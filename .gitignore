@@ -24,9 +24,14 @@
 *.lai
 *.la
 *.a
-*.lib
 
 # Executables
 *.exe
 *.out
 *.app
+
+# Other
+*.vs
+*x64
+*SummerGame_2026
+Log.txt
