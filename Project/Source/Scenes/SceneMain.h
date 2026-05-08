@@ -6,6 +6,7 @@ public:
 	~SceneMain();
 
 	void Init();
+	void End();
 	void Update();
 	void Draw();
 private:
@@ -14,4 +15,3 @@ private:
 private:
 	int m_frameCount;
 };
-

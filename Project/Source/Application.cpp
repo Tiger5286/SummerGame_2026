@@ -85,6 +85,9 @@ void Application::Run()
 		ScreenFlip(); // 描画した内容を画面に反映する
 		while (GetNowHiPerformanceCount() - start < 16667) {} // 約16.667ミリ秒(1/60秒)待つことで60FPSに固定
 	}
+	
+	// シーンの終了処理
+	pScene->End();
 }
 
 void Application::Terminate()

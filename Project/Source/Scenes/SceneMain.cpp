@@ -25,6 +25,10 @@ void SceneMain::Init()
 	SetCameraNearFar(200.0f, 1500.0f);
 }
 
+void SceneMain::End()
+{
+}
+
 void SceneMain::Update()
 {
 	m_frameCount++;
