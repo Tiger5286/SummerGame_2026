@@ -36,10 +36,16 @@ void SceneMain::Update()
 
 void SceneMain::Draw()
 {
+#ifdef _DEBUG
 	DrawGrid();
+#endif
 
+
+
+#ifdef _DEBUG
 	DrawString(0,0,L"SceneMain",0xffffff);
 	DrawFormatString(0, 16, 0xffffff, L"FRAME:%d", m_frameCount);
+#endif
 }
 
 void SceneMain::DrawGrid()
