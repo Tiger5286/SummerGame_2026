@@ -23,11 +23,13 @@ public:
 	static inline Vector3 Front() { return Vector3(0.0f, 0.0f, 1.0f); }
 	static inline Vector3 Back()  { return Vector3(0.0f, 0.0f, -1.0f); }
 
+	static void Draw(const Vector3& start, const Vector3& end);
+
 // ----- 変換関数 -----
 	// DxLib用のベクトルに変換して返す
 	VECTOR ToDxLib() const;
 	// DxLib用のベクトルをこのクラスのベクトルに変換して返す
-	static Vector3 FromDxLib(VECTOR vec);
+	static Vector3 FromDxLib(const VECTOR& vec);
 
 // ----- 計算関数 -----
 	// ベクトルの大きさの二乗を返す
@@ -60,6 +62,9 @@ public:
 	// ベクトルの掛け算
 	Vector3 operator*(float s) const;
 	void operator*=(float s);
+	// ベクトルの割り算
+	Vector3 operator/(float s) const;
+	void operator/=(float s);
 
 	// ベクトルが同じかどうか
 	bool operator==(const Vector3& v) const;

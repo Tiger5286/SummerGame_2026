@@ -19,12 +19,22 @@ Vector3::~Vector3()
 {
 }
 
+void Vector3::Draw(const Vector3& start, const Vector3& end)
+{
+	DrawLine3D(start.ToDxLib(), end.ToDxLib(), 0xffff00);
+	Vector3 revVec = end;
+	revVec.Normalize();
+	revVec *= 20.0f;
+	revVec = end - revVec;
+	DrawCone3D(end.ToDxLib(), revVec.ToDxLib(), 10.0f, 8, 0xffff00, 0xffff00, true);
+}
+
 VECTOR Vector3::ToDxLib() const
 {
 	return { x,y,z };
 }
 
-Vector3 Vector3::FromDxLib(VECTOR vec)
+Vector3 Vector3::FromDxLib(const VECTOR& vec)
 {
 	return Vector3(vec.x, vec.y, vec.z);
 }
@@ -127,6 +137,20 @@ void Vector3::operator*=(float s)
 	x *= s;
 	y *= s;
 	z *= s;
+}
+
+Vector3 Vector3::operator/(float s) const
+{
+	return Vector3(x / s,
+				   y / s,
+				   z / s);
+}
+
+void Vector3::operator/=(float s)
+{
+	x /= s;
+	y /= s;
+	z /= s;
 }
 
 bool Vector3::operator==(const Vector3& v) const
