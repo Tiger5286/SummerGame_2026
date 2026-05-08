@@ -36,7 +36,7 @@ Matrix4x4 Matrix4x4::Zero()
 					 0.0f, 0.0f, 0.0f, 0.0f);
 }
 
-Matrix4x4 Matrix4x4::GetRotXMatrix(float angle)
+Matrix4x4 Matrix4x4::GetRotX(float angle)
 {
 	float cos = cosf(angle);
 	float sin = sinf(angle);
@@ -46,7 +46,7 @@ Matrix4x4 Matrix4x4::GetRotXMatrix(float angle)
 					 0.0f, 0.0f, 0.0f, 1.0f);
 }
 
-Matrix4x4 Matrix4x4::GetRotYMatrix(float angle)
+Matrix4x4 Matrix4x4::GetRotY(float angle)
 {
 	float cos = cosf(angle);
 	float sin = sinf(angle);
@@ -56,7 +56,7 @@ Matrix4x4 Matrix4x4::GetRotYMatrix(float angle)
 					 0.0f, 0.0f, 0.0f, 1.0f);
 }
 
-Matrix4x4 Matrix4x4::GetRotZMatrix(float angle)
+Matrix4x4 Matrix4x4::GetRotZ(float angle)
 {
 	float cos = cosf(angle);
 	float sin = sinf(angle);
@@ -66,7 +66,7 @@ Matrix4x4 Matrix4x4::GetRotZMatrix(float angle)
 					 0.0f, 0.0f, 0.0f, 1.0f);
 }
 
-Matrix4x4 Matrix4x4::GetTranslateMatrix(Vector3 v)
+Matrix4x4 Matrix4x4::GetTranslate(Vector3 v)
 {
 	Matrix4x4 ans = Identity();
 	ans.m03 = v.x;
@@ -75,7 +75,7 @@ Matrix4x4 Matrix4x4::GetTranslateMatrix(Vector3 v)
 	return ans;
 }
 
-Matrix4x4 Matrix4x4::GetScaleMatrix(Vector3 v)
+Matrix4x4 Matrix4x4::GetScale(Vector3 v)
 {
 	Matrix4x4 ans = Identity();
 	ans.m00 = v.x;
@@ -95,38 +95,43 @@ MATRIX Matrix4x4::ToDxLib() const
 Matrix4x4 Matrix4x4::operator*(Matrix4x4 m) const
 {
 	return Matrix4x4(
-		m00 * m.m00 + m01 * m.m10 + m02 * m.m20 + m03 * m.m30,
-		m00 * m.m01 + m01 * m.m11 + m02 * m.m21 + m03 * m.m31,
-		m00 * m.m02 + m01 * m.m12 + m02 * m.m22 + m03 * m.m32,
-		m00 * m.m03 + m01 * m.m13 + m02 * m.m23 + m03 * m.m33,
-		m10 * m.m00 + m11 * m.m10 + m12 * m.m20 + m13 * m.m30,
-		m10 * m.m01 + m11 * m.m11 + m12 * m.m21 + m13 * m.m31,
-		m10 * m.m02 + m11 * m.m12 + m12 * m.m22 + m13 * m.m32,
-		m10 * m.m03 + m11 * m.m13 + m12 * m.m23 + m13 * m.m33,
-		m20 * m.m00 + m21 * m.m10 + m22 * m.m20 + m23 * m.m30,
-		m20 * m.m01 + m21 * m.m11 + m22 * m.m21 + m23 * m.m31,
-		m20 * m.m02 + m21 * m.m12 + m22 * m.m22 + m23 * m.m32,
-		m20 * m.m03 + m21 * m.m13 + m22 * m.m23 + m23 * m.m33,
-		m30 * m.m00 + m31 * m.m10 + m32 * m.m20 + m33 * m.m30,
-		m30 * m.m01 + m31 * m.m11 + m32 * m.m21 + m33 * m.m31,
-		m30 * m.m02 + m31 * m.m12 + m32 * m.m22 + m33 * m.m32,
-		m30 * m.m03 + m31 * m.m13 + m32 * m.m23 + m33 * m.m33
+		m.m00 * m00 + m.m01 * m10 + m.m02 * m20 + m.m03 * m30,
+		m.m00 * m01 + m.m01 * m11 + m.m02 * m21 + m.m03 * m31,
+		m.m00 * m02 + m.m01 * m12 + m.m02 * m22 + m.m03 * m32,
+		m.m00 * m03 + m.m01 * m13 + m.m02 * m23 + m.m03 * m33,
+		m.m10 * m00 + m.m11 * m10 + m.m12 * m20 + m.m13 * m30,
+		m.m10 * m01 + m.m11 * m11 + m.m12 * m21 + m.m13 * m31,
+		m.m10 * m02 + m.m11 * m12 + m.m12 * m22 + m.m13 * m32,
+		m.m10 * m03 + m.m11 * m13 + m.m12 * m23 + m.m13 * m33,
+		m.m20 * m00 + m.m21 * m10 + m.m22 * m20 + m.m23 * m30,
+		m.m20 * m01 + m.m21 * m11 + m.m22 * m21 + m.m23 * m31,
+		m.m20 * m02 + m.m21 * m12 + m.m22 * m22 + m.m23 * m32,
+		m.m20 * m03 + m.m21 * m13 + m.m22 * m23 + m.m23 * m33,
+		m.m30 * m00 + m.m31 * m10 + m.m32 * m20 + m.m33 * m30,
+		m.m30 * m01 + m.m31 * m11 + m.m32 * m21 + m.m33 * m31,
+		m.m30 * m02 + m.m31 * m12 + m.m32 * m22 + m.m33 * m32,
+		m.m30 * m03 + m.m31 * m13 + m.m32 * m23 + m.m33 * m33
 	);
 }
 
-void Matrix4x4::operator*=(Matrix4x4 m)
+void Matrix4x4::operator*=(const Matrix4x4 m)
 {
 	*this = *this * m;
 }
 
-Vector3 Matrix4x4::operator*(Vector3 v) const
+Vector3 Matrix4x4::operator*(const Vector3 v) const
 {
 	return Vector3(v.x * m00 + v.y * m01 + v.z * m02 + m03,
 				   v.x * m10 + v.y * m11 + v.z * m12 + m13,
 				   v.x * m20 + v.y * m21 + v.z * m22 + m23);
 }
 
-void Matrix4x4::operator*=(Vector3 v)
+Vector3 operator*(const Vector3& v, const Matrix4x4& m)
 {
-	v = *this * v;
+	return m * v;
+}
+
+void operator*=(Vector3& v, const Matrix4x4& m)
+{
+	v = m * v;
 }
