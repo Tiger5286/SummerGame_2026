@@ -14,12 +14,22 @@ public:
 	// ベクトルの成分
 	float x, y, z;
 
+// ----- ユーティリティ関数 -----
+	static inline Vector3 Zero()  { return Vector3(0.0f, 0.0f, 0.0f); }
+	static inline Vector3 Up()    { return Vector3(0.0f, 1.0f, 0.0f); }
+	static inline Vector3 Down()  { return Vector3(0.0f, -1.0f, 0.0f); }
+	static inline Vector3 Right() { return Vector3(1.0f, 0.0f, 0.0f); }
+	static inline Vector3 Left()  { return Vector3(-1.0f, 0.0f, 0.0f); }
+	static inline Vector3 Front() { return Vector3(0.0f, 0.0f, 1.0f); }
+	static inline Vector3 Back()  { return Vector3(0.0f, 0.0f, -1.0f); }
+
+// ----- 変換関数 -----
 	// DxLib用のベクトルに変換して返す
 	VECTOR ToDxLib() const;
+	// DxLib用のベクトルをこのクラスのベクトルに変換して返す
+	static Vector3 FromDxLib(VECTOR vec);
 
-	// ベクトルの要素を描画する
-	void Draw(int x,int y) const;
-
+// ----- 計算関数 -----
 	// ベクトルの大きさの二乗を返す
 	float SquaredLength() const;
 	// ベクトルの大きさを返す
@@ -38,6 +48,7 @@ public:
 	// ベクトルの線形補間をする
 	void Lerp(const Vector3& v, float t);
 
+// ----- 演算子オーバーロード -----
 	// 反転したベクトルを返す
 	Vector3 operator-() const;
 	// ベクトルの足し算
@@ -50,7 +61,9 @@ public:
 	Vector3 operator*(float s) const;
 	void operator*=(float s);
 
+	// ベクトルが同じかどうか
 	bool operator==(const Vector3& v) const;
+	// ベクトルが同じでないかどうか
 	bool operator!=(const Vector3& v) const;
 };
 

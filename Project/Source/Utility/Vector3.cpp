@@ -24,9 +24,9 @@ VECTOR Vector3::ToDxLib() const
 	return { x,y,z };
 }
 
-void Vector3::Draw(int x, int y) const
+Vector3 Vector3::FromDxLib(VECTOR vec)
 {
-	DrawFormatString(x, y, 0xffffff, L"x:%.2f,y:%.2f,z:%.2f", this->x, this->y, this->z);
+	return Vector3(vec.x, vec.y, vec.z);
 }
 
 float Vector3::SquaredLength() const
