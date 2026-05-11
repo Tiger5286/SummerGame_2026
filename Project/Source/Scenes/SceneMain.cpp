@@ -1,8 +1,8 @@
 ﻿#include "SceneMain.h"
 #include "DxLib.h"
+#include "../GameObject/Player.h"
 
-SceneMain::SceneMain() :
-	m_frameCount(0)
+SceneMain::SceneMain()
 {
 }
 
@@ -23,15 +23,25 @@ void SceneMain::Init()
 	SetCameraPositionAndTarget_UpVecY(VGet(0.0f, 300.0f, -700.0f), VGet(0.0f, 0.0f, 0.0f));
 	SetupCamera_Perspective(DX_PI_F / 3.0f);
 	SetCameraNearFar(200.0f, 1500.0f);
+
+	m_playerModelHandle = MV1LoadModel(L"data/models/Player.mv1");
+
+	// プレイヤーの生成
+	m_pPlayer = std::make_shared<Player>();
+	m_pPlayer->SetHandle(m_playerModelHandle);
+	m_pPlayer->Init();
 }
 
 void SceneMain::End()
 {
+	m_pPlayer->End();
 }
 
 void SceneMain::Update()
 {
 	m_frameCount++;
+
+	m_pPlayer->Update();
 }
 
 void SceneMain::Draw()
@@ -40,7 +50,7 @@ void SceneMain::Draw()
 	DrawGrid();
 #endif
 
-
+	m_pPlayer->Draw();
 
 #ifdef _DEBUG
 	DrawString(0,0,L"SceneMain",0xffffff);

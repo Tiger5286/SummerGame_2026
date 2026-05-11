@@ -1,4 +1,8 @@
 ﻿#pragma once
+#include <memory>
+
+class Player;
+
 class SceneMain
 {
 public:
@@ -13,5 +17,9 @@ private:
 	void DrawGrid();
 
 private:
-	int m_frameCount;
+	int m_frameCount = 0;
+
+	int m_playerModelHandle = -1;
+
+	std::shared_ptr<Player> m_pPlayer = nullptr;
 };

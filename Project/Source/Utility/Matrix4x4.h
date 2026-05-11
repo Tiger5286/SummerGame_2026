@@ -45,7 +45,7 @@ public:
 	// 行列とベクトルの掛け算
 	// 行列 * ベクトル
 	Vector3 operator*(const Vector3 v) const;
-	// ベクトル * 行列 (結果は上と同じ)
+	// ベクトル * 行列 (結果は行列*ベクトルと同じ)
 	friend Vector3 operator*(const Vector3& v, const Matrix4x4& m);
 	friend void operator*=(Vector3& v, const Matrix4x4& m);
 };
