@@ -1,7 +1,10 @@
 ﻿#pragma once
 #include <memory>
 
+#include "../System/Input.h"
+
 class Player;
+class Camera;
 
 class SceneMain
 {
@@ -21,5 +24,8 @@ private:
 
 	int m_playerModelHandle = -1;
 
+	Input m_input;
+
 	std::shared_ptr<Player> m_pPlayer = nullptr;
+	std::shared_ptr<Camera> m_pCamera = nullptr;
 };

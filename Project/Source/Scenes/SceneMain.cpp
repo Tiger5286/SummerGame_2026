@@ -1,6 +1,7 @@
 ﻿#include "SceneMain.h"
 #include "DxLib.h"
 #include "../GameObject/Player.h"
+#include "../System/Camera.h"
 
 SceneMain::SceneMain()
 {
@@ -12,24 +13,16 @@ SceneMain::~SceneMain()
 
 void SceneMain::Init()
 {
-	// カリングの設定
-	SetUseBackCulling(true);
-
-	// Zバッファの設定
-	SetUseZBuffer3D(true);	// Zバッファを使います
-	SetWriteZBuffer3D(true);	// 描画する物体はZバッファにも距離を書き込む
-
-	// カメラの設定
-	SetCameraPositionAndTarget_UpVecY(VGet(0.0f, 300.0f, -700.0f), VGet(0.0f, 0.0f, 0.0f));
-	SetupCamera_Perspective(DX_PI_F / 3.0f);
-	SetCameraNearFar(200.0f, 1500.0f);
-
+	// モデルの読み込み
 	m_playerModelHandle = MV1LoadModel(L"data/models/Player.mv1");
 
 	// プレイヤーの生成
-	m_pPlayer = std::make_shared<Player>();
+	m_pPlayer = std::make_shared<Player>(m_input);
 	m_pPlayer->SetHandle(m_playerModelHandle);
 	m_pPlayer->Init();
+	// カメラの生成
+	m_pCamera = std::make_shared<Camera>(m_input);
+	m_pCamera->Init();
 }
 
 void SceneMain::End()
@@ -41,7 +34,19 @@ void SceneMain::Update()
 {
 	m_frameCount++;
 
+	m_input.Update();
+
+	// カメラの更新
+	m_pCamera->SetPlayerPos(m_pPlayer->GetPos());
+	m_pPlayer->SetCameraAngleY(m_pCamera->GetAngleY());
+
+	// 各オブジェクトの更新
 	m_pPlayer->Update();
+	m_pCamera->Update();
+
+	// ライトの向きをカメラからプレイヤーのベクトルの向きにする
+	auto cameraToPlayer = m_pPlayer->GetPos() - m_pCamera->GetPos();
+	SetLightDirection(cameraToPlayer.ToDxLib());
 }
 
 void SceneMain::Draw()

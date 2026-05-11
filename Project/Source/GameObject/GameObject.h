@@ -18,6 +18,14 @@ public:
 	/// <param name="handle">ロードしたモデルのハンドル</param>
 	void SetHandle(int handle) { m_modelHandle = handle; }
 
+	// 位置を取得する
+	Vector3 GetPos() const { return m_pos; }
+
+	/// <summary>
+	/// 速度に抵抗をつける(なにもしなかったら徐々に速度が遅くなる)
+	/// </summary>
+	void Resistance();
+
 protected:
 	// モデルのハンドル
 	int m_modelHandle = -1;

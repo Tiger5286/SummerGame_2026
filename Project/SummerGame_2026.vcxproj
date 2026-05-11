@@ -19,23 +19,31 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\System\Animator.cpp" />
     <ClCompile Include="Source\GameObject\Player.cpp" />
     <ClCompile Include="Source\Collider\ColliderBase.cpp" />
     <ClCompile Include="Source\GameObject\GameObject.cpp" />
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Scenes\SceneMain.cpp" />
+    <ClCompile Include="Source\System\Camera.cpp" />
+    <ClCompile Include="Source\System\Input.cpp" />
+    <ClCompile Include="Source\System\SkyBox.cpp" />
     <ClCompile Include="Source\Utility\Matrix4x4.cpp" />
     <ClCompile Include="Source\Utility\Vector3.cpp" />
     <ClCompile Include="Source\Collider\SphereCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\System\Animator.h" />
     <ClInclude Include="Source\GameObject\Player.h" />
     <ClInclude Include="Source\Collider\ColliderBase.h" />
     <ClInclude Include="Source\GameObject\GameObject.h" />
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Game.h" />
     <ClInclude Include="Source\Scenes\SceneMain.h" />
+    <ClInclude Include="Source\System\Camera.h" />
+    <ClInclude Include="Source\System\Input.h" />
+    <ClInclude Include="Source\System\SkyBox.h" />
     <ClInclude Include="Source\Utility\Matrix4x4.h" />
     <ClInclude Include="Source\Utility\Vector3.h" />
     <ClInclude Include="Source\Collider\SphereCollider.h" />
