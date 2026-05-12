@@ -1,4 +1,4 @@
-#include "Animator.h"
+﻿#include "Animator.h"
 #include "Dxlib.h"
 #include <cassert>
 

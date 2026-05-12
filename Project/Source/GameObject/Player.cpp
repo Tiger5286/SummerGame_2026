@@ -16,7 +16,7 @@ namespace
 	const std::wstring kCombo3AnimName  = L"Player|Combo3";
 
 	// 加速度
-	constexpr float kMoveAccel = 2.0f;
+	constexpr float kMoveAccel = 3.0f;
 	// 最大移動速度
 	constexpr float kMaxMoveSpeed =7.0f;
 }
@@ -44,8 +44,18 @@ void Player::Update()
 	// 過去のステートを保存
 	m_prevState = m_state;
 
+	// ジャンプ処理
+	Jump();
 	// 移動処理
 	Move();
+
+	// 状態を更新
+	UpdateState();
+
+	// 重力をかける
+	Gravity();
+	// 速度に抵抗をかける
+	Resistance();
 
 	// 行列を生成してモデルに適用
 	auto transMtx = Matrix4x4::GetTranslate(m_pos);
@@ -53,7 +63,8 @@ void Player::Update()
 	auto mtx = rotMtx * transMtx;
 	MV1SetMatrix(m_modelHandle, mtx.ToDxLib());
 
-	UpdateState();
+	DrawFormatString(0, 64 + 16, 0xffffff, L"vel.x:%.2f,y:%.2f,z:%.2f", m_vel.x, m_vel.y, m_vel.z);
+	DrawFormatString(0, 64 + 32, 0xffffff, L"vel.length:%.2f", m_vel.Length());
 
 	// アニメーションの更新
 	m_anim.Update();
@@ -73,18 +84,27 @@ void Player::Move()
 	moveVec += Vector3(stick.x, 0.0f, stick.y) * kMoveAccel;
 	// カメラの向きに応じて移動ベクトルを回転させる
 	moveVec *= Matrix4x4::GetRotY(m_cameraAngleY);
-	// 速度が上限を超えていなければ移動量を足す
-	if (m_vel.SquaredLength() < kMaxMoveSpeed * kMaxMoveSpeed)
+	// 水平移動速度が上限を超えていなければ移動量を足す
+	auto velXZ = m_vel;
+	velXZ.y = 0.0f;
+	if (velXZ.SquaredLength() < kMaxMoveSpeed * kMaxMoveSpeed)
 	{
 		m_vel += moveVec;
 	}
+	else
+	{
+		// 水平移動速度が上限を超えていたらその値で固定する
+		velXZ.Normalize();
+		velXZ *= kMaxMoveSpeed;
+		m_vel.x = 0.0f;
+		m_vel.z = 0.0f;
+		m_vel += velXZ;
+	}
 	// 位置に速度を足す
 	m_pos += m_vel;
-	// 速度に抵抗をつける
-	Resistance();
 
 	// モデルを回転させる
-	// 移動ベクトルがある時のみ回る
+	// 入力があるときのみ回る
 	if (stick.SquaredLength() > 0.0f)
 	{
 		m_angle = atan2f(stick.y, -stick.x) + DX_PI_F / 2;
@@ -94,14 +114,49 @@ void Player::Move()
 	DrawFormatString(0, 48, 0xffffff, L"m_angle:%.2f", m_angle);
 }
 
+void Player::Jump()
+{
+	if (m_input.IsTriggerd(XINPUT_BUTTON_A))
+	{
+		m_vel.y = 10.0f;
+	}
+}
+
 void Player::UpdateState()
 {
-	if (m_vel.SquaredLength() > 0.0f)
+	// 現在の状態からステートを決定
+	auto velXZ = m_vel;
+	velXZ.y = 0.0f;
+	if (abs(m_vel.y) > 0.0f)	// 速度のyが0じゃないなら落下
+	{
+		m_state = State::Fall;
+	}
+	else if (velXZ.SquaredLength() > 0.0f)	// 水平方向への速度が0より大きければ移動
 	{
 		m_state = State::Run;
 	}
-	else
+	else	// どれにも当てはまらなければ待機
 	{
 		m_state = State::Idle;
 	}
+	DrawFormatString(0, 64, 0xffffff, L"state:%d", m_state);
+
+	// ステート切り替えに応じてアニメーションも切り替え
+	if (TriggerdChangeState(State::Idle))
+	{
+		m_anim.ChangeAnim(kIdleAnimName);
+	}
+	if (TriggerdChangeState(State::Run))
+	{
+		m_anim.ChangeAnim(kRunAnimName);
+	}
+	if (TriggerdChangeState(State::Fall))
+	{
+		m_anim.ChangeAnim(kFallAnimName);
+	}
+}
+
+bool Player::TriggerdChangeState(State state)
+{
+	return m_state == state && m_prevState != state;
 }

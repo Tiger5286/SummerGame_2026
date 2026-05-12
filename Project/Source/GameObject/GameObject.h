@@ -26,6 +26,11 @@ public:
 	/// </summary>
 	void Resistance();
 
+	/// <summary>
+	/// 重力をかける
+	/// </summary>
+	void Gravity(float power = 0.5f);
+
 protected:
 	// モデルのハンドル
 	int m_modelHandle = -1;

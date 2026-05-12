@@ -22,12 +22,14 @@ public:
 private:
 
     void Move();    // 移動処理
+    void Jump();    // ジャンプ処理
 
     // 現在の状態を表す列挙体
     enum class State
     {
         Idle,
         Run,
+        Fall,
 
         Num
     };
@@ -36,6 +38,13 @@ private:
     /// 現在の状態をチェックしてステートを更新する
     /// </summary>
     void UpdateState();
+
+    /// <summary>
+    /// ステートが変わった瞬間を取得する
+    /// </summary>
+    /// <param name="state">取得したいステート</param>
+    /// <returns>変わった瞬間かどうか</returns>
+    bool TriggerdChangeState(State state);
 
 private:
     Input& m_input;

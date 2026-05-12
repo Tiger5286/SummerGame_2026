@@ -25,9 +25,19 @@ void GameObject::Resistance()
 	m_vel += resistVec;
 	// 速度が一定以下になったら止まる
 	auto velXZ = Vector3(m_vel.x, 0.0f, m_vel.z);
-	if (velXZ.SquaredLength() < 1.0f)
+	if (velXZ.SquaredLength() < kResistancePower)
 	{
 		m_vel.x = 0.0f;
 		m_vel.z = 0.0f;
+	}
+}
+
+void GameObject::Gravity(float power)
+{
+	m_vel.y -= power;
+	if (m_pos.y <= 0.0f)
+	{
+		m_vel.y = 0.0f;
+		m_pos.y = 0.0f;
 	}
 }
