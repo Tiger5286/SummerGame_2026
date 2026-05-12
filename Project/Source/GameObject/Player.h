@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "GameObject.h"
 #include "../System/Animator.h"
+#include "../Collider/CapsuleCollider.h"
 
 class Input;
 
@@ -49,6 +50,7 @@ private:
 private:
     Input& m_input; // 入力クラスの参照
 	Animator m_anim;    // アニメーションクラス
+    CapsuleCollider m_collider;
 
 	bool m_isGround = false;    // 地面にいるかどうか
 

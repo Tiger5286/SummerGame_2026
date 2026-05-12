@@ -1,8 +1,8 @@
 ﻿#include "SphereCollider.h"
 #include "Dxlib.h"
 
-SphereCollider::SphereCollider(ColliderType type, float radius):
-	ColliderBase(type),
+SphereCollider::SphereCollider(float radius):
+	ColliderBase(ColliderType::Sphere),
 	m_radius(radius)
 {
 }

@@ -16,6 +16,10 @@ namespace
 	const std::wstring kCombo2AnimName  = L"Player|Combo2";
 	const std::wstring kCombo3AnimName  = L"Player|Combo3";
 
+	// 当たり判定
+	constexpr float kColliderRadius = 25.0f;
+	constexpr float kColliderHeight = 120.0f;
+
 	// 加速度
 	constexpr float kMoveAccel = 3.0f;
 	// 最大移動速度
@@ -23,7 +27,8 @@ namespace
 }
 
 Player::Player(Input& input):
-	m_input(input)
+	m_input(input),
+	m_collider(kColliderRadius, kColliderHeight)
 {
 }
 
@@ -64,6 +69,9 @@ void Player::Update()
 	// 速度に抵抗をかける
 	Resistance();
 
+	// コライダーの位置を更新
+	m_collider.SetPos(m_pos + Vector3::Up() * m_collider.GetRadius());
+
 	// モデルの回転角度を更新
 	float diff = m_angle - m_drawAngle - DX_PI_F * 2;
 	while (diff > DX_PI_F) diff -= 2.0f * DX_PI_F;
@@ -86,6 +94,10 @@ void Player::Update()
 void Player::Draw()
 {
 	MV1DrawModel(m_modelHandle);
+
+#ifdef _DEBUG
+	m_collider.Draw();
+#endif
 }
 
 void Player::Move()
