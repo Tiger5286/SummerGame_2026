@@ -1,5 +1,6 @@
 ﻿#include "Player.h"
 #include <string>
+#include <cmath>
 #include "../Utility/Matrix4x4.h"
 
 #include "../System/Input.h"
@@ -49,6 +50,12 @@ void Player::Update()
 	// 移動処理
 	Move();
 
+	// 設置判定
+	if (m_pos.y <= 0.0f)
+	{
+		m_isGround = true;
+	}
+
 	// 状態を更新
 	UpdateState();
 
@@ -57,9 +64,15 @@ void Player::Update()
 	// 速度に抵抗をかける
 	Resistance();
 
+	// モデルの回転角度を更新
+	float diff = m_angle - m_drawAngle - DX_PI_F * 2;
+	while (diff > DX_PI_F) diff -= 2.0f * DX_PI_F;
+	while (diff < -DX_PI_F) diff += 2.0f * DX_PI_F;
+	m_drawAngle += diff * 0.1f;
+
 	// 行列を生成してモデルに適用
 	auto transMtx = Matrix4x4::GetTranslate(m_pos);
-	auto rotMtx = Matrix4x4::GetRotY(m_angle);
+	auto rotMtx = Matrix4x4::GetRotY(m_drawAngle);
 	auto mtx = rotMtx * transMtx;
 	MV1SetMatrix(m_modelHandle, mtx.ToDxLib());
 
@@ -116,9 +129,10 @@ void Player::Move()
 
 void Player::Jump()
 {
-	if (m_input.IsTriggerd(XINPUT_BUTTON_A))
+	if (m_input.IsTriggerd(XINPUT_BUTTON_A) && m_isGround)
 	{
 		m_vel.y = 10.0f;
+		m_isGround = false;
 	}
 }
 
@@ -127,7 +141,7 @@ void Player::UpdateState()
 	// 現在の状態からステートを決定
 	auto velXZ = m_vel;
 	velXZ.y = 0.0f;
-	if (abs(m_vel.y) > 0.0f)	// 速度のyが0じゃないなら落下
+	if (!m_isGround)	// 地面にいなければ落下
 	{
 		m_state = State::Fall;
 	}
