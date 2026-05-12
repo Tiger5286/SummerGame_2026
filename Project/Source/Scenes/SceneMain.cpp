@@ -15,10 +15,12 @@ void SceneMain::Init()
 {
 	// モデルの読み込み
 	m_playerModelHandle = MV1LoadModel(L"data/models/Player.mv1");
+	m_mapModelHandle = MV1LoadModel(L"data/models/Map.mv1");
 
 	// プレイヤーの生成
 	m_pPlayer = std::make_shared<Player>(m_input);
 	m_pPlayer->SetHandle(m_playerModelHandle);
+	m_pPlayer->SetMapHandle(m_mapModelHandle);
 	m_pPlayer->Init();
 	// カメラの生成
 	m_pCamera = std::make_shared<Camera>(m_input);
@@ -27,6 +29,9 @@ void SceneMain::Init()
 
 void SceneMain::End()
 {
+	MV1DeleteModel(m_playerModelHandle);
+	MV1DeleteModel(m_mapModelHandle);
+
 	m_pPlayer->End();
 }
 
@@ -53,6 +58,8 @@ void SceneMain::Draw()
 {
 #ifdef _DEBUG
 	DrawGrid();
+
+	MV1DrawModel(m_mapModelHandle);
 #endif
 
 	m_pPlayer->Draw();

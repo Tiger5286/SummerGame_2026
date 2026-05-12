@@ -20,10 +20,15 @@ public:
     // カメラの角度を設定する(毎フレームUpdateの前に実行する)
     void SetCameraAngleY(float cameraAngleY) { m_cameraAngleY = cameraAngleY; }
 
+	// マップモデルのハンドルを設定する(Initの前に実行する)
+	void SetMapHandle(int mapHandle) { m_mapHandle = mapHandle; }
+
 private:
 
     void Move();    // 移動処理
     void Jump();    // ジャンプ処理
+
+	void CheckHitMap(MV1_COLL_RESULT_POLY_DIM coll);  // マップに当たったときの処理
 
     // 現在の状態を表す列挙体
     enum class State
@@ -51,6 +56,7 @@ private:
     Input& m_input; // 入力クラスの参照
 	Animator m_anim;    // アニメーションクラス
     CapsuleCollider m_collider;
+	int m_mapHandle = -1;	// マップのモデルのハンドル
 
 	bool m_isGround = false;    // 地面にいるかどうか
 

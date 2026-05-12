@@ -23,8 +23,8 @@ public:
 	// 当たり判定を描画する
 	virtual void Draw() = 0;
 
-	// 位置を設定する
-	void SetPos(const Vector3& pos) { m_pos = pos; }
+	Vector3 GetPos() const { return m_pos; }	// 位置を取得する
+	void SetPos(const Vector3& pos) { m_pos = pos; }	// 位置を設定する
 
 protected:
 

@@ -35,9 +35,4 @@ void GameObject::Resistance()
 void GameObject::Gravity(float power)
 {
 	m_vel.y -= power;
-	if (m_pos.y <= 0.0f)
-	{
-		m_vel.y = 0.0f;
-		m_pos.y = 0.0f;
-	}
 }

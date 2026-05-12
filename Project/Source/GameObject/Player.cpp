@@ -39,6 +39,8 @@ Player::~Player()
 void Player::Init()
 {
 	m_anim.Init(m_modelHandle, kIdleAnimName);
+
+	m_pos = Vector3(0.0f, 200.0f, 0.0f);
 }
 
 void Player::End()
@@ -71,6 +73,18 @@ void Player::Update()
 
 	// コライダーの位置を更新
 	m_collider.SetPos(m_pos + Vector3::Up() * m_collider.GetRadius());
+
+	// マップとの当たり判定
+	auto collResult = m_collider.CheckCollModel(m_mapHandle);
+	CheckHitMap(collResult);
+	// 当たり判定に使用したメモリを解放
+	MV1CollResultPolyDimTerminate(collResult);
+
+	// 奈落に落ちたら初期位置に戻す
+	if (m_pos.y < -2000.0f)
+	{
+		m_pos = Vector3(0.0f, 200.0f, 0.0f);
+	}
 
 	// モデルの回転角度を更新
 	float diff = m_angle - m_drawAngle - DX_PI_F * 2;
@@ -145,6 +159,33 @@ void Player::Jump()
 	{
 		m_vel.y = 10.0f;
 		m_isGround = false;
+	}
+}
+
+void Player::CheckHitMap(MV1_COLL_RESULT_POLY_DIM coll)
+{
+	for (int i = 0; i < coll.HitNum; i++)
+	{
+		// 当たったポリゴンの法線
+		Vector3 normal = Vector3::FromDxLib(coll.Dim[i].Normal);
+
+		// 法線が上を向いているときは地面とみなす
+		if (normal.y > 0.4f)
+		{
+			m_vel.y = 0.0f;
+			normal = Vector3::Up();
+			m_isGround = true;
+		}
+
+		// 当たった位置
+		Vector3 hitPos = Vector3::FromDxLib(coll.Dim[i].HitPosition);
+		// 当たった位置からカプセルの線分までの距離
+		Vector3 capsuleStart = m_collider.GetPos();
+		Vector3 capsuleEnd = m_collider.GetPos() + Vector3::Up() * m_collider.GetHeight();
+		float hitDist = Segment_Point_MinLength(capsuleStart.ToDxLib(), capsuleEnd.ToDxLib(), hitPos.ToDxLib());
+
+		// 位置を修正する
+		m_pos += -normal * (hitDist - m_collider.GetRadius());
 	}
 }
 
