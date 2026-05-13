@@ -57,12 +57,6 @@ void Player::Update()
 	// 移動処理
 	Move();
 
-	// 設置判定
-	if (m_pos.y <= 0.0f)
-	{
-		m_isGround = true;
-	}
-
 	// 状態を更新
 	UpdateState();
 
@@ -84,6 +78,7 @@ void Player::Update()
 	if (m_pos.y < -2000.0f)
 	{
 		m_pos = Vector3(0.0f, 200.0f, 0.0f);
+		m_vel = Vector3::Zero();
 	}
 
 	// モデルの回転角度を更新
