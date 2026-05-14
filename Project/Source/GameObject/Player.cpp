@@ -74,6 +74,11 @@ void Player::Update()
 	// 当たり判定に使用したメモリを解放
 	MV1CollResultPolyDimTerminate(collResult);
 
+	// デバッグ用の情報を表示
+	DrawFormatString(0, 64 + 16, 0xffffff, L"vel.x:%.2f,y:%.2f,z:%.2f", m_vel.x, m_vel.y, m_vel.z);
+	DrawFormatString(0, 64 + 32, 0xffffff, L"vel.length:%.2f", m_vel.Length());
+	DrawFormatString(0, 64 + 48, 0xffffff, L"pos.x:%.2f,y:%.2f,z:%.2f", m_pos.x, m_pos.y, m_pos.z);
+
 	// 奈落に落ちたら初期位置に戻す
 	if (m_pos.y < -2000.0f)
 	{
@@ -93,8 +98,6 @@ void Player::Update()
 	auto mtx = rotMtx * transMtx;
 	MV1SetMatrix(m_modelHandle, mtx.ToDxLib());
 
-	DrawFormatString(0, 64 + 16, 0xffffff, L"vel.x:%.2f,y:%.2f,z:%.2f", m_vel.x, m_vel.y, m_vel.z);
-	DrawFormatString(0, 64 + 32, 0xffffff, L"vel.length:%.2f", m_vel.Length());
 
 	// アニメーションの更新
 	m_anim.Update();
@@ -166,21 +169,20 @@ void Player::CheckHitMap(MV1_COLL_RESULT_POLY_DIM coll)
 
 		// 法線が上を向いているときは地面とみなす
 		if (normal.y > 0.4f)
-		{
+		{	// 床に当たった場合
 			m_vel.y = 0.0f;
 			normal = Vector3::Up();
 			m_isGround = true;
 		}
-
-		// 当たった位置
-		Vector3 hitPos = Vector3::FromDxLib(coll.Dim[i].HitPosition);
-		// 当たった位置からカプセルの線分までの距離
-		Vector3 capsuleStart = m_collider.GetPos();
-		Vector3 capsuleEnd = m_collider.GetPos() + Vector3::Up() * m_collider.GetHeight();
-		float hitDist = Segment_Point_MinLength(capsuleStart.ToDxLib(), capsuleEnd.ToDxLib(), hitPos.ToDxLib());
-
-		// 位置を修正する
-		m_pos += -normal * (hitDist - m_collider.GetRadius());
+		else
+		{	// 壁に当たった場合
+			// 法線の向きに速度を反射させる
+			float dot = m_vel.Dot(normal);
+			if (dot < 0.0f)
+			{
+				m_vel -= normal * dot;
+			}
+		}
 	}
 }
 

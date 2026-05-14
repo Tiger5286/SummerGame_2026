@@ -25,9 +25,6 @@ MV1_COLL_RESULT_POLY_DIM CapsuleCollider::CheckCollModel(int mapHandle)
 		m_pos.ToDxLib(),
 		(m_pos + Vector3::Up() * m_height).ToDxLib(),
 		m_radius);
-	if (result.HitNum)
-	{
-		printfDx(L"hit\n");
-	}
+
 	return result;
 }
