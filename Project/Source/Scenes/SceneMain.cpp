@@ -24,6 +24,7 @@ void SceneMain::Init()
 	m_pPlayer->Init();
 	// カメラの生成
 	m_pCamera = std::make_shared<Camera>(m_input);
+	m_pCamera->SetMapHandle(m_mapModelHandle);
 	m_pCamera->Init();
 }
 

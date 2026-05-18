@@ -14,8 +14,8 @@ namespace
 	// 視野角
 	constexpr float kFov = DX_PI_F / 3.0f;	// 60度
 	// NearFar
-	constexpr float kNear = 100.0f;
-	constexpr float kFar = 10000.0f;
+	constexpr float kNear = 10.0f;
+	constexpr float kFar = 5000.0f;
 
 	// オフセット
 	const Vector3 kTargetOffset = { 0.0f,100.0f,0.0f };
@@ -90,7 +90,16 @@ void Camera::Update()
 	auto mtx = rotXMtx * rotYMtx * transMtx;
 	// ベクトルを変形
 	pos = mtx * pos;
-	m_pos.Lerp(pos, kLerpT);	// カメラの位置を滑らかに移動させる
+
+	// マップとの当たり判定
+	auto result = MV1CollCheck_Line(m_mapHandle, -1, m_target.ToDxLib(), pos.ToDxLib());
+	if (result.HitFlag)
+	{
+		pos = Vector3::FromDxLib(result.HitPosition);
+	}
+
+	// カメラの位置を滑らかに移動させる
+	m_pos.Lerp(pos, kLerpT);
 
 	// 位置と注視点を反映
 	SetCameraPositionAndTarget_UpVecY(m_pos.ToDxLib(), m_target.ToDxLib());

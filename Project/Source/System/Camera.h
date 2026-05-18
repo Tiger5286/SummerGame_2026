@@ -17,6 +17,9 @@ public:
 	Vector3 GetPos() const { return m_pos; }
 	void SetPos(const Vector3& pos) { m_pos = pos; }
 
+	// マップのハンドルを設定する(Initの前に呼ぶ)
+	void SetMapHandle(int handle) { m_mapHandle = handle; }
+
 	// プレイヤーの位置を設定する(毎フレームUpdateの前に呼ぶ)
 	void SetPlayerPos(const Vector3& playerPos) { m_playerPos = playerPos; }
 
@@ -24,6 +27,7 @@ private:
 
 	Input& m_input;
 	Vector3 m_playerPos;
+	int m_mapHandle = -1;
 
 	Vector3 m_pos;
 	Vector3 m_target;
