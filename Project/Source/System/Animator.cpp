@@ -56,14 +56,18 @@ void Animator::Update()
 
 	// アニメーションの進行
 	m_currentAnimTime += m_animSpeed;
+	float totalCount = MV1GetAttachAnimTotalTime(m_modelHandle, m_currentAnimHandle);
 	// アニメーションのループ処理
-	if (m_isLoop)
+	if (m_isCurrentAnimLoop)
 	{
-		float totalCount = MV1GetAttachAnimTotalTime(m_modelHandle, m_currentAnimHandle);
 		while (m_currentAnimTime >= totalCount)
 		{
 			m_currentAnimTime -= totalCount;
 		}
+	}
+	else if (m_currentAnimTime >= totalCount)
+	{
+		m_currentAnimTime = totalCount;
 	}
 	MV1SetAttachAnimTime(m_modelHandle, m_currentAnimHandle, m_currentAnimTime);
 
@@ -72,9 +76,12 @@ void Animator::Update()
 	{
 		m_lastAnimTime += m_animSpeed;
 		float lastTotalCount = MV1GetAttachAnimTotalTime(m_modelHandle, m_lastAnimHandle);
-		while (m_lastAnimTime >= lastTotalCount)
+		if (m_isLastAnimLoop)
 		{
-			m_lastAnimTime -= lastTotalCount;
+			while (m_lastAnimTime >= lastTotalCount)
+			{
+				m_lastAnimTime -= lastTotalCount;
+			}
 		}
 		MV1SetAttachAnimTime(m_modelHandle, m_lastAnimHandle, m_lastAnimTime);
 	}
@@ -93,6 +100,7 @@ void Animator::ChangeAnim(std::wstring animName, float animSpeed,bool isLoop)
 	// 現在再生中のアニメーションを一つ前のアニメーションとする
 	m_lastAnimHandle = m_currentAnimHandle;
 	m_lastAnimTime = m_currentAnimTime;
+	m_isLastAnimLoop = m_isCurrentAnimLoop;
 	// 次に再生するアニメーションをセット
 	auto animIndex = MV1GetAnimIndex(m_modelHandle, animName.c_str());
 	assert(animIndex != -1 && "アニメーションが見つかりませんでした");
@@ -103,7 +111,7 @@ void Animator::ChangeAnim(std::wstring animName, float animSpeed,bool isLoop)
 	// アニメーションの進行速度を設定
 	m_animSpeed = animSpeed;
 	// ループするかどうかを設定
-	m_isLoop = isLoop;
+	m_isCurrentAnimLoop = isLoop;
 	// アニメーション名を設定
 	m_currentAnimName = animName;
 }
@@ -111,7 +119,7 @@ void Animator::ChangeAnim(std::wstring animName, float animSpeed,bool isLoop)
 bool Animator::IsEnd()
 {
 	// ループするならfalseを返す
-	if (m_isLoop)
+	if (m_isCurrentAnimLoop)
 	{
 		return false;
 	}
@@ -119,7 +127,7 @@ bool Animator::IsEnd()
 	// アニメーションの総再生時間を現在の再生時間が下回っていたらfalse
 	auto animIndex = MV1GetAnimIndex(m_modelHandle, m_currentAnimName.c_str());
 	auto totalTime = MV1GetAnimTotalTime(m_modelHandle, animIndex);
-	if (m_currentAnimTime <= totalTime)
+	if (m_currentAnimTime < totalTime)
 	{
 		return false;
 	}

@@ -59,8 +59,8 @@ void SceneMain::Draw()
 #ifdef _DEBUG
 	DrawGrid();
 
-	MV1DrawModel(m_mapModelHandle);
 #endif
+	MV1DrawModel(m_mapModelHandle);
 
 	m_pPlayer->Draw();
 

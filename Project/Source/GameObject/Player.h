@@ -64,14 +64,19 @@ private:
     CapsuleCollider m_collider;
 	int m_mapHandle = -1;	// マップのモデルのハンドル
 
-	bool m_isGround = false;    // 地面にいるかどうか
+    // 操作可能かどうかフラグ
+    bool m_isCanControll = true;
 
 	State m_state = State::Idle;    // 現在の状態
 	State m_prevState = State::Idle;    // 1フレーム前の状態
 
+	bool m_isGround = false;    // 地面にいるかどうか
+
+    // 回避のフレーム数
+    int m_dodgeFrame = 0;
+
     // カメラの角度
     float m_cameraAngleY = 0.0f;
-
 	// 自身のモデルの回転角度
     float m_angle = 0.0f;
 	// 描画用の回転角度(Lerpで滑らかに回転する)

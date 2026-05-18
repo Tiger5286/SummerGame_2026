@@ -23,10 +23,15 @@ namespace
 	// 加速度
 	constexpr float kMoveAccel = 3.0f;
 	// 最大移動速度
-	constexpr float kMaxMoveSpeed =7.0f;
+	constexpr float kMaxMoveSpeed = 7.0f;
+	// 回避の速度
+	constexpr float kDodgeSpeed = 15.0f;
 
 	// 設置判定に使うレイの長さ
-	constexpr float kLineLength = 15.0f;
+	constexpr float kLineLength = 10.0f;
+
+	// 回避のフレーム数
+	constexpr int kDodgeFrame = 36;
 }
 
 Player::Player(Input& input):
@@ -63,7 +68,12 @@ void Player::Update()
 	Dodge();
 
 	// 状態を更新
-	UpdateState();
+	// 回避中でなければ
+	if (m_dodgeFrame == 0)
+	{
+		UpdateState();
+	}
+	
 
 	// 重力をかける
 	Gravity();
@@ -82,10 +92,12 @@ void Player::Update()
 	// 接地判定
 	CheckGround();
 
+#ifdef _DEBUG
 	// デバッグ用の情報を表示
 	DrawFormatString(0, 64 + 16, 0xffffff, L"vel.x:%.2f,y:%.2f,z:%.2f", m_vel.x, m_vel.y, m_vel.z);
 	DrawFormatString(0, 64 + 32, 0xffffff, L"vel.length:%.2f", m_vel.Length());
 	DrawFormatString(0, 64 + 48, 0xffffff, L"pos.x:%.2f,y:%.2f,z:%.2f", m_pos.x, m_pos.y, m_pos.z);
+#endif
 
 	// 奈落に落ちたら初期位置に戻す
 	if (m_pos.y < -2000.0f)
@@ -123,6 +135,12 @@ void Player::Move()
 {
 	// スティック入力を取得
 	auto stick = m_input.GetStickInput(LR::Left);
+	// 移動禁止状態なら入力を消す
+	if (!m_isCanControll)
+	{
+		stick = Vector3::Zero();
+	}
+
 	// 移動ベクトルに入力を反映する
 	Vector3 moveVec;
 	moveVec += Vector3(stick.x, 0.0f, stick.y) * kMoveAccel;
@@ -135,7 +153,7 @@ void Player::Move()
 	{
 		m_vel += moveVec;
 	}
-	else
+	else if (m_state != State::Dodge)
 	{
 		// 水平移動速度が上限を超えていたらその値で固定する
 		velXZ.Normalize();
@@ -154,13 +172,16 @@ void Player::Move()
 		m_angle = atan2f(stick.y, -stick.x) + DX_PI_F / 2;
 		m_angle += m_cameraAngleY;
 	}
+
+#ifdef _DEBUG
 	DrawFormatString(0, 32, 0xffffff, L"stick.x:%.2f,y:%.2f", stick.x, stick.y);
 	DrawFormatString(0, 48, 0xffffff, L"m_angle:%.2f", m_angle);
+#endif
 }
 
 void Player::Jump()
 {
-	if (m_input.IsTriggerd(XINPUT_BUTTON_A) && m_isGround)
+	if (m_input.IsTriggerd(XINPUT_BUTTON_A) && m_isGround && m_isCanControll)
 	{
 		m_vel.y = 10.0f;
 		m_isGround = false;
@@ -169,9 +190,31 @@ void Player::Jump()
 
 void Player::Dodge()
 {
-	if (m_input.IsTriggerd(XINPUT_BUTTON_B))
+	// ボタンを押した、かつ回避中でなければ回避
+	if (m_input.IsTriggerd(XINPUT_BUTTON_B) && m_state != State::Dodge)
 	{
 		m_anim.ChangeAnim(kRollingAnimName, 0.5f, false);
+		m_state = State::Dodge;
+		m_dodgeFrame = 0;
+		m_isCanControll = false;
+	}
+
+	if (m_state == State::Dodge)
+	{	
+		// 回避中のフレームをカウント
+		m_dodgeFrame++;
+		// 一定時間経過したら回避終了
+		if (m_dodgeFrame > kDodgeFrame)
+		{
+			m_dodgeFrame = 0;
+			m_isCanControll = true;
+		}
+
+		// 向いている方向に進む
+		Vector3 moveVec = Vector3(0.0f, 0.0f, -kDodgeSpeed);
+		moveVec *= Matrix4x4::GetRotY(m_angle);
+		m_vel.x = moveVec.x;
+		m_vel.z = moveVec.z;
 	}
 }
 
@@ -250,7 +293,9 @@ void Player::UpdateState()
 	{
 		m_state = State::Idle;
 	}
+#ifdef _DEBUG
 	DrawFormatString(0, 64, 0xffffff, L"state:%d", m_state);
+#endif
 
 	// ステート切り替えに応じてアニメーションも切り替え
 	if (TriggerdChangeState(State::Idle))

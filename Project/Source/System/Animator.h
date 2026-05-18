@@ -47,7 +47,8 @@ private:
 	float m_currentAnimTime = 0.0f;
 	float m_lastAnimTime = 0.0f;
 
-	bool m_isLoop = true;
+	bool m_isCurrentAnimLoop = true;
+	bool m_isLastAnimLoop = true;
 
 	// アニメーションの切り替えフレーム数
 	int m_animChangeFrame = 0;
