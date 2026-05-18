@@ -24,6 +24,9 @@ namespace
 	constexpr float kMoveAccel = 3.0f;
 	// 最大移動速度
 	constexpr float kMaxMoveSpeed =7.0f;
+
+	// 設置判定に使うレイの長さ
+	constexpr float kLineLength = 15.0f;
 }
 
 Player::Player(Input& input):
@@ -56,6 +59,8 @@ void Player::Update()
 	Jump();
 	// 移動処理
 	Move();
+	// 回避処理
+	Dodge();
 
 	// 状態を更新
 	UpdateState();
@@ -73,6 +78,9 @@ void Player::Update()
 	CheckHitMap(collResult);
 	// 当たり判定に使用したメモリを解放
 	MV1CollResultPolyDimTerminate(collResult);
+
+	// 接地判定
+	CheckGround();
 
 	// デバッグ用の情報を表示
 	DrawFormatString(0, 64 + 16, 0xffffff, L"vel.x:%.2f,y:%.2f,z:%.2f", m_vel.x, m_vel.y, m_vel.z);
@@ -97,7 +105,6 @@ void Player::Update()
 	auto rotMtx = Matrix4x4::GetRotY(m_drawAngle);
 	auto mtx = rotMtx * transMtx;
 	MV1SetMatrix(m_modelHandle, mtx.ToDxLib());
-
 
 	// アニメーションの更新
 	m_anim.Update();
@@ -160,29 +167,69 @@ void Player::Jump()
 	}
 }
 
+void Player::Dodge()
+{
+	if (m_input.IsTriggerd(XINPUT_BUTTON_B))
+	{
+		m_anim.ChangeAnim(kRollingAnimName, 0.5f, false);
+	}
+}
+
 void Player::CheckHitMap(MV1_COLL_RESULT_POLY_DIM coll)
 {
 	for (int i = 0; i < coll.HitNum; i++)
 	{
-		// 当たったポリゴンの法線
-		Vector3 normal = Vector3::FromDxLib(coll.Dim[i].Normal);
+		// 当たったポリゴンの法線を取得
+		auto normal = Vector3::FromDxLib(coll.Dim[i].Normal);
+		// 法線が少しでも上を向いていれば床判定
+		bool isFloor = normal.y > 0.0f;	// true:床 / false:壁
+		// 床判定なら法線を真上向きにする
+		if (isFloor) normal = Vector3::Up();
 
-		// 法線が上を向いているときは地面とみなす
-		if (normal.y > 0.4f)
-		{	// 床に当たった場合
+		// カプセルの位置を取得
+		Vector3 capsuleStart = m_collider.GetPos();
+		Vector3 capsuleEnd = capsuleStart + Vector3::Up() * m_collider.GetHeight();
+
+		// ポリゴンとカプセルの線との最短距離を計算
+		auto minDist = Segment_Triangle_MinLength(capsuleStart.ToDxLib(), capsuleEnd.ToDxLib(),
+								   coll.Dim[i].Position[0], coll.Dim[i].Position[1], coll.Dim[i].Position[2]);
+		// 押し戻し量を計算
+		auto pushDist = m_collider.GetRadius() - minDist;
+
+		// 法線方向に押し戻す
+		m_pos += normal * pushDist;
+		if (isFloor)
+		{
 			m_vel.y = 0.0f;
-			normal = Vector3::Up();
 			m_isGround = true;
 		}
-		else
-		{	// 壁に当たった場合
-			// 法線の向きに速度を反射させる
-			float dot = m_vel.Dot(normal);
-			if (dot < 0.0f)
-			{
-				m_vel -= normal * dot;
-			}
+	}
+}
+
+void Player::CheckGround()
+{
+	// 速度が上向きなら処理しない
+	if (m_vel.y > 0.0f) return;
+
+	// レイの座標を計算
+	Vector3 lineStart = m_pos + Vector3::Up() * kLineLength;
+	Vector3 lineEnd = m_pos - Vector3::Up() * kLineLength;
+	// マップとレイの当たり判定
+	auto result = MV1CollCheck_Line(m_mapHandle, -1, lineStart.ToDxLib(), lineEnd.ToDxLib());
+	// レイが当たっていたら
+	if (result.HitFlag)
+	{
+		bool isFloor = result.Normal.y > 0.0f;
+
+		if (isFloor)
+		{
+			m_pos.y = result.HitPosition.y;
+			m_isGround = true;
 		}
+	}
+	else
+	{
+		m_isGround = false;
 	}
 }
 

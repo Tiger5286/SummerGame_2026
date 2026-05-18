@@ -27,8 +27,13 @@ private:
 
     void Move();    // 移動処理
     void Jump();    // ジャンプ処理
+    void Dodge();   // 回避処理
 
-	void CheckHitMap(MV1_COLL_RESULT_POLY_DIM coll);  // マップに当たったときの処理
+    // マップに当たったときの処理
+	void CheckHitMap(MV1_COLL_RESULT_POLY_DIM coll);
+
+    // 設置判定
+    void CheckGround();
 
     // 現在の状態を表す列挙体
     enum class State
@@ -36,6 +41,7 @@ private:
         Idle,
         Run,
         Fall,
+        Dodge,
 
         Num
     };
