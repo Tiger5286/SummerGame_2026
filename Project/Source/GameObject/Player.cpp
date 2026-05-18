@@ -31,7 +31,7 @@ namespace
 	constexpr float kLineLength = 10.0f;
 
 	// 回避のフレーム数
-	constexpr int kDodgeFrame = 36;
+	constexpr int kDodgeFrame = 30;
 }
 
 Player::Player(Input& input):
