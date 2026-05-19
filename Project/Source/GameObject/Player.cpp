@@ -36,9 +36,9 @@ namespace
 	constexpr int kCombo1Frame = 35*2;
 	constexpr int kCombo2Frame = 36*2;
 	constexpr int kCombo3Frame = 43*2;
-	// 次のコンボに移行する入力の受付時間
-	constexpr int kCombo1ReceptionFrame = 10 * 2;
-	constexpr int kCombo2ReceptionFrame = 11 * 2;
+	// コンボ一つに最短どれくらいの時間かかるか
+	constexpr int kCombo1MinFrame = 10 * 2;
+	constexpr int kCombo2MinFrame = 10 * 2;
 	// コンボ中の前進する速度
 	constexpr float kAttackMoveSpeed = 10.0f;
 	// コンボ中の前進する時間
@@ -247,7 +247,7 @@ void Player::Attack()
 		if (m_state == State::Combo1)	// 1段目→2段目
 		{
 			// コンボフレームが受付時間内なら次のコンボに移行する
-			if (m_comboFrame < kCombo1ReceptionFrame)
+			if (m_comboFrame < kCombo1Frame)
 			{
 				m_isTransferNextCombo = true;
 			}
@@ -255,7 +255,7 @@ void Player::Attack()
 		else if (m_state == State::Combo2)	// 2段目→3段目
 		{
 			// コンボフレームが受付時間内なら次のコンボに移行する
-			if (m_comboFrame < kCombo1Frame + kCombo2ReceptionFrame)
+			if (m_comboFrame < kCombo1Frame + kCombo2Frame)
 			{
 				m_isTransferNextCombo = true;
 			}
@@ -285,11 +285,12 @@ void Player::Attack()
 			// コンボ移行処理
 			if (m_isTransferNextCombo)
 			{
-				if (m_comboFrame == kCombo1ReceptionFrame)
+				if (m_comboFrame > kCombo1MinFrame)
 				{
 					m_state = State::Combo2;
 					m_anim.ChangeAnim(kCombo2AnimName, 0.5f, false);
 					m_isTransferNextCombo = false;
+					m_comboFrame = kCombo1MinFrame;
 
 					auto stick = m_input.GetStickInput(LR::Left);
 					if (stick.SquaredLength() > 0.0f)
@@ -320,11 +321,12 @@ void Player::Attack()
 		case State::Combo2:
 			if (m_isTransferNextCombo)
 			{
-				if (m_comboFrame == kCombo2ReceptionFrame + kCombo1ReceptionFrame)
+				if (m_comboFrame > kCombo2MinFrame + kCombo1MinFrame)
 				{
 					m_state = State::Combo3;
 					m_anim.ChangeAnim(kCombo3AnimName, 0.5f, false);
 					m_isTransferNextCombo = false;
+					m_comboFrame = kCombo2MinFrame + kCombo1MinFrame;
 
 					auto stick = m_input.GetStickInput(LR::Left);
 					if (stick.SquaredLength() > 0.0f)
@@ -337,7 +339,7 @@ void Player::Attack()
 			}
 			else
 			{
-				if (m_comboFrame == kCombo2Frame + kCombo1ReceptionFrame)
+				if (m_comboFrame == kCombo2Frame + kCombo1MinFrame)
 				{
 					m_comboFrame = 0;
 					m_isCanControll = true;
@@ -345,7 +347,7 @@ void Player::Attack()
 				}
 			}
 			// コンボ移動処理
-			if (m_comboFrame < kCombo1MoveFrame + kCombo1ReceptionFrame)
+			if (m_comboFrame < kCombo1MoveFrame + kCombo1MinFrame)
 			{
 				Vector3 moveVec = Vector3(0, 0, -kAttackMoveSpeed);
 				moveVec *= Matrix4x4::GetRotY(m_angle);
@@ -353,14 +355,14 @@ void Player::Attack()
 			}
 			break;
 		case State::Combo3:
-			if (m_comboFrame == kCombo3Frame + kCombo2ReceptionFrame + kCombo1ReceptionFrame)
+			if (m_comboFrame == kCombo3Frame + kCombo2MinFrame + kCombo1MinFrame)
 			{
 				m_comboFrame = 0;
 				m_isCanControll = true;
 				m_isTransferNextCombo = false;
 			}
 			// コンボ移動処理
-			if (m_comboFrame < kCombo3MoveFrame + kCombo2ReceptionFrame + kCombo1ReceptionFrame)
+			if (m_comboFrame < kCombo3MoveFrame + kCombo2MinFrame + kCombo1MinFrame)
 			{
 				Vector3 moveVec = Vector3(0, 0, -kAttackMoveSpeed);
 				moveVec *= Matrix4x4::GetRotY(m_angle);
