@@ -2,6 +2,7 @@
 #include "DxLib.h"
 #include "../GameObject/Player.h"
 #include "../System/Camera.h"
+#include "../System/SkyBox.h"
 
 SceneMain::SceneMain()
 {
@@ -26,6 +27,10 @@ void SceneMain::Init()
 	m_pCamera = std::make_shared<Camera>(m_input);
 	m_pCamera->SetMapHandle(m_mapModelHandle);
 	m_pCamera->Init();
+
+	// スカイボックスの生成
+	m_pSkyBox = std::make_shared<SkyBox>();
+	m_pSkyBox->Init();
 }
 
 void SceneMain::End()
@@ -34,6 +39,8 @@ void SceneMain::End()
 	MV1DeleteModel(m_mapModelHandle);
 
 	m_pPlayer->End();
+	
+	m_pSkyBox->End();
 }
 
 void SceneMain::Update()
@@ -50,6 +57,9 @@ void SceneMain::Update()
 	m_pPlayer->Update();
 	m_pCamera->Update();
 
+	m_pSkyBox->SetCameraPos(m_pCamera->GetPos());
+	m_pSkyBox->Update();
+
 	// ライトの向きをカメラからプレイヤーのベクトルの向きにする
 	auto cameraToPlayer = m_pPlayer->GetPos() - m_pCamera->GetPos();
 	SetLightDirection(cameraToPlayer.ToDxLib());
@@ -57,11 +67,13 @@ void SceneMain::Update()
 
 void SceneMain::Draw()
 {
+	m_pSkyBox->Draw();
+
+	MV1DrawModel(m_mapModelHandle);
+
 #ifdef _DEBUG
 	DrawGrid();
-
 #endif
-	MV1DrawModel(m_mapModelHandle);
 
 	m_pPlayer->Draw();
 

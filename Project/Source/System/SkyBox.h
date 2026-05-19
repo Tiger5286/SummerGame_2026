@@ -14,6 +14,7 @@ public:
 	void Update();
 	void Draw();
 
+	// カメラの位置をセットする(毎フレームUpdateの前に呼ぶ)
 	void SetCameraPos(const Vector3& pos) { m_pos = pos; }
 
 private:
