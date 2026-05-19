@@ -32,6 +32,10 @@ namespace
 
 	// 回避のフレーム数
 	constexpr int kDodgeFrame = 30;
+	// コンボのフレーム数
+	constexpr int kCombo1Frame = 20;
+	constexpr int kCombo2Frame = 22;
+	constexpr int kCombo3Frame = 60;
 }
 
 Player::Player(Input& input):
@@ -66,10 +70,12 @@ void Player::Update()
 	Move();
 	// 回避処理
 	Dodge();
+	// 攻撃処理
+	Attack();
 
 	// 状態を更新
-	// 回避中でなければ
-	if (m_dodgeFrame == 0)
+	// 回避中でなければ、かつ攻撃中でなければ
+	if (m_dodgeFrame == 0 && m_comboFrame == 0)
 	{
 		UpdateState();
 	}
@@ -127,7 +133,11 @@ void Player::Draw()
 	MV1DrawModel(m_modelHandle);
 
 #ifdef _DEBUG
+	// 当たり判定を描画
 	m_collider.Draw();
+	// 接地判定用のレイを描画
+	Vector3 layEnd = m_pos - Vector3::Up() * kLineLength;
+	DrawLine3D(m_pos.ToDxLib(), layEnd.ToDxLib(), 0xffff00);
 #endif
 }
 
@@ -197,6 +207,9 @@ void Player::Dodge()
 		m_state = State::Dodge;
 		m_dodgeFrame = 0;
 		m_isCanControll = false;
+
+		// 攻撃を中止する
+		CancelAttack();
 	}
 
 	if (m_state == State::Dodge)
@@ -218,12 +231,87 @@ void Player::Dodge()
 	}
 }
 
+void Player::Attack()
+{
+	// Xボタンで攻撃、回避中は不可
+	if (m_input.IsTriggerd(XINPUT_BUTTON_X) && m_state != State::Dodge)
+	{
+		if (m_state == State::Combo1)	// 1段目→2段目
+		{
+			m_isTransferNextCombo = true;
+		}
+		else if (m_state == State::Combo2)	// 2段目→3段目
+		{
+			m_isTransferNextCombo = true;
+		}
+		else if (m_state == State::Combo3)	// 3段目
+		{
+			// 何もしない
+		}
+		else	// 1段目開始
+		{
+			m_state = State::Combo1;
+			m_anim.ChangeAnim(kCombo1AnimName, 0.5f, false);
+			m_comboFrame = 0;
+			m_isTransferNextCombo = false;
+		}
+	}
+	// 攻撃中なら
+	bool isAttacking = m_state == State::Combo1 || m_state == State::Combo2 || m_state == State::Combo3;
+	if (isAttacking)
+	{	// コンボ用のフレームカウントを更新
+		m_comboFrame++;
+		// 1段目→2段目
+		if (m_comboFrame == kCombo1Frame)
+		{
+			// 次のコンボへの移行が予約されていたら
+			if (m_isTransferNextCombo)
+			{	// 次のコンボへ
+				m_state = State::Combo2;
+				m_anim.ChangeAnim(kCombo2AnimName,0.5f,false);
+				m_isTransferNextCombo = false;
+			}
+			else
+			{	// 次のコンボに行かないならコンボを終わる
+				m_comboFrame = 0;
+			}
+		}
+		// 2段目→3段目
+		if (m_comboFrame == kCombo2Frame + kCombo1Frame)
+		{
+			// 次のコンボへの移行が予約されていたら
+			if (m_isTransferNextCombo)
+			{	// 次のコンボへ
+				m_state = State::Combo3;
+				m_anim.ChangeAnim(kCombo3AnimName, 0.5f, false);
+				m_isTransferNextCombo = false;
+			}
+			else
+			{	// 次のコンボに行かないならコンボを終わる
+				m_comboFrame = 0;
+			}
+		}
+		// 3段目
+		if (m_comboFrame >= kCombo3Frame + kCombo2Frame + kCombo1Frame)
+		{
+			m_comboFrame = 0;
+			m_isTransferNextCombo = false;
+		}
+	}
+}
+
+void Player::CancelAttack()
+{
+	m_comboFrame = 0;
+}
+
 void Player::CheckHitMap(MV1_COLL_RESULT_POLY_DIM coll)
 {
 	for (int i = 0; i < coll.HitNum; i++)
 	{
 		// 当たったポリゴンの法線を取得
 		auto normal = Vector3::FromDxLib(coll.Dim[i].Normal);
+
 		// 法線が少しでも上を向いていれば床判定
 		bool isFloor = normal.y > 0.0f;	// true:床 / false:壁
 		// 床判定なら法線を真上向きにする

@@ -28,6 +28,8 @@ private:
     void Move();    // 移動処理
     void Jump();    // ジャンプ処理
     void Dodge();   // 回避処理
+    void Attack();  // 攻撃処理
+    void CancelAttack();    // 攻撃を中止する
 
     // マップに当たったときの処理
 	void CheckHitMap(MV1_COLL_RESULT_POLY_DIM coll);
@@ -42,6 +44,9 @@ private:
         Run,
         Fall,
         Dodge,
+        Combo1,
+        Combo2,
+        Combo3,
 
         Num
     };
@@ -74,6 +79,11 @@ private:
 
     // 回避のフレーム数
     int m_dodgeFrame = 0;
+
+    // コンボのフレーム数
+    int m_comboFrame = 0;
+    // 次のコンボに移行するかどうか
+    bool m_isTransferNextCombo = false;
 
     // カメラの角度
     float m_cameraAngleY = 0.0f;
