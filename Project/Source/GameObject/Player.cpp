@@ -33,8 +33,8 @@ namespace
 	// 回避のフレーム数
 	constexpr int kDodgeFrame = 30;
 	// コンボのフレーム数
-	constexpr int kCombo1Frame = 35*2;
-	constexpr int kCombo2Frame = 36*2;
+	constexpr int kCombo1Frame = 33*2;
+	constexpr int kCombo2Frame = 34*2;
 	constexpr int kCombo3Frame = 43*2;
 	// コンボ一つに最短どれくらいの時間かかるか
 	constexpr int kCombo1MinFrame = 10 * 2;
@@ -317,6 +317,11 @@ void Player::Attack()
 				moveVec *= Matrix4x4::GetRotY(m_angle);
 				m_pos += moveVec;
 			}
+			// 攻撃中は浮く
+			if (m_comboFrame < kCombo1MinFrame)
+			{
+				m_vel.y = 0.0f;
+			}
 			break;
 		case State::Combo2:
 			if (m_isTransferNextCombo)
@@ -352,6 +357,11 @@ void Player::Attack()
 				Vector3 moveVec = Vector3(0, 0, -kAttackMoveSpeed);
 				moveVec *= Matrix4x4::GetRotY(m_angle);
 				m_pos += moveVec;
+			}
+			// 攻撃中は浮く
+			if (m_comboFrame < kCombo1MinFrame + kCombo2MinFrame)
+			{
+				m_vel.y = 0.0f;
 			}
 			break;
 		case State::Combo3:
