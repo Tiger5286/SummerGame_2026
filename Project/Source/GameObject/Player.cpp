@@ -33,9 +33,18 @@ namespace
 	// 回避のフレーム数
 	constexpr int kDodgeFrame = 30;
 	// コンボのフレーム数
-	constexpr int kCombo1Frame = 20;
-	constexpr int kCombo2Frame = 22;
-	constexpr int kCombo3Frame = 60;
+	constexpr int kCombo1Frame = 35*2;
+	constexpr int kCombo2Frame = 36*2;
+	constexpr int kCombo3Frame = 43*2;
+	// 次のコンボに移行する入力の受付時間
+	constexpr int kCombo1ReceptionFrame = 10 * 2;
+	constexpr int kCombo2ReceptionFrame = 11 * 2;
+	// コンボ中の前進する速度
+	constexpr float kAttackMoveSpeed = 10.0f;
+	// コンボ中の前進する時間
+	constexpr int kCombo1MoveFrame = 10;
+	constexpr int kCombo2MoveFrame = 11;
+	constexpr int kCombo3MoveFrame = 20;
 }
 
 Player::Player(Input& input):
@@ -138,6 +147,10 @@ void Player::Draw()
 	// 接地判定用のレイを描画
 	Vector3 layEnd = m_pos - Vector3::Up() * kLineLength;
 	DrawLine3D(m_pos.ToDxLib(), layEnd.ToDxLib(), 0xffff00);
+
+	// デバッグ表示
+	DrawFormatString(0, 64, 0xffffff, L"comboFrame:%d", m_comboFrame);
+	DrawFormatString(0, 48, 0xffffff, L"m_angle:%.2f", m_angle);
 #endif
 }
 
@@ -182,11 +195,6 @@ void Player::Move()
 		m_angle = atan2f(stick.y, -stick.x) + DX_PI_F / 2;
 		m_angle += m_cameraAngleY;
 	}
-
-#ifdef _DEBUG
-	DrawFormatString(0, 32, 0xffffff, L"stick.x:%.2f,y:%.2f", stick.x, stick.y);
-	DrawFormatString(0, 48, 0xffffff, L"m_angle:%.2f", m_angle);
-#endif
 }
 
 void Player::Jump()
@@ -238,11 +246,19 @@ void Player::Attack()
 	{
 		if (m_state == State::Combo1)	// 1段目→2段目
 		{
-			m_isTransferNextCombo = true;
+			// コンボフレームが受付時間内なら次のコンボに移行する
+			if (m_comboFrame < kCombo1ReceptionFrame)
+			{
+				m_isTransferNextCombo = true;
+			}
 		}
 		else if (m_state == State::Combo2)	// 2段目→3段目
 		{
-			m_isTransferNextCombo = true;
+			// コンボフレームが受付時間内なら次のコンボに移行する
+			if (m_comboFrame < kCombo1Frame + kCombo2ReceptionFrame)
+			{
+				m_isTransferNextCombo = true;
+			}
 		}
 		else if (m_state == State::Combo3)	// 3段目
 		{
@@ -254,6 +270,7 @@ void Player::Attack()
 			m_anim.ChangeAnim(kCombo1AnimName, 0.5f, false);
 			m_comboFrame = 0;
 			m_isTransferNextCombo = false;
+			m_isCanControll = false;
 		}
 	}
 	// 攻撃中なら
@@ -261,41 +278,95 @@ void Player::Attack()
 	if (isAttacking)
 	{	// コンボ用のフレームカウントを更新
 		m_comboFrame++;
-		// 1段目→2段目
-		if (m_comboFrame == kCombo1Frame)
+
+		switch (m_state)
 		{
-			// 次のコンボへの移行が予約されていたら
+		case State::Combo1:
+			// コンボ移行処理
 			if (m_isTransferNextCombo)
-			{	// 次のコンボへ
-				m_state = State::Combo2;
-				m_anim.ChangeAnim(kCombo2AnimName,0.5f,false);
-				m_isTransferNextCombo = false;
+			{
+				if (m_comboFrame == kCombo1ReceptionFrame)
+				{
+					m_state = State::Combo2;
+					m_anim.ChangeAnim(kCombo2AnimName, 0.5f, false);
+					m_isTransferNextCombo = false;
+
+					auto stick = m_input.GetStickInput(LR::Left);
+					if (stick.SquaredLength() > 0.0f)
+					{
+						stick.Normalize();
+						m_angle = atan2f(stick.y, -stick.x) + DX_PI_F / 2;
+						m_angle += m_cameraAngleY;
+					}
+				}
 			}
 			else
-			{	// 次のコンボに行かないならコンボを終わる
-				m_comboFrame = 0;
+			{
+				if (m_comboFrame == kCombo1Frame)
+				{
+					m_comboFrame = 0;
+					m_isCanControll = true;
+					m_isTransferNextCombo = false;
+				}
 			}
-		}
-		// 2段目→3段目
-		if (m_comboFrame == kCombo2Frame + kCombo1Frame)
-		{
-			// 次のコンボへの移行が予約されていたら
+			// コンボ移動処理
+			if (m_comboFrame < kCombo1MoveFrame)
+			{
+				Vector3 moveVec = Vector3(0,0, -kAttackMoveSpeed);
+				moveVec *= Matrix4x4::GetRotY(m_angle);
+				m_pos += moveVec;
+			}
+			break;
+		case State::Combo2:
 			if (m_isTransferNextCombo)
-			{	// 次のコンボへ
-				m_state = State::Combo3;
-				m_anim.ChangeAnim(kCombo3AnimName, 0.5f, false);
-				m_isTransferNextCombo = false;
+			{
+				if (m_comboFrame == kCombo2ReceptionFrame + kCombo1ReceptionFrame)
+				{
+					m_state = State::Combo3;
+					m_anim.ChangeAnim(kCombo3AnimName, 0.5f, false);
+					m_isTransferNextCombo = false;
+
+					auto stick = m_input.GetStickInput(LR::Left);
+					if (stick.SquaredLength() > 0.0f)
+					{
+						stick.Normalize();
+						m_angle = atan2f(stick.y, -stick.x) + DX_PI_F / 2;
+						m_angle += m_cameraAngleY;
+					}
+				}
 			}
 			else
-			{	// 次のコンボに行かないならコンボを終わる
-				m_comboFrame = 0;
+			{
+				if (m_comboFrame == kCombo2Frame + kCombo1ReceptionFrame)
+				{
+					m_comboFrame = 0;
+					m_isCanControll = true;
+					m_isTransferNextCombo = false;
+				}
 			}
-		}
-		// 3段目
-		if (m_comboFrame >= kCombo3Frame + kCombo2Frame + kCombo1Frame)
-		{
-			m_comboFrame = 0;
-			m_isTransferNextCombo = false;
+			// コンボ移動処理
+			if (m_comboFrame < kCombo1MoveFrame + kCombo1ReceptionFrame)
+			{
+				Vector3 moveVec = Vector3(0, 0, -kAttackMoveSpeed);
+				moveVec *= Matrix4x4::GetRotY(m_angle);
+				m_pos += moveVec;
+			}
+			break;
+		case State::Combo3:
+			if (m_comboFrame == kCombo3Frame + kCombo2ReceptionFrame + kCombo1ReceptionFrame)
+			{
+				m_comboFrame = 0;
+				m_isCanControll = true;
+				m_isTransferNextCombo = false;
+			}
+			// コンボ移動処理
+			if (m_comboFrame < kCombo3MoveFrame + kCombo2ReceptionFrame + kCombo1ReceptionFrame)
+			{
+				Vector3 moveVec = Vector3(0, 0, -kAttackMoveSpeed);
+				moveVec *= Matrix4x4::GetRotY(m_angle);
+				m_pos += moveVec;
+			}
+			break;
 		}
 	}
 }
