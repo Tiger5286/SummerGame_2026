@@ -18,6 +18,7 @@ namespace
 	constexpr float kFar = 5000.0f;
 
 	// オフセット
+	constexpr float kOffsetX = -100.0f;
 	const Vector3 kTargetOffset = { 0.0f,100.0f,0.0f };
 	const Vector3 kPosOffset = { 0.0f,200.0f,0.0f };
 
@@ -29,7 +30,7 @@ namespace
 
 	// カメラのX軸回転の上限と下限
 	constexpr float kMaxAngleX = DX_PI_F / 2.0f - 0.1f;
-	constexpr float kMinAngleX = -DX_PI_F / 2.0f + 0.1f;
+	constexpr float kMinAngleX = -DX_PI_F / 4.0f + 0.1f;
 
 	// Lerpの定数
 	constexpr float kLerpT = 0.3f;
@@ -72,10 +73,6 @@ void Camera::Update()
 	if (m_angleX < kMinAngleX) m_angleX = kMinAngleX;
 
 	// プレイヤーの位置をもとにカメラの位置と注視点を設定
-	
-	// 注視点を設定
-	auto target = m_playerPos + kTargetOffset;
-	m_target.Lerp(target, kLerpT);
 	// 位置を設定
 	// 適当なベクトルを生成
 	Vector3 pos = { 0,0,-1 };
@@ -91,13 +88,24 @@ void Camera::Update()
 	// ベクトルを変形
 	pos = mtx * pos;
 
+	// 注視点を設定
+	auto target = m_playerPos + kTargetOffset;
+
+	// 注視点とカメラの位置を右にずらす
+	auto forwardVec = target - pos;
+	auto right = forwardVec.Cross(Vector3::Up()).Normalized();
+	pos += right * kOffsetX;
+	target += right * kOffsetX;
+
 	// マップとの当たり判定
-	auto result = MV1CollCheck_Line(m_mapHandle, -1, m_target.ToDxLib(), pos.ToDxLib());
+	auto result = MV1CollCheck_Line(m_mapHandle, -1, (m_playerPos + kPosOffset).ToDxLib(), pos.ToDxLib());
 	if (result.HitFlag)
 	{
 		pos = Vector3::FromDxLib(result.HitPosition);
 	}
 
+	// 注視点を滑らかに移動させる
+	m_target.Lerp(target, kLerpT);
 	// カメラの位置を滑らかに移動させる
 	m_pos.Lerp(pos, kLerpT);
 
