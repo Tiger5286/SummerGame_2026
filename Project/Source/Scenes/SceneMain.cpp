@@ -16,16 +16,17 @@ void SceneMain::Init()
 {
 	// モデルの読み込み
 	m_playerModelHandle = MV1LoadModel(L"data/models/Player.mv1");
-	m_mapModelHandle = MV1LoadModel(L"data/models/Map.mv1");
+	m_mapModelHandle = MV1LoadModel(L"data/models/Stage.mv1");
+	m_mapColliderHandle = MV1LoadModel(L"data/models/Collision.mv1");
 
 	// プレイヤーの生成
 	m_pPlayer = std::make_shared<Player>(m_input);
 	m_pPlayer->SetHandle(m_playerModelHandle);
-	m_pPlayer->SetMapHandle(m_mapModelHandle);
+	m_pPlayer->SetMapHandle(m_mapColliderHandle);
 	m_pPlayer->Init();
 	// カメラの生成
 	m_pCamera = std::make_shared<Camera>(m_input);
-	m_pCamera->SetMapHandle(m_mapModelHandle);
+	m_pCamera->SetMapHandle(m_mapColliderHandle);
 	m_pCamera->Init();
 
 	// スカイボックスの生成
@@ -37,6 +38,7 @@ void SceneMain::End()
 {
 	MV1DeleteModel(m_playerModelHandle);
 	MV1DeleteModel(m_mapModelHandle);
+	MV1DeleteModel(m_mapColliderHandle);
 
 	m_pPlayer->End();
 	
@@ -59,10 +61,6 @@ void SceneMain::Update()
 
 	m_pSkyBox->SetCameraPos(m_pCamera->GetPos());
 	m_pSkyBox->Update();
-
-	// ライトの向きをカメラからプレイヤーのベクトルの向きにする
-	auto cameraToPlayer = m_pPlayer->GetPos() - m_pCamera->GetPos();
-	SetLightDirection(cameraToPlayer.ToDxLib());
 }
 
 void SceneMain::Draw()

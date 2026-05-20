@@ -24,6 +24,8 @@ private:
 	int m_frameCount = 0;
 
 	int m_mapModelHandle = -1;
+	int m_mapColliderHandle = -1;
+
 	int m_playerModelHandle = -1;
 
 	Input m_input;
