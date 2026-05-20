@@ -2,6 +2,7 @@
 #include "DxLib.h"
 #include "../GameObject/Player.h"
 #include "../System/Camera.h"
+#include "../GameObject/Zombie.h"
 #include "../System/SkyBox.h"
 
 SceneMain::SceneMain()
@@ -15,9 +16,11 @@ SceneMain::~SceneMain()
 void SceneMain::Init()
 {
 	// モデルの読み込み
-	m_playerModelHandle = MV1LoadModel(L"data/models/Player.mv1");
 	m_mapModelHandle = MV1LoadModel(L"data/models/Stage.mv1");
 	m_mapColliderHandle = MV1LoadModel(L"data/models/Collision.mv1");
+
+	m_playerModelHandle = MV1LoadModel(L"data/models/Player.mv1");
+	m_zombieModelHandle = MV1LoadModel(L"data/models/Zombie.mv1");
 
 	// プレイヤーの生成
 	m_pPlayer = std::make_shared<Player>(m_input);
@@ -28,6 +31,10 @@ void SceneMain::Init()
 	m_pCamera = std::make_shared<Camera>(m_input);
 	m_pCamera->SetMapHandle(m_mapColliderHandle);
 	m_pCamera->Init();
+	// ゾンビの生成
+	m_pZombie = std::make_shared<Zombie>();
+	m_pZombie->SetHandle(m_zombieModelHandle);
+	m_pZombie->Init();
 
 	// スカイボックスの生成
 	m_pSkyBox = std::make_shared<SkyBox>();
@@ -39,9 +46,10 @@ void SceneMain::End()
 	MV1DeleteModel(m_playerModelHandle);
 	MV1DeleteModel(m_mapModelHandle);
 	MV1DeleteModel(m_mapColliderHandle);
+	MV1DeleteModel(m_zombieModelHandle);
 
 	m_pPlayer->End();
-	
+	m_pZombie->End();
 	m_pSkyBox->End();
 }
 
@@ -58,6 +66,7 @@ void SceneMain::Update()
 	// 各オブジェクトの更新
 	m_pPlayer->Update();
 	m_pCamera->Update();
+	m_pZombie->Update();
 
 	m_pSkyBox->SetCameraPos(m_pCamera->GetPos());
 	m_pSkyBox->Update();
@@ -73,6 +82,7 @@ void SceneMain::Draw()
 	DrawGrid();
 #endif
 
+	m_pZombie->Draw();
 	m_pPlayer->Draw();
 
 #ifdef _DEBUG

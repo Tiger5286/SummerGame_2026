@@ -5,6 +5,7 @@
 
 class Player;
 class Camera;
+class Zombie;
 class SkyBox;
 
 class SceneMain
@@ -27,11 +28,13 @@ private:
 	int m_mapColliderHandle = -1;
 
 	int m_playerModelHandle = -1;
+	int m_zombieModelHandle = -1;
 
 	Input m_input;
 
 	std::shared_ptr<Player> m_pPlayer = nullptr;
 	std::shared_ptr<Camera> m_pCamera = nullptr;
+	std::shared_ptr<Zombie> m_pZombie = nullptr;
 
 	std::shared_ptr<SkyBox> m_pSkyBox = nullptr;
 };
