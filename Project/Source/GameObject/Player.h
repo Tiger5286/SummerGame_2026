@@ -31,6 +31,8 @@ private:
     void Attack();  // 攻撃処理
     void CancelAttack();    // 攻撃を中止する
 
+    void RotateInputDir();  // 入力方向を向く
+
     // マップに当たったときの処理
 	void CheckHitMap(MV1_COLL_RESULT_POLY_DIM coll);
 

@@ -211,6 +211,9 @@ void Player::Dodge()
 	// ボタンを押した、かつ回避中でなければ回避
 	if (m_input.IsTriggerd(XINPUT_BUTTON_B) && m_state != State::Dodge)
 	{
+		// 入力方向を向く
+		RotateInputDir();
+
 		m_anim.ChangeAnim(kRollingAnimName, 0.5f, false);
 		m_state = State::Dodge;
 		m_dodgeFrame = 0;
@@ -292,13 +295,7 @@ void Player::Attack()
 					m_isTransferNextCombo = false;
 					m_comboFrame = kCombo1MinFrame;
 
-					auto stick = m_input.GetStickInput(LR::Left);
-					if (stick.SquaredLength() > 0.0f)
-					{
-						stick.Normalize();
-						m_angle = atan2f(stick.y, -stick.x) + DX_PI_F / 2;
-						m_angle += m_cameraAngleY;
-					}
+					RotateInputDir();
 				}
 			}
 			else
@@ -333,13 +330,7 @@ void Player::Attack()
 					m_isTransferNextCombo = false;
 					m_comboFrame = kCombo2MinFrame + kCombo1MinFrame;
 
-					auto stick = m_input.GetStickInput(LR::Left);
-					if (stick.SquaredLength() > 0.0f)
-					{
-						stick.Normalize();
-						m_angle = atan2f(stick.y, -stick.x) + DX_PI_F / 2;
-						m_angle += m_cameraAngleY;
-					}
+					RotateInputDir();
 				}
 			}
 			else
@@ -386,6 +377,17 @@ void Player::Attack()
 void Player::CancelAttack()
 {
 	m_comboFrame = 0;
+}
+
+void Player::RotateInputDir()
+{
+	auto stick = m_input.GetStickInput(LR::Left);
+	if (stick.SquaredLength() > 0.0f)
+	{
+		stick.Normalize();
+		m_angle = atan2f(stick.y, -stick.x) + DX_PI_F / 2;
+		m_angle += m_cameraAngleY;
+	}
 }
 
 void Player::CheckHitMap(MV1_COLL_RESULT_POLY_DIM coll)
