@@ -1,5 +1,6 @@
-#pragma once
+﻿#pragma once
 #include "GameObject.h"
+#include "../System/Animator.h"
 
 class Zombie : public GameObject
 {
@@ -12,7 +13,12 @@ public:
 	void Update() override;
 	void Draw() override;
 
-private:
+	// プレイヤーの位置を設定する(毎フレームUpdateの前に呼ぶ)
+	void SetPlayerPos(const Vector3& pos) { m_playerPos = pos; }
 
+private:
+	Animator m_anim;
+
+	Vector3 m_playerPos;	// プレイヤーの位置
 };
 

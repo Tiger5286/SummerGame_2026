@@ -66,6 +66,8 @@ void SceneMain::Update()
 	// 各オブジェクトの更新
 	m_pPlayer->Update();
 	m_pCamera->Update();
+
+	m_pZombie->SetPlayerPos(m_pPlayer->GetPos());
 	m_pZombie->Update();
 
 	m_pSkyBox->SetCameraPos(m_pCamera->GetPos());
