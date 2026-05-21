@@ -23,6 +23,11 @@ public:
 	// マップモデルのハンドルを設定する(Initの前に実行する)
 	void SetMapHandle(int mapHandle) { m_mapHandle = mapHandle; }
 
+    // 角度を取得する
+    float GetAngle() const { return m_angle; }
+    // 自身の向きを表すベクトルを取得する
+    Vector3 GetDir() const;
+
 private:
 
     void Move();    // 移動処理

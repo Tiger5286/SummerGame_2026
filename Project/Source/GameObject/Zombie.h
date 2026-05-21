@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include "GameObject.h"
 #include "../System/Animator.h"
+#include <memory>
+
+class Player;
 
 class Zombie : public GameObject
 {
@@ -13,12 +16,13 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	// プレイヤーの位置を設定する(毎フレームUpdateの前に呼ぶ)
-	void SetPlayerPos(const Vector3& pos) { m_playerPos = pos; }
+	// プレイヤーのポインタを設定する(Initの前に実行する)
+	void SetPlayer(const std::shared_ptr<Player> pPlayer) { m_pPlayer = pPlayer; }
 
 private:
 	Animator m_anim;
+	float m_angle = 0.0f;
 
-	Vector3 m_playerPos;	// プレイヤーの位置
+	std::shared_ptr<Player> m_pPlayer = nullptr;	// プレイヤーのポインタ
 };
 

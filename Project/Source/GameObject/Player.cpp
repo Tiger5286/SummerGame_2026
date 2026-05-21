@@ -16,6 +16,9 @@ namespace
 	const std::wstring kCombo2AnimName  = L"Player|Combo2";
 	const std::wstring kCombo3AnimName  = L"Player|Combo3";
 
+	// モデルのデフォルトの向き(angleが0の時の向き)
+	const Vector3 kDefaultDir = Vector3(0, 0, -1);
+
 	// 当たり判定
 	constexpr float kColliderRadius = 25.0f;
 	constexpr float kColliderHeight = 120.0f;
@@ -152,6 +155,11 @@ void Player::Draw()
 	DrawFormatString(0, 64, 0xffffff, L"comboFrame:%d", m_comboFrame);
 	DrawFormatString(0, 48, 0xffffff, L"m_angle:%.2f", m_angle);
 #endif
+}
+
+Vector3 Player::GetDir() const
+{
+	return kDefaultDir * Matrix4x4::GetRotY(m_angle);
 }
 
 void Player::Move()
