@@ -49,7 +49,7 @@ void Zombie::Update()
 	Vector3 toPlayerVec = m_pPlayer->GetPos() - m_pos;
 	// 二つのベクトルの角度を計算
 	float theta = forwardVec.Dot(toPlayerVec) / (forwardVec.Length() * toPlayerVec.Length());
-	printfDx(L"theta:%.2f\n", theta);
+	//printfDx(L"theta:%.2f\n", theta);
 
 	// 行列を生成してモデルに適用
 	auto mtx = Matrix4x4::GetRotY(m_angle) * Matrix4x4::GetTranslate(m_pos);
@@ -69,14 +69,17 @@ void Zombie::Draw()
 	DrawLine3D(m_pos.ToDxLib(), (m_pos + lineVec2).ToDxLib(), 0xff0000);
 	DrawLine3D(m_pos.ToDxLib(), (m_pos + lineVec3).ToDxLib(), 0xff0000);
 
-	constexpr int temp = 10;
+	constexpr int temp = 16;
 	const auto theta = kPlayerFindTheta / temp;
 	for (int i = 0; i < temp; i++)
 	{
 		Vector3 tempV = lineVec2 * Matrix4x4::GetRotY(theta * i);
-		DrawLine3D(m_pos.ToDxLib(), (m_pos + tempV).ToDxLib(), 0xff0000);
-		Vector3 tempV2 = lineVec1 * Matrix4x4::GetRotY(-theta * i);
-		DrawLine3D(m_pos.ToDxLib(), (m_pos + tempV2).ToDxLib(), 0xff0000);
+		Vector3 tempV2 = lineVec2 * Matrix4x4::GetRotY(theta * (i + 1));
+		DrawLine3D((m_pos + tempV).ToDxLib(), (m_pos + tempV2).ToDxLib(), 0xff0000);
+
+		tempV = lineVec1 * Matrix4x4::GetRotY(-theta * i);
+		tempV2 = lineVec1 * Matrix4x4::GetRotY(-theta * (i + 1));
+		DrawLine3D((m_pos + tempV).ToDxLib(), (m_pos + tempV2).ToDxLib(), 0xff0000);
 	}
 #endif
 
