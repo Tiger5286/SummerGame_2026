@@ -3,6 +3,7 @@
 #include "../Utility/Matrix4x4.h"
 #include <cassert>
 #include "Player.h"
+#include "../Utility/MyLib.h"
 
 namespace
 {
@@ -62,25 +63,26 @@ void Zombie::Update()
 void Zombie::Draw()
 {
 #ifdef _DEBUG
-	Vector3 lineVec1 = kDefaultDir * Matrix4x4::GetRotY(kPlayerFindTheta) * kPlayerFindDist;
-	Vector3 lineVec2 = kDefaultDir * Matrix4x4::GetRotY(-kPlayerFindTheta) * kPlayerFindDist;
-	Vector3 lineVec3 = kDefaultDir * kPlayerFindDist;
-	DrawLine3D(m_pos.ToDxLib(), (m_pos + lineVec1).ToDxLib(), 0xff0000);
-	DrawLine3D(m_pos.ToDxLib(), (m_pos + lineVec2).ToDxLib(), 0xff0000);
-	DrawLine3D(m_pos.ToDxLib(), (m_pos + lineVec3).ToDxLib(), 0xff0000);
+	//Vector3 lineVec1 = kDefaultDir * Matrix4x4::GetRotY(kPlayerFindTheta) * kPlayerFindDist;
+	//Vector3 lineVec2 = kDefaultDir * Matrix4x4::GetRotY(-kPlayerFindTheta) * kPlayerFindDist;
+	//Vector3 lineVec3 = kDefaultDir * kPlayerFindDist;
+	//DrawLine3D(m_pos.ToDxLib(), (m_pos + lineVec1).ToDxLib(), 0xff0000);
+	//DrawLine3D(m_pos.ToDxLib(), (m_pos + lineVec2).ToDxLib(), 0xff0000);
+	//DrawLine3D(m_pos.ToDxLib(), (m_pos + lineVec3).ToDxLib(), 0xff0000);
 
-	constexpr int temp = 16;
-	const auto theta = kPlayerFindTheta / temp;
-	for (int i = 0; i < temp; i++)
-	{
-		Vector3 tempV = lineVec2 * Matrix4x4::GetRotY(theta * i);
-		Vector3 tempV2 = lineVec2 * Matrix4x4::GetRotY(theta * (i + 1));
-		DrawLine3D((m_pos + tempV).ToDxLib(), (m_pos + tempV2).ToDxLib(), 0xff0000);
+	//constexpr int temp = 16;
+	//const auto theta = kPlayerFindTheta / temp;
+	//for (int i = 0; i < temp; i++)
+	//{
+	//	Vector3 tempV = lineVec2 * Matrix4x4::GetRotY(theta * i);
+	//	Vector3 tempV2 = lineVec2 * Matrix4x4::GetRotY(theta * (i + 1));
+	//	DrawLine3D((m_pos + tempV).ToDxLib(), (m_pos + tempV2).ToDxLib(), 0xff0000);
 
-		tempV = lineVec1 * Matrix4x4::GetRotY(-theta * i);
-		tempV2 = lineVec1 * Matrix4x4::GetRotY(-theta * (i + 1));
-		DrawLine3D((m_pos + tempV).ToDxLib(), (m_pos + tempV2).ToDxLib(), 0xff0000);
-	}
+	//	tempV = lineVec1 * Matrix4x4::GetRotY(-theta * i);
+	//	tempV2 = lineVec1 * Matrix4x4::GetRotY(-theta * (i + 1));
+	//	DrawLine3D((m_pos + tempV).ToDxLib(), (m_pos + tempV2).ToDxLib(), 0xff0000);
+	//}
+	MyLib::DrawFan3D(m_pos, m_angle, kPlayerFindTheta, kPlayerFindDist, 8);
 #endif
 
 	// モデルの描画

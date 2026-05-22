@@ -48,6 +48,7 @@
     <ClInclude Include="Source\System\Input.h" />
     <ClInclude Include="Source\System\SkyBox.h" />
     <ClInclude Include="Source\Utility\Matrix4x4.h" />
+    <ClInclude Include="Source\Utility\MyLib.h" />
     <ClInclude Include="Source\Utility\Vector3.h" />
     <ClInclude Include="Source\Collider\SphereCollider.h" />
     <ClInclude Include="Source\GameObject\Zombie.h" />
