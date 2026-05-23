@@ -18,7 +18,8 @@ namespace
 	// プレイヤーを見つける距離
 	constexpr float kPlayerFindDist = 500.0f;
 	// プレイヤーを見つける角度			// 45度
-	constexpr float kPlayerFindTheta = DX_PI_F / 4;
+	constexpr float kPlayerFindRad = DX_PI_F / 4;
+	const float kPlayerFindCos = cosf(kPlayerFindRad);
 
 	// モデルのデフォルトの向き(angleが0の時の向き)
 	const Vector3 kDefaultDir = Vector3(0, 0, -1);
@@ -48,9 +49,13 @@ void Zombie::Update()
 	Vector3 forwardVec = kDefaultDir * Matrix4x4::GetRotY(m_angle);
 	// 敵からプレイヤーの位置までのベクトル
 	Vector3 toPlayerVec = m_pPlayer->GetPos() - m_pos;
+	toPlayerVec.y = 0.0f;	// y軸は無視する
 	// 二つのベクトルの角度を計算
-	float theta = forwardVec.Dot(toPlayerVec) / (forwardVec.Length() * toPlayerVec.Length());
-	//printfDx(L"theta:%.2f\n", theta);
+	float cos = forwardVec.Dot(toPlayerVec) / (1.0f * toPlayerVec.Length());
+	if (cos > kPlayerFindCos && toPlayerVec.SquaredLength() < kPlayerFindDist * kPlayerFindDist)
+	{
+		// プレイヤーを見つけた時の処理
+	}
 
 	// 行列を生成してモデルに適用
 	auto mtx = Matrix4x4::GetRotY(m_angle) * Matrix4x4::GetTranslate(m_pos);
@@ -63,26 +68,7 @@ void Zombie::Update()
 void Zombie::Draw()
 {
 #ifdef _DEBUG
-	//Vector3 lineVec1 = kDefaultDir * Matrix4x4::GetRotY(kPlayerFindTheta) * kPlayerFindDist;
-	//Vector3 lineVec2 = kDefaultDir * Matrix4x4::GetRotY(-kPlayerFindTheta) * kPlayerFindDist;
-	//Vector3 lineVec3 = kDefaultDir * kPlayerFindDist;
-	//DrawLine3D(m_pos.ToDxLib(), (m_pos + lineVec1).ToDxLib(), 0xff0000);
-	//DrawLine3D(m_pos.ToDxLib(), (m_pos + lineVec2).ToDxLib(), 0xff0000);
-	//DrawLine3D(m_pos.ToDxLib(), (m_pos + lineVec3).ToDxLib(), 0xff0000);
-
-	//constexpr int temp = 16;
-	//const auto theta = kPlayerFindTheta / temp;
-	//for (int i = 0; i < temp; i++)
-	//{
-	//	Vector3 tempV = lineVec2 * Matrix4x4::GetRotY(theta * i);
-	//	Vector3 tempV2 = lineVec2 * Matrix4x4::GetRotY(theta * (i + 1));
-	//	DrawLine3D((m_pos + tempV).ToDxLib(), (m_pos + tempV2).ToDxLib(), 0xff0000);
-
-	//	tempV = lineVec1 * Matrix4x4::GetRotY(-theta * i);
-	//	tempV2 = lineVec1 * Matrix4x4::GetRotY(-theta * (i + 1));
-	//	DrawLine3D((m_pos + tempV).ToDxLib(), (m_pos + tempV2).ToDxLib(), 0xff0000);
-	//}
-	MyLib::DrawFan3D(m_pos, m_angle, kPlayerFindTheta, kPlayerFindDist, 8);
+	MyLib::DrawFan3D(m_pos, m_angle, kPlayerFindRad, kPlayerFindDist, 8);
 #endif
 
 	// モデルの描画
