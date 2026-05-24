@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "DxLib.h"
 #include "Vector3.h"
 #include "Matrix4x4.h"
@@ -17,9 +17,9 @@ namespace MyLib
 	/// <param name="divNum">何分割の扇を描画するか</param>
 	void DrawFan3D(const Vector3& pos,float angle,float fanAngle,float radius,int divNum)
 	{
-		Vector3 lineVec1 = kDefaultDir * Matrix4x4::GetRotY(fanAngle) * radius;
-		Vector3 lineVec2 = kDefaultDir * Matrix4x4::GetRotY(-fanAngle) * radius;
-		Vector3 lineVec3 = kDefaultDir * radius;
+		Vector3 lineVec1 = kDefaultDir * Matrix4x4::GetRotY(fanAngle) * Matrix4x4::GetRotY(angle) * radius;
+		Vector3 lineVec2 = kDefaultDir * Matrix4x4::GetRotY(-fanAngle) * Matrix4x4::GetRotY(angle) * radius;
+		Vector3 lineVec3 = kDefaultDir * Matrix4x4::GetRotY(angle) * radius;
 		DrawLine3D(pos.ToDxLib(), (pos + lineVec1).ToDxLib(), 0xff0000);
 		DrawLine3D(pos.ToDxLib(), (pos + lineVec2).ToDxLib(), 0xff0000);
 		DrawLine3D(pos.ToDxLib(), (pos + lineVec3).ToDxLib(), 0xff0000);
@@ -33,6 +33,22 @@ namespace MyLib
 
 			tempV = lineVec1 * Matrix4x4::GetRotY(-theta * i);
 			tempV2 = lineVec1 * Matrix4x4::GetRotY(-theta * (i + 1));
+			DrawLine3D((pos + tempV).ToDxLib(), (pos + tempV2).ToDxLib(), 0xff0000);
+		}
+	}
+
+	/// <summary>
+	/// 円形を描画する
+	/// </summary>
+	/// <param name="pos">中心点の位置</param>
+	/// <param name="radius">円の半径</param>
+	/// <param name="divNum">何分割で描画するか</param>
+	void DrawCircle3D(const Vector3& pos, float radius, int divNum)
+	{
+		for (int i = 0; i < divNum; i++)
+		{
+			Vector3 tempV = kDefaultDir * Matrix4x4::GetRotY(DX_PI_F * 2 / divNum * i) * radius;
+			Vector3 tempV2 = kDefaultDir * Matrix4x4::GetRotY(DX_PI_F * 2 / divNum * (i + 1)) * radius;
 			DrawLine3D((pos + tempV).ToDxLib(), (pos + tempV2).ToDxLib(), 0xff0000);
 		}
 	}

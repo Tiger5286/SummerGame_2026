@@ -15,8 +15,13 @@ namespace
 
 	// ゾンビの移動速度
 	constexpr float kZombieMoveSpeed = 3.0f;
+
 	// プレイヤーを見つける距離
-	constexpr float kPlayerFindDist = 500.0f;
+	constexpr float kPlayerFindDist = 700.0f;
+	constexpr float kUnconditionalFindDist = 200.0f;	// 条件なしで見つける距離(プレイヤーが近すぎるときは角度に関係なく見つける)
+	// プレイヤーを追いかけなくなる距離
+	constexpr float kStopChaseDist = 100.0f;
+
 	// プレイヤーを見つける角度			// 45度
 	constexpr float kPlayerFindRad = DX_PI_F / 4;
 	const float kPlayerFindCos = cosf(kPlayerFindRad);
@@ -52,9 +57,23 @@ void Zombie::Update()
 	toPlayerVec.y = 0.0f;	// y軸は無視する
 	// 二つのベクトルの角度を計算
 	float cos = forwardVec.Dot(toPlayerVec) / (1.0f * toPlayerVec.Length());
-	if (cos > kPlayerFindCos && toPlayerVec.SquaredLength() < kPlayerFindDist * kPlayerFindDist)
+
+	bool isFindAngle = cos > kPlayerFindCos;	// プレイヤーが見つける角度の範囲にいるかどうか
+	bool isFindDist = toPlayerVec.SquaredLength() < kPlayerFindDist * kPlayerFindDist;	// プレイヤーが見つける距離の範囲にいるかどうか
+	bool isUnconditionalFindDist = toPlayerVec.SquaredLength() < kUnconditionalFindDist * kUnconditionalFindDist;	// 条件なしで見つける距離の範囲にいるかどうか
+	bool isStopChase = toPlayerVec.SquaredLength() < kStopChaseDist * kStopChaseDist;	// プレイヤーが追いかけなくなる距離の範囲にいるかどうか
+
+	if (((isFindAngle && isFindDist) || isUnconditionalFindDist))
 	{
 		// プレイヤーを見つけた時の処理
+		auto angleToPlayer = atan2(toPlayerVec.z, toPlayerVec.x) + DX_PI_F / 2;
+		m_angle = -angleToPlayer;
+		// プレイヤーが近すぎるときは追いかけない
+		if (!isStopChase)
+		{
+			Vector3 moveVec = forwardVec * kZombieMoveSpeed;
+			m_pos += moveVec;
+		}
 	}
 
 	// 行列を生成してモデルに適用
@@ -69,6 +88,7 @@ void Zombie::Draw()
 {
 #ifdef _DEBUG
 	MyLib::DrawFan3D(m_pos, m_angle, kPlayerFindRad, kPlayerFindDist, 8);
+	MyLib::DrawCircle3D(m_pos, kUnconditionalFindDist, 32);
 #endif
 
 	// モデルの描画
