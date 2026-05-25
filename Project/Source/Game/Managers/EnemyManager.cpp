@@ -1,5 +1,6 @@
 ﻿#include "EnemyManager.h"
 #include "../GameObject/EnemyBase.h"
+#include <cassert>
 
 EnemyManager::EnemyManager()
 {}
@@ -7,10 +8,15 @@ EnemyManager::EnemyManager()
 EnemyManager::~EnemyManager()
 {}
 
-void EnemyManager::Init()
+void EnemyManager::Init(std::shared_ptr<Player> pPlayer)
 {
+	assert(pPlayer != nullptr && "EnemyManager::Init() : プレイヤーのポインタがnullptrです");
+	
+	m_pPlayer = pPlayer;
+
 	for (auto& enemy : m_enemyList)
 	{
+		enemy->SetPlayer(m_pPlayer);
 		enemy->Init();
 	}
 }
@@ -55,4 +61,7 @@ void EnemyManager::AddEnemy(std::shared_ptr<EnemyBase> enemy, const Vector3& pos
 {
 	enemy->SetPos(pos);
 	m_enemyList.push_back(enemy);
+
+	enemy->SetPlayer(m_pPlayer);
+	enemy->Init();
 }

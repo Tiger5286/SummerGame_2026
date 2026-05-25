@@ -5,8 +5,9 @@
 
 class Player;
 class Camera;
-class Zombie;
 class SkyBox;
+
+class EnemyManager;
 
 class SceneMain
 {
@@ -34,7 +35,8 @@ private:
 
 	std::shared_ptr<Player> m_pPlayer = nullptr;
 	std::shared_ptr<Camera> m_pCamera = nullptr;
-	std::shared_ptr<Zombie> m_pZombie = nullptr;
+
+	std::shared_ptr<EnemyManager> m_pEnemyManager = nullptr;
 
 	std::shared_ptr<SkyBox> m_pSkyBox = nullptr;
 };

@@ -4,6 +4,7 @@
 #include "../../Utility/Vector3.h"
 
 class EnemyBase;
+class Player;
 
 class EnemyManager
 {
@@ -11,7 +12,7 @@ public:
 	EnemyManager();
 	virtual ~EnemyManager();
 
-	void Init();
+	void Init(std::shared_ptr<Player> pPlayer);
 	void End();
 	void Update();
 	void Draw();
@@ -24,5 +25,8 @@ public:
 	void AddEnemy(std::shared_ptr<EnemyBase> enemy, const Vector3& pos);
 
 private:
+	int m_zombieModelHandle = -1;
+
 	std::list<std::shared_ptr<EnemyBase>> m_enemyList;
+	std::shared_ptr<Player> m_pPlayer = nullptr;
 };

@@ -3,6 +3,9 @@
 #include "../Game/GameObject/Player.h"
 #include "../System/Camera.h"
 #include "../Game/GameObject/Zombie.h"
+
+#include "../Game/Managers/EnemyManager.h"
+
 #include "../System/SkyBox.h"
 
 SceneMain::SceneMain()
@@ -31,11 +34,10 @@ void SceneMain::Init()
 	m_pCamera = std::make_shared<Camera>(m_input);
 	m_pCamera->SetMapHandle(m_mapColliderHandle);
 	m_pCamera->Init();
-	// ゾンビの生成
-	m_pZombie = std::make_shared<Zombie>();
-	m_pZombie->SetHandle(m_zombieModelHandle);
-	m_pZombie->SetPlayer(m_pPlayer);
-	m_pZombie->Init();
+
+	// 敵管理クラスの生成
+	m_pEnemyManager = std::make_shared<EnemyManager>();
+	m_pEnemyManager->Init(m_pPlayer);
 
 	// スカイボックスの生成
 	m_pSkyBox = std::make_shared<SkyBox>();
@@ -50,8 +52,9 @@ void SceneMain::End()
 	MV1DeleteModel(m_zombieModelHandle);
 
 	m_pPlayer->End();
-	m_pZombie->End();
 	m_pSkyBox->End();
+
+	m_pEnemyManager->End();
 }
 
 void SceneMain::Update()
@@ -67,7 +70,8 @@ void SceneMain::Update()
 	// 各オブジェクトの更新
 	m_pPlayer->Update();
 	m_pCamera->Update();
-	m_pZombie->Update();
+	
+	m_pEnemyManager->Update();
 
 	m_pSkyBox->SetCameraPos(m_pCamera->GetPos());
 	m_pSkyBox->Update();
@@ -83,8 +87,9 @@ void SceneMain::Draw()
 	DrawGrid();
 #endif
 
-	m_pZombie->Draw();
 	m_pPlayer->Draw();
+
+	m_pEnemyManager->Draw();
 
 #ifdef _DEBUG
 	DrawString(0,0,L"SceneMain",0xffffff);
