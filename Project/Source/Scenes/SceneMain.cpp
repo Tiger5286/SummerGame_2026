@@ -54,6 +54,18 @@ void SceneMain::Init()
 	m_pEnemyManager = std::make_shared<EnemyManager>();
 	m_pEnemyManager->Init(m_pPlayer);
 
+	auto zombie = std::make_shared<Zombie>();
+	zombie->SetHandle(modelManager.DuplicateModel(L"Zombie"));
+	m_pEnemyManager->AddEnemy(zombie,Vector3(0,0,800));
+
+	zombie = std::make_shared<Zombie>();
+	zombie->SetHandle(modelManager.DuplicateModel(L"Zombie"));
+	m_pEnemyManager->AddEnemy(zombie, Vector3(300, 0, 800));
+
+	zombie = std::make_shared<Zombie>();
+	zombie->SetHandle(modelManager.DuplicateModel(L"Zombie"));
+	m_pEnemyManager->AddEnemy(zombie, Vector3(-300, 0, 800));
+
 	// スカイボックスの生成
 	m_pSkyBox = std::make_shared<SkyBox>();
 	m_pSkyBox->Init();
