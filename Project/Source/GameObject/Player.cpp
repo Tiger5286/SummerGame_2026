@@ -2,7 +2,7 @@
 #include <string>
 #include <cmath>
 #include "../Utility/Matrix4x4.h"
-
+#include "../Utility/MyLib.h"
 #include "../System/Input.h"
 
 namespace
@@ -125,9 +125,7 @@ void Player::Update()
 	}
 
 	// モデルの回転角度を更新
-	float diff = m_angle - m_drawAngle - DX_PI_F * 2;
-	while (diff > DX_PI_F) diff -= 2.0f * DX_PI_F;
-	while (diff < -DX_PI_F) diff += 2.0f * DX_PI_F;
+	float diff = MyLib::GetAngleDif(m_angle, m_drawAngle);
 	m_drawAngle += diff * 0.1f;
 
 	// 行列を生成してモデルに適用

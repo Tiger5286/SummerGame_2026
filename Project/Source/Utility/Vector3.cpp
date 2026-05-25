@@ -29,6 +29,11 @@ void Vector3::Draw(const Vector3& start, const Vector3& end)
 	DrawCone3D(end.ToDxLib(), revVec.ToDxLib(), 10.0f, 8, 0xffff00, 0xffff00, true);
 }
 
+float Vector3::Angle() const
+{
+	return atan2(z, x);
+}
+
 VECTOR Vector3::ToDxLib() const
 {
 	return { x,y,z };

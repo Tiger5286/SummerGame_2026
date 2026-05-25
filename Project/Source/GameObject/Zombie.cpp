@@ -15,10 +15,13 @@ namespace
 
 	// ゾンビの移動速度
 	constexpr float kZombieMoveSpeed = 3.0f;
+	// ゾンビの回転速度
+	constexpr float kRotateSpeed = 0.01f;
+	//constexpr float kRotateSpeedNear = 0.1f;	// 近いときは早く回転する
 
 	// プレイヤーを見つける距離
 	constexpr float kPlayerFindDist = 700.0f;
-	constexpr float kUnconditionalFindDist = 200.0f;	// 条件なしで見つける距離(プレイヤーが近すぎるときは角度に関係なく見つける)
+	constexpr float kUnconditionalFindDist = 100.0f;	// 条件なしで見つける距離(プレイヤーが近すぎるときは角度に関係なく見つける)
 	// プレイヤーを追いかけなくなる距離
 	constexpr float kStopChaseDist = 100.0f;
 
@@ -66,8 +69,26 @@ void Zombie::Update()
 	if (((isFindAngle && isFindDist) || isUnconditionalFindDist))
 	{
 		// プレイヤーを見つけた時の処理
-		auto angleToPlayer = atan2(toPlayerVec.z, toPlayerVec.x) + DX_PI_F / 2;
-		m_angle = -angleToPlayer;
+		// 外積の正負でどっちに回転すべきか判定
+		auto cross = forwardVec.Cross(toPlayerVec);
+		// 回転速度を設定
+		float rotSpeed = kRotateSpeed;
+		//// 近いなら早く回転
+		//if (isUnconditionalFindDist)
+		//{
+		//	rotSpeed = kRotateSpeedNear;
+		//}
+
+		// 回転
+		if (cross.y < 0)
+		{
+			m_angle -= rotSpeed;
+		}
+		else if (cross.y > 0)
+		{
+			m_angle += rotSpeed;
+		}
+		
 		// プレイヤーが近すぎるときは追いかけない
 		if (!isStopChase)
 		{

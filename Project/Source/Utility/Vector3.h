@@ -25,6 +25,12 @@ public:
 
 	static void Draw(const Vector3& start, const Vector3& end);
 
+	/// <summary>
+	/// 自身のベクトルのXZ成分を見て角度を返す
+	/// </summary>
+	/// <returns>角度(ラジアン)</returns>
+	float Angle() const;
+
 // ----- 変換関数 -----
 	// DxLib用のベクトルに変換して返す
 	VECTOR ToDxLib() const;
@@ -44,7 +50,7 @@ public:
 
 	// ベクトルの内積を返す
 	float Dot(const Vector3& v) const;
-	// ベクトルの外積を返す
+	// ベクトルの外積を返す(正規化はされない)
 	Vector3 Cross(const Vector3& v) const;
 
 	// ベクトルの線形補間をする
