@@ -19,7 +19,10 @@ public:
 	// プレイヤーのポインタを設定する(Initの前に実行する)
 	void SetPlayer(const std::shared_ptr<Player> pPlayer) { m_pPlayer = pPlayer; }
 
+	bool IsDead() const { return m_isDead; }
+
 protected:
 	std::shared_ptr<Player> m_pPlayer = nullptr;
+	bool m_isDead = false;
 };
 

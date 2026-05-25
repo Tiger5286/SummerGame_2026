@@ -20,6 +20,8 @@ public:
 
 	// 位置を取得する
 	Vector3 GetPos() const { return m_pos; }
+	// 位置を設定する
+	void SetPos(const Vector3& pos) { m_pos = pos; }
 
 	/// <summary>
 	/// 速度に抵抗をつける(なにもしなかったら徐々に速度が遅くなる)
