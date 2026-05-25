@@ -64,7 +64,7 @@ void Player::Init()
 {
 	m_anim.Init(m_modelHandle, kIdleAnimName);
 
-	m_pos = Vector3(0.0f, 200.0f, 0.0f);
+	m_pos = Vector3(0.0f, 0.0f, 0.0f);
 }
 
 void Player::End()
