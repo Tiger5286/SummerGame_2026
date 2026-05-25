@@ -6,6 +6,8 @@
 #include <memory>
 #include <string>
 
+#include "Singleton/ModelManager.h"
+
 #include "Scenes/SceneMain.h"
 
 Application& Application::GetInstance()
@@ -60,6 +62,9 @@ void Application::Run()
 
 	// ライティングの設定
 	SetUseLighting(true);
+
+	// シングルトンクラスの生成
+	auto& modelManager = ModelManager::GetInstance();
 
 	// シーンの生成、初期化
 	auto pScene = std::make_shared<SceneMain>();

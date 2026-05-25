@@ -1,5 +1,10 @@
 ﻿#include "SceneMain.h"
 #include "DxLib.h"
+#include <string>
+#include <vector>
+
+#include "../Singleton/ModelManager.h"
+
 #include "../Game/GameObject/Player.h"
 #include "../System/Camera.h"
 #include "../Game/GameObject/Zombie.h"
@@ -7,6 +12,16 @@
 #include "../Game/Managers/EnemyManager.h"
 
 #include "../System/SkyBox.h"
+
+namespace
+{
+	const std::vector<std::pair<std::wstring, std::wstring>> kModelFileNames = {
+		{ L"Stage", L"data/models/Stage.mv1" },
+		{ L"Collision", L"data/models/Collision.mv1" },
+		{ L"Player", L"data/models/Player.mv1" },
+		{ L"Zombie", L"data/models/Zombie.mv1" }
+	};
+}
 
 SceneMain::SceneMain()
 {
@@ -18,21 +33,21 @@ SceneMain::~SceneMain()
 
 void SceneMain::Init()
 {
-	// モデルの読み込み
-	m_mapModelHandle = MV1LoadModel(L"data/models/Stage.mv1");
-	m_mapColliderHandle = MV1LoadModel(L"data/models/Collision.mv1");
-
-	m_playerModelHandle = MV1LoadModel(L"data/models/Player.mv1");
-	m_zombieModelHandle = MV1LoadModel(L"data/models/Zombie.mv1");
+	// モデルのロードと登録
+	auto& modelManager = ModelManager::GetInstance();
+	for (const auto& modelFileName : kModelFileNames)
+	{
+		modelManager.LoadModel(modelFileName.second, modelFileName.first);
+	}
 
 	// プレイヤーの生成
 	m_pPlayer = std::make_shared<Player>(m_input);
-	m_pPlayer->SetHandle(m_playerModelHandle);
-	m_pPlayer->SetMapHandle(m_mapColliderHandle);
+	m_pPlayer->SetHandle(modelManager.GetModelHandle(L"Player"));
+	m_pPlayer->SetMapHandle(modelManager.GetModelHandle(L"Collision"));
 	m_pPlayer->Init();
 	// カメラの生成
 	m_pCamera = std::make_shared<Camera>(m_input);
-	m_pCamera->SetMapHandle(m_mapColliderHandle);
+	m_pCamera->SetMapHandle(modelManager.GetModelHandle(L"Collision"));
 	m_pCamera->Init();
 
 	// 敵管理クラスの生成
@@ -46,11 +61,6 @@ void SceneMain::Init()
 
 void SceneMain::End()
 {
-	MV1DeleteModel(m_playerModelHandle);
-	MV1DeleteModel(m_mapModelHandle);
-	MV1DeleteModel(m_mapColliderHandle);
-	MV1DeleteModel(m_zombieModelHandle);
-
 	m_pPlayer->End();
 	m_pSkyBox->End();
 
@@ -81,7 +91,8 @@ void SceneMain::Draw()
 {
 	m_pSkyBox->Draw();
 
-	MV1DrawModel(m_mapModelHandle);
+	auto& modelManager = ModelManager::GetInstance();
+	MV1DrawModel(modelManager.GetModelHandle(L"Stage"));
 
 #ifdef _DEBUG
 	DrawGrid();
