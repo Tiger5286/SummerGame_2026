@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "GameObject.h"
-#include "../System/Animator.h"
+#include "../../System/Animator.h"
 #include <memory>
 
 class Player;

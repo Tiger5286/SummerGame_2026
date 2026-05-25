@@ -30,16 +30,16 @@
     <ClCompile Include="Source\Utility\Vector3.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GameObject\GameObject.cpp">
+    <ClCompile Include="Source\Game\GameObject\GameObject.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Collider\ColliderBase.cpp">
+    <ClCompile Include="Source\Game\Collider\ColliderBase.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Collider\SphereCollider.cpp">
+    <ClCompile Include="Source\Game\Collider\SphereCollider.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GameObject\Player.cpp">
+    <ClCompile Include="Source\Game\GameObject\Player.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\System\Animator.cpp">
@@ -54,10 +54,10 @@
     <ClCompile Include="Source\System\Camera.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Collider\CapsuleCollider.cpp">
+    <ClCompile Include="Source\Game\Collider\CapsuleCollider.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GameObject\Zombie.cpp">
+    <ClCompile Include="Source\Game\GameObject\Zombie.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -77,16 +77,16 @@
     <ClInclude Include="Source\Utility\Vector3.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameObject\GameObject.h">
+    <ClInclude Include="Source\Game\GameObject\GameObject.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Collider\ColliderBase.h">
+    <ClInclude Include="Source\Game\Collider\ColliderBase.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Collider\SphereCollider.h">
+    <ClInclude Include="Source\Game\Collider\SphereCollider.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameObject\Player.h">
+    <ClInclude Include="Source\Game\GameObject\Player.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\System\Animator.h">
@@ -101,10 +101,10 @@
     <ClInclude Include="Source\System\Camera.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Collider\CapsuleCollider.h">
+    <ClInclude Include="Source\Game\Collider\CapsuleCollider.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameObject\Zombie.h">
+    <ClInclude Include="Source\Game\GameObject\Zombie.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\MyLib.h">

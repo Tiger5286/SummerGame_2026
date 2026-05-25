@@ -1,9 +1,9 @@
 ﻿#include "Player.h"
 #include <string>
 #include <cmath>
-#include "../Utility/Matrix4x4.h"
-#include "../Utility/MyLib.h"
-#include "../System/Input.h"
+#include "../../Utility/Matrix4x4.h"
+#include "../../Utility/MyLib.h"
+#include "../../System/Input.h"
 
 namespace
 {

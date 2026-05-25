@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "../Utility/Vector3.h"
+#include "../../Utility/Vector3.h"
 
 /// <summary>
 /// 当たり判定の種類を表す列挙体

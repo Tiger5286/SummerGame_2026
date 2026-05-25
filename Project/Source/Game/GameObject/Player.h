@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "GameObject.h"
-#include "../System/Animator.h"
+#include "../../System/Animator.h"
 #include "../Collider/CapsuleCollider.h"
 
 class Input;

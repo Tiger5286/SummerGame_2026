@@ -1,8 +1,8 @@
 ﻿#include "SceneMain.h"
 #include "DxLib.h"
-#include "../GameObject/Player.h"
+#include "../Game/GameObject/Player.h"
 #include "../System/Camera.h"
-#include "../GameObject/Zombie.h"
+#include "../Game/GameObject/Zombie.h"
 #include "../System/SkyBox.h"
 
 SceneMain::SceneMain()
