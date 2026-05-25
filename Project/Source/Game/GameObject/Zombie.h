@@ -1,11 +1,10 @@
 ﻿#pragma once
-#include "GameObject.h"
+#include "EnemyBase.h"
 #include "../../System/Animator.h"
-#include <memory>
 
 class Player;
 
-class Zombie : public GameObject
+class Zombie : public EnemyBase
 {
 public:
 	Zombie();
@@ -16,13 +15,8 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	// プレイヤーのポインタを設定する(Initの前に実行する)
-	void SetPlayer(const std::shared_ptr<Player> pPlayer) { m_pPlayer = pPlayer; }
-
 private:
 	Animator m_anim;
 	float m_angle = 0.0f;
-
-	std::shared_ptr<Player> m_pPlayer = nullptr;	// プレイヤーのポインタ
 };
 
