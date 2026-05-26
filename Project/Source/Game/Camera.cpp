@@ -75,48 +75,58 @@ void Camera::Update()
 	if (m_angleX > kMaxAngleX) m_angleX = kMaxAngleX;
 	if (m_angleX < kMinAngleX) m_angleX = kMinAngleX;
 
-	// プレイヤーの位置をもとにカメラの位置と注視点を設定
-	// 位置を設定
-	// 適当なベクトルを生成
-	Vector3 pos = { 0,0,-1 };
-	pos.Normalize();
-	// ベクトルの長さを注視点との距離にする
-	pos *= kTargetDis;
-	// 変形用の行列を生成
-	auto rotYMtx = Matrix4x4::GetRotY(m_angleY);
-	auto rotXMtx = Matrix4x4::GetRotX(m_angleX);
-	auto transMtx = Matrix4x4::GetTranslate(m_playerPos + kPosOffset);
-	// 行列を合成
-	auto mtx = rotXMtx * rotYMtx * transMtx;
-	// ベクトルを変形
-	pos = mtx * pos;
-
-	// 注視点を設定
-	auto target = Vector3::Zero();
-	target = m_playerPos + kTargetOffset;
-	// ロックオンターゲット
-	if (m_pTarget != nullptr)
+	Vector3 pos;
+	Vector3 target;
+	float dif = 0.0f;
+	do
 	{
+		// プレイヤーの位置をもとにカメラの位置と注視点を設定
+		// 位置を設定
+		// 適当なベクトルを生成
+		pos = { 0,0,-1 };
+		pos.Normalize();
+		// ベクトルの長さを注視点との距離にする
+		pos *= kTargetDis;
+		// 変形用の行列を生成
+		auto rotYMtx = Matrix4x4::GetRotY(m_angleY);
+		auto rotXMtx = Matrix4x4::GetRotX(m_angleX);
+		auto transMtx = Matrix4x4::GetTranslate(m_playerPos + kPosOffset);
+		// 行列を合成
+		auto mtx = rotXMtx * rotYMtx * transMtx;
+		// ベクトルを変形
+		pos = mtx * pos;
+
+		// 注視点を設定
+		target = m_playerPos + kTargetOffset;
+		// ロックオンターゲット
 		// カメラの向き、プレイヤー→ターゲットの二つのベクトルを生成
-		Vector3 cameraDir = (m_targetPos - m_pos).Normalized();
+		Vector3 cameraDir = (m_targetPos - m_pos);
+		cameraDir.y = 0.0f;		// カメラの水平方向のみを見る
+		cameraDir.Normalize();
 		Vector3 playerToTargetVec = m_pTarget->GetPos() - m_playerPos;
 		// 二つのベクトルの角度の差を求める			// cameraDirは正規化されているので1.0
 		float dif = cameraDir.Dot(playerToTargetVec) / (1.0f * playerToTargetVec.Length());
-		// ターゲットが視界から外れようとしたら
-		if (dif < cosf(kLockonFixAngle))
+		if (m_pTarget != nullptr)
 		{
-			// 外積でどっちに向きを修正すべきか判定
-			auto cross = cameraDir.Cross(playerToTargetVec);
-			if (cross.y > 0)
+			// ターゲットが視界から外れようとしたら
+			if (dif < cosf(kLockonFixAngle))
 			{
-				m_angleY += /*abs(rightStick.x) **/ kRotSpeed;
-			}
-			else
-			{
-				m_angleY -= /*abs(rightStick.x) **/ kRotSpeed;
+				// 外積でどっちに向きを修正すべきか判定
+				auto cross = cameraDir.Cross(playerToTargetVec);
+				if (cross.y > 0)
+				{
+					m_angleY += /*abs(rightStick.x) **/ kRotSpeed;
+				}
+				else
+				{
+					m_angleY -= /*abs(rightStick.x) **/ kRotSpeed;
+				}
 			}
 		}
-	}
+		// difがいいかんじの値になるまでdowhileで回そうとしたけどなんかうまくいかない
+		dif = cameraDir.Dot(playerToTargetVec) / (1.0f * playerToTargetVec.Length());
+		float temp = cosf(kLockonFixAngle);
+	} while (false);
 
 	// 注視点とカメラの位置を右にずらす
 	auto forwardVec = target - pos;
