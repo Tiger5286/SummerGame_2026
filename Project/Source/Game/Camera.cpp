@@ -3,7 +3,7 @@
 #include "EffekseerForDXLib.h"
 #include "../Utility/Matrix4x4.h"
 
-#include "Input.h"
+#include "../System/Input.h"
 #include "../Game/GameObject/Player.h"
 
 namespace
@@ -18,7 +18,7 @@ namespace
 	constexpr float kFar = 5000.0f;
 
 	// オフセット
-	constexpr float kOffsetX = -100.0f;
+	constexpr float kOffsetX = -75.0f;
 	const Vector3 kTargetOffset = { 0.0f,100.0f,0.0f };
 	const Vector3 kPosOffset = { 0.0f,200.0f,0.0f };
 
@@ -29,8 +29,11 @@ namespace
 	constexpr float kRotSpeed = 0.05f;
 
 	// カメラのX軸回転の上限と下限
-	constexpr float kMaxAngleX = DX_PI_F / 2.0f - 0.1f;
+	constexpr float kMaxAngleX = DX_PI_F / 4.0f - 0.1f;
 	constexpr float kMinAngleX = -DX_PI_F / 4.0f + 0.1f;
+
+	// ターゲットがどれくらい注視方向からずれたら戻すかの角度
+	constexpr float kLockonFixAngle = DX_PI_F / 6.0f;
 
 	// Lerpの定数
 	constexpr float kLerpT = 0.3f;
@@ -49,8 +52,8 @@ void Camera::Init()
 {
 	// カメラの初期設定
 	m_pos = kFirstPos;
-	m_target = kFirstTarget;
-	SetCameraPositionAndTarget_UpVecY(m_pos.ToDxLib(), m_target.ToDxLib());
+	m_targetPos = kFirstTarget;
+	SetCameraPositionAndTarget_UpVecY(m_pos.ToDxLib(), m_targetPos.ToDxLib());
 	SetupCamera_Perspective(kFov);
 	SetCameraNearFar(kNear, kFar);
 	// DXライブラリのカメラとEffekseerのカメラを同期する。
@@ -89,7 +92,31 @@ void Camera::Update()
 	pos = mtx * pos;
 
 	// 注視点を設定
-	auto target = m_playerPos + kTargetOffset;
+	auto target = Vector3::Zero();
+	target = m_playerPos + kTargetOffset;
+	// ロックオンターゲット
+	if (m_pTarget != nullptr)
+	{
+		// カメラの向き、プレイヤー→ターゲットの二つのベクトルを生成
+		Vector3 cameraDir = (m_targetPos - m_pos).Normalized();
+		Vector3 playerToTargetVec = m_pTarget->GetPos() - m_playerPos;
+		// 二つのベクトルの角度の差を求める			// cameraDirは正規化されているので1.0
+		float dif = cameraDir.Dot(playerToTargetVec) / (1.0f * playerToTargetVec.Length());
+		// ターゲットが視界から外れようとしたら
+		if (dif < cosf(kLockonFixAngle))
+		{
+			// 外積でどっちに向きを修正すべきか判定
+			auto cross = cameraDir.Cross(playerToTargetVec);
+			if (cross.y > 0)
+			{
+				m_angleY += /*abs(rightStick.x) **/ kRotSpeed;
+			}
+			else
+			{
+				m_angleY -= /*abs(rightStick.x) **/ kRotSpeed;
+			}
+		}
+	}
 
 	// 注視点とカメラの位置を右にずらす
 	auto forwardVec = target - pos;
@@ -105,12 +132,12 @@ void Camera::Update()
 	}
 
 	// 注視点を滑らかに移動させる
-	m_target.Lerp(target, kLerpT);
+	m_targetPos.Lerp(target, kLerpT);
 	// カメラの位置を滑らかに移動させる
 	m_pos.Lerp(pos, kLerpT);
 
 	// 位置と注視点を反映
-	SetCameraPositionAndTarget_UpVecY(m_pos.ToDxLib(), m_target.ToDxLib());
+	SetCameraPositionAndTarget_UpVecY(m_pos.ToDxLib(), m_targetPos.ToDxLib());
 	// DXライブラリのカメラとEffekseerのカメラを同期する。
 	Effekseer_Sync3DSetting();
 }

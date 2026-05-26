@@ -1,8 +1,10 @@
 ﻿#pragma once
 #include "../Utility/Vector3.h"
+#include <memory>
 
 class Input;
 class Player;
+class GameObject;
 
 class Camera
 {
@@ -23,6 +25,9 @@ public:
 	// プレイヤーの位置を設定する(毎フレームUpdateの前に呼ぶ)
 	void SetPlayerPos(const Vector3& playerPos) { m_playerPos = playerPos; }
 
+	// ターゲットを設定する
+	void SetTarget(std::shared_ptr<GameObject> pTarget) { m_pTarget = pTarget; }
+
 private:
 
 	Input& m_input;
@@ -30,8 +35,10 @@ private:
 	int m_mapHandle = -1;
 
 	Vector3 m_pos;
-	Vector3 m_target;
+	Vector3 m_targetPos;
 	float m_angleY = 0.0f;
 	float m_angleX = 0.0f;
+
+	std::shared_ptr<GameObject> m_pTarget = nullptr;
 };
 

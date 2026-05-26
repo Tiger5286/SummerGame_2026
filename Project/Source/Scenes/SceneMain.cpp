@@ -6,12 +6,12 @@
 #include "../Singleton/ModelManager.h"
 
 #include "../Game/GameObject/Player.h"
-#include "../System/Camera.h"
+#include "../Game/Camera.h"
 #include "../Game/GameObject/Zombie.h"
 
 #include "../Game/Managers/EnemyManager.h"
 
-#include "../System/SkyBox.h"
+#include "../Game/SkyBox.h"
 
 namespace
 {
@@ -58,13 +58,7 @@ void SceneMain::Init()
 	zombie->SetHandle(modelManager.DuplicateModel(L"Zombie"));
 	m_pEnemyManager->AddEnemy(zombie,Vector3(0,0,800));
 
-	zombie = std::make_shared<Zombie>();
-	zombie->SetHandle(modelManager.DuplicateModel(L"Zombie"));
-	m_pEnemyManager->AddEnemy(zombie, Vector3(300, 0, 800));
-
-	zombie = std::make_shared<Zombie>();
-	zombie->SetHandle(modelManager.DuplicateModel(L"Zombie"));
-	m_pEnemyManager->AddEnemy(zombie, Vector3(-300, 0, 800));
+	m_pCamera->SetTarget(zombie);
 
 	// スカイボックスの生成
 	m_pSkyBox = std::make_shared<SkyBox>();
