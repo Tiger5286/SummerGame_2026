@@ -59,6 +59,7 @@ void SceneMain::Init()
 	m_pEnemyManager->AddEnemy(zombie,Vector3(0,0,800));
 
 	m_pCamera->SetTarget(zombie);
+	m_pPlayer->SetTarget(zombie);
 
 	// スカイボックスの生成
 	m_pSkyBox = std::make_shared<SkyBox>();

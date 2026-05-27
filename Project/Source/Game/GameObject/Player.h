@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "../../System/Animator.h"
 #include "../Collider/CapsuleCollider.h"
+#include <memory>
 
 class Input;
 
@@ -22,6 +23,8 @@ public:
 
 	// マップモデルのハンドルを設定する(Initの前に実行する)
 	void SetMapHandle(int mapHandle) { m_mapHandle = mapHandle; }
+
+    void SetTarget(std::shared_ptr<GameObject> target) { m_target = target; }
 
     // 角度を取得する
     float GetAngle() const { return m_angle; }
@@ -76,6 +79,8 @@ private:
 	Animator m_anim;    // アニメーションクラス
     CapsuleCollider m_collider;
 	int m_mapHandle = -1;	// マップのモデルのハンドル
+
+    std::shared_ptr<GameObject> m_target;   // ロックオンしているターゲット
 
     // 操作可能かどうかフラグ
     bool m_isCanControll = true;

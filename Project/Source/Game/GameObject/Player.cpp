@@ -46,8 +46,12 @@ namespace
 	constexpr float kAttackMoveSpeed = 10.0f;
 	// コンボ中の前進する時間
 	constexpr int kCombo1MoveFrame = 10;
-	constexpr int kCombo2MoveFrame = 11;
-	constexpr int kCombo3MoveFrame = 20;
+	constexpr int kCombo2MoveFrame = 10;
+	constexpr int kCombo3MoveFrame = 15;
+	// 攻撃がホーミングする距離
+	constexpr float kTrackingAttackDist = 500.0f;
+	// 攻撃の前進をやめる距離
+	constexpr float kStopTrackingDist = 150.0f;
 }
 
 Player::Player(Input& input):
@@ -250,6 +254,22 @@ void Player::Dodge()
 
 void Player::Attack()
 {
+	Vector3 toTargetDir = Vector3::Zero();
+	float toTargetDistSquare = 0.0f;
+	bool isTrackingAttack = false;
+	if (m_target != nullptr)
+	{
+		// ターゲットとの距離を計算しておく
+		toTargetDistSquare = (m_target->GetPos() - m_pos).SquaredLength();
+		// 攻撃が敵にホーミングするかどうか		// ターゲットが存在する　かつ　ホーミングする距離内にいる
+		isTrackingAttack = m_target != nullptr && toTargetDistSquare < kTrackingAttackDist * kTrackingAttackDist;
+
+		// ターゲットへの方向を計算しておく
+		toTargetDir = (m_target->GetPos() - m_pos);
+		toTargetDir.y = 0.0;
+		toTargetDir.Normalize();
+	}
+
 	// Xボタンで攻撃、回避中は不可
 	if (m_input.IsTriggerd(XINPUT_BUTTON_X) && m_state != State::Dodge)
 	{
@@ -280,6 +300,15 @@ void Player::Attack()
 			m_comboFrame = 0;
 			m_isTransferNextCombo = false;
 			m_isCanControll = false;
+
+			if (isTrackingAttack)
+			{
+				m_angle = atan2(toTargetDir.z, -toTargetDir.x) + DX_PI_F / 2;
+			}
+			else
+			{
+				RotateInputDir();
+			}
 		}
 	}
 	// 攻撃中なら
@@ -301,7 +330,14 @@ void Player::Attack()
 					m_isTransferNextCombo = false;
 					m_comboFrame = kCombo1MinFrame;
 
-					RotateInputDir();
+					if (isTrackingAttack)
+					{
+						m_angle = atan2(toTargetDir.z, -toTargetDir.x) + DX_PI_F / 2;
+					}
+					else
+					{
+						RotateInputDir();
+					}
 				}
 			}
 			else
@@ -316,7 +352,12 @@ void Player::Attack()
 			// コンボ移動処理
 			if (m_comboFrame < kCombo1MoveFrame)
 			{
-				Vector3 moveVec = Vector3(0,0, -kAttackMoveSpeed);
+				float moveSpeed = -kAttackMoveSpeed;
+				if (toTargetDistSquare < kStopTrackingDist * kStopTrackingDist)
+				{
+					moveSpeed = 0.0f;
+				}
+				Vector3 moveVec = Vector3(0,0, moveSpeed);
 				moveVec *= Matrix4x4::GetRotY(m_angle);
 				m_pos += moveVec;
 			}
@@ -336,7 +377,14 @@ void Player::Attack()
 					m_isTransferNextCombo = false;
 					m_comboFrame = kCombo2MinFrame + kCombo1MinFrame;
 
-					RotateInputDir();
+					if (isTrackingAttack)
+					{
+						m_angle = atan2(toTargetDir.z, -toTargetDir.x) + DX_PI_F / 2;
+					}
+					else
+					{
+						RotateInputDir();
+					}
 				}
 			}
 			else
@@ -351,7 +399,12 @@ void Player::Attack()
 			// コンボ移動処理
 			if (m_comboFrame < kCombo1MoveFrame + kCombo1MinFrame)
 			{
-				Vector3 moveVec = Vector3(0, 0, -kAttackMoveSpeed);
+				float moveSpeed = -kAttackMoveSpeed;
+				if (toTargetDistSquare < kStopTrackingDist * kStopTrackingDist)
+				{
+					moveSpeed = 0.0f;
+				}
+				Vector3 moveVec = Vector3(0, 0, moveSpeed);
 				moveVec *= Matrix4x4::GetRotY(m_angle);
 				m_pos += moveVec;
 			}
@@ -371,7 +424,12 @@ void Player::Attack()
 			// コンボ移動処理
 			if (m_comboFrame < kCombo3MoveFrame + kCombo2MinFrame + kCombo1MinFrame)
 			{
-				Vector3 moveVec = Vector3(0, 0, -kAttackMoveSpeed);
+				float moveSpeed = -kAttackMoveSpeed;
+				if (toTargetDistSquare < kStopTrackingDist * kStopTrackingDist)
+				{
+					moveSpeed = 0.0f;
+				}
+				Vector3 moveVec = Vector3(0, 0, moveSpeed);
 				moveVec *= Matrix4x4::GetRotY(m_angle);
 				m_pos += moveVec;
 			}
