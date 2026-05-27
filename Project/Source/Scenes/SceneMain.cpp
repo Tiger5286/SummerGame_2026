@@ -15,6 +15,7 @@
 
 namespace
 {
+	// ロードするモデルのファイル名と登録名
 	const std::vector<std::pair<std::wstring, std::wstring>> kModelFileNames = {
 		{ L"Stage", L"data/models/Stage.mv1" },
 		{ L"Collision", L"data/models/Collision.mv1" },
@@ -54,10 +55,11 @@ void SceneMain::Init()
 	m_pEnemyManager = std::make_shared<EnemyManager>();
 	m_pEnemyManager->Init(m_pPlayer);
 
+	// 仮の敵を生成
 	auto zombie = std::make_shared<Zombie>();
 	zombie->SetHandle(modelManager.DuplicateModel(L"Zombie"));
 	m_pEnemyManager->AddEnemy(zombie,Vector3(0,0,800));
-
+	// ロックオンする
 	m_pCamera->SetTarget(zombie);
 	m_pPlayer->SetTarget(zombie);
 
@@ -68,6 +70,7 @@ void SceneMain::Init()
 
 void SceneMain::End()
 {
+	// 各クラスの終了処理
 	m_pPlayer->End();
 	m_pSkyBox->End();
 
@@ -78,13 +81,14 @@ void SceneMain::Update()
 {
 	m_frameCount++;
 
+	// 入力の更新
 	m_input.Update();
 
 	// カメラの更新
 	m_pCamera->SetPlayerPos(m_pPlayer->GetPos());
 	m_pPlayer->SetCameraAngleY(m_pCamera->GetAngleY());
 
-	// 各オブジェクトの更新
+	// 各クラスの更新
 	m_pPlayer->Update();
 	m_pCamera->Update();
 	
@@ -96,20 +100,25 @@ void SceneMain::Update()
 
 void SceneMain::Draw()
 {
+	// 空の描画
 	m_pSkyBox->Draw();
 
+	// ステージの描画
 	auto& modelManager = ModelManager::GetInstance();
 	MV1DrawModel(modelManager.GetModelHandle(L"Stage"));
 
 #ifdef _DEBUG
+	// グリッドの描画
 	DrawGrid();
 #endif
 
+	// 各クラスの描画
 	m_pPlayer->Draw();
 
 	m_pEnemyManager->Draw();
 
 #ifdef _DEBUG
+	// デバッグ表示
 	DrawString(0,0,L"SceneMain",0xffffff);
 	DrawFormatString(0, 16, 0xffffff, L"FRAME:%d", m_frameCount);
 #endif

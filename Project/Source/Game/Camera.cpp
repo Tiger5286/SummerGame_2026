@@ -36,6 +36,8 @@ namespace
 	constexpr float kLockonFixAngle = DX_PI_F / 6.0f;
 	// ターゲットにどれだけ近かったら注視方向の制限をしないか
 	constexpr float kNotLockonDist = 200.0f;
+	// ロックオンの最大補正速度
+	constexpr float kMaxLockonSpeed = 0.3f;
 
 	// Lerpの定数
 	constexpr float kLerpT = 0.3f;
@@ -114,18 +116,18 @@ void Camera::Update()
 			if (cross.y > 0)
 			{
 				float fixValue = cosf(kLockonFixAngle) - dif;
-				if (fixValue > 0.3f)
+				if (fixValue > kMaxLockonSpeed)
 				{
-					fixValue = 0.3f;
+					fixValue = kMaxLockonSpeed;
 				}
 				m_angleY += fixValue;
 			}
 			else
 			{
 				float fixValue = cosf(kLockonFixAngle) - dif;
-				if (fixValue > 0.3f)
+				if (fixValue > kMaxLockonSpeed)
 				{
-					fixValue = 0.3f;
+					fixValue = kMaxLockonSpeed;
 				}
 				m_angleY -= fixValue;
 			}
