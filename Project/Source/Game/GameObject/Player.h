@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include "GameObject.h"
 #include "../../System/Animator.h"
-#include "../Collider/CapsuleCollider.h"
 #include <memory>
 
 class Input;
@@ -77,7 +76,6 @@ private:
 private:
     Input& m_input; // 入力クラスの参照
 	Animator m_anim;    // アニメーションクラス
-    CapsuleCollider m_collider;
 	int m_mapHandle = -1;	// マップのモデルのハンドル
 
     std::shared_ptr<GameObject> m_target;   // ロックオンしているターゲット

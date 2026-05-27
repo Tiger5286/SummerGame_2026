@@ -36,3 +36,6 @@ void GameObject::Gravity(float power)
 {
 	m_vel.y -= power;
 }
+
+void GameObject::OnCollision(GameObject& other)
+{}

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\Collider\CollisionManager.cpp" />
     <ClCompile Include="Source\Game\Managers\EnemyManager.cpp" />
     <ClCompile Include="Source\Game\GameObject\EnemyBase.cpp" />
     <ClCompile Include="Source\Game\Collider\CapsuleCollider.cpp" />
@@ -39,6 +40,7 @@
     <ClCompile Include="Source\Game\GameObject\Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\Collider\CollisionManager.h" />
     <ClInclude Include="Source\Game\Managers\EnemyManager.h" />
     <ClInclude Include="Source\Game\GameObject\EnemyBase.h" />
     <ClInclude Include="Source\Game\Collider\CapsuleCollider.h" />

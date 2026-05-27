@@ -4,6 +4,7 @@
 #include "../../Utility/Matrix4x4.h"
 #include "../../Utility/MyLib.h"
 #include "../../System/Input.h"
+#include "../Collider/CapsuleCollider.h"
 
 namespace
 {
@@ -55,8 +56,7 @@ namespace
 }
 
 Player::Player(Input& input):
-	m_input(input),
-	m_collider(kColliderRadius, kColliderHeight)
+	m_input(input)
 {
 }
 
@@ -66,9 +66,13 @@ Player::~Player()
 
 void Player::Init()
 {
+	// アニメーションの初期化
 	m_anim.Init(m_modelHandle, kIdleAnimName);
-
+	// 位置の初期化
 	m_pos = Vector3(0.0f, 0.0f, 0.0f);
+
+	// 当たり判定の生成と初期化
+	m_collider = std::make_shared<CapsuleCollider>(kColliderRadius, kColliderHeight);
 }
 
 void Player::End()
@@ -102,11 +106,12 @@ void Player::Update()
 	// 速度に抵抗をかける
 	Resistance();
 
-	// コライダーの位置を更新
-	m_collider.SetPos(m_pos + Vector3::Up() * m_collider.GetRadius());
+	// 当たり判定の初期化
+	auto capsule = std::dynamic_pointer_cast<CapsuleCollider>(m_collider);
+	capsule->SetPos(m_pos + Vector3(0.0f, capsule->GetRadius(), 0.0f));
 
 	// マップとの当たり判定
-	auto collResult = m_collider.CheckCollModel(m_mapHandle);
+	auto collResult = m_collider->CheckCollModel(m_mapHandle);
 	CheckHitMap(collResult);
 	// 当たり判定に使用したメモリを解放
 	MV1CollResultPolyDimTerminate(collResult);
@@ -148,7 +153,7 @@ void Player::Draw()
 
 #ifdef _DEBUG
 	// 当たり判定を描画
-	m_collider.Draw();
+	m_collider->Draw();
 	// 接地判定用のレイを描画
 	Vector3 layEnd = m_pos - Vector3::Up() * kLineLength;
 	DrawLine3D(m_pos.ToDxLib(), layEnd.ToDxLib(), 0xffff00);
@@ -456,6 +461,7 @@ void Player::RotateInputDir()
 
 void Player::CheckHitMap(MV1_COLL_RESULT_POLY_DIM coll)
 {
+	auto capsule = std::dynamic_pointer_cast<CapsuleCollider>(m_collider);
 	for (int i = 0; i < coll.HitNum; i++)
 	{
 		// 当たったポリゴンの法線を取得
@@ -467,14 +473,14 @@ void Player::CheckHitMap(MV1_COLL_RESULT_POLY_DIM coll)
 		if (isFloor) normal = Vector3::Up();
 
 		// カプセルの位置を取得
-		Vector3 capsuleStart = m_collider.GetPos();
-		Vector3 capsuleEnd = capsuleStart + Vector3::Up() * m_collider.GetHeight();
+		Vector3 capsuleStart = capsule->GetPos();
+		Vector3 capsuleEnd = capsuleStart + Vector3::Up() * capsule->GetHeight();
 
 		// ポリゴンとカプセルの線との最短距離を計算
 		auto minDist = Segment_Triangle_MinLength(capsuleStart.ToDxLib(), capsuleEnd.ToDxLib(),
 								   coll.Dim[i].Position[0], coll.Dim[i].Position[1], coll.Dim[i].Position[2]);
 		// 押し戻し量を計算
-		auto pushDist = m_collider.GetRadius() - minDist;
+		auto pushDist = capsule->GetRadius() - minDist;
 
 		// 法線方向に押し戻す
 		m_pos += normal * pushDist;
