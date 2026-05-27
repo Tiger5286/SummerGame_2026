@@ -9,6 +9,8 @@ public:
 
     void Draw() override;
 
+    MV1_COLL_RESULT_POLY_DIM CheckCollModel(int mapHandle) override;
+
 	float GetRadius() const { return m_radius; }
 
 private:
