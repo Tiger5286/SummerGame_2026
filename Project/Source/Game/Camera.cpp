@@ -34,6 +34,8 @@ namespace
 
 	// ターゲットがどれくらい注視方向からずれたら戻すかの角度
 	constexpr float kLockonFixAngle = DX_PI_F / 6.0f;
+	// ターゲットにどれだけ近かったら注視方向の制限をしないか
+	constexpr float kNotLockonDist = 200.0f;
 
 	// Lerpの定数
 	constexpr float kLerpT = 0.3f;
@@ -75,58 +77,60 @@ void Camera::Update()
 	if (m_angleX > kMaxAngleX) m_angleX = kMaxAngleX;
 	if (m_angleX < kMinAngleX) m_angleX = kMinAngleX;
 
-	Vector3 pos;
-	Vector3 target;
-	float dif = 0.0f;
-	do
-	{
-		// プレイヤーの位置をもとにカメラの位置と注視点を設定
+	// プレイヤーの位置をもとにカメラの位置と注視点を設定
 		// 位置を設定
 		// 適当なベクトルを生成
-		pos = { 0,0,-1 };
-		pos.Normalize();
-		// ベクトルの長さを注視点との距離にする
-		pos *= kTargetDis;
-		// 変形用の行列を生成
-		auto rotYMtx = Matrix4x4::GetRotY(m_angleY);
-		auto rotXMtx = Matrix4x4::GetRotX(m_angleX);
-		auto transMtx = Matrix4x4::GetTranslate(m_playerPos + kPosOffset);
-		// 行列を合成
-		auto mtx = rotXMtx * rotYMtx * transMtx;
-		// ベクトルを変形
-		pos = mtx * pos;
+	Vector3 pos = { 0,0,-1 };
+	pos.Normalize();
+	// ベクトルの長さを注視点との距離にする
+	pos *= kTargetDis;
+	// 変形用の行列を生成
+	auto rotYMtx = Matrix4x4::GetRotY(m_angleY);
+	auto rotXMtx = Matrix4x4::GetRotX(m_angleX);
+	auto transMtx = Matrix4x4::GetTranslate(m_playerPos + kPosOffset);
+	// 行列を合成
+	auto mtx = rotXMtx * rotYMtx * transMtx;
+	// ベクトルを変形
+	pos = mtx * pos;
 
-		// 注視点を設定
-		target = m_playerPos + kTargetOffset;
-		// ロックオンターゲット
-		// カメラの向き、プレイヤー→ターゲットの二つのベクトルを生成
-		Vector3 cameraDir = (m_targetPos - m_pos);
-		cameraDir.y = 0.0f;		// カメラの水平方向のみを見る
-		cameraDir.Normalize();
-		Vector3 playerToTargetVec = m_pTarget->GetPos() - m_playerPos;
-		// 二つのベクトルの角度の差を求める			// cameraDirは正規化されているので1.0
-		float dif = cameraDir.Dot(playerToTargetVec) / (1.0f * playerToTargetVec.Length());
-		if (m_pTarget != nullptr)
+	// 注視点を設定
+	Vector3 target = m_playerPos + kTargetOffset;
+	// ロックオンターゲット
+	// カメラの向き、プレイヤー→ターゲットの二つのベクトルを生成
+	Vector3 cameraDir = (m_targetPos - m_pos);
+	cameraDir.y = 0.0f;		// カメラの水平方向のみを見る
+	cameraDir.Normalize();
+	Vector3 playerToTargetVec = m_pTarget->GetPos() - m_playerPos;
+	float playerToTargetDist = playerToTargetVec.SquaredLength();
+	// 二つのベクトルの角度の差を求める			// cameraDirは正規化されているので1.0
+	float dif = cameraDir.Dot(playerToTargetVec) / (1.0f * playerToTargetVec.Length());
+	if (m_pTarget != nullptr)
+	{
+		// ターゲットが視界から外れようとしたら、かつ一定の距離が開いていたら
+		if (dif < cosf(kLockonFixAngle) && playerToTargetDist > kNotLockonDist * kNotLockonDist)
 		{
-			// ターゲットが視界から外れようとしたら
-			if (dif < cosf(kLockonFixAngle))
+			// 外積でどっちに向きを修正すべきか判定
+			auto cross = cameraDir.Cross(playerToTargetVec);
+			if (cross.y > 0)
 			{
-				// 外積でどっちに向きを修正すべきか判定
-				auto cross = cameraDir.Cross(playerToTargetVec);
-				if (cross.y > 0)
+				float fixValue = cosf(kLockonFixAngle) - dif;
+				if (fixValue > 0.3f)
 				{
-					m_angleY += /*abs(rightStick.x) **/ kRotSpeed;
+					fixValue = 0.3f;
 				}
-				else
+				m_angleY += fixValue;
+			}
+			else
+			{
+				float fixValue = cosf(kLockonFixAngle) - dif;
+				if (fixValue > 0.3f)
 				{
-					m_angleY -= /*abs(rightStick.x) **/ kRotSpeed;
+					fixValue = 0.3f;
 				}
+				m_angleY -= fixValue;
 			}
 		}
-		// difがいいかんじの値になるまでdowhileで回そうとしたけどなんかうまくいかない
-		dif = cameraDir.Dot(playerToTargetVec) / (1.0f * playerToTargetVec.Length());
-		float temp = cosf(kLockonFixAngle);
-	} while (false);
+	}
 
 	// 注視点とカメラの位置を右にずらす
 	auto forwardVec = target - pos;
