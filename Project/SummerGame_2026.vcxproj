@@ -151,7 +151,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../DxLib_h</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../DxLib_h;$(ProjectDir)Source</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -169,7 +169,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../DxLib_h</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../DxLib_h;$(ProjectDir)Source</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
