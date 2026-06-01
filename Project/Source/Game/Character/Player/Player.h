@@ -1,12 +1,12 @@
 ﻿#pragma once
-#include "Game/GameObject/GameObject.h"
+#include "Game/Character/Character.h"
 #include "System/Animator.h"
 #include <memory>
 
 class Input;
 
 class Player :
-    public GameObject
+    public Character
 {
 public:
     Player(Input& input);
@@ -23,7 +23,7 @@ public:
 	// マップモデルのハンドルを設定する(Initの前に実行する)
 	void SetMapHandle(int mapHandle) { m_mapHandle = mapHandle; }
 
-    void SetTarget(std::shared_ptr<GameObject> target) { m_target = target; }
+    void SetTarget(std::shared_ptr<Character> target) { m_target = target; }
 
     // 角度を取得する
     float GetAngle() const { return m_angle; }
@@ -78,7 +78,7 @@ private:
 	Animator m_anim;    // アニメーションクラス
 	int m_mapHandle = -1;	// マップのモデルのハンドル
 
-    std::shared_ptr<GameObject> m_target;   // ロックオンしているターゲット
+    std::shared_ptr<Character> m_target;   // ロックオンしているターゲット
 
     // 操作可能かどうかフラグ
     bool m_isCanControll = true;

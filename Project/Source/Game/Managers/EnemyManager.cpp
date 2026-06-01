@@ -1,5 +1,5 @@
 ﻿#include "EnemyManager.h"
-#include "../GameObject/EnemyBase.h"
+#include "../Character/EnemyBase.h"
 #include <cassert>
 
 EnemyManager::EnemyManager()

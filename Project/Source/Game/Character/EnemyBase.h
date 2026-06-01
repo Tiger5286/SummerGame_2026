@@ -1,11 +1,11 @@
 ﻿#pragma once
-#include "GameObject.h"
+#include "Character.h"
 #include <memory>
 
 class Player;
 
 class EnemyBase :
-    public GameObject
+    public Character
 {
 public:
     EnemyBase();

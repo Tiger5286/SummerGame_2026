@@ -2,7 +2,7 @@
 #include <memory>
 #include <list>
 
-class GameObject;
+class Character;
 class ColliderBase;
 class SphereCollider;
 class CapsuleCollider;
@@ -22,13 +22,13 @@ public:
 	/// 当たり判定を持つオブジェクトを登録する
 	/// </summary>
 	/// <param name="object">当たり判定を持つゲームオブジェクト</param>
-	void Register(std::shared_ptr<GameObject> object);
+	void Register(std::shared_ptr<Character> object);
 
 	/// <summary>
 	/// 当たり判定を持つオブジェクトの登録を解除する
 	/// </summary>
 	/// <param name="object">当たり判定を持つゲームオブジェクト</param>
-	void Unregister(std::shared_ptr<GameObject> object);
+	void Unregister(std::shared_ptr<Character> object);
 
 private:
 	/// <summary>
@@ -65,6 +65,6 @@ private:
 
 private:
 	// 当たり判定を行うオブジェクトのリスト
-	std::list<std::shared_ptr<GameObject>> m_objects;
+	std::list<std::shared_ptr<Character>> m_objects;
 };
 

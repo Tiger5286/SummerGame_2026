@@ -4,7 +4,7 @@
 #include "../Utility/Matrix4x4.h"
 
 #include "../System/Input.h"
-#include "Game/GameObject/Player/Player.h"
+#include "Game/Character/Player/Player.h"
 
 namespace
 {

@@ -4,11 +4,11 @@
 
 class ColliderBase;
 
-class GameObject
+class Character
 {
 public:
-	GameObject();
-	virtual ~GameObject();
+	Character();
+	virtual ~Character();
 
 	virtual void Init() abstract;
 	virtual void End() abstract;
@@ -42,7 +42,7 @@ public:
 	/// ほかのオブジェクトと当たった時に呼ばれる関数
 	/// </summary>
 	/// <param name="other">当たったオブジェクト</param>
-	virtual void OnCollision(GameObject& other);
+	virtual void OnCollision(Character& other);
 
 protected:
 	// モデルのハンドル

@@ -30,7 +30,7 @@
     <ClCompile Include="Source\Utility\Vector3.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\GameObject\GameObject.cpp">
+    <ClCompile Include="Source\Game\Character\Character.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Collider\ColliderBase.cpp">
@@ -39,7 +39,7 @@
     <ClCompile Include="Source\Game\Collider\SphereCollider.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\GameObject\Player\Player.cpp">
+    <ClCompile Include="Source\Game\Character\Player\Player.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\System\Animator.cpp">
@@ -57,10 +57,10 @@
     <ClCompile Include="Source\Game\Collider\CapsuleCollider.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\GameObject\Zombie.cpp">
+    <ClCompile Include="Source\Game\Character\Zombie.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\GameObject\EnemyBase.cpp">
+    <ClCompile Include="Source\Game\Character\EnemyBase.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Managers\EnemyManager.cpp">
@@ -72,7 +72,10 @@
     <ClCompile Include="Source\Game\Collider\CollisionManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\GameObject\Player\PlayerStateBase.cpp">
+    <ClCompile Include="Source\Game\Character\Player\PlayerStateBase.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Character\Player\PlayerStateIdle.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,7 +95,7 @@
     <ClInclude Include="Source\Utility\Vector3.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\GameObject\GameObject.h">
+    <ClInclude Include="Source\Game\Character\Character.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Collider\ColliderBase.h">
@@ -101,7 +104,7 @@
     <ClInclude Include="Source\Game\Collider\SphereCollider.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\GameObject\Player\Player.h">
+    <ClInclude Include="Source\Game\Character\Player\Player.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\System\Animator.h">
@@ -119,13 +122,13 @@
     <ClInclude Include="Source\Game\Collider\CapsuleCollider.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\GameObject\Zombie.h">
+    <ClInclude Include="Source\Game\Character\Zombie.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\MyLib.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\GameObject\EnemyBase.h">
+    <ClInclude Include="Source\Game\Character\EnemyBase.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Managers\EnemyManager.h">
@@ -137,7 +140,10 @@
     <ClInclude Include="Source\Game\Collider\CollisionManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\GameObject\Player\PlayerStateBase.h">
+    <ClInclude Include="Source\Game\Character\Player\PlayerStateBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Character\Player\PlayerStateIdle.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

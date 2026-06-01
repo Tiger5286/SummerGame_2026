@@ -1,19 +1,19 @@
-﻿#include "GameObject.h"
+﻿#include "Character.h"
 
 namespace
 {
 	constexpr float kResistancePower = 1.0f;
 }
 
-GameObject::GameObject()
+Character::Character()
 {
 }
 
-GameObject::~GameObject()
+Character::~Character()
 {
 }
 
-void GameObject::Resistance()
+void Character::Resistance()
 {
 	// 速度と逆向きのベクトルを生成
 	auto resistVec = -m_vel;
@@ -32,10 +32,10 @@ void GameObject::Resistance()
 	}
 }
 
-void GameObject::Gravity(float power)
+void Character::Gravity(float power)
 {
 	m_vel.y -= power;
 }
 
-void GameObject::OnCollision(GameObject& other)
+void Character::OnCollision(Character& other)
 {}
