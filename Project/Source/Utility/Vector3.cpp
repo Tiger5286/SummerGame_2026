@@ -31,7 +31,7 @@ void Vector3::Draw(const Vector3& start, const Vector3& end)
 
 float Vector3::Angle() const
 {
-	return atan2(z, x);
+	return atan2(z, -x) + DX_PI_F / 2;;
 }
 
 VECTOR Vector3::ToDxLib() const
