@@ -7,7 +7,7 @@
 
 #include "Game/Character/Player/Player.h"
 #include "../Game/Camera.h"
-#include "../Game/Character/Zombie.h"
+#include "../Game/Character/Enemy/Zombie.h"
 
 #include "../Game/Managers/EnemyManager.h"
 

@@ -1,9 +1,9 @@
 ﻿#include "Zombie.h"
 #include <string>
-#include "../../Utility/Matrix4x4.h"
+#include "Utility/Matrix4x4.h"
 #include <cassert>
-#include "Player/Player.h"
-#include "../../Utility/MyLib.h"
+#include "../Player/Player.h"
+#include "Utility/MyLib.h"
 
 namespace
 {

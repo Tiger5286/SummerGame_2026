@@ -27,7 +27,7 @@
     <ClCompile Include="Source\Game\Character\Player\PlayerStateBase.cpp" />
     <ClCompile Include="Source\Game\Collider\CollisionManager.cpp" />
     <ClCompile Include="Source\Game\Managers\EnemyManager.cpp" />
-    <ClCompile Include="Source\Game\Character\EnemyBase.cpp" />
+    <ClCompile Include="Source\Game\Character\Enemy\EnemyBase.cpp" />
     <ClCompile Include="Source\Game\Collider\CapsuleCollider.cpp" />
     <ClCompile Include="Source\Singleton\ModelManager.cpp" />
     <ClCompile Include="Source\System\Animator.cpp" />
@@ -43,7 +43,7 @@
     <ClCompile Include="Source\Utility\Matrix4x4.cpp" />
     <ClCompile Include="Source\Utility\Vector3.cpp" />
     <ClCompile Include="Source\Game\Collider\SphereCollider.cpp" />
-    <ClCompile Include="Source\Game\Character\Zombie.cpp" />
+    <ClCompile Include="Source\Game\Character\Enemy\Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game\Character\Player\PlayerStateAttack.h" />
@@ -54,7 +54,7 @@
     <ClInclude Include="Source\Game\Character\Player\PlayerStateBase.h" />
     <ClInclude Include="Source\Game\Collider\CollisionManager.h" />
     <ClInclude Include="Source\Game\Managers\EnemyManager.h" />
-    <ClInclude Include="Source\Game\Character\EnemyBase.h" />
+    <ClInclude Include="Source\Game\Character\Enemy\EnemyBase.h" />
     <ClInclude Include="Source\Game\Collider\CapsuleCollider.h" />
     <ClInclude Include="Source\Singleton\ModelManager.h" />
     <ClInclude Include="Source\System\Animator.h" />
@@ -71,7 +71,7 @@
     <ClInclude Include="Source\Utility\MyLib.h" />
     <ClInclude Include="Source\Utility\Vector3.h" />
     <ClInclude Include="Source\Game\Collider\SphereCollider.h" />
-    <ClInclude Include="Source\Game\Character\Zombie.h" />
+    <ClInclude Include="Source\Game\Character\Enemy\Zombie.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

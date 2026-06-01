@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "EnemyBase.h"
-#include "../../System/Animator.h"
+#include "System/Animator.h"
 
 class Player;
 
