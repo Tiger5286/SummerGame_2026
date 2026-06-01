@@ -28,11 +28,13 @@ void PlayerStateFall::Update()
 		if (velXZ.SquaredLength() > 0.0f)
 		{
 			ChangeState(std::make_shared<PlayerStateMove>());
+			return;
 		}
 		// 移動していないならidleへ
 		if (velXZ.SquaredLength() <= 0.0f)
 		{
 			ChangeState(std::make_shared<PlayerStateIdle>());
+			return;
 		}
 	}
 	// 移動処理
