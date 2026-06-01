@@ -1,5 +1,7 @@
 #include "PlayerStateIdle.h"
 #include "Player.h"
+#include "Singleton/Input.h"
+#include "PlayerStateMove.h"
 
 namespace
 {
@@ -15,7 +17,14 @@ void PlayerStateIdle::Enter(std::shared_ptr<Player> pPlayer)
 
 void PlayerStateIdle::Update()
 {
+	auto& input = Input::GetInstance();
 
+	// スティック入力があったらMoveへ
+	if (input.GetStickInput(LR::Left).SquaredLength() > 0.0f)
+	{
+		ChangeState(std::make_shared<PlayerStateMove>());
+		return;
+	}
 }
 
 void PlayerStateIdle::Exit()

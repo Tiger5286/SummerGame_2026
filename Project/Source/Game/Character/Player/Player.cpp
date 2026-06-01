@@ -26,10 +26,6 @@ namespace
 	constexpr float kColliderRadius = 25.0f;
 	constexpr float kColliderHeight = 120.0f;
 
-	// 加速度
-	constexpr float kMoveAccel = 3.0f;
-	// 最大移動速度
-	constexpr float kMaxMoveSpeed = 7.0f;
 	// 回避の速度
 	constexpr float kDodgeSpeed = 15.0f;
 
@@ -157,45 +153,6 @@ Vector3 Player::GetDir() const
 
 void Player::Move()
 {
-	//// スティック入力を取得
-	//auto stick = m_input.GetStickInput(LR::Left);
-	//// 移動禁止状態なら入力を消す
-	//if (!m_isCanControll)
-	//{
-	//	stick = Vector3::Zero();
-	//}
-
-	//// 移動ベクトルに入力を反映する
-	//Vector3 moveVec;
-	//moveVec += Vector3(stick.x, 0.0f, stick.y) * kMoveAccel;
-	//// カメラの向きに応じて移動ベクトルを回転させる
-	//moveVec *= Matrix4x4::GetRotY(m_cameraAngleY);
-	//// 水平移動速度が上限を超えていなければ移動量を足す
-	//auto velXZ = m_vel;
-	//velXZ.y = 0.0f;
-	//if (velXZ.SquaredLength() < kMaxMoveSpeed * kMaxMoveSpeed)
-	//{
-	//	m_vel += moveVec;
-	//}
-	//else if (m_state != State::Dodge)
-	//{
-	//	// 水平移動速度が上限を超えていたらその値で固定する
-	//	velXZ.Normalize();
-	//	velXZ *= kMaxMoveSpeed;
-	//	m_vel.x = 0.0f;
-	//	m_vel.z = 0.0f;
-	//	m_vel += velXZ;
-	//}
-	// 位置に速度を足す
-	m_pos += m_vel;
-
-	// モデルを回転させる
-	// 入力があるときのみ回る
-	/*if (stick.SquaredLength() > 0.0f)
-	{
-		m_angle = atan2f(stick.y, -stick.x) + DX_PI_F / 2;
-		m_angle += m_cameraAngleY;
-	}*/
 }
 
 void Player::Jump()
@@ -438,13 +395,14 @@ void Player::CancelAttack()
 
 void Player::RotateInputDir()
 {
-	/*auto stick = m_input.GetStickInput(LR::Left);
+	auto& input = Input::GetInstance();
+	auto stick = input.GetStickInput(LR::Left);
 	if (stick.SquaredLength() > 0.0f)
 	{
 		stick.Normalize();
 		m_angle = atan2f(stick.y, -stick.x) + DX_PI_F / 2;
 		m_angle += m_cameraAngleY;
-	}*/
+	}
 }
 
 void Player::CheckHitMap(MV1_COLL_RESULT_POLY_DIM coll)
@@ -518,6 +476,8 @@ void Player::UpdateState()
 		m_pState = nextState;
 
 		m_pState->Enter(shared_from_this());
+
+		m_pState->ChangeState(m_pState);
 	}
 
 	/*
