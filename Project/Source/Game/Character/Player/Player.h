@@ -39,8 +39,6 @@ private:
 
     void Move();    // 移動処理
     void Jump();    // ジャンプ処理
-    void Attack();  // 攻撃処理
-    void CancelAttack();    // 攻撃を中止する
 
     void RotateInputDir();  // 入力方向を向く
 
