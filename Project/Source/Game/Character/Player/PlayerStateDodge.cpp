@@ -10,7 +10,7 @@ namespace
 	// アニメーション名
 	const std::wstring kRollingAnimName = L"Player|Rolling";
 	// 回避の速度
-	constexpr float kDodgeSpeed = 15.0f;
+	constexpr float kDodgeSpeed = 10.0f;
 	// 回避のフレーム数
 	constexpr int kDodgeFrame = 30;
 }
