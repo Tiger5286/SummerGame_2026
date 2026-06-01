@@ -3,7 +3,7 @@
 #include "EffekseerForDXLib.h"
 #include "../Utility/Matrix4x4.h"
 
-#include "../System/Input.h"
+#include "../Singleton/Input.h"
 #include "Game/Character/Player/Player.h"
 
 namespace
@@ -43,15 +43,6 @@ namespace
 	constexpr float kLerpT = 0.3f;
 }
 
-Camera::Camera(Input& input):
-	m_input(input)
-{
-}
-
-Camera::~Camera()
-{
-}
-
 void Camera::Init()
 {
 	// カメラの初期設定
@@ -71,7 +62,7 @@ void Camera::Init()
 void Camera::Update()
 {
 	// スティック入力に応じて角度を更新
-	auto rightStick = m_input.GetStickInput(LR::Right);
+	auto rightStick = Input::GetInstance().GetStickInput(LR::Right);
 	m_angleY += rightStick.x * kRotSpeed;
 	if (m_angleY < 0.0f) m_angleY += DX_TWO_PI_F;
 	if (m_angleY > DX_TWO_PI_F) m_angleY -= DX_TWO_PI_F;

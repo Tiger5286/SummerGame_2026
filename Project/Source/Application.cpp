@@ -7,6 +7,7 @@
 #include <string>
 
 #include "Singleton/ModelManager.h"
+#include "Singleton/Input.h"
 
 #include "Scenes/SceneMain.h"
 
@@ -65,6 +66,7 @@ void Application::Run()
 
 	// シングルトンクラスの生成
 	auto& modelManager = ModelManager::GetInstance();
+	auto& input = Input::GetInstance();
 
 	// シーンの生成、初期化
 	auto pScene = std::make_shared<SceneMain>();
@@ -74,6 +76,9 @@ void Application::Run()
 	{
 		auto start = GetNowHiPerformanceCount(); // フレーム開始時間を取得
 		ClearDrawScreen(); // 画面をクリア
+
+		// 入力の更新
+		input.Update();
 
 		// シーンの更新
 		pScene->Update();

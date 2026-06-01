@@ -11,9 +11,15 @@ enum class LR
 class Input
 {
 public:
-	Input();
-	virtual ~Input();
+	static Input& GetInstance();
+	virtual ~Input() = default;
 
+	Input(const Input&) = delete;
+	Input& operator=(const Input&) = delete;
+private:
+	Input() = default;
+
+public:
 	void Update();
 
 	/// <summary>

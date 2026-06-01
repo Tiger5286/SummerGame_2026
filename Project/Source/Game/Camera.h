@@ -2,15 +2,14 @@
 #include "../Utility/Vector3.h"
 #include <memory>
 
-class Input;
 class Player;
 class Character;
 
 class Camera
 {
 public:
-	Camera(Input& input);
-	virtual ~Camera();
+	Camera() = default;
+	virtual ~Camera() = default;
 
 	void Init();
 	void Update();
@@ -29,8 +28,6 @@ public:
 	void SetTarget(std::shared_ptr<Character> pTarget) { m_pTarget = pTarget; }
 
 private:
-
-	Input& m_input;
 	Vector3 m_playerPos;
 	int m_mapHandle = -1;
 

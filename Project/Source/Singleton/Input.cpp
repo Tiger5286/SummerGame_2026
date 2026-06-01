@@ -9,12 +9,10 @@ namespace
 	constexpr int kMaxStickValue = 25000;
 }
 
-Input::Input()
+Input& Input::GetInstance()
 {
-}
-
-Input::~Input()
-{
+	static Input instance;
+	return instance;
 }
 
 void Input::Update()

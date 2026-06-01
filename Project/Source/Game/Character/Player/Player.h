@@ -3,19 +3,16 @@
 #include "System/Animator.h"
 #include <memory>
 
-class Input;
-
 // プレイヤーのステートクラスをプロトタイプ宣言しておく
 class PlayerStateBase;
 class PlayerStateIdle;
 class PlayerStateMove;
 
-class Player :
-    public Character
+class Player : public Character, public std::enable_shared_from_this<Player>
 {
 public:
-    Player(Input& input);
-    virtual ~Player();
+    Player() = default;
+    virtual ~Player() = default;
 
     void Init() override;
     void End() override;
@@ -57,7 +54,6 @@ private:
     void UpdateState();
 
 private:
-    Input& m_input; // 入力クラスの参照
 	Animator m_anim;    // アニメーションクラス
 	int m_mapHandle = -1;	// マップのモデルのハンドル
 

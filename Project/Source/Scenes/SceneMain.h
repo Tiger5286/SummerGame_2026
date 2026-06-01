@@ -1,8 +1,6 @@
 ﻿#pragma once
 #include <memory>
 
-#include "../System/Input.h"
-
 class Player;
 class Camera;
 class SkyBox;
@@ -24,8 +22,6 @@ private:
 
 private:
 	int m_frameCount = 0;
-
-	Input m_input;
 
 	std::shared_ptr<Player> m_pPlayer = nullptr;
 	std::shared_ptr<Camera> m_pCamera = nullptr;

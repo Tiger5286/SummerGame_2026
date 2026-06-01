@@ -42,12 +42,12 @@ void SceneMain::Init()
 	}
 
 	// プレイヤーの生成
-	m_pPlayer = std::make_shared<Player>(m_input);
+	m_pPlayer = std::make_shared<Player>();
 	m_pPlayer->SetHandle(modelManager.GetModelHandle(L"Player"));
 	m_pPlayer->SetMapHandle(modelManager.GetModelHandle(L"Collision"));
 	m_pPlayer->Init();
 	// カメラの生成
-	m_pCamera = std::make_shared<Camera>(m_input);
+	m_pCamera = std::make_shared<Camera>();
 	m_pCamera->SetMapHandle(modelManager.GetModelHandle(L"Collision"));
 	m_pCamera->Init();
 
@@ -80,9 +80,6 @@ void SceneMain::End()
 void SceneMain::Update()
 {
 	m_frameCount++;
-
-	// 入力の更新
-	m_input.Update();
 
 	// カメラの更新
 	m_pCamera->SetPlayerPos(m_pPlayer->GetPos());

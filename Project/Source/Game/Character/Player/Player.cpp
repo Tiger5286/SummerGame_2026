@@ -3,15 +3,16 @@
 #include <cmath>
 #include "Utility/Matrix4x4.h"
 #include "Utility/MyLib.h"
-#include "System/Input.h"
+#include "Singleton/Input.h"
 #include "Game/Collider/CapsuleCollider.h"
 
 #include "PlayerStateBase.h"
 #include "PlayerStateIdle.h"
 
-namespace PlayerConstants
+namespace
 {
-	// アニメーションの名前
+	// アニメーション名
+	const std::wstring kIdleAnimName = L"Player|Idle";
 	const std::wstring kFallAnimName    = L"Player|Fall";
 	const std::wstring kRollingAnimName = L"Player|Rolling";
 	const std::wstring kCombo1AnimName  = L"Player|Combo1";
@@ -56,17 +57,6 @@ namespace PlayerConstants
 	constexpr float kStopTrackingDist = 150.0f;
 }
 
-using namespace PlayerConstants;
-
-Player::Player(Input& input):
-	m_input(input)
-{
-}
-
-Player::~Player()
-{
-}
-
 void Player::Init()
 {
 	// 位置の初期化
@@ -75,8 +65,14 @@ void Player::Init()
 	// 当たり判定の生成と初期化
 	m_collider = std::make_shared<CapsuleCollider>(kColliderRadius, kColliderHeight);
 
+	// アニメーションの初期化
+	m_anim.Init(m_modelHandle, kIdleAnimName);
+
 	// ステートの初期化
-	m_pState->ChangeState(std::make_shared<PlayerStateIdle>());
+	m_pState = std::make_shared<PlayerStateIdle>();
+	m_pState->ChangeState(m_pState);
+	m_pState->Enter(shared_from_this());
+	UpdateState();
 }
 
 void Player::End()
@@ -85,6 +81,9 @@ void Player::End()
 
 void Player::Update()
 {
+	// 次のステートがあったらステートを変更する
+	UpdateState();
+
 	// ステートの更新
 	m_pState->Update();
 
@@ -158,26 +157,26 @@ Vector3 Player::GetDir() const
 
 void Player::Move()
 {
-	// スティック入力を取得
-	auto stick = m_input.GetStickInput(LR::Left);
-	// 移動禁止状態なら入力を消す
-	if (!m_isCanControll)
-	{
-		stick = Vector3::Zero();
-	}
+	//// スティック入力を取得
+	//auto stick = m_input.GetStickInput(LR::Left);
+	//// 移動禁止状態なら入力を消す
+	//if (!m_isCanControll)
+	//{
+	//	stick = Vector3::Zero();
+	//}
 
-	// 移動ベクトルに入力を反映する
-	Vector3 moveVec;
-	moveVec += Vector3(stick.x, 0.0f, stick.y) * kMoveAccel;
-	// カメラの向きに応じて移動ベクトルを回転させる
-	moveVec *= Matrix4x4::GetRotY(m_cameraAngleY);
-	// 水平移動速度が上限を超えていなければ移動量を足す
-	auto velXZ = m_vel;
-	velXZ.y = 0.0f;
-	if (velXZ.SquaredLength() < kMaxMoveSpeed * kMaxMoveSpeed)
-	{
-		m_vel += moveVec;
-	}
+	//// 移動ベクトルに入力を反映する
+	//Vector3 moveVec;
+	//moveVec += Vector3(stick.x, 0.0f, stick.y) * kMoveAccel;
+	//// カメラの向きに応じて移動ベクトルを回転させる
+	//moveVec *= Matrix4x4::GetRotY(m_cameraAngleY);
+	//// 水平移動速度が上限を超えていなければ移動量を足す
+	//auto velXZ = m_vel;
+	//velXZ.y = 0.0f;
+	//if (velXZ.SquaredLength() < kMaxMoveSpeed * kMaxMoveSpeed)
+	//{
+	//	m_vel += moveVec;
+	//}
 	//else if (m_state != State::Dodge)
 	//{
 	//	// 水平移動速度が上限を超えていたらその値で固定する
@@ -192,20 +191,20 @@ void Player::Move()
 
 	// モデルを回転させる
 	// 入力があるときのみ回る
-	if (stick.SquaredLength() > 0.0f)
+	/*if (stick.SquaredLength() > 0.0f)
 	{
 		m_angle = atan2f(stick.y, -stick.x) + DX_PI_F / 2;
 		m_angle += m_cameraAngleY;
-	}
+	}*/
 }
 
 void Player::Jump()
 {
-	if (m_input.IsTriggerd(XINPUT_BUTTON_A) && m_isGround && m_isCanControll)
+	/*if (m_input.IsTriggerd(XINPUT_BUTTON_A) && m_isGround && m_isCanControll)
 	{
 		m_vel.y = 10.0f;
 		m_isGround = false;
-	}
+	}*/
 }
 
 void Player::Dodge()
@@ -439,13 +438,13 @@ void Player::CancelAttack()
 
 void Player::RotateInputDir()
 {
-	auto stick = m_input.GetStickInput(LR::Left);
+	/*auto stick = m_input.GetStickInput(LR::Left);
 	if (stick.SquaredLength() > 0.0f)
 	{
 		stick.Normalize();
 		m_angle = atan2f(stick.y, -stick.x) + DX_PI_F / 2;
 		m_angle += m_cameraAngleY;
-	}
+	}*/
 }
 
 void Player::CheckHitMap(MV1_COLL_RESULT_POLY_DIM coll)
@@ -510,6 +509,17 @@ void Player::CheckGround()
 
 void Player::UpdateState()
 {
+	auto nextState = m_pState->GetNextState();
+	// 次のステートがある場合は切り替え
+	if (m_pState != nextState)
+	{
+		m_pState->Exit();
+
+		m_pState = nextState;
+
+		m_pState->Enter(shared_from_this());
+	}
+
 	/*
 	// 現在の状態からステートを決定
 	auto velXZ = m_vel;
