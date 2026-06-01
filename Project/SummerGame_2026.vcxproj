@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\Character\Player\PlayerAttackCollider.cpp" />
     <ClCompile Include="Source\Game\Character\Player\PlayerStateAttack.cpp" />
     <ClCompile Include="Source\Game\Character\Player\PlayerStateDodge.cpp" />
     <ClCompile Include="Source\Game\Character\Player\PlayerStateFall.cpp" />
@@ -46,6 +47,7 @@
     <ClCompile Include="Source\Game\Character\Enemy\Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\Character\Player\PlayerAttackCollider.h" />
     <ClInclude Include="Source\Game\Character\Player\PlayerStateAttack.h" />
     <ClInclude Include="Source\Game\Character\Player\PlayerStateDodge.h" />
     <ClInclude Include="Source\Game\Character\Player\PlayerStateFall.h" />

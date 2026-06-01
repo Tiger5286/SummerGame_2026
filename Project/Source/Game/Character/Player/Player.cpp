@@ -20,6 +20,8 @@ namespace
 	// 当たり判定
 	constexpr float kColliderRadius = 25.0f;
 	constexpr float kColliderHeight = 120.0f;
+	// 攻撃用当たり判定のオフセット
+	const Vector3 kAttackColliderOffset = Vector3(0, 100, -100);
 
 	// 加速度
 	constexpr float kMoveAccel = 3.0f;
