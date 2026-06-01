@@ -57,7 +57,7 @@
     <ClCompile Include="Source\Game\Collider\CapsuleCollider.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Character\Enemy\Zombie.cpp">
+    <ClCompile Include="Source\Game\Character\Enemy\Zombie\Zombie.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Character\Enemy\EnemyBase.cpp">
@@ -137,7 +137,7 @@
     <ClInclude Include="Source\Game\Collider\CapsuleCollider.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Character\Enemy\Zombie.h">
+    <ClInclude Include="Source\Game\Character\Enemy\Zombie\Zombie.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\MyLib.h">

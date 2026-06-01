@@ -6,12 +6,12 @@
 #include "../Singleton/ModelManager.h"
 
 #include "Game/Character/Player/Player.h"
-#include "../Game/Camera.h"
-#include "../Game/Character/Enemy/Zombie.h"
+#include "Game/Camera.h"
+#include "Game/Character/Enemy/Zombie/Zombie.h"
 
-#include "../Game/Managers/EnemyManager.h"
+#include "Game/Managers/EnemyManager.h"
 
-#include "../Game/SkyBox.h"
+#include "Game/SkyBox.h"
 
 namespace
 {

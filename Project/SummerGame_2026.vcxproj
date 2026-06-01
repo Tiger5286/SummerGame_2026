@@ -44,7 +44,7 @@
     <ClCompile Include="Source\Utility\Matrix4x4.cpp" />
     <ClCompile Include="Source\Utility\Vector3.cpp" />
     <ClCompile Include="Source\Game\Collider\SphereCollider.cpp" />
-    <ClCompile Include="Source\Game\Character\Enemy\Zombie.cpp" />
+    <ClCompile Include="Source\Game\Character\Enemy\Zombie\Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game\Character\Player\PlayerAttackCollider.h" />
@@ -73,7 +73,7 @@
     <ClInclude Include="Source\Utility\MyLib.h" />
     <ClInclude Include="Source\Utility\Vector3.h" />
     <ClInclude Include="Source\Game\Collider\SphereCollider.h" />
-    <ClInclude Include="Source\Game\Character\Enemy\Zombie.h" />
+    <ClInclude Include="Source\Game\Character\Enemy\Zombie\Zombie.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

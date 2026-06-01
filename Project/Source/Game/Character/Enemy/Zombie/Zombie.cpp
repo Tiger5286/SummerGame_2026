@@ -2,7 +2,7 @@
 #include <string>
 #include "Utility/Matrix4x4.h"
 #include <cassert>
-#include "../Player/Player.h"
+#include "Game/Character/Player/Player.h"
 #include "Utility/MyLib.h"
 #include "Game/Collider/CapsuleCollider.h"
 
@@ -81,11 +81,6 @@ void Zombie::Update()
 		auto cross = forwardVec.Cross(toPlayerVec);
 		// 回転速度を設定
 		float rotSpeed = kRotateSpeed;
-		//// 近いなら早く回転
-		//if (isUnconditionalFindDist)
-		//{
-		//	rotSpeed = kRotateSpeedNear;
-		//}
 
 		// 回転
 		if (cross.y < 0)
