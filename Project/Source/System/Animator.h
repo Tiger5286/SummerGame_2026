@@ -29,6 +29,12 @@ public:
 	/// <returns>true:終わった / false:終わってない</returns>
 	bool IsEnd();
 
+	/// <summary>
+	/// 現在再生中のアニメーションの再生時間の割合を取得する
+	/// </summary>
+	/// <returns>再生時間の割合</returns>
+	float GetAnimRate();
+
 	bool operator==(const std::wstring& animName);
 	bool operator!=(const std::wstring& animName);
 
