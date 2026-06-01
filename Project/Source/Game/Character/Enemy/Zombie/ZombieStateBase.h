@@ -9,7 +9,7 @@ public:
 	ZombieStateBase() = default;
 	virtual ~ZombieStateBase() = default;
 
-	virtual void Enter(std::shared_ptr<Zombie> pZombie) abstract;
+	virtual void Enter(std::weak_ptr<Zombie> pZombie) abstract;
 	virtual void Update() abstract;
 	virtual void Exit() abstract;
 
@@ -24,7 +24,7 @@ public:
 	}
 
 protected:
-	std::shared_ptr<Zombie> m_pZombie = nullptr;
+	std::weak_ptr<Zombie> m_pZombie;
 	std::shared_ptr<ZombieStateBase> m_pNextState = nullptr;
 };
 

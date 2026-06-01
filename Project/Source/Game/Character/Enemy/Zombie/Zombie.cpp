@@ -6,6 +6,9 @@
 #include "Utility/MyLib.h"
 #include "Game/Collider/CapsuleCollider.h"
 
+#include "ZombieStateBase.h"
+#include "ZombieStateIdle.h"
+
 namespace
 {
 	// アニメーション名
@@ -54,6 +57,12 @@ void Zombie::Init()
 
 	// アニメーションの初期化
 	m_anim.Init(m_modelHandle, kIdleAnimName);
+
+	// ステートの初期化
+	m_pState = std::make_shared<ZombieStateIdle>();
+	m_pState->ChangeState(m_pState);
+	m_pState->Enter(weak_from_this());
+	CheckChangeState();
 }
 
 void Zombie::End()
@@ -134,4 +143,20 @@ void Zombie::Draw()
 #ifdef _DEBUG
 	m_pCollider->Draw();
 #endif
+}
+
+void Zombie::CheckChangeState()
+{
+	auto nextState = m_pState->GetNextState();
+	// 次のステートがある場合は切り替え
+	if (m_pState != nextState)
+	{
+		m_pState->Exit();
+
+		m_pState = nextState;
+
+		m_pState->Enter(weak_from_this());
+
+		m_pState->ChangeState(m_pState);
+	}
 }
