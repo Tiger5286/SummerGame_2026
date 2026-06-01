@@ -25,7 +25,7 @@
     <ClCompile Include="Source\Game\Collider\CapsuleCollider.cpp" />
     <ClCompile Include="Source\Singleton\ModelManager.cpp" />
     <ClCompile Include="Source\System\Animator.cpp" />
-    <ClCompile Include="Source\Game\GameObject\Player.cpp" />
+    <ClCompile Include="Source\Game\GameObject\Player\Player.cpp" />
     <ClCompile Include="Source\Game\Collider\ColliderBase.cpp" />
     <ClCompile Include="Source\Game\GameObject\GameObject.cpp" />
     <ClCompile Include="Source\Application.cpp" />
@@ -46,7 +46,7 @@
     <ClInclude Include="Source\Game\Collider\CapsuleCollider.h" />
     <ClInclude Include="Source\Singleton\ModelManager.h" />
     <ClInclude Include="Source\System\Animator.h" />
-    <ClInclude Include="Source\Game\GameObject\Player.h" />
+    <ClInclude Include="Source\Game\GameObject\Player\Player.h" />
     <ClInclude Include="Source\Game\Collider\ColliderBase.h" />
     <ClInclude Include="Source\Game\GameObject\GameObject.h" />
     <ClInclude Include="Source\Application.h" />

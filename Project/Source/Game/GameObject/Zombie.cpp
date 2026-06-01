@@ -2,7 +2,7 @@
 #include <string>
 #include "../../Utility/Matrix4x4.h"
 #include <cassert>
-#include "Player.h"
+#include "Player/Player.h"
 #include "../../Utility/MyLib.h"
 
 namespace

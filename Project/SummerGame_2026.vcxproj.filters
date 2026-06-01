@@ -39,7 +39,7 @@
     <ClCompile Include="Source\Game\Collider\SphereCollider.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\GameObject\Player.cpp">
+    <ClCompile Include="Source\Game\GameObject\Player\Player.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\System\Animator.cpp">
@@ -98,7 +98,7 @@
     <ClInclude Include="Source\Game\Collider\SphereCollider.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\GameObject\Player.h">
+    <ClInclude Include="Source\Game\GameObject\Player\Player.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\System\Animator.h">

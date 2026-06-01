@@ -5,7 +5,7 @@
 
 #include "../Singleton/ModelManager.h"
 
-#include "../Game/GameObject/Player.h"
+#include "Game/GameObject/Player/Player.h"
 #include "../Game/Camera.h"
 #include "../Game/GameObject/Zombie.h"
 
