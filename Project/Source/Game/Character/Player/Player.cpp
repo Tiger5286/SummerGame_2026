@@ -6,11 +6,12 @@
 #include "System/Input.h"
 #include "Game/Collider/CapsuleCollider.h"
 
-namespace
+#include "PlayerStateBase.h"
+#include "PlayerStateIdle.h"
+
+namespace PlayerConstants
 {
 	// アニメーションの名前
-	const std::wstring kIdleAnimName    = L"Player|Idle";
-	const std::wstring kRunAnimName     = L"Player|Run";
 	const std::wstring kFallAnimName    = L"Player|Fall";
 	const std::wstring kRollingAnimName = L"Player|Rolling";
 	const std::wstring kCombo1AnimName  = L"Player|Combo1";
@@ -55,6 +56,8 @@ namespace
 	constexpr float kStopTrackingDist = 150.0f;
 }
 
+using namespace PlayerConstants;
+
 Player::Player(Input& input):
 	m_input(input)
 {
@@ -66,13 +69,14 @@ Player::~Player()
 
 void Player::Init()
 {
-	// アニメーションの初期化
-	m_anim.Init(m_modelHandle, kIdleAnimName);
 	// 位置の初期化
 	m_pos = Vector3(0.0f, 0.0f, 0.0f);
 
 	// 当たり判定の生成と初期化
 	m_collider = std::make_shared<CapsuleCollider>(kColliderRadius, kColliderHeight);
+
+	// ステートの初期化
+	m_pState->ChangeState(std::make_shared<PlayerStateIdle>());
 }
 
 void Player::End()
@@ -81,32 +85,15 @@ void Player::End()
 
 void Player::Update()
 {
-	// 過去のステートを保存
-	m_prevState = m_state;
-
-	// ジャンプ処理
-	Jump();
-	// 移動処理
-	Move();
-	// 回避処理
-	Dodge();
-	// 攻撃処理
-	Attack();
-
-	// 状態を更新
-	// 回避中でなければ、かつ攻撃中でなければ
-	if (m_dodgeFrame == 0 && m_comboFrame == 0)
-	{
-		UpdateState();
-	}
-	
+	// ステートの更新
+	m_pState->Update();
 
 	// 重力をかける
 	Gravity();
 	// 速度に抵抗をかける
 	Resistance();
 
-	// 当たり判定の初期化
+	// 当たり判定の更新
 	auto capsule = std::dynamic_pointer_cast<CapsuleCollider>(m_collider);
 	capsule->SetPos(m_pos + Vector3(0.0f, capsule->GetRadius(), 0.0f));
 
@@ -191,15 +178,15 @@ void Player::Move()
 	{
 		m_vel += moveVec;
 	}
-	else if (m_state != State::Dodge)
-	{
-		// 水平移動速度が上限を超えていたらその値で固定する
-		velXZ.Normalize();
-		velXZ *= kMaxMoveSpeed;
-		m_vel.x = 0.0f;
-		m_vel.z = 0.0f;
-		m_vel += velXZ;
-	}
+	//else if (m_state != State::Dodge)
+	//{
+	//	// 水平移動速度が上限を超えていたらその値で固定する
+	//	velXZ.Normalize();
+	//	velXZ *= kMaxMoveSpeed;
+	//	m_vel.x = 0.0f;
+	//	m_vel.z = 0.0f;
+	//	m_vel += velXZ;
+	//}
 	// 位置に速度を足す
 	m_pos += m_vel;
 
@@ -223,42 +210,43 @@ void Player::Jump()
 
 void Player::Dodge()
 {
-	// ボタンを押した、かつ回避中でなければ回避
-	if (m_input.IsTriggerd(XINPUT_BUTTON_B) && m_state != State::Dodge)
-	{
-		// 入力方向を向く
-		RotateInputDir();
+	//// ボタンを押した、かつ回避中でなければ回避
+	//if (m_input.IsTriggerd(XINPUT_BUTTON_B) && m_state != State::Dodge)
+	//{
+	//	// 入力方向を向く
+	//	RotateInputDir();
 
-		m_anim.ChangeAnim(kRollingAnimName, 0.5f, false);
-		m_state = State::Dodge;
-		m_dodgeFrame = 0;
-		m_isCanControll = false;
+	//	m_anim.ChangeAnim(kRollingAnimName, 0.5f, false);
+	//	m_state = State::Dodge;
+	//	m_dodgeFrame = 0;
+	//	m_isCanControll = false;
 
-		// 攻撃を中止する
-		CancelAttack();
-	}
+	//	// 攻撃を中止する
+	//	CancelAttack();
+	//}
 
-	if (m_state == State::Dodge)
-	{	
-		// 回避中のフレームをカウント
-		m_dodgeFrame++;
-		// 一定時間経過したら回避終了
-		if (m_dodgeFrame > kDodgeFrame)
-		{
-			m_dodgeFrame = 0;
-			m_isCanControll = true;
-		}
+	//if (m_state == State::Dodge)
+	//{	
+	//	// 回避中のフレームをカウント
+	//	m_dodgeFrame++;
+	//	// 一定時間経過したら回避終了
+	//	if (m_dodgeFrame > kDodgeFrame)
+	//	{
+	//		m_dodgeFrame = 0;
+	//		m_isCanControll = true;
+	//	}
 
-		// 向いている方向に進む
-		Vector3 moveVec = Vector3(0.0f, 0.0f, -kDodgeSpeed);
-		moveVec *= Matrix4x4::GetRotY(m_angle);
-		m_vel.x = moveVec.x;
-		m_vel.z = moveVec.z;
-	}
+	//	// 向いている方向に進む
+	//	Vector3 moveVec = Vector3(0.0f, 0.0f, -kDodgeSpeed);
+	//	moveVec *= Matrix4x4::GetRotY(m_angle);
+	//	m_vel.x = moveVec.x;
+	//	m_vel.z = moveVec.z;
+	//}
 }
 
 void Player::Attack()
 {
+	/*
 	Vector3 toTargetDir = Vector3::Zero();
 	float toTargetDistSquare = 0.0f;
 	bool isTrackingAttack = false;
@@ -441,6 +429,7 @@ void Player::Attack()
 			break;
 		}
 	}
+	*/
 }
 
 void Player::CancelAttack()
@@ -521,6 +510,7 @@ void Player::CheckGround()
 
 void Player::UpdateState()
 {
+	/*
 	// 現在の状態からステートを決定
 	auto velXZ = m_vel;
 	velXZ.y = 0.0f;
@@ -553,9 +543,10 @@ void Player::UpdateState()
 	{
 		m_anim.ChangeAnim(kFallAnimName);
 	}
+	*/
 }
 
-bool Player::TriggerdChangeState(State state)
-{
-	return m_state == state && m_prevState != state;
-}
+//bool Player::TriggerdChangeState(State state)
+//{
+//	return m_state == state && m_prevState != state;
+//}

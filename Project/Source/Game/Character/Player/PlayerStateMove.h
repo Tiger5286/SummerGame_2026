@@ -1,11 +1,11 @@
 #pragma once
 #include "PlayerStateBase.h"
-class PlayerStateIdle :
+class PlayerStateMove :
     public PlayerStateBase
 {
 public:
-    PlayerStateIdle() = default;
-    ~PlayerStateIdle() = default;
+    PlayerStateMove() = default;
+    ~PlayerStateMove() = default;
 
     void Enter(std::shared_ptr<Player> pPlayer) override;
     void Update() override;
