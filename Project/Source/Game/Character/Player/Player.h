@@ -42,9 +42,6 @@ private:
 
     void RotateInputDir();  // 入力方向を向く
 
-    // マップに当たったときの処理
-	void CheckHitMap(MV1_COLL_RESULT_POLY_DIM coll);
-
     // 接地判定
     void CheckGround();
 
@@ -61,8 +58,6 @@ private:
 
     // 操作可能かどうかフラグ
     bool m_isCanControll = true;
-
-	bool m_isGround = false;    // 地面にいるかどうか
 
     // 回避のフレーム数
     int m_dodgeFrame = 0;

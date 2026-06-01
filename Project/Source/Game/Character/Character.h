@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "../../Utility/Vector3.h"
+#include "DxLib.h"
 #include <memory>
 
 class ColliderBase;
@@ -26,7 +27,7 @@ public:
 	// 位置を設定する
 	void SetPos(const Vector3& pos) { m_pos = pos; }
 	// 当たり判定を取得する
-	std::shared_ptr<ColliderBase> GetCollider() const { return m_collider; }
+	std::shared_ptr<ColliderBase> GetCollider() const { return m_pCollider; }
 
 	/// <summary>
 	/// 速度に抵抗をつける(なにもしなかったら徐々に速度が遅くなる)
@@ -44,13 +45,18 @@ public:
 	/// <param name="other">当たったオブジェクト</param>
 	virtual void OnCollision(Character& other);
 
+	// マップに当たったときの処理
+	void CheckHitMap(MV1_COLL_RESULT_POLY_DIM coll);
+
 protected:
 	// モデルのハンドル
 	int m_modelHandle = -1;
 
-	std::shared_ptr<ColliderBase> m_collider = nullptr;
+	std::shared_ptr<ColliderBase> m_pCollider = nullptr;
 
 	Vector3 m_pos;	// 位置
 	Vector3 m_vel;	// 速度
+
+	bool m_isGround = false;	// 接地しているかどうか
 };
 

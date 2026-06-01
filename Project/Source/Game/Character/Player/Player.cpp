@@ -43,7 +43,7 @@ void Player::Init()
 	m_pos = Vector3(0.0f, 0.0f, 0.0f);
 
 	// 当たり判定の生成と初期化
-	m_collider = std::make_shared<CapsuleCollider>(kColliderRadius, kColliderHeight);
+	m_pCollider = std::make_shared<CapsuleCollider>(kColliderRadius, kColliderHeight);
 
 	// アニメーションの初期化
 	m_anim.Init(m_modelHandle, kIdleAnimName);
@@ -76,11 +76,11 @@ void Player::Update()
 	Resistance();
 
 	// 当たり判定の更新
-	auto capsule = std::dynamic_pointer_cast<CapsuleCollider>(m_collider);
+	auto capsule = std::dynamic_pointer_cast<CapsuleCollider>(m_pCollider);
 	capsule->SetPos(m_pos + Vector3(0.0f, capsule->GetRadius(), 0.0f));
 
 	// マップとの当たり判定
-	auto collResult = m_collider->CheckCollModel(m_mapHandle);
+	auto collResult = m_pCollider->CheckCollModel(m_mapHandle);
 	CheckHitMap(collResult);
 	// 当たり判定に使用したメモリを解放
 	MV1CollResultPolyDimTerminate(collResult);
@@ -122,7 +122,7 @@ void Player::Draw()
 
 #ifdef _DEBUG
 	// 当たり判定を描画
-	m_collider->Draw();
+	m_pCollider->Draw();
 	// 接地判定用のレイを描画
 	Vector3 layEnd = m_pos - Vector3::Up() * kLineLength;
 	DrawLine3D(m_pos.ToDxLib(), layEnd.ToDxLib(), 0xffff00);
@@ -190,39 +190,6 @@ void Player::RotateInputDir()
 		stick.Normalize();
 		m_angle = atan2f(stick.y, -stick.x) + DX_PI_F / 2;
 		m_angle += m_cameraAngleY;
-	}
-}
-
-void Player::CheckHitMap(MV1_COLL_RESULT_POLY_DIM coll)
-{
-	auto capsule = std::dynamic_pointer_cast<CapsuleCollider>(m_collider);
-	for (int i = 0; i < coll.HitNum; i++)
-	{
-		// 当たったポリゴンの法線を取得
-		auto normal = Vector3::FromDxLib(coll.Dim[i].Normal);
-
-		// 法線が少しでも上を向いていれば床判定
-		bool isFloor = normal.y > 0.0f;	// true:床 / false:壁
-		// 床判定なら法線を真上向きにする
-		if (isFloor) normal = Vector3::Up();
-
-		// カプセルの位置を取得
-		Vector3 capsuleStart = capsule->GetPos();
-		Vector3 capsuleEnd = capsuleStart + Vector3::Up() * capsule->GetHeight();
-
-		// ポリゴンとカプセルの線との最短距離を計算
-		auto minDist = Segment_Triangle_MinLength(capsuleStart.ToDxLib(), capsuleEnd.ToDxLib(),
-								   coll.Dim[i].Position[0], coll.Dim[i].Position[1], coll.Dim[i].Position[2]);
-		// 押し戻し量を計算
-		auto pushDist = capsule->GetRadius() - minDist;
-
-		// 法線方向に押し戻す
-		m_pos += normal * pushDist;
-		if (isFloor)
-		{
-			m_vel.y = 0.0f;
-			m_isGround = true;
-		}
 	}
 }
 

@@ -4,6 +4,7 @@
 #include <cassert>
 #include "../Player/Player.h"
 #include "Utility/MyLib.h"
+#include "Game/Collider/CapsuleCollider.h"
 
 namespace
 {
@@ -18,6 +19,10 @@ namespace
 	// ゾンビの回転速度
 	constexpr float kRotateSpeed = 0.01f;
 	//constexpr float kRotateSpeedNear = 0.1f;	// 近いときは早く回転する
+	
+	// 当たり判定
+	constexpr float kColliderRadius = 25.0f;
+	constexpr float kColliderHeight = 120.0f;
 
 	// プレイヤーを見つける距離
 	constexpr float kPlayerFindDist = 700.0f;
@@ -43,6 +48,9 @@ void Zombie::Init()
 {
 	// プレイヤーが設定されていないならエラー
 	assert(m_pPlayer != nullptr && "プレイヤーが設定されていません Zombie::Init()");
+
+	// 当たり判定の初期化
+	m_pCollider = std::make_shared<CapsuleCollider>(kColliderRadius, kColliderHeight);
 
 	// アニメーションの初期化
 	m_anim.Init(m_modelHandle, kIdleAnimName);
@@ -97,6 +105,19 @@ void Zombie::Update()
 		}
 	}
 
+	// 重力をかける
+	Gravity();
+
+	// 当たり判定の更新
+	auto capsule = std::dynamic_pointer_cast<CapsuleCollider>(m_pCollider);
+	capsule->SetPos(m_pos + Vector3(0.0f, capsule->GetRadius(), 0.0f));
+
+	// マップとの当たり判定
+	auto collResult = m_pCollider->CheckCollModel(m_mapHandle);
+	CheckHitMap(collResult);
+	// 当たり判定に使用したメモリを解放
+	MV1CollResultPolyDimTerminate(collResult);
+
 	// 行列を生成してモデルに適用
 	auto mtx = Matrix4x4::GetRotY(m_angle) * Matrix4x4::GetTranslate(m_pos);
 	MV1SetMatrix(m_modelHandle, mtx.ToDxLib());
@@ -114,4 +135,8 @@ void Zombie::Draw()
 
 	// モデルの描画
 	MV1DrawModel(m_modelHandle);
+
+#ifdef _DEBUG
+	m_pCollider->Draw();
+#endif
 }

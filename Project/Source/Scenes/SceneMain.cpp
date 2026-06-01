@@ -58,6 +58,7 @@ void SceneMain::Init()
 	// 仮の敵を生成
 	auto zombie = std::make_shared<Zombie>();
 	zombie->SetHandle(modelManager.DuplicateModel(L"Zombie"));
+	zombie->SetMapHandle(modelManager.GetModelHandle(L"Collision"));
 	m_pEnemyManager->AddEnemy(zombie,Vector3(0,0,800));
 	// ロックオンする
 	m_pCamera->SetTarget(zombie);

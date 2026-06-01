@@ -18,10 +18,13 @@ public:
 
 	// プレイヤーのポインタを設定する(Initの前に実行する)
 	void SetPlayer(const std::shared_ptr<Player> pPlayer) { m_pPlayer = pPlayer; }
+	// マップモデルのハンドルを設定する(Initの前に実行する)
+	void SetMapHandle(int mapHandle) { m_mapHandle = mapHandle; }
 
 	bool IsDead() const { return m_isDead; }
 
 protected:
+	int m_mapHandle = -1;
 	std::shared_ptr<Player> m_pPlayer = nullptr;
 	bool m_isDead = false;
 };
