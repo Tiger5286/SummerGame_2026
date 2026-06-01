@@ -13,9 +13,6 @@ namespace
 {
 	// アニメーション名
 	const std::wstring kIdleAnimName = L"Player|Idle";
-	const std::wstring kCombo1AnimName  = L"Player|Combo1";
-	const std::wstring kCombo2AnimName  = L"Player|Combo2";
-	const std::wstring kCombo3AnimName  = L"Player|Combo3";
 
 	// モデルのデフォルトの向き(angleが0の時の向き)
 	const Vector3 kDefaultDir = Vector3(0, 0, -1);

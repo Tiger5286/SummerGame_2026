@@ -20,6 +20,7 @@ void PlayerStateDodge::Enter(std::shared_ptr<Player> pPlayer)
 {
 	m_pPlayer = pPlayer;
 	m_pPlayer->m_anim.ChangeAnim(kRollingAnimName, 0.5f, false);
+	m_pPlayer->RotateInputDir();
 }
 
 void PlayerStateDodge::Update()

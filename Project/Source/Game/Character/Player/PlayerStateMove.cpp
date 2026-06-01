@@ -6,6 +6,7 @@
 #include "PlayerStateIdle.h"
 #include "PlayerStateFall.h"
 #include "PlayerStateDodge.h"
+#include "PlayerStateAttack.h"
 
 namespace
 {
@@ -32,6 +33,12 @@ void PlayerStateMove::Update()
 	if (input.IsTriggerd(XINPUT_BUTTON_B))
 	{
 		ChangeState(std::make_shared<PlayerStateDodge>());
+		return;
+	}
+	// 攻撃を入力していたら攻撃
+	if (input.IsTriggerd(XINPUT_BUTTON_X))
+	{
+		ChangeState(std::make_shared<PlayerStateAttack>());
 		return;
 	}
 	// 接地していなかったらFallにする
