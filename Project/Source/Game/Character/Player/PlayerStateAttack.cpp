@@ -21,7 +21,7 @@ namespace
 		float endColTimeRate = -1;	// 当たり判定を終了する時間
 	};
 	// コンボ一つ一つの情報
-	std::vector<ComboData> kComboDatas =
+	const std::vector<ComboData> kComboDatas =
 	{
 		{
 			L"Player|Combo1",
@@ -80,10 +80,10 @@ void PlayerStateAttack::Update()
 		return;
 	}
 	// 効果時間内に攻撃ボタンを押したら移行フラグを立てる
-	float animRate = m_pPlayer->m_anim.GetAnimRate();
-	bool isCanTransTime = animRate > kComboDatas[m_comboIndex].minInputTimeRate && animRate < kComboDatas[m_comboIndex].maxInputTimeRate;
-	if (isCanTransTime && input.IsTriggerd(XINPUT_BUTTON_X))
-	{
+	float animRate = m_pPlayer->m_anim.GetAnimRate();	// 現在のアニメーションの再生時間の割合を取得
+	bool isCanTransTime = animRate > kComboDatas[m_comboIndex].minInputTimeRate && animRate < kComboDatas[m_comboIndex].maxInputTimeRate;	// 入力受付時間内だったらtrue
+	if (isCanTransTime && input.IsTriggerd(XINPUT_BUTTON_X))	// 入力受付時間内かつ入力があったら
+	{	// 移行フラグを立てる
 		m_isCanTransNextCombo = true;
 	}
 	// 移動処理
