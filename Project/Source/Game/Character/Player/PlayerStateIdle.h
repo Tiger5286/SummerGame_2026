@@ -2,5 +2,12 @@
 #include "PlayerStateBase.h"
 class PlayerStateIdle :
     public PlayerStateBase
-{};
+{
+    PlayerStateIdle() = default;
+    ~PlayerStateIdle() = default;
+
+    void Enter(std::shared_ptr<Player> pPlayer) override;
+    void Update() override;
+    void Exit() override;
+};
 

@@ -5,6 +5,10 @@
 
 class Input;
 
+// プレイヤーのステートクラスをプロトタイプ宣言しておく
+class PlayerStateBase;
+class PlayerStateIdle;
+
 class Player :
     public Character
 {
@@ -102,5 +106,9 @@ private:
     float m_angle = 0.0f;
 	// 描画用の回転角度(Lerpで滑らかに回転する)
 	float m_drawAngle = 0.0f;
+    
+    // プレイヤーのステートクラスがプレイヤーにアクセスできるようにする
+    friend PlayerStateBase;
+    friend PlayerStateIdle;
 };
 
