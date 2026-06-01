@@ -24,6 +24,8 @@ public:
 private:
 	void CheckChangeState();	// ステートの切り替え処理
 
+	bool IsFindPlayer();	// プレイヤーを見つけるかどうか
+
 private:
 	Animator m_anim;
 	float m_angle = 0.0f;

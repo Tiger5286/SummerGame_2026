@@ -1,6 +1,8 @@
 #include "ZombieStateIdle.h"
 #include "Zombie.h"	
 
+#include "ZombieStateMove.h"
+
 namespace
 {
 	const std::wstring kIdleAnimName = L"Zombie|Idle";
@@ -13,7 +15,13 @@ void ZombieStateIdle::Enter(std::weak_ptr<Zombie> pZombie)
 }
 
 void ZombieStateIdle::Update()
-{}
+{
+	// プレイヤーを見つけたら移動ステートに切り替える
+	if (m_pZombie.lock()->IsFindPlayer())
+	{
+		ChangeState(std::make_shared<ZombieStateMove>());
+	}
+}
 
 void ZombieStateIdle::Exit()
 {}
