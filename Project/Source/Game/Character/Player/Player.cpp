@@ -13,7 +13,6 @@ namespace
 {
 	// アニメーション名
 	const std::wstring kIdleAnimName = L"Player|Idle";
-	const std::wstring kFallAnimName    = L"Player|Fall";
 	const std::wstring kRollingAnimName = L"Player|Rolling";
 	const std::wstring kCombo1AnimName  = L"Player|Combo1";
 	const std::wstring kCombo2AnimName  = L"Player|Combo2";
@@ -26,6 +25,10 @@ namespace
 	constexpr float kColliderRadius = 25.0f;
 	constexpr float kColliderHeight = 120.0f;
 
+	// 加速度
+	constexpr float kMoveAccel = 3.0f;
+	// 最大移動速度
+	constexpr float kMaxMoveSpeed = 7.0f;
 	// 回避の速度
 	constexpr float kDodgeSpeed = 15.0f;
 
@@ -82,6 +85,9 @@ void Player::Update()
 
 	// ステートの更新
 	m_pState->Update();
+
+	//位置に速度を足す
+	m_pos += m_vel;
 
 	// 重力をかける
 	Gravity();
@@ -153,15 +159,45 @@ Vector3 Player::GetDir() const
 
 void Player::Move()
 {
+	// 入力を取得
+	auto& input = Input::GetInstance();
+
+	// 入力方向を向く
+	RotateInputDir();
+
+	// スティック入力を取得
+	auto stick = input.GetStickInput(LR::Left);
+	// 移動ベクトルに入力を反映する
+	Vector3 moveVec;
+	moveVec += Vector3(stick.x, 0.0f, stick.y) * kMoveAccel;
+	// カメラの向きに応じて移動ベクトルを回転させる
+	moveVec *= Matrix4x4::GetRotY(m_cameraAngleY);
+	// 水平移動速度が上限を超えていなければ移動量を足す
+	auto velXZ = m_vel;
+	velXZ.y = 0.0f;
+	if (velXZ.SquaredLength() < kMaxMoveSpeed * kMaxMoveSpeed)
+	{
+		m_vel += moveVec;
+	}
+	else
+	{
+		// 水平移動速度が上限を超えていたらその値で固定する
+		velXZ.Normalize();
+		velXZ *= kMaxMoveSpeed;
+		m_vel.x = 0.0f;
+		m_vel.z = 0.0f;
+		m_vel += velXZ;
+	}
 }
 
 void Player::Jump()
 {
-	/*if (m_input.IsTriggerd(XINPUT_BUTTON_A) && m_isGround && m_isCanControll)
+	auto& input = Input::GetInstance();
+	if (input.IsTriggerd(XINPUT_BUTTON_A) && m_isGround)
 	{
 		m_vel.y = 10.0f;
 		m_isGround = false;
-	}*/
+	}
 }
 
 void Player::Dodge()

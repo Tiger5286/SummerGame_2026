@@ -7,6 +7,8 @@
 class PlayerStateBase;
 class PlayerStateIdle;
 class PlayerStateMove;
+class PlayerStateFall;
+class PlayerStateDodge;
 
 class Player : public Character, public std::enable_shared_from_this<Player>
 {
@@ -86,5 +88,7 @@ private:
     friend PlayerStateBase;
     friend PlayerStateIdle;
     friend PlayerStateMove;
+    friend PlayerStateFall;
+    friend PlayerStateDodge;
 };
 
