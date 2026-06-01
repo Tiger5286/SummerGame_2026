@@ -13,7 +13,6 @@ namespace
 {
 	// アニメーション名
 	const std::wstring kIdleAnimName = L"Player|Idle";
-	const std::wstring kRollingAnimName = L"Player|Rolling";
 	const std::wstring kCombo1AnimName  = L"Player|Combo1";
 	const std::wstring kCombo2AnimName  = L"Player|Combo2";
 	const std::wstring kCombo3AnimName  = L"Player|Combo3";
@@ -29,14 +28,10 @@ namespace
 	constexpr float kMoveAccel = 3.0f;
 	// 最大移動速度
 	constexpr float kMaxMoveSpeed = 7.0f;
-	// 回避の速度
-	constexpr float kDodgeSpeed = 15.0f;
 
-	// 設置判定に使うレイの長さ
+	// 接地判定に使うレイの長さ
 	constexpr float kLineLength = 10.0f;
 
-	// 回避のフレーム数
-	constexpr int kDodgeFrame = 30;
 	// コンボのフレーム数
 	constexpr int kCombo1Frame = 33*2;
 	constexpr int kCombo2Frame = 34*2;
@@ -71,7 +66,7 @@ void Player::Init()
 	m_pState = std::make_shared<PlayerStateIdle>();
 	m_pState->ChangeState(m_pState);
 	m_pState->Enter(shared_from_this());
-	UpdateState();
+	CheckChangeState();
 }
 
 void Player::End()
@@ -81,7 +76,7 @@ void Player::End()
 void Player::Update()
 {
 	// 次のステートがあったらステートを変更する
-	UpdateState();
+	CheckChangeState();
 
 	// ステートの更新
 	m_pState->Update();
@@ -198,42 +193,6 @@ void Player::Jump()
 		m_vel.y = 10.0f;
 		m_isGround = false;
 	}
-}
-
-void Player::Dodge()
-{
-	//// ボタンを押した、かつ回避中でなければ回避
-	//if (m_input.IsTriggerd(XINPUT_BUTTON_B) && m_state != State::Dodge)
-	//{
-	//	// 入力方向を向く
-	//	RotateInputDir();
-
-	//	m_anim.ChangeAnim(kRollingAnimName, 0.5f, false);
-	//	m_state = State::Dodge;
-	//	m_dodgeFrame = 0;
-	//	m_isCanControll = false;
-
-	//	// 攻撃を中止する
-	//	CancelAttack();
-	//}
-
-	//if (m_state == State::Dodge)
-	//{	
-	//	// 回避中のフレームをカウント
-	//	m_dodgeFrame++;
-	//	// 一定時間経過したら回避終了
-	//	if (m_dodgeFrame > kDodgeFrame)
-	//	{
-	//		m_dodgeFrame = 0;
-	//		m_isCanControll = true;
-	//	}
-
-	//	// 向いている方向に進む
-	//	Vector3 moveVec = Vector3(0.0f, 0.0f, -kDodgeSpeed);
-	//	moveVec *= Matrix4x4::GetRotY(m_angle);
-	//	m_vel.x = moveVec.x;
-	//	m_vel.z = moveVec.z;
-	//}
 }
 
 void Player::Attack()
@@ -501,7 +460,7 @@ void Player::CheckGround()
 	}
 }
 
-void Player::UpdateState()
+void Player::CheckChangeState()
 {
 	auto nextState = m_pState->GetNextState();
 	// 次のステートがある場合は切り替え
@@ -515,44 +474,4 @@ void Player::UpdateState()
 
 		m_pState->ChangeState(m_pState);
 	}
-
-	/*
-	// 現在の状態からステートを決定
-	auto velXZ = m_vel;
-	velXZ.y = 0.0f;
-	if (!m_isGround)	// 地面にいなければ落下
-	{
-		m_state = State::Fall;
-	}
-	else if (velXZ.SquaredLength() > 0.0f)	// 水平方向への速度が0より大きければ移動
-	{
-		m_state = State::Run;
-	}
-	else	// どれにも当てはまらなければ待機
-	{
-		m_state = State::Idle;
-	}
-#ifdef _DEBUG
-	DrawFormatString(0, 64, 0xffffff, L"state:%d", m_state);
-#endif
-
-	// ステート切り替えに応じてアニメーションも切り替え
-	if (TriggerdChangeState(State::Idle))
-	{
-		m_anim.ChangeAnim(kIdleAnimName);
-	}
-	if (TriggerdChangeState(State::Run))
-	{
-		m_anim.ChangeAnim(kRunAnimName);
-	}
-	if (TriggerdChangeState(State::Fall))
-	{
-		m_anim.ChangeAnim(kFallAnimName);
-	}
-	*/
 }
-
-//bool Player::TriggerdChangeState(State state)
-//{
-//	return m_state == state && m_prevState != state;
-//}

@@ -5,6 +5,7 @@
 
 #include "PlayerStateIdle.h"
 #include "PlayerStateFall.h"
+#include "PlayerStateDodge.h"
 
 namespace
 {
@@ -20,12 +21,17 @@ void PlayerStateMove::Enter(std::shared_ptr<Player> pPlayer)
 
 void PlayerStateMove::Update()
 {
+	// 移動処理
+	m_pPlayer->Move();
+	// ジャンプ処理
+	m_pPlayer->Jump();
+
 	// 入力を取得
 	auto& input = Input::GetInstance();
-	// スティック入力がなくなったらIdleにする
-	if (input.GetStickInput(LR::Left).SquaredLength() <= 0.0f)
+	// 回避が入力されたら回避
+	if (input.IsTriggerd(XINPUT_BUTTON_B))
 	{
-		ChangeState(std::make_shared<PlayerStateIdle>());
+		ChangeState(std::make_shared<PlayerStateDodge>());
 		return;
 	}
 	// 接地していなかったらFallにする
@@ -34,10 +40,14 @@ void PlayerStateMove::Update()
 		ChangeState(std::make_shared<PlayerStateFall>());
 		return;
 	}
-	// 移動処理
-	m_pPlayer->Move();
-	// ジャンプ処理
-	m_pPlayer->Jump();
+	// xz速度が0になったらidle
+	auto velXZ = m_pPlayer->m_vel;
+	velXZ.y = 0.0f;
+	if (velXZ.SquaredLength() <= 0.0f)
+	{
+		ChangeState(std::make_shared<PlayerStateIdle>());
+		return;
+	}
 }
 
 void PlayerStateMove::Exit()

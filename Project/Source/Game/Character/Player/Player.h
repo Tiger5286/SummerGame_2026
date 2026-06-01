@@ -38,7 +38,6 @@ private:
 
     void Move();    // 移動処理
     void Jump();    // ジャンプ処理
-    void Dodge();   // 回避処理
     void Attack();  // 攻撃処理
     void CancelAttack();    // 攻撃を中止する
 
@@ -51,9 +50,9 @@ private:
     void CheckGround();
 
     /// <summary>
-    /// 現在の状態をチェックしてステートを更新する
+    /// ステートの切り替え処理
     /// </summary>
-    void UpdateState();
+    void CheckChangeState();
 
 private:
 	Animator m_anim;    // アニメーションクラス

@@ -1,8 +1,10 @@
 #include "PlayerStateFall.h"
 #include "Player.h"
+#include "Singleton/Input.h"
 
 #include "PlayerStateIdle.h"
 #include "PlayerStateMove.h"
+#include "PlayerStateDodge.h"
 
 namespace
 {
@@ -18,6 +20,17 @@ void PlayerStateFall::Enter(std::shared_ptr<Player> pPlayer)
 
 void PlayerStateFall::Update()
 {
+	// 移動処理
+	m_pPlayer->Move();
+
+	// 入力を取得
+	auto& input = Input::GetInstance();
+	// 回避ボタンを押したら回避
+	if (input.IsTriggerd(XINPUT_BUTTON_B))
+	{
+		ChangeState(std::make_shared<PlayerStateDodge>());
+		return;
+	}
 	// 接地していたら
 	if (m_pPlayer->m_isGround)
 	{
@@ -37,8 +50,6 @@ void PlayerStateFall::Update()
 			return;
 		}
 	}
-	// 移動処理
-	m_pPlayer->Move();
 }
 
 void PlayerStateFall::Exit()
