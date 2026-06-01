@@ -2,7 +2,6 @@
 #include "Player.h"
 #include "Utility/Matrix4x4.h"
 
-#include "PlayerStateIdle.h"
 #include "PlayerStateMove.h"
 #include "PlayerStateFall.h"
 
@@ -16,11 +15,11 @@ namespace
 	constexpr int kDodgeFrame = 30;
 }
 
-void PlayerStateDodge::Enter(std::shared_ptr<Player> pPlayer)
+void PlayerStateDodge::Enter(std::weak_ptr<Player> pPlayer)
 {
 	m_pPlayer = pPlayer;
-	m_pPlayer->m_anim.ChangeAnim(kRollingAnimName, 0.5f, false);
-	m_pPlayer->RotateInputDir();
+	m_pPlayer.lock()->m_anim.ChangeAnim(kRollingAnimName, 0.5f, false);
+	m_pPlayer.lock()->RotateInputDir();
 }
 
 void PlayerStateDodge::Update()
@@ -31,7 +30,7 @@ void PlayerStateDodge::Update()
 		if (m_dodgeFrame > kDodgeFrame)
 		{
 			// 接地していなかったらfall
-			if (!(m_pPlayer->m_isGround))
+			if (!(m_pPlayer.lock()->m_isGround))
 			{
 				ChangeState(std::make_shared<PlayerStateFall>());
 				return;
@@ -43,9 +42,9 @@ void PlayerStateDodge::Update()
 
 		// 向いている方向に進む
 		Vector3 moveVec = Vector3(0.0f, 0.0f, -kDodgeSpeed);
-		moveVec *= Matrix4x4::GetRotY(m_pPlayer->m_angle);
-		m_pPlayer->m_vel.x = moveVec.x;
-		m_pPlayer->m_vel.z = moveVec.z;
+		moveVec *= Matrix4x4::GetRotY(m_pPlayer.lock()->m_angle);
+		m_pPlayer.lock()->m_vel.x = moveVec.x;
+		m_pPlayer.lock()->m_vel.z = moveVec.z;
 }
 
 void PlayerStateDodge::Exit()

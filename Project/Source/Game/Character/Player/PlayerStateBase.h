@@ -9,7 +9,7 @@ public:
 	PlayerStateBase() = default;
 	virtual ~PlayerStateBase() = default;
 
-	virtual void Enter(std::shared_ptr<Player> pPlayer) abstract;
+	virtual void Enter(std::weak_ptr<Player> pPlayer) abstract;
 	virtual void Update() abstract;
 	virtual void Exit() abstract;
 
@@ -24,7 +24,7 @@ public:
 	}
 
 protected:
-	std::shared_ptr<Player> m_pPlayer = nullptr;
+	std::weak_ptr<Player> m_pPlayer;
 	std::shared_ptr<PlayerStateBase> m_pNextState = nullptr;
 };
 

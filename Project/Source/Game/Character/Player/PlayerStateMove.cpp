@@ -14,18 +14,18 @@ namespace
 	const std::wstring kRunAnimName = L"Player|Run";
 }
 
-void PlayerStateMove::Enter(std::shared_ptr<Player> pPlayer)
+void PlayerStateMove::Enter(std::weak_ptr<Player> pPlayer)
 {
 	m_pPlayer = pPlayer;
-	m_pPlayer->m_anim.ChangeAnim(kRunAnimName);
+	m_pPlayer.lock()->m_anim.ChangeAnim(kRunAnimName);
 }
 
 void PlayerStateMove::Update()
 {
 	// 移動処理
-	m_pPlayer->Move();
+	m_pPlayer.lock()->Move();
 	// ジャンプ処理
-	m_pPlayer->Jump();
+	m_pPlayer.lock()->Jump();
 
 	// 入力を取得
 	auto& input = Input::GetInstance();
@@ -42,13 +42,13 @@ void PlayerStateMove::Update()
 		return;
 	}
 	// 接地していなかったらFallにする
-	if (!(m_pPlayer->m_isGround))
+	if (!(m_pPlayer.lock()->m_isGround))
 	{
 		ChangeState(std::make_shared<PlayerStateFall>());
 		return;
 	}
 	// xz速度が0になったらidle
-	auto velXZ = m_pPlayer->m_vel;
+	auto velXZ = m_pPlayer.lock()->m_vel;
 	velXZ.y = 0.0f;
 	if (velXZ.SquaredLength() <= 0.0f)
 	{

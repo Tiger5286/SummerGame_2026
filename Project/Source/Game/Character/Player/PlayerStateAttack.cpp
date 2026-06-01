@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Singleton/Input.h"
 #include "Utility/Matrix4x4.h"
+#include <vector>
 
 #include "PlayerStateIdle.h"
 #include "PlayerStateDodge.h"
@@ -61,10 +62,10 @@ namespace
 	constexpr float kStopTrackingDist = 150.0f;
 }
 
-void PlayerStateAttack::Enter(std::shared_ptr<Player> pPlayer)
+void PlayerStateAttack::Enter(std::weak_ptr<Player> pPlayer)
 {
 	m_pPlayer = pPlayer;
-	m_pPlayer->m_anim.ChangeAnim(kComboDatas[0].animName, 0.5f, false);
+	m_pPlayer.lock()->m_anim.ChangeAnim(kComboDatas[0].animName, 0.5f, false);
 	m_comboIndex = 0;
 	Tracking();
 }
@@ -80,13 +81,13 @@ void PlayerStateAttack::Update()
 		return;
 	}
 	// アニメーションが終わったらIdleに移行
-	if (m_pPlayer->m_anim.IsEnd())
+	if (m_pPlayer.lock()->m_anim.IsEnd())
 	{
 		ChangeState(std::make_shared<PlayerStateIdle>());
 		return;
 	}
 	// 効果時間内に攻撃ボタンを押したら移行フラグを立てる
-	float animRate = m_pPlayer->m_anim.GetAnimRate();	// 現在のアニメーションの再生時間の割合を取得
+	float animRate = m_pPlayer.lock()->m_anim.GetAnimRate();	// 現在のアニメーションの再生時間の割合を取得
 	bool isCanTransTime = animRate > kComboDatas[m_comboIndex].minInputTimeRate && animRate < kComboDatas[m_comboIndex].maxInputTimeRate;	// 入力受付時間内だったらtrue
 	if (isCanTransTime && input.IsTriggerd(XINPUT_BUTTON_X))	// 入力受付時間内かつ入力があったら
 	{	// 移行フラグを立てる
@@ -96,26 +97,26 @@ void PlayerStateAttack::Update()
 	if (animRate < kComboDatas[m_comboIndex].moveTimeRate)
 	{
 		// 移動ベクトルを生成
-		Vector3 moveVec = Vector3(0, m_pPlayer->m_vel.y, -kComboDatas[m_comboIndex].moveSpeed);
+		Vector3 moveVec = Vector3(0, m_pPlayer.lock()->m_vel.y, -kComboDatas[m_comboIndex].moveSpeed);
 
 		// ホーミングするターゲットへのベクトルを生成
-		Vector3 toTargetVec = m_pPlayer->m_target->GetPos() - m_pPlayer->m_pos;
+		Vector3 toTargetVec = m_pPlayer.lock()->m_target->GetPos() - m_pPlayer.lock()->m_pos;
 		// 一定の距離より近かったら進まない
 		if (toTargetVec.SquaredLength() < kStopTrackingDist * kStopTrackingDist)
 		{
 			moveVec = Vector3::Zero();
 		}
 		// 移動ベクトルをプレイヤーの向きに回転
-		moveVec *= Matrix4x4::GetRotY(m_pPlayer->m_angle);
+		moveVec *= Matrix4x4::GetRotY(m_pPlayer.lock()->m_angle);
 		// 速度に適用
-		m_pPlayer->m_vel = moveVec;
+		m_pPlayer.lock()->m_vel = moveVec;
 	}
 	// 移行フラグが立っている、かつ次の攻撃までの最低時間を越していたら次の攻撃へ
 	if (m_isCanTransNextCombo && animRate > kComboDatas[m_comboIndex].minTimeRate)
 	{
-		m_pPlayer->RotateInputDir();
+		m_pPlayer.lock()->RotateInputDir();
 		Tracking();
-		m_pPlayer->m_anim.ChangeAnim(kComboDatas[m_comboIndex + 1].animName, 0.5f, false);
+		m_pPlayer.lock()->m_anim.ChangeAnim(kComboDatas[m_comboIndex + 1].animName, 0.5f, false);
 		m_comboIndex++;
 		m_isCanTransNextCombo = false;
 	}
@@ -127,11 +128,11 @@ void PlayerStateAttack::Exit()
 void PlayerStateAttack::Tracking()
 {
 	// ホーミングするターゲットへのベクトルを生成
-	Vector3 toTargetVec = m_pPlayer->m_target->GetPos() - m_pPlayer->m_pos;
+	Vector3 toTargetVec = m_pPlayer.lock()->m_target->GetPos() - m_pPlayer.lock()->m_pos;
 	// 条件を満たしたらプレイヤーの向きをターゲットのほうへ向ける
 	bool isTrackingDist = toTargetVec.SquaredLength() < kTrackingAttackDist * kTrackingAttackDist;	// ホーミングする距離内
 	if (isTrackingDist)	// 距離内、かつ一定の距離外
 	{
-		m_pPlayer->m_angle = toTargetVec.Angle();
+		m_pPlayer.lock()->m_angle = toTargetVec.Angle();
 	}
 }

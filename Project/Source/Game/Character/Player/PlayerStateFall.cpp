@@ -13,16 +13,16 @@ namespace
 	const std::wstring kFallAnimName = L"Player|Fall";
 }
 
-void PlayerStateFall::Enter(std::shared_ptr<Player> pPlayer)
+void PlayerStateFall::Enter(std::weak_ptr<Player> pPlayer)
 {
 	m_pPlayer = pPlayer;
-	m_pPlayer->m_anim.ChangeAnim(kFallAnimName);
+	m_pPlayer.lock()->m_anim.ChangeAnim(kFallAnimName);
 }
 
 void PlayerStateFall::Update()
 {
 	// 移動処理
-	m_pPlayer->Move();
+	m_pPlayer.lock()->Move();
 
 	// 入力を取得
 	auto& input = Input::GetInstance();
@@ -39,10 +39,10 @@ void PlayerStateFall::Update()
 		return;
 	}
 	// 接地していたら
-	if (m_pPlayer->m_isGround)
+	if (m_pPlayer.lock()->m_isGround)
 	{
 		// yを除いた速度ベクトルを計算
-		Vector3 velXZ = m_pPlayer->m_vel;
+		Vector3 velXZ = m_pPlayer.lock()->m_vel;
 		velXZ.y = 0.0f;
 		// 移動しているならmoveへ
 		if (velXZ.SquaredLength() > 0.0f)

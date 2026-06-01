@@ -13,16 +13,16 @@ namespace
 	const std::wstring kIdleAnimName = L"Player|Idle";
 }
 
-void PlayerStateIdle::Enter(std::shared_ptr<Player> pPlayer)
+void PlayerStateIdle::Enter(std::weak_ptr<Player> pPlayer)
 {
 	m_pPlayer = pPlayer;
-	m_pPlayer->m_anim.ChangeAnim(kIdleAnimName);
+	m_pPlayer.lock()->m_anim.ChangeAnim(kIdleAnimName);
 }
 
 void PlayerStateIdle::Update()
 {
 	// ジャンプ処理
-	m_pPlayer->Jump();
+	m_pPlayer.lock()->Jump();
 
 	// 入力を取得
 	auto& input = Input::GetInstance();
@@ -45,7 +45,7 @@ void PlayerStateIdle::Update()
 		return;
 	}
 	// 接地していなかったらFallにする
-	if (!(m_pPlayer->m_isGround))
+	if (!(m_pPlayer.lock()->m_isGround))
 	{
 		ChangeState(std::make_shared<PlayerStateFall>());
 		return;

@@ -51,7 +51,7 @@ void Player::Init()
 	// ステートの初期化
 	m_pState = std::make_shared<PlayerStateIdle>();
 	m_pState->ChangeState(m_pState);
-	m_pState->Enter(shared_from_this());
+	m_pState->Enter(weak_from_this());
 	CheckChangeState();
 }
 
@@ -230,7 +230,7 @@ void Player::CheckChangeState()
 
 		m_pState = nextState;
 
-		m_pState->Enter(shared_from_this());
+		m_pState->Enter(weak_from_this());
 
 		m_pState->ChangeState(m_pState);
 	}
