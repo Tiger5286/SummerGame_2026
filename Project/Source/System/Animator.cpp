@@ -141,6 +141,21 @@ bool Animator::operator!=(const std::wstring& animName)
 	return !(*this == animName);
 }
 
+float Animator::GetAnimRate()
+{
+	// アニメーションの総再生時間を取得
+	auto animIndex = MV1GetAnimIndex(m_modelHandle, m_currentAnimName.c_str());
+	auto totalTime = MV1GetAnimTotalTime(m_modelHandle, animIndex);
+	// 総再生時間が0ならreturn(0除算回避)
+	if (totalTime < 0.0f)
+	{
+		return 0.0f;
+	}
+	// 現在のアニメーションの再生時間を総再生時間で割って割合を計算
+	float rate = m_currentAnimTime / totalTime;
+	return rate;
+}
+
 bool Animator::operator==(const std::wstring& animName)
 {
 	if (m_currentAnimName == animName)

@@ -2,15 +2,14 @@
 #include "../Utility/Vector3.h"
 #include <memory>
 
-class Input;
 class Player;
-class GameObject;
+class Character;
 
 class Camera
 {
 public:
-	Camera(Input& input);
-	virtual ~Camera();
+	Camera() = default;
+	virtual ~Camera() = default;
 
 	void Init();
 	void Update();
@@ -26,11 +25,9 @@ public:
 	void SetPlayerPos(const Vector3& playerPos) { m_playerPos = playerPos; }
 
 	// ターゲットを設定する
-	void SetTarget(std::shared_ptr<GameObject> pTarget) { m_pTarget = pTarget; }
+	void SetTarget(std::shared_ptr<Character> pTarget) { m_pTarget = pTarget; }
 
 private:
-
-	Input& m_input;
 	Vector3 m_playerPos;
 	int m_mapHandle = -1;
 
@@ -39,6 +36,6 @@ private:
 	float m_angleY = 0.0f;
 	float m_angleX = 0.0f;
 
-	std::shared_ptr<GameObject> m_pTarget = nullptr;
+	std::shared_ptr<Character> m_pTarget = nullptr;
 };
 

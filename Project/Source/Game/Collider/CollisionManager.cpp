@@ -1,5 +1,5 @@
-#include "CollisionManager.h"
-#include "../GameObject/GameObject.h"
+﻿#include "CollisionManager.h"
+#include "Game/Character/Character.h"
 #include "ColliderBase.h"
 #include "SphereCollider.h"
 #include "CapsuleCollider.h"
@@ -23,12 +23,12 @@ void CollisionManager::Update()
 	}
 }
 
-void CollisionManager::Register(std::shared_ptr<GameObject> object)
+void CollisionManager::Register(std::shared_ptr<Character> object)
 {
 	m_objects.push_back(object);
 }
 
-void CollisionManager::Unregister(std::shared_ptr<GameObject> object)
+void CollisionManager::Unregister(std::shared_ptr<Character> object)
 {
 	m_objects.remove(object);
 }
