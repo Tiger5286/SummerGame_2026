@@ -65,6 +65,6 @@ private:
 
 private:
 	// 当たり判定を行うオブジェクトのリスト
-	std::list<std::shared_ptr<Character>> m_objects;
+	std::list<std::weak_ptr<Character>> m_objects;
 };
 

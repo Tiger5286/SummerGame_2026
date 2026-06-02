@@ -11,16 +11,18 @@ void CollisionManager::Update()
 	{
 		for (auto& obj2 : m_objects)
 		{
+			auto obj1s = obj1.lock();
+			auto obj2s = obj2.lock();
 			// 当たり判定が無効になっているなら判定しない
-			if (!obj1->GetCollider()->IsEnable()) continue;
-			if (!obj2->GetCollider()->IsEnable()) continue;
+			if (!obj1s->GetCollider()->IsEnable()) continue;
+			if (!obj2s->GetCollider()->IsEnable()) continue;
 			// 同じオブジェクトなら当たり判定しない
-			if (obj1 == obj2) continue;
+			if (obj1s == obj2s) continue;
 			// 当たり判定をチェックし、当たっていたらお互いを渡す
-			if (CheckCollision(obj1->GetCollider(), obj2->GetCollider()))
+			if (CheckCollision(obj1s->GetCollider(), obj2s->GetCollider()))
 			{
-				obj1->OnCollision(*obj2);
-				obj2->OnCollision(*obj1);
+				obj1s->OnCollision(*obj2s);
+				obj2s->OnCollision(*obj1s);
 			}
 		}
 	}
@@ -33,7 +35,11 @@ void CollisionManager::Register(std::shared_ptr<Character> object)
 
 void CollisionManager::Unregister(std::shared_ptr<Character> object)
 {
-	m_objects.remove(object);
+	m_objects.remove_if([&](const std::weak_ptr<Character>& w) {
+		auto a = w.lock();
+		auto b = object;
+		return a && b && a.get() == b.get();
+		});
 }
 
 bool CollisionManager::CheckCollision(std::shared_ptr<ColliderBase> col1, std::shared_ptr<ColliderBase> col2)
