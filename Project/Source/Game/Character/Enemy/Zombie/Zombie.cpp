@@ -23,6 +23,7 @@ namespace
 	// プレイヤーを見つける距離
 	constexpr float kPlayerFindDist = 700.0f;
 	constexpr float kUnconditionalFindDist = 100.0f;	// 条件なしで見つける距離(プレイヤーが近すぎるときは角度に関係なく見つける)
+	constexpr float kUnconditionalFindDistFighting = 400.0f;	// 戦闘中は条件なしで見つける範囲を広げる
 
 	// プレイヤーを見つける角度			// 45度
 	constexpr float kPlayerFindRad = DX_PI_F / 4;
@@ -122,7 +123,7 @@ void Zombie::CheckChangeState()
 	}
 }
 
-bool Zombie::IsFindPlayer()
+bool Zombie::IsFindPlayer(bool isFighting)
 {
 	// 自分の向きのベクトル
 	Vector3 forwardVec = kDefaultDir * Matrix4x4::GetRotY(m_angle);
@@ -134,7 +135,15 @@ bool Zombie::IsFindPlayer()
 
 	bool isFindAngle = cos > kPlayerFindCos;	// プレイヤーが見つける角度の範囲にいるかどうか
 	bool isFindDist = toPlayerVec.SquaredLength() < kPlayerFindDist * kPlayerFindDist;	// プレイヤーが見つける距離の範囲にいるかどうか
-	bool isUnconditionalFindDist = toPlayerVec.SquaredLength() < kUnconditionalFindDist * kUnconditionalFindDist;	// 条件なしで見つける距離の範囲にいるかどうか
+	bool isUnconditionalFindDist;
+	if (!isFighting)	// 戦闘中でないなら見つける範囲が狭い
+	{
+		isUnconditionalFindDist = toPlayerVec.SquaredLength() < kUnconditionalFindDist * kUnconditionalFindDist;	// 条件なしで見つける距離の範囲にいるかどうか
+	}
+	else	// 戦闘中なら見つける範囲が広い
+	{
+		isUnconditionalFindDist = toPlayerVec.SquaredLength() < kUnconditionalFindDistFighting * kUnconditionalFindDistFighting;	// 条件なしで見つける距離の範囲にいるかどうか
+	}
 
 	return ((isFindAngle && isFindDist) || isUnconditionalFindDist);
 }

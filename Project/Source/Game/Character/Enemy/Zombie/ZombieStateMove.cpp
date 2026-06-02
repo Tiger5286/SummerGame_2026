@@ -62,7 +62,7 @@ void ZombieStateMove::Update()
 	}
 
 	// プレイヤーを見つけていないなら待機ステートに切り替える
-	if (!m_pZombie.lock()->IsFindPlayer())
+	if (!m_pZombie.lock()->IsFindPlayer(true))
 	{
 		ChangeState(std::make_shared<ZombieStateIdle>());
 		return;

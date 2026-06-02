@@ -24,7 +24,12 @@ public:
 private:
 	void CheckChangeState();	// ステートの切り替え処理
 
-	bool IsFindPlayer();	// プレイヤーを見つけるかどうか
+	/// <summary>
+	/// プレイヤーを見つけているかどうか判定する
+	/// </summary>
+	/// <param name="isFighting">戦闘中かどうか</param>
+	/// <returns>true:見つけている / false:見つけていない</returns>
+	bool IsFindPlayer(bool isFighting);	// プレイヤーを見つけるかどうか
 
 private:
 	Animator m_anim;
