@@ -10,8 +10,8 @@ class CapsuleCollider;
 class CollisionManager
 {
 public:
-	CollisionManager();
-	virtual ~CollisionManager();
+	CollisionManager() = default;
+	virtual ~CollisionManager() = default;
 
 	/// <summary>
 	/// 当たり判定を更新する

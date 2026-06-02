@@ -1,6 +1,8 @@
 ﻿#include "EnemyManager.h"
 #include "../Character/Enemy/EnemyBase.h"
 #include <cassert>
+#include "../Character/Enemy/Zombie/Zombie.h"
+#include "Singleton/ModelManager.h"
 
 EnemyManager::EnemyManager()
 {}
@@ -8,11 +10,13 @@ EnemyManager::EnemyManager()
 EnemyManager::~EnemyManager()
 {}
 
-void EnemyManager::Init(std::shared_ptr<Player> pPlayer)
+void EnemyManager::Init(std::shared_ptr<Player> pPlayer, std::shared_ptr<CollisionManager> pColManager)
 {
 	assert(pPlayer != nullptr && "EnemyManager::Init() : プレイヤーのポインタがnullptrです");
+	assert(pColManager != nullptr && "EnemyManager::Init() : コリジョンマネージャーのポインタがnullptrです");
 	
 	m_pPlayer = pPlayer;
+	m_pColManager = pColManager;
 
 	for (auto& enemy : m_enemyList)
 	{
@@ -57,11 +61,27 @@ void EnemyManager::Draw()
 	}
 }
 
-void EnemyManager::AddEnemy(std::shared_ptr<EnemyBase> enemy, const Vector3& pos)
+void EnemyManager::AddEnemy(EnemyType type, const Vector3& pos)
 {
-	enemy->SetPos(pos);
-	m_enemyList.push_back(enemy);
+	std::shared_ptr<EnemyBase> pEnemy = nullptr;
+	switch (type)
+	{
+	case EnemyType::Zombie:
+		pEnemy = std::make_shared<Zombie>();
+		pEnemy->SetHandle(ModelManager::GetInstance().DuplicateModel(L"Zombie"));
+		pEnemy->SetColManager(m_pColManager);
+		pEnemy->SetPlayer(m_pPlayer);
+		pEnemy->SetMapHandle(ModelManager::GetInstance().GetModelHandle(L"Collision"));
+		pEnemy->SetPos(pos);
+		pEnemy->Init();
+		m_enemyList.push_back(pEnemy);
+		break;
+	default:
+		assert(false && "EnemyManager::AddEnemy() : 未知のEnemyTypeが渡されました");
+	}
+}
 
-	enemy->SetPlayer(m_pPlayer);
-	enemy->Init();
+std::shared_ptr<EnemyBase> EnemyManager::GetLastEnemy()
+{
+	return m_enemyList.back();
 }

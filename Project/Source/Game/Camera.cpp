@@ -89,16 +89,16 @@ void Camera::Update()
 	// 注視点を設定
 	Vector3 target = m_playerPos + kTargetOffset;
 	// ロックオンターゲット
-	// カメラの向き、プレイヤー→ターゲットの二つのベクトルを生成
-	Vector3 cameraDir = (m_targetPos - m_pos);
-	cameraDir.y = 0.0f;		// カメラの水平方向のみを見る
-	cameraDir.Normalize();
-	Vector3 playerToTargetVec = m_pTarget->GetPos() - m_playerPos;
-	float playerToTargetDist = playerToTargetVec.SquaredLength();
-	// 二つのベクトルの角度の差を求める			// cameraDirは正規化されているので1.0
-	float dif = cameraDir.Dot(playerToTargetVec) / (1.0f * playerToTargetVec.Length());
 	if (m_pTarget != nullptr)
 	{
+		// カメラの向き、プレイヤー→ターゲットの二つのベクトルを生成
+		Vector3 cameraDir = (m_targetPos - m_pos);
+		cameraDir.y = 0.0f;		// カメラの水平方向のみを見る
+		cameraDir.Normalize();
+		Vector3 playerToTargetVec = m_pTarget->GetPos() - m_playerPos;
+		float playerToTargetDist = playerToTargetVec.SquaredLength();
+		// 二つのベクトルの角度の差を求める			// cameraDirは正規化されているので1.0
+		float dif = cameraDir.Dot(playerToTargetVec) / (1.0f * playerToTargetVec.Length());
 		// ターゲットが視界から外れようとしたら、かつ一定の距離が開いていたら
 		if (dif < cosf(kLockonFixAngle) && playerToTargetDist > kNotLockonDist * kNotLockonDist)
 		{

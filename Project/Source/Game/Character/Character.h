@@ -4,6 +4,7 @@
 #include <memory>
 
 class ColliderBase;
+class CollisionManager;
 
 class Character
 {
@@ -21,6 +22,12 @@ public:
 	/// </summary>
 	/// <param name="handle">ロードしたモデルのハンドル</param>
 	void SetHandle(int handle) { m_modelHandle = handle; }
+
+	/// <summary>
+	/// コリジョンマネージャーのポインタを設定する。Initの前に実行すること
+	/// </summary>
+	/// <param name="pColManager">コリジョンマネージャーのポインタ</param>
+	void SetColManager(std::shared_ptr<CollisionManager> pColManager) { m_pColManager = pColManager; }
 
 	// 位置を取得する
 	Vector3 GetPos() const { return m_pos; }
@@ -52,6 +59,7 @@ protected:
 	// モデルのハンドル
 	int m_modelHandle = -1;
 
+	std::shared_ptr<CollisionManager> m_pColManager = nullptr;
 	std::shared_ptr<ColliderBase> m_pCollider = nullptr;
 
 	Vector3 m_pos;	// 位置
