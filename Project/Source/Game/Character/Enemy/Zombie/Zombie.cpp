@@ -13,7 +13,6 @@ namespace
 {
 	// アニメーション名
 	const std::wstring kIdleAnimName = L"Zombie|Idle";
-	const std::wstring kAttackAnimName = L"Zombie|Attack";
 	const std::wstring kHitAnimName = L"Zombie|Hit";
 	
 	// 当たり判定

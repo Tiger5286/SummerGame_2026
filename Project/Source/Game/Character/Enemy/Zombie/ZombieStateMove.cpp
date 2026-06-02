@@ -4,6 +4,7 @@
 #include "../../Player/Player.h"
 
 #include "ZombieStateIdle.h"
+#include "ZombieStateAttack.h"
 
 namespace
 {
@@ -29,6 +30,7 @@ void ZombieStateMove::Enter(std::weak_ptr<Zombie> pZombie)
 
 void ZombieStateMove::Update()
 {
+	// 円の中にいるときは回転させる
 	if (m_pZombie.lock()->IsPlayerInCircle())
 	{
 		RotateToPlayer();
@@ -42,6 +44,13 @@ void ZombieStateMove::Update()
 	{
 		RotateToPlayer();
 		ChasePlayer();
+	}
+
+	// プレイヤーを攻撃する距離内なら攻撃ステートに切り替える
+	if (m_pZombie.lock()->IsPlayerInAttackDist())
+	{
+		ChangeState(std::make_shared<ZombieStateAttack>());
+		return;
 	}
 
 	// プレイヤーを見つけていないなら待機ステートに切り替える
