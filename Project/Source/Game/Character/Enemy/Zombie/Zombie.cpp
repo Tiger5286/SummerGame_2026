@@ -21,14 +21,14 @@ namespace
 
 	// プレイヤーを見つける距離
 	constexpr float kFindDist = 700.0f;
-	constexpr float kUnconditionalFindDist = 200.0f;	// 条件なしで見つける距離(プレイヤーが近すぎるときは角度に関係なく見つける)
+	constexpr float kUnconditionalFindDist = 250.0f;	// 条件なしで見つける距離(プレイヤーが近すぎるときは角度に関係なく見つける)
 	constexpr float kUnconditionalFindDistFighting = 500.0f;	// 戦闘中は条件なしで見つける範囲を広げる
-	// プレイヤーを見つける角度			// 45度
-	constexpr float kFindAngleRad = DX_PI_F / 4;
+	// プレイヤーを見つける角度			// 50度
+	constexpr float kFindAngleRad = DX_PI_F / 3.6f;
 	const float kFindAngleCos = cosf(kFindAngleRad);
 
 	// プレイヤーを攻撃する距離
-	constexpr float kAttackDist = 100.0f;
+	constexpr float kAttackDist = 150.0f;
 
 	// モデルのデフォルトの向き(angleが0の時の向き)
 	const Vector3 kDefaultDir = Vector3(0, 0, -1);
