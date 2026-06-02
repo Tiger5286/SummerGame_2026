@@ -87,8 +87,12 @@ void Zombie::Update()
 	// 当たり判定に使用したメモリを解放
 	MV1CollResultPolyDimTerminate(collResult);
 
+	// モデルの回転角度を更新
+	float diff = MyLib::GetAngleDif(m_angle, m_drawAngle);
+	m_drawAngle += diff * 0.1f;
+
 	// 行列を生成してモデルに適用
-	auto mtx = Matrix4x4::GetRotY(m_angle) * Matrix4x4::GetTranslate(m_pos);
+	auto mtx = Matrix4x4::GetRotY(m_drawAngle) * Matrix4x4::GetTranslate(m_pos);
 	MV1SetMatrix(m_modelHandle, mtx.ToDxLib());
 
 	// アニメーションの更新
