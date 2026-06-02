@@ -24,45 +24,28 @@ void ZombieStateMove::Enter(std::weak_ptr<Zombie> pZombie)
 {
 	m_pZombie = pZombie;
 	m_pZombie.lock()->m_anim.ChangeAnim(kWalkAnimName);
+	m_pZombie.lock()->m_isFighting = true;
 }
 
 void ZombieStateMove::Update()
 {
-	if (m_pZombie.lock()->IsFindPlayer())
+	if (m_pZombie.lock()->IsPlayerInCircle())
 	{
-		// 自分の向きのベクトル
-		Vector3 forwardVec = kDefaultDir * Matrix4x4::GetRotY(m_pZombie.lock()->m_angle);
-		// 敵からプレイヤーの位置までのベクトル
-		Vector3 toPlayerVec = m_pZombie.lock()->m_pPlayer->GetPos() - m_pZombie.lock()->m_pos;
-
-		// プレイヤーを見つけた時の処理
-		// 外積の正負でどっちに回転すべきか判定
-		auto cross = forwardVec.Cross(toPlayerVec);
-		// 回転速度を設定
-		float rotSpeed = kRotateSpeed;
-
-		// 回転
-		if (cross.y < 0)
+		RotateToPlayer();
+		// 扇の中にいる時のみ追いかける
+		if (m_pZombie.lock()->IsPlayerInFan())
 		{
-			m_pZombie.lock()->m_angle -= rotSpeed;
+			ChasePlayer();
 		}
-		else if (cross.y > 0)
-		{
-			m_pZombie.lock()->m_angle += rotSpeed;
-		}
-
-		// プレイヤーが追いかけなくなる距離の範囲にいるかどうか
-		bool isStopChase = toPlayerVec.SquaredLength() < kStopChaseDist * kStopChaseDist;
-		// プレイヤーが近すぎるときは追いかけない
-		if (!isStopChase)
-		{
-			Vector3 moveVec = forwardVec * kZombieMoveSpeed;
-			m_pZombie.lock()->m_pos += moveVec;
-		}
+	}	// 円の外、かつ扇の中の時も追いかける
+	else if (m_pZombie.lock()->IsPlayerInFan())
+	{
+		RotateToPlayer();
+		ChasePlayer();
 	}
 
 	// プレイヤーを見つけていないなら待機ステートに切り替える
-	if (!m_pZombie.lock()->IsFindPlayer(true))
+	if (!m_pZombie.lock()->IsPlayerInFan() && !m_pZombie.lock()->IsPlayerInCircle())
 	{
 		ChangeState(std::make_shared<ZombieStateIdle>());
 		return;
@@ -71,3 +54,44 @@ void ZombieStateMove::Update()
 
 void ZombieStateMove::Exit()
 {}
+
+void ZombieStateMove::RotateToPlayer()
+{
+	// 自分の向きのベクトル
+	Vector3 forwardVec = kDefaultDir * Matrix4x4::GetRotY(m_pZombie.lock()->m_angle);
+	// 敵からプレイヤーの位置までのベクトル
+	Vector3 toPlayerVec = m_pZombie.lock()->m_pPlayer->GetPos() - m_pZombie.lock()->m_pos;
+
+	// プレイヤーを見つけた時の処理
+	// 外積の正負でどっちに回転すべきか判定
+	auto cross = forwardVec.Cross(toPlayerVec);
+	// 回転速度を設定
+	float rotSpeed = kRotateSpeed;
+
+	// 回転
+	if (cross.y < 0)
+	{
+		m_pZombie.lock()->m_angle -= rotSpeed;
+	}
+	else if (cross.y > 0)
+	{
+		m_pZombie.lock()->m_angle += rotSpeed;
+	}
+}
+
+void ZombieStateMove::ChasePlayer()
+{
+	// 自分の向きのベクトル
+	Vector3 forwardVec = kDefaultDir * Matrix4x4::GetRotY(m_pZombie.lock()->m_angle);
+	// 敵からプレイヤーの位置までのベクトル
+	Vector3 toPlayerVec = m_pZombie.lock()->m_pPlayer->GetPos() - m_pZombie.lock()->m_pos;
+
+	// プレイヤーが追いかけなくなる距離の範囲にいるかどうか
+	bool isStopChaseDist = toPlayerVec.SquaredLength() < kStopChaseDist * kStopChaseDist;
+	// プレイヤーが近すぎるときは追いかけない
+	if (!isStopChaseDist)
+	{
+		Vector3 moveVec = forwardVec * kZombieMoveSpeed;
+		m_pZombie.lock()->m_vel = moveVec;
+	}
+}

@@ -25,15 +25,28 @@ private:
 	void CheckChangeState();	// ステートの切り替え処理
 
 	/// <summary>
-	/// プレイヤーを見つけているかどうか判定する
+	/// プレイヤーが検知範囲の扇の中にいるか判定する
 	/// </summary>
-	/// <param name="isFighting">戦闘中かどうか</param>
-	/// <returns>true:見つけている / false:見つけていない</returns>
-	bool IsFindPlayer(bool isFighting);	// プレイヤーを見つけるかどうか
+	/// <returns>true:扇の中にいる / false:扇の外にいる</returns>
+	bool IsPlayerInFan();
+
+	/// <summary>
+	/// プレイヤーが検知範囲の円の中にいるか判定する
+	/// </summary>
+	/// <returns>true:円の中にいる / false:円の外にいる</returns>
+	bool IsPlayerInCircle();
+
+	/// <summary>
+	/// プレイヤーを攻撃する距離内かどうか
+	/// </summary>
+	/// <returns>true:範囲内 / false:範囲外</returns>
+	bool IsPlayerInAttackDist();
 
 private:
 	Animator m_anim;
 	float m_angle = 0.0f;
+
+	bool m_isFighting = false;
 
 	std::shared_ptr<ZombieStateBase> m_pState = nullptr;
 
