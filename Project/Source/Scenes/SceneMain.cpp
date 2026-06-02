@@ -95,6 +95,8 @@ void SceneMain::Update()
 	
 	m_pEnemyManager->Update();
 
+	m_pColManager->Update();
+
 	m_pSkyBox->SetCameraPos(m_pCamera->GetPos());
 	m_pSkyBox->Update();
 }

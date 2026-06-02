@@ -7,6 +7,7 @@
 #include "Game/Collider/CapsuleCollider.h"
 #include "Game/Collider/SphereCollider.h"
 #include "PlayerAttackCollider.h"
+#include "Game/Collider/CollisionManager.h"
 
 #include "PlayerStateBase.h"
 #include "PlayerStateIdle.h"
@@ -50,6 +51,9 @@ void Player::Init()
 	m_pAttackCollider = std::make_shared<PlayerAttackCollider>();
 	m_pAttackCollider->Init();
 	m_pAttackCollider->m_pCollider->SetEnable(false);
+	// 当たり判定の登録
+	m_pColManager->Register(shared_from_this());
+	m_pColManager->Register(m_pAttackCollider);
 
 	// アニメーションの初期化
 	m_anim.Init(m_modelHandle, kIdleAnimName);

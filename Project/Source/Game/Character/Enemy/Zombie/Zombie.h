@@ -21,6 +21,8 @@ public:
 	void Update() override;
 	void Draw() override;
 
+	void OnCollision(Character& other) override;
+
 private:
 	void CheckChangeState();	// ステートの切り替え処理
 
