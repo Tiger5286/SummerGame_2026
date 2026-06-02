@@ -1,4 +1,4 @@
-#include "ZombieStateIdle.h"
+﻿#include "ZombieStateIdle.h"
 #include "Zombie.h"	
 
 #include "ZombieStateMove.h"

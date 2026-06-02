@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "ZombieStateBase.h"
 class ZombieStateMove :
     public ZombieStateBase
