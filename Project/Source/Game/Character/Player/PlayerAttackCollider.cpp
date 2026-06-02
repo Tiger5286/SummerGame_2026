@@ -9,6 +9,8 @@ namespace
 void PlayerAttackCollider::Init()
 {
 	m_pCollider = std::make_shared<SphereCollider>(kColliderRadius);
+
+	m_type = Type::PlayerAttackCol;
 }
 
 void PlayerAttackCollider::End()

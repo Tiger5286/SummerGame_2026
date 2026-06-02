@@ -17,6 +17,17 @@ public:
 	virtual void Update() abstract;
 	virtual void Draw() abstract;
 
+	enum class Type
+	{
+		None,
+		Player,
+		PlayerAttackCol,
+		Enemy,
+		EnemyAttackCol,
+
+		Num
+	};
+
 	/// <summary>
 	/// モデルのハンドルを設定する。Initの前に実行すること
 	/// </summary>
@@ -35,6 +46,8 @@ public:
 	void SetPos(const Vector3& pos) { m_pos = pos; }
 	// 当たり判定を取得する
 	std::shared_ptr<ColliderBase> GetCollider() const { return m_pCollider; }
+	// キャラクタータイプを取得する
+	Type GetType() const { return m_type; }
 
 	/// <summary>
 	/// 速度に抵抗をつける(なにもしなかったら徐々に速度が遅くなる)
@@ -64,6 +77,8 @@ protected:
 
 	Vector3 m_pos;	// 位置
 	Vector3 m_vel;	// 速度
+
+	Type m_type = Type::None;
 
 	bool m_isGround = false;	// 接地しているかどうか
 };

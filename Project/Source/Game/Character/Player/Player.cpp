@@ -63,6 +63,9 @@ void Player::Init()
 	m_pState->ChangeState(m_pState);
 	m_pState->Enter(weak_from_this());
 	CheckChangeState();
+
+	// キャラクタータイプをプレイヤーにする
+	m_type = Type::Player;
 }
 
 void Player::End()
