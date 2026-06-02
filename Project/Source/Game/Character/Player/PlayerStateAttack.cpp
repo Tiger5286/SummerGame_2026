@@ -3,6 +3,8 @@
 #include "Singleton/Input.h"
 #include "Utility/Matrix4x4.h"
 #include <vector>
+#include "PlayerAttackCollider.h"
+#include "Game/Collider/ColliderBase.h"
 
 #include "PlayerStateIdle.h"
 #include "PlayerStateDodge.h"
@@ -31,8 +33,8 @@ namespace
 			0.9f,
 			0.1f,
 			10.0f,
-			0.3f,
-			0.7f
+			0.1f,
+			0.28f
 		},
 		{
 			L"Player|Combo2",
@@ -41,8 +43,8 @@ namespace
 			0.9f,
 			0.1f,
 			10.0f,
-			0.3f,
-			0.7f
+			0.16f,
+			0.3f
 		},
 		{
 			L"Player|Combo3",
@@ -51,8 +53,8 @@ namespace
 			0.0f,
 			0.15f,
 			10.0f,
-			0.3f,
-			0.7f
+			0.25f,
+			0.44f
 		}
 	};
 
@@ -74,9 +76,12 @@ void PlayerStateAttack::Update()
 {
 	// 入力を取得
 	auto& input = Input::GetInstance();
+	// 攻撃の当たり判定を取得
+	auto atkCol = m_pPlayer.lock()->m_pAttackCollider->GetCollider();
 	// 回避を入力したら回避
 	if (input.IsTriggerd(XINPUT_BUTTON_B))
 	{
+		atkCol->SetEnable(false);
 		ChangeState(std::make_shared<PlayerStateDodge>());
 		return;
 	}
@@ -92,6 +97,15 @@ void PlayerStateAttack::Update()
 	if (isCanTransTime && input.IsTriggerd(XINPUT_BUTTON_X))	// 入力受付時間内かつ入力があったら
 	{	// 移行フラグを立てる
 		m_isCanTransNextCombo = true;
+	}
+	// 当たり判定処理
+	if (animRate > kComboDatas[m_comboIndex].startColTimeRate && animRate < kComboDatas[m_comboIndex].endColTimeRate)
+	{
+		atkCol->SetEnable(true);
+	}
+	else
+	{
+		atkCol->SetEnable(false);
 	}
 	// 移動処理
 	if (animRate < kComboDatas[m_comboIndex].moveTimeRate)
@@ -119,6 +133,7 @@ void PlayerStateAttack::Update()
 		m_pPlayer.lock()->m_anim.ChangeAnim(kComboDatas[m_comboIndex + 1].animName, 0.5f, false);
 		m_comboIndex++;
 		m_isCanTransNextCombo = false;
+		atkCol->SetEnable(false);
 	}
 }
 

@@ -2,6 +2,7 @@
 #include "../Character.h"
 #include <memory>
 
+class Player;
 class SphereCollider;
 
 class PlayerAttackCollider : public Character
@@ -15,9 +16,7 @@ public:
 	void Update() override;
 	void Draw() override;
 
-
-
 private:
-	std::shared_ptr<SphereCollider> m_pCollider;
+	friend Player;
 };
 

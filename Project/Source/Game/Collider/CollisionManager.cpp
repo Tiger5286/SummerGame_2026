@@ -11,6 +11,9 @@ void CollisionManager::Update()
 	{
 		for (auto& obj2 : m_objects)
 		{
+			// 当たり判定が無効になっているなら判定しない
+			if (!obj1->GetCollider()->IsEnable()) continue;
+			if (!obj2->GetCollider()->IsEnable()) continue;
 			// 同じオブジェクトなら当たり判定しない
 			if (obj1 == obj2) continue;
 			// 当たり判定をチェックし、当たっていたらお互いを渡す

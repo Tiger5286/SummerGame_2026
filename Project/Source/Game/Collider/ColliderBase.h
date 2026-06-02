@@ -34,11 +34,14 @@ public:
 	Vector3 GetPos() const { return m_pos; }	// 位置を取得する
 	void SetPos(const Vector3& pos) { m_pos = pos; }	// 位置を設定する
 
+	bool IsEnable() const { return m_isEnable; }	// 有効か無効かを取得する
+	void SetEnable(bool isEnable) { m_isEnable = isEnable; }	// 有効か無効かを設定する
+
 	ColliderType GetType() const { return m_type; }
 
 protected:
-
 	Vector3 m_pos;	// 位置
+	bool m_isEnable = true;
 
 	// 当たり判定の種類
 	ColliderType m_type = ColliderType::None;

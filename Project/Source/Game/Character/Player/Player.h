@@ -3,6 +3,8 @@
 #include "System/Animator.h"
 #include <memory>
 
+class PlayerAttackCollider;
+
 // プレイヤーのステートクラスをプロトタイプ宣言しておく
 class PlayerStateBase;
 class PlayerStateIdle;
@@ -76,6 +78,9 @@ private:
     
     // プレイヤーのステート
     std::shared_ptr<PlayerStateBase> m_pState = nullptr;
+
+    // 攻撃の当たり判定クラス
+    std::shared_ptr<PlayerAttackCollider> m_pAttackCollider = nullptr;
 
     // プレイヤーのステートクラスがプレイヤーにアクセスできるようにする
     friend PlayerStateBase;
