@@ -8,6 +8,7 @@
 
 #include "Singleton/ModelManager.h"
 #include "Singleton/Input.h"
+#include "Singleton/IDManager.h"
 
 #include "Scenes/SceneMain.h"
 
@@ -67,6 +68,7 @@ void Application::Run()
 	// シングルトンクラスの生成
 	auto& modelManager = ModelManager::GetInstance();
 	auto& input = Input::GetInstance();
+	auto& idManager = IDManager::GetInstance();
 
 	// シーンの生成、初期化
 	auto pScene = std::make_shared<SceneMain>();
