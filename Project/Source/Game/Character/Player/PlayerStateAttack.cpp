@@ -3,7 +3,7 @@
 #include "Singleton/Input.h"
 #include "Utility/Matrix4x4.h"
 #include <vector>
-#include "PlayerAttackCollider.h"
+#include "Game/Character/Attack.h"
 #include "Singleton/CollisionManager.h"
 
 #include "PlayerStateIdle.h"
@@ -63,10 +63,13 @@ namespace
 	// 攻撃の前進をやめる距離
 	constexpr float kStopTrackingDist = 150.0f;
 
-	// 攻撃の当たり判定の大きさ
-	constexpr float kColliderRadius = 100.0f;
-	// 攻撃用当たり判定のオフセット
+	// 攻撃の位置オフセット
 	const Vector3 kAttackColliderOffset = Vector3(0, 100, -100);
+	// 攻撃のデータ
+	const Attack::Data kAttackData = {
+	100.f,
+	Character::Type::Enemy
+	};
 }
 
 void PlayerStateAttack::Enter(std::weak_ptr<Player> pPlayer)
@@ -127,25 +130,24 @@ void PlayerStateAttack::Update()
 	if (animRate > kComboDatas[m_comboIndex].startColTimeRate && !m_isOnCollider)
 	{
 		// 当たり判定を生成し、当たり判定をonにする
-		m_pAtkCol = std::make_shared<PlayerAttackCollider>();
-		m_pAtkCol->Init();
-		CollisionManager::GetInstance().Register(m_pAtkCol);
+		m_pAtk = std::make_shared<Attack>();
+		m_pAtk->SetData(kAttackData);
+		m_pAtk->Init();
 		m_isOnCollider = true;
-		//printfDx(L"atkCol ID:%d\n", m_pAtkCol->GetID());
 	}
 	// 当たり判定終了	当たり判定終了の時間、かつまだ当たり判定をoffにしていないなら
 	if (animRate > kComboDatas[m_comboIndex].endColTimeRate && !m_isOffCollider)
 	{
 		// 当たり判定を生成し、当たり判定をoffにする
-		m_pAtkCol = nullptr;
+		m_pAtk = nullptr;
 		m_isOffCollider = true;
 	}
 	// 当たり判定の移動
-	if (m_pAtkCol != nullptr)
+	if (m_pAtk != nullptr)
 	{
 		Vector3 colPos = player->m_pos + (kAttackColliderOffset * Matrix4x4::GetRotY(player->m_angle));
-		m_pAtkCol->SetPos(colPos);
-		m_pAtkCol->Update();
+		m_pAtk->SetPos(colPos);
+		m_pAtk->Update();
 	}
 
 	// 移行フラグが立っている、かつ次の攻撃までの最低時間を越していたら次の攻撃へ
@@ -168,9 +170,9 @@ void PlayerStateAttack::Draw()
 {
 #ifdef _DEBUG
 	// 当たり判定のデバッグ表示
-	if (m_pAtkCol != nullptr)
+	if (m_pAtk != nullptr)
 	{
-		m_pAtkCol->Draw();
+		m_pAtk->Draw();
 	}
 #endif
 }

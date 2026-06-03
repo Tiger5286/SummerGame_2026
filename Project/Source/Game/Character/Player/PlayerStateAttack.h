@@ -1,7 +1,7 @@
 #pragma once
 #include "PlayerStateBase.h"
 
-class PlayerAttackCollider;
+class Attack;
 
 class PlayerStateAttack :
     public PlayerStateBase
@@ -24,6 +24,6 @@ private:
     bool m_isOnCollider = false;
     bool m_isOffCollider = false;
 
-    std::shared_ptr<PlayerAttackCollider> m_pAtkCol = nullptr;
+    std::shared_ptr<Attack> m_pAtk = nullptr;
 };
 

@@ -20,9 +20,7 @@ public:
 	{
 		None,
 		Player,
-		PlayerAttackCol,
 		Enemy,
-		EnemyAttackCol,
 
 		Num
 	};

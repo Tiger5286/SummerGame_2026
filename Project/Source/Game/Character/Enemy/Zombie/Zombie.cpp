@@ -128,11 +128,6 @@ void Zombie::Draw()
 
 void Zombie::OnCollision(Character& other)
 {
-	// プレイヤーの攻撃に当たったら
-	if (other.GetType() == Type::PlayerAttackCol)
-	{
-		//printfDx(L"ゾンビがプレイヤーの攻撃を受けた！\n");
-	}
 }
 
 void Zombie::OnHitAttack()

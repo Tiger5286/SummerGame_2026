@@ -7,7 +7,7 @@ class Attack :
     public Character, public std::enable_shared_from_this<Attack>
 {
 public:
-    struct AttackData
+    struct Data
     {
         float colliderRadius = 0.0f;
         Character::Type hitCharacterType = Character::Type::None;
@@ -27,10 +27,10 @@ public:
     /// 攻撃の情報を設定する。Initの前に実行する。
     /// </summary>
     /// <param name="data"></param>
-    void SetData(AttackData data) { m_data = data; }
+    void SetData(Data data) { m_data = data; }
 
 private:
     std::list<int> m_hitIds;
-    AttackData m_data;
+    Data m_data;
 };
 

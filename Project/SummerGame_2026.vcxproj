@@ -21,7 +21,6 @@
   <ItemGroup>
     <ClCompile Include="Source\Game\Character\Attack.cpp" />
     <ClCompile Include="Source\Singleton\IDManager.cpp" />
-    <ClCompile Include="Source\Game\Character\Player\PlayerAttackCollider.cpp" />
     <ClCompile Include="Source\Game\Character\Player\PlayerStateAttack.cpp" />
     <ClCompile Include="Source\Game\Character\Player\PlayerStateDodge.cpp" />
     <ClCompile Include="Source\Game\Character\Player\PlayerStateFall.cpp" />
@@ -55,7 +54,6 @@
   <ItemGroup>
     <ClInclude Include="Source\Game\Character\Attack.h" />
     <ClInclude Include="Source\Singleton\IDManager.h" />
-    <ClInclude Include="Source\Game\Character\Player\PlayerAttackCollider.h" />
     <ClInclude Include="Source\Game\Character\Player\PlayerStateAttack.h" />
     <ClInclude Include="Source\Game\Character\Player\PlayerStateDodge.h" />
     <ClInclude Include="Source\Game\Character\Player\PlayerStateFall.h" />

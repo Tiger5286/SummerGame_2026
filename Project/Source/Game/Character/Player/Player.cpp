@@ -6,7 +6,6 @@
 #include "Singleton/Input.h"
 #include "Game/Collider/CapsuleCollider.h"
 #include "Game/Collider/SphereCollider.h"
-#include "PlayerAttackCollider.h"
 #include "Singleton/CollisionManager.h"
 
 #include "PlayerStateBase.h"
