@@ -61,7 +61,7 @@ namespace
 	// 攻撃がホーミングする距離
 	constexpr float kTrackingAttackDist = 500.0f;
 	// 攻撃の前進をやめる距離
-	constexpr float kStopTrackingDist = 150.0f;
+	constexpr float kStopTrackingDist = 120.0f;
 
 	// 攻撃の位置オフセット
 	const Vector3 kAttackColliderOffset = Vector3(0, 100, -100);
