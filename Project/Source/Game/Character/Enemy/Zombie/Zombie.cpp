@@ -5,8 +5,7 @@
 #include "Game/Character/Player/Player.h"
 #include "Utility/MyLib.h"
 #include "Game/Collider/CapsuleCollider.h"
-#include "Game/Collider/CollisionManager.h"
-
+#include "Singleton/CollisionManager.h"
 #include "ZombieStateBase.h"
 #include "ZombieStateIdle.h"
 
@@ -49,7 +48,7 @@ void Zombie::Init()
 	// 当たり判定の初期化
 	m_pCollider = std::make_shared<CapsuleCollider>(kColliderRadius, kColliderHeight);
 	// 当たり判定の登録
-	m_pColManager->Register(shared_from_this());
+	CollisionManager::GetInstance().Register(shared_from_this());
 
 	// アニメーションの初期化
 	m_anim.Init(m_modelHandle, kIdleAnimName);
@@ -132,8 +131,13 @@ void Zombie::OnCollision(Character& other)
 	// プレイヤーの攻撃に当たったら
 	if (other.GetType() == Type::PlayerAttackCol)
 	{
-		printfDx(L"ゾンビがプレイヤーの攻撃を受けた！\n");
+		//printfDx(L"ゾンビがプレイヤーの攻撃を受けた！\n");
 	}
+}
+
+void Zombie::OnHitAttack()
+{
+	printfDx(L"ゾンビが攻撃を食らった！\n");
 }
 
 void Zombie::CheckChangeState()

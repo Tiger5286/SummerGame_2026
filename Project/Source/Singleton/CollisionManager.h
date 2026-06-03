@@ -10,8 +10,14 @@ class CapsuleCollider;
 class CollisionManager
 {
 public:
-	CollisionManager() = default;
+	static CollisionManager& GetInstance();
 	virtual ~CollisionManager() = default;
+
+	CollisionManager(const CollisionManager&) = delete;
+	CollisionManager& operator=(const CollisionManager&) = delete;
+private:
+	CollisionManager() = default;
+public:
 
 	/// <summary>
 	/// 当たり判定を更新する

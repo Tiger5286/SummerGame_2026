@@ -5,8 +5,6 @@
 
 #include "../Singleton/ModelManager.h"
 
-#include "Game/Collider/CollisionManager.h"
-
 #include "Game/Character/Player/Player.h"
 #include "Game/Camera.h"
 #include "Game/Character/Enemy/Zombie/Zombie.h"
@@ -43,14 +41,10 @@ void SceneMain::Init()
 		modelManager.LoadModel(modelFileName.second, modelFileName.first);
 	}
 
-	// コリジョンマネージャーの生成
-	m_pColManager = std::make_shared<CollisionManager>();
-
 	// プレイヤーの生成
 	m_pPlayer = std::make_shared<Player>();
 	m_pPlayer->SetHandle(modelManager.GetModelHandle(L"Player"));
 	m_pPlayer->SetMapHandle(modelManager.GetModelHandle(L"Collision"));
-	m_pPlayer->SetColManager(m_pColManager);
 	m_pPlayer->Init();
 	// カメラの生成
 	m_pCamera = std::make_shared<Camera>();
@@ -59,7 +53,7 @@ void SceneMain::Init()
 
 	// 敵管理クラスの生成
 	m_pEnemyManager = std::make_shared<EnemyManager>();
-	m_pEnemyManager->Init(m_pPlayer,m_pColManager);
+	m_pEnemyManager->Init(m_pPlayer);
 
 	// 仮の敵を生成
 	m_pEnemyManager->AddEnemy(EnemyType::Zombie, Vector3(0, 0, 800));
@@ -94,8 +88,6 @@ void SceneMain::Update()
 	m_pCamera->Update();
 	
 	m_pEnemyManager->Update();
-
-	m_pColManager->Update();
 
 	m_pSkyBox->SetCameraPos(m_pCamera->GetPos());
 	m_pSkyBox->Update();

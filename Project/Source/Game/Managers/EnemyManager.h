@@ -21,7 +21,7 @@ public:
 	EnemyManager();
 	virtual ~EnemyManager();
 
-	void Init(std::shared_ptr<Player> pPlayer,std::shared_ptr<CollisionManager> pColManager);
+	void Init(std::shared_ptr<Player> pPlayer);
 	void End();
 	void Update();
 	void Draw();

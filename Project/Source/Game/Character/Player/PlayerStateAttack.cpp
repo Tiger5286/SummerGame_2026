@@ -4,7 +4,7 @@
 #include "Utility/Matrix4x4.h"
 #include <vector>
 #include "PlayerAttackCollider.h"
-#include "Game/Collider/ColliderBase.h"
+#include "Singleton/CollisionManager.h"
 
 #include "PlayerStateIdle.h"
 #include "PlayerStateDodge.h"
@@ -62,6 +62,11 @@ namespace
 	constexpr float kTrackingAttackDist = 500.0f;
 	// 攻撃の前進をやめる距離
 	constexpr float kStopTrackingDist = 150.0f;
+
+	// 攻撃の当たり判定の大きさ
+	constexpr float kColliderRadius = 100.0f;
+	// 攻撃用当たり判定のオフセット
+	const Vector3 kAttackColliderOffset = Vector3(0, 100, -100);
 }
 
 void PlayerStateAttack::Enter(std::weak_ptr<Player> pPlayer)
@@ -76,12 +81,11 @@ void PlayerStateAttack::Update()
 {
 	// 入力を取得
 	auto& input = Input::GetInstance();
-	// 攻撃の当たり判定を取得
-	auto atkCol = m_pPlayer.lock()->m_pAttackCollider->GetCollider();
+	// プレイヤーのshared_ptrを取得
+	auto player = m_pPlayer.lock();
 	// 回避を入力したら回避
 	if (input.IsTriggerd(XINPUT_BUTTON_B))
 	{
-		atkCol->SetEnable(false);
 		ChangeState(std::make_shared<PlayerStateDodge>());
 		return;
 	}
@@ -98,15 +102,7 @@ void PlayerStateAttack::Update()
 	{	// 移行フラグを立てる
 		m_isCanTransNextCombo = true;
 	}
-	// 当たり判定処理
-	if (animRate > kComboDatas[m_comboIndex].startColTimeRate && animRate < kComboDatas[m_comboIndex].endColTimeRate)
-	{
-		atkCol->SetEnable(true);
-	}
-	else
-	{
-		atkCol->SetEnable(false);
-	}
+
 	// 移動処理
 	if (animRate < kComboDatas[m_comboIndex].moveTimeRate)
 	{
@@ -125,6 +121,33 @@ void PlayerStateAttack::Update()
 		// 速度に適用
 		m_pPlayer.lock()->m_vel = moveVec;
 	}
+
+	// 当たり判定処理
+	// 当たり判定開始	当たり判定開始の時間、かつまだ当たり判定をonにしていないなら
+	if (animRate > kComboDatas[m_comboIndex].startColTimeRate && !m_isOnCollider)
+	{
+		// 当たり判定を生成し、当たり判定をonにする
+		m_pAtkCol = std::make_shared<PlayerAttackCollider>();
+		m_pAtkCol->Init();
+		CollisionManager::GetInstance().Register(m_pAtkCol);
+		m_isOnCollider = true;
+		//printfDx(L"atkCol ID:%d\n", m_pAtkCol->GetID());
+	}
+	// 当たり判定終了	当たり判定終了の時間、かつまだ当たり判定をoffにしていないなら
+	if (animRate > kComboDatas[m_comboIndex].endColTimeRate && !m_isOffCollider)
+	{
+		// 当たり判定を生成し、当たり判定をoffにする
+		m_pAtkCol = nullptr;
+		m_isOffCollider = true;
+	}
+	// 当たり判定の移動
+	if (m_pAtkCol != nullptr)
+	{
+		Vector3 colPos = player->m_pos + (kAttackColliderOffset * Matrix4x4::GetRotY(player->m_angle));
+		m_pAtkCol->SetPos(colPos);
+		m_pAtkCol->Update();
+	}
+
 	// 移行フラグが立っている、かつ次の攻撃までの最低時間を越していたら次の攻撃へ
 	if (m_isCanTransNextCombo && animRate > kComboDatas[m_comboIndex].minTimeRate)
 	{
@@ -133,12 +156,24 @@ void PlayerStateAttack::Update()
 		m_pPlayer.lock()->m_anim.ChangeAnim(kComboDatas[m_comboIndex + 1].animName, 0.5f, false);
 		m_comboIndex++;
 		m_isCanTransNextCombo = false;
-		atkCol->SetEnable(false);
+		m_isOnCollider = false;
+		m_isOffCollider = false;
 	}
 }
 
 void PlayerStateAttack::Exit()
 {}
+
+void PlayerStateAttack::Draw()
+{
+#ifdef _DEBUG
+	// 当たり判定のデバッグ表示
+	if (m_pAtkCol != nullptr)
+	{
+		m_pAtkCol->Draw();
+	}
+#endif
+}
 
 void PlayerStateAttack::Tracking()
 {

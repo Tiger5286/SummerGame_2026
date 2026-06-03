@@ -23,6 +23,8 @@ public:
 
 	void OnCollision(Character& other) override;
 
+	void OnHitAttack() override;
+
 private:
 	void CheckChangeState();	// ステートの切り替え処理
 

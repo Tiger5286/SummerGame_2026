@@ -1,6 +1,7 @@
 #pragma once
 #include "../Character.h"
 #include <memory>
+#include <list>
 
 class Player;
 class SphereCollider;
@@ -16,7 +17,12 @@ public:
 	void Update() override;
 	void Draw() override;
 
+	void OnCollision(Character& other) override;
+
 private:
+	
+	std::list<int> m_hitIds;
+
 	friend Player;
 };
 

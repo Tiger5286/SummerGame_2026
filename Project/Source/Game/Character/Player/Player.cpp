@@ -7,7 +7,7 @@
 #include "Game/Collider/CapsuleCollider.h"
 #include "Game/Collider/SphereCollider.h"
 #include "PlayerAttackCollider.h"
-#include "Game/Collider/CollisionManager.h"
+#include "Singleton/CollisionManager.h"
 
 #include "PlayerStateBase.h"
 #include "PlayerStateIdle.h"
@@ -23,8 +23,6 @@ namespace
 	// 当たり判定
 	constexpr float kColliderRadius = 25.0f;
 	constexpr float kColliderHeight = 120.0f;
-	// 攻撃用当たり判定のオフセット
-	const Vector3 kAttackColliderOffset = Vector3(0, 100, -100);
 
 	// 加速度
 	constexpr float kMoveAccel = 3.0f;
@@ -47,13 +45,8 @@ void Player::Init()
 
 	// 当たり判定の生成と初期化
 	m_pCollider = std::make_shared<CapsuleCollider>(kColliderRadius, kColliderHeight);
-	// 攻撃の当たり判定の生成と初期化
-	m_pAttackCollider = std::make_shared<PlayerAttackCollider>();
-	m_pAttackCollider->Init();
-	m_pAttackCollider->m_pCollider->SetEnable(false);
 	// 当たり判定の登録
-	m_pColManager->Register(shared_from_this());
-	m_pColManager->Register(m_pAttackCollider);
+	CollisionManager::GetInstance().Register(shared_from_this());
 
 	// アニメーションの初期化
 	m_anim.Init(m_modelHandle, kIdleAnimName);
@@ -91,10 +84,6 @@ void Player::Update()
 	// 当たり判定の更新
 	auto capsule = std::dynamic_pointer_cast<CapsuleCollider>(m_pCollider);
 	capsule->SetPos(m_pos + Vector3(0.0f, capsule->GetRadius(), 0.0f));
-	// 攻撃の当たり判定の更新
-	Vector3 atkColOffset = kAttackColliderOffset * Matrix4x4::GetRotY(m_angle);
-	m_pAttackCollider->m_pos = m_pos + atkColOffset;
-	m_pAttackCollider->Update();
 
 	// マップとの当たり判定
 	auto collResult = m_pCollider->CheckCollModel(m_mapHandle);
@@ -135,13 +124,15 @@ void Player::Update()
 
 void Player::Draw()
 {
+	// モデルを描画
 	MV1DrawModel(m_modelHandle);
+
+	// ステートに描画したい内容があったら描画
+	m_pState->Draw();
 
 #ifdef _DEBUG
 	// 当たり判定を描画
 	m_pCollider->Draw();
-	// 攻撃の当たり判定の描画
-	m_pAttackCollider->Draw();
 	// 接地判定用のレイを描画
 	Vector3 layEnd = m_pos - Vector3::Up() * kLineLength;
 	DrawLine3D(m_pos.ToDxLib(), layEnd.ToDxLib(), 0xffff00);

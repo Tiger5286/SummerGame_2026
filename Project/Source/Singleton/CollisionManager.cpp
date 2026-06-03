@@ -1,11 +1,20 @@
 ﻿#include "CollisionManager.h"
 #include "Game/Character/Character.h"
-#include "ColliderBase.h"
-#include "SphereCollider.h"
-#include "CapsuleCollider.h"
+#include "Game/Collider/ColliderBase.h"
+#include "Game/Collider/SphereCollider.h"
+#include "Game/Collider/CapsuleCollider.h"
+
+CollisionManager& CollisionManager::GetInstance()
+{
+	static CollisionManager instance;
+	return instance;
+}
 
 void CollisionManager::Update()
 {
+	// nullptrのオブジェクトがあったらlistから消す
+	m_objects.remove_if([](const auto& c) {return c.expired(); });
+
 	// 二つのオブジェクトの当たり判定を全部回す
 	for (auto& obj1 : m_objects)
 	{
@@ -26,6 +35,8 @@ void CollisionManager::Update()
 			}
 		}
 	}
+	
+	//printfDx(L"colNum:%d\n", m_objects.size());
 }
 
 void CollisionManager::Register(std::shared_ptr<Character> object)

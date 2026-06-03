@@ -10,13 +10,11 @@ EnemyManager::EnemyManager()
 EnemyManager::~EnemyManager()
 {}
 
-void EnemyManager::Init(std::shared_ptr<Player> pPlayer, std::shared_ptr<CollisionManager> pColManager)
+void EnemyManager::Init(std::shared_ptr<Player> pPlayer)
 {
 	assert(pPlayer != nullptr && "EnemyManager::Init() : プレイヤーのポインタがnullptrです");
-	assert(pColManager != nullptr && "EnemyManager::Init() : コリジョンマネージャーのポインタがnullptrです");
 	
 	m_pPlayer = pPlayer;
-	m_pColManager = pColManager;
 
 	for (auto& enemy : m_enemyList)
 	{
@@ -69,7 +67,6 @@ void EnemyManager::AddEnemy(EnemyType type, const Vector3& pos)
 	case EnemyType::Zombie:
 		pEnemy = std::make_shared<Zombie>();
 		pEnemy->SetHandle(ModelManager::GetInstance().DuplicateModel(L"Zombie"));
-		pEnemy->SetColManager(m_pColManager);
 		pEnemy->SetPlayer(m_pPlayer);
 		pEnemy->SetMapHandle(ModelManager::GetInstance().GetModelHandle(L"Collision"));
 		pEnemy->SetPos(pos);

@@ -12,6 +12,7 @@ public:
 	virtual void Enter(std::weak_ptr<Player> pPlayer) abstract;
 	virtual void Update() abstract;
 	virtual void Exit() abstract;
+	virtual void Draw() {}
 
 	std::shared_ptr<PlayerStateBase> GetNextState()
 	{

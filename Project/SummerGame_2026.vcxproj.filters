@@ -69,7 +69,7 @@
     <ClCompile Include="Source\Singleton\ModelManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Collider\CollisionManager.cpp">
+    <ClCompile Include="Source\Singleton\CollisionManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Character\Player\PlayerStateBase.cpp">
@@ -167,7 +167,7 @@
     <ClInclude Include="Source\Singleton\ModelManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Collider\CollisionManager.h">
+    <ClInclude Include="Source\Singleton\CollisionManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Character\Player\PlayerStateBase.h">

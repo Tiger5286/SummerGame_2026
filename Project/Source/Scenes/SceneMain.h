@@ -25,8 +25,6 @@ private:
 private:
 	int m_frameCount = 0;
 
-	std::shared_ptr<CollisionManager> m_pColManager = nullptr;
-
 	std::shared_ptr<Player> m_pPlayer = nullptr;
 	std::shared_ptr<Camera> m_pCamera = nullptr;
 
