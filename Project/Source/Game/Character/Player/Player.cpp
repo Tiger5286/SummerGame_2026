@@ -8,8 +8,8 @@
 #include "Game/Collider/SphereCollider.h"
 #include "Singleton/CollisionManager.h"
 
-#include "PlayerStateBase.h"
 #include "PlayerStateIdle.h"
+#include "PlayerStateDodge.h"
 
 namespace
 {
@@ -149,6 +149,13 @@ Vector3 Player::GetDir() const
 
 void Player::OnHitAttack(int damage)
 {
+	// 回避ステートのときは攻撃を食らわない
+	auto dodgeState = std::dynamic_pointer_cast<PlayerStateDodge>(m_pState);
+	if (dodgeState != nullptr)
+	{
+		return;
+	}
+
 	m_hp -= damage;
 	printfDx(L"プレイヤーが攻撃を食らった！HP:%d\n",m_hp);
 }
