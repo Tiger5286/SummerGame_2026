@@ -67,7 +67,7 @@ namespace
 	const Vector3 kAttackColliderOffset = Vector3(0, 100, -100);
 	// 攻撃のデータ
 	const Attack::Data kAttackData = {
-	100.f,
+	100.0f,
 	Character::Type::Enemy
 	};
 }

@@ -121,6 +121,8 @@ void Zombie::Draw()
 	// モデルの描画
 	MV1DrawModel(m_modelHandle);
 
+	m_pState->Draw();
+
 #ifdef _DEBUG
 	m_pCollider->Draw();
 #endif

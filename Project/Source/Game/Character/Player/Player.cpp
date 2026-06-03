@@ -147,6 +147,11 @@ Vector3 Player::GetDir() const
 	return kDefaultDir * Matrix4x4::GetRotY(m_angle);
 }
 
+void Player::OnHitAttack()
+{
+	printfDx(L"プレイヤーが攻撃を食らった！\n");
+}
+
 void Player::Move()
 {
 	// 入力を取得

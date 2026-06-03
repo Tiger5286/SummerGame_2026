@@ -1,6 +1,8 @@
 ﻿#include "ZombieStateAttack.h"
 #include "Zombie.h"
 #include "../../Player/Player.h"
+#include "Game/Character/Attack.h"
+#include "Utility/Matrix4x4.h"
 
 #include "ZombieStateIdle.h"
 #include "ZombieStateMove.h"
@@ -8,6 +10,14 @@
 namespace
 {
 	const std::wstring kAttackAnimName = L"Zombie|Attack";
+	constexpr float kStartColTimeRate = 0.38f;
+	constexpr float kEndColTimeRate = 0.45f;
+
+	const Vector3 kColliderOffset = Vector3(0, 100, -60);
+	const Attack::Data kAttackData = {
+		60.0f,
+		Character::Type::Player
+	};
 }
 
 void ZombieStateAttack::Enter(std::weak_ptr<Zombie> pZombie)
@@ -24,6 +34,30 @@ void ZombieStateAttack::Enter(std::weak_ptr<Zombie> pZombie)
 void ZombieStateAttack::Update()
 {
 	auto zombie = m_pZombie.lock();
+	float animRate = zombie->m_anim.GetAnimRate();
+	// 当たり判定処理
+	// 当たり判定開始	当たり判定開始の時間、かつまだ当たり判定をONにしていないなら
+	if (animRate > kStartColTimeRate && !m_isOnCollider)
+	{
+		m_pAtk = std::make_shared<Attack>();
+		m_pAtk->SetData(kAttackData);
+		m_pAtk->Init();
+		m_isOnCollider = true;
+	}
+	// 当たり判定終了
+	if (animRate > kEndColTimeRate && !m_isOffCollider)
+	{
+		m_pAtk = nullptr;
+		m_isOffCollider = true;
+	}
+	// 当たり判定の移動
+	if (m_pAtk != nullptr)
+	{
+		Vector3 colPos = zombie->m_pos + (kColliderOffset * Matrix4x4::GetRotY(zombie->m_angle));
+		m_pAtk->SetPos(colPos);
+		m_pAtk->Update();
+	}
+
 	// 攻撃アニメーションが終わった時
 	if (zombie->m_anim.IsEnd())
 	{
@@ -32,6 +66,8 @@ void ZombieStateAttack::Update()
 		{
 			// もう一度攻撃する
 			zombie->m_anim.ChangeAnim(kAttackAnimName, 0.5f, false);
+			m_isOnCollider = false;
+			m_isOffCollider = false;
 			// プレイヤーの方を向く
 			Vector3 toPlayerVec = m_pZombie.lock()->m_pPlayer->GetPos() - m_pZombie.lock()->m_pos;
 			float toPlayerAngle = toPlayerVec.Angle();
@@ -54,3 +90,13 @@ void ZombieStateAttack::Update()
 
 void ZombieStateAttack::Exit()
 {}
+
+void ZombieStateAttack::Draw()
+{
+#ifdef _DEBUG
+	if (m_pAtk != nullptr)
+	{
+		m_pAtk->Draw();
+	}
+#endif
+}
