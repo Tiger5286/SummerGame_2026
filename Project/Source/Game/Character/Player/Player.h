@@ -60,17 +60,6 @@ private:
 
     std::shared_ptr<Character> m_target;   // ロックオンしているターゲット
 
-    // 操作可能かどうかフラグ
-    bool m_isCanControll = true;
-
-    // 回避のフレーム数
-    int m_dodgeFrame = 0;
-
-    // コンボのフレーム数
-    int m_comboFrame = 0;
-    // 次のコンボに移行するかどうか
-    bool m_isTransferNextCombo = false;
-
     // カメラの角度
     float m_cameraAngleY = 0.0f;
 	// 自身のモデルの回転角度
