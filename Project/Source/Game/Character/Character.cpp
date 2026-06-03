@@ -1,12 +1,14 @@
 ﻿#include "Character.h"
 #include "../Collider/CapsuleCollider.h"
+#include "Singleton/IDManager.h"
 
 namespace
 {
 	constexpr float kResistancePower = 1.0f;
 }
 
-Character::Character()
+Character::Character() :
+	m_id(IDManager::GetInstance().GetNewId())
 {
 }
 

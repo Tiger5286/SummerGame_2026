@@ -49,6 +49,9 @@ public:
 	// キャラクタータイプを取得する
 	Type GetType() const { return m_type; }
 
+	// IDを取得する
+	const int GetID() const { return m_id; }
+
 	/// <summary>
 	/// 速度に抵抗をつける(なにもしなかったら徐々に速度が遅くなる)
 	/// </summary>
@@ -81,5 +84,7 @@ protected:
 	Type m_type = Type::None;
 
 	bool m_isGround = false;	// 接地しているかどうか
+
+	const int m_id;
 };
 
