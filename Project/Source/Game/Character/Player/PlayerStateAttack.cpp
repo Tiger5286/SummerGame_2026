@@ -68,6 +68,7 @@ namespace
 	// 攻撃のデータ
 	const Attack::Data kAttackData = {
 	100.0f,
+	100,
 	Character::Type::Enemy
 	};
 }

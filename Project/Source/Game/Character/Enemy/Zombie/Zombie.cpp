@@ -32,6 +32,9 @@ namespace
 
 	// モデルのデフォルトの向き(angleが0の時の向き)
 	const Vector3 kDefaultDir = Vector3(0, 0, -1);
+
+	// 最大Hp
+	constexpr int kMaxHP = 200;
 }
 
 Zombie::Zombie()
@@ -52,6 +55,9 @@ void Zombie::Init()
 
 	// アニメーションの初期化
 	m_anim.Init(m_modelHandle, kIdleAnimName);
+
+	// Hpの初期化
+	m_hp = kMaxHP;
 
 	// ステートの初期化
 	m_pState = std::make_shared<ZombieStateIdle>();
@@ -132,9 +138,10 @@ void Zombie::OnCollision(Character& other)
 {
 }
 
-void Zombie::OnHitAttack()
+void Zombie::OnHitAttack(int damage)
 {
-	printfDx(L"ゾンビが攻撃を食らった！\n");
+	m_hp -= damage;
+	printfDx(L"ゾンビが攻撃を食らった！HP:%d\n",m_hp);
 }
 
 void Zombie::CheckChangeState()

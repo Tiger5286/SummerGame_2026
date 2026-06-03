@@ -10,6 +10,7 @@ public:
     struct Data
     {
         float colliderRadius = 0.0f;
+        int damage = 0;
         Character::Type hitCharacterType = Character::Type::None;
     };
 

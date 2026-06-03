@@ -35,7 +35,7 @@ void Attack::OnCollision(Character & other)
 		// 当たった相手が設定された相手だったら
 		if (other.GetType() == m_data.hitCharacterType)
 		{
-			other.OnHitAttack();
+			other.OnHitAttack(m_data.damage);
 		}
 	}
 }

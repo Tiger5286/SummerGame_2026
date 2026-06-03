@@ -16,6 +16,7 @@ namespace
 	const Vector3 kColliderOffset = Vector3(0, 100, -60);
 	const Attack::Data kAttackData = {
 		60.0f,
+		20,
 		Character::Type::Player
 	};
 }

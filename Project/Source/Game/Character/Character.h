@@ -59,7 +59,7 @@ public:
 	/// <param name="other">当たったオブジェクト</param>
 	virtual void OnCollision(Character& other);
 
-	virtual void OnHitAttack() {};
+	virtual void OnHitAttack(int damage) {};
 
 	// マップに当たったときの処理
 	void CheckHitMap(MV1_COLL_RESULT_POLY_DIM coll);
@@ -69,6 +69,8 @@ protected:
 	int m_modelHandle = -1;
 
 	std::shared_ptr<ColliderBase> m_pCollider = nullptr;
+
+	int m_hp = -1;
 
 	Vector3 m_pos;	// 位置
 	Vector3 m_vel;	// 速度

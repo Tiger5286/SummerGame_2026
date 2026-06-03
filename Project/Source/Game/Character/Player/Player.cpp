@@ -31,10 +31,8 @@ namespace
 	// 接地判定に使うレイの長さ
 	constexpr float kLineLength = 10.0f;
 
-	// 攻撃がホーミングする距離
-	constexpr float kTrackingAttackDist = 500.0f;
-	// 攻撃の前進をやめる距離
-	constexpr float kStopTrackingDist = 150.0f;
+	// 最大HP
+	constexpr int kMaxHp = 1000;
 }
 
 void Player::Init()
@@ -49,6 +47,9 @@ void Player::Init()
 
 	// アニメーションの初期化
 	m_anim.Init(m_modelHandle, kIdleAnimName);
+
+	// hpの初期化
+	m_hp = kMaxHp;
 
 	// ステートの初期化
 	m_pState = std::make_shared<PlayerStateIdle>();
@@ -146,9 +147,10 @@ Vector3 Player::GetDir() const
 	return kDefaultDir * Matrix4x4::GetRotY(m_angle);
 }
 
-void Player::OnHitAttack()
+void Player::OnHitAttack(int damage)
 {
-	printfDx(L"プレイヤーが攻撃を食らった！\n");
+	m_hp -= damage;
+	printfDx(L"プレイヤーが攻撃を食らった！HP:%d\n",m_hp);
 }
 
 void Player::Move()

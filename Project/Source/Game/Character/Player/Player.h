@@ -37,7 +37,7 @@ public:
     // 自身の向きを表すベクトルを取得する
     Vector3 GetDir() const;
 
-    void OnHitAttack() override;
+    void OnHitAttack(int damage) override;
 
 private:
 
