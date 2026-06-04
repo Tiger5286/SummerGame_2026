@@ -66,10 +66,22 @@ namespace
 	// 攻撃の位置オフセット
 	const Vector3 kAttackColliderOffset = Vector3(0, 100, -100);
 	// 攻撃のデータ
-	const Attack::Data kAttackData = {
-	100.0f,
-	100,
-	Character::Type::Enemy
+	const std::vector<Attack::Data> kAttackData = {
+		{
+			100.0f,
+			40,
+			Character::Type::Enemy
+		},
+		{
+			100.0f,
+			60,
+			Character::Type::Enemy
+		},
+		{
+			100.0f,
+			100,
+			Character::Type::Enemy
+		},
 	};
 }
 
@@ -132,7 +144,7 @@ void PlayerStateAttack::Update()
 	{
 		// 当たり判定を生成し、当たり判定をonにする
 		m_pAtk = std::make_shared<Attack>();
-		m_pAtk->SetData(kAttackData);
+		m_pAtk->SetData(kAttackData[m_comboIndex]);
 		m_pAtk->Init();
 		m_isOnCollider = true;
 	}
