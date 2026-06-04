@@ -22,10 +22,12 @@ public:
 	void SetMapHandle(int mapHandle) { m_mapHandle = mapHandle; }
 
 	bool IsDead() const { return m_isDead; }
+	bool IsDying() const { return m_isDying; }
 
 protected:
 	int m_mapHandle = -1;
 	std::shared_ptr<Player> m_pPlayer = nullptr;
-	bool m_isDead = false;
+	bool m_isDead = false;	// 完全に死んだときにtrue
+	bool m_isDying = false;	// 死ぬモーションの間true
 };
 

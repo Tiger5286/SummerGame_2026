@@ -161,7 +161,7 @@ void Zombie::OnHitAttack(int damage)
 		m_pState->ChangeState(std::make_shared<ZombieStateHit>());
 	}
 
-	printfDx(L"ゾンビが攻撃を食らった！HP:%d\n",m_hp);
+	//printfDx(L"ゾンビが攻撃を食らった！HP:%d\n",m_hp);
 }
 
 void Zombie::CheckChangeState()

@@ -30,6 +30,12 @@ void TargetManager::Update()
 			float minDist = kFloatMax;
 			for (const auto& enemy : m_pEnemyManager->GetEnemies())
 			{
+				// 死んでいるモーション中なら無視する
+				if (enemy->IsDying())
+				{
+					continue;
+				}
+
 				auto enemyPos = enemy->GetPos();
 				float dist = (playerPos - enemyPos).SquaredLength();
 				if (dist < minDist)
@@ -51,6 +57,11 @@ void TargetManager::Update()
 			if (m_pTarget == enemy)
 			{
 				isFindEnemy = true;
+				// ターゲットが死ぬモーション中なら無視する
+				if (enemy->IsDying())
+				{
+					isFindEnemy = false;
+				}
 			}
 		}
 		// ターゲットが死んでいたらnullptrにする

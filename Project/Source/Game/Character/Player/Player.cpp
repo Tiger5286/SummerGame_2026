@@ -168,7 +168,7 @@ void Player::OnHitAttack(int damage)
 
 	m_hp -= damage;
 	m_pState->ChangeState(std::make_shared<PlayerStateHit>());
-	printfDx(L"プレイヤーが攻撃を食らった！HP:%d\n",m_hp);
+	//printfDx(L"プレイヤーが攻撃を食らった！HP:%d\n",m_hp);
 }
 
 void Player::Move()

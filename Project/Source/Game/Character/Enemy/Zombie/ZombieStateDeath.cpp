@@ -10,6 +10,7 @@ void ZombieStateDeath::Enter(std::weak_ptr<Zombie> pZombie)
 {
 	m_pZombie = pZombie;
 	m_pZombie.lock()->m_anim.ChangeAnim(kDeathAnimName, 0.5f, false);
+	m_pZombie.lock()->m_isDying = true;
 }
 
 void ZombieStateDeath::Update()
