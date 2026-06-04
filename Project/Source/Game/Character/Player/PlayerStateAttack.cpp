@@ -125,13 +125,18 @@ void PlayerStateAttack::Update()
 		// 移動ベクトルを生成
 		Vector3 moveVec = Vector3(0, m_pPlayer.lock()->m_vel.y, -kComboDatas[m_comboIndex].moveSpeed);
 
-		// ホーミングするターゲットへのベクトルを生成
-		Vector3 toTargetVec = m_pPlayer.lock()->m_target->GetPos() - m_pPlayer.lock()->m_pos;
-		// 一定の距離より近かったら進まない
-		if (toTargetVec.SquaredLength() < kStopTrackingDist * kStopTrackingDist)
+		// ターゲットがいる場合のみ
+		if (player->m_target != nullptr)
 		{
-			moveVec = Vector3::Zero();
+			// ホーミングするターゲットへのベクトルを生成
+			Vector3 toTargetVec = m_pPlayer.lock()->m_target->GetPos() - m_pPlayer.lock()->m_pos;
+			// 一定の距離より近かったら進まない
+			if (toTargetVec.SquaredLength() < kStopTrackingDist * kStopTrackingDist)
+			{
+				moveVec = Vector3::Zero();
+			}
 		}
+		
 		// 移動ベクトルをプレイヤーの向きに回転
 		moveVec *= Matrix4x4::GetRotY(m_pPlayer.lock()->m_angle);
 		// 速度に適用
@@ -192,6 +197,12 @@ void PlayerStateAttack::Draw()
 
 void PlayerStateAttack::Tracking()
 {
+	// ターゲットがいないなら処理しない
+	if (m_pPlayer.lock()->m_target == nullptr)
+	{
+		return;
+	}
+
 	// ホーミングするターゲットへのベクトルを生成
 	Vector3 toTargetVec = m_pPlayer.lock()->m_target->GetPos() - m_pPlayer.lock()->m_pos;
 	// 条件を満たしたらプレイヤーの向きをターゲットのほうへ向ける
