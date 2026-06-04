@@ -18,6 +18,9 @@ namespace
 
 	constexpr float kInvisibleStartTimeRate = 0.3f;
 	constexpr float kInvisibleEndTimeRate = 0.9f;
+
+	// 攻撃の前進をやめる距離
+	constexpr float kStopTrackingDist = 120.0f;
 }
 
 void PlayerStateShift::Enter(std::weak_ptr<Player> pPlayer)
@@ -37,6 +40,15 @@ void PlayerStateShift::Update()
 	if (player->m_anim.GetAnimRate() > kMoveStartTimeRate && player->m_anim.GetAnimRate() < kMoveEndTimeRate)
 	{
 		player->m_vel = Vector3::Back() * kMoveSpeed * Matrix4x4::GetRotY(player->m_angle);
+		// 敵との距離が近かったら速度を0にする
+		if (player->m_target != nullptr)
+		{
+			float squareDist = (player->GetPos() - player->m_target->GetPos()).SquaredLength();
+			if (squareDist < kStopTrackingDist * kStopTrackingDist)
+			{
+				player->m_vel = Vector3::Zero();
+			}
+		}
 	}
 	else
 	{
