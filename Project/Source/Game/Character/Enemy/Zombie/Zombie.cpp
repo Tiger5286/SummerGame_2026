@@ -9,6 +9,7 @@
 
 #include "ZombieStateIdle.h"
 #include "ZombieStateHit.h"
+#include "ZombieStateDeath.h"
 
 namespace
 {
@@ -140,8 +141,26 @@ void Zombie::OnCollision(Character& other)
 
 void Zombie::OnHitAttack(int damage)
 {
+	// 死亡ステートなら被弾しない
+	std::shared_ptr<ZombieStateBase> state = nullptr;
+	state = std::dynamic_pointer_cast<ZombieStateDeath>(m_pState);
+	if (state != nullptr)
+	{
+		return;
+	}
+	state = nullptr;
+
 	m_hp -= damage;
-	m_pState->ChangeState(std::make_shared<ZombieStateHit>());
+	// hpがなくなったら死亡
+	if (m_hp <= 0)
+	{
+		m_pState->ChangeState(std::make_shared<ZombieStateDeath>());
+	}
+	else	// hpがあるなら被弾
+	{
+		m_pState->ChangeState(std::make_shared<ZombieStateHit>());
+	}
+
 	printfDx(L"ゾンビが攻撃を食らった！HP:%d\n",m_hp);
 }
 

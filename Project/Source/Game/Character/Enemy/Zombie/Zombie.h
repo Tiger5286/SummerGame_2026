@@ -9,6 +9,7 @@ class ZombieStateIdle;
 class ZombieStateMove;
 class ZombieStateAttack;
 class ZombieStateHit;
+class ZombieStateDeath;
 
 class Zombie : public EnemyBase, public std::enable_shared_from_this<Zombie>
 {
@@ -60,5 +61,6 @@ private:
 	friend ZombieStateMove;
 	friend ZombieStateAttack;
 	friend ZombieStateHit;
+	friend ZombieStateDeath;
 };
 

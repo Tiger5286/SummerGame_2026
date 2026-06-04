@@ -1,13 +1,14 @@
-﻿#pragma once
+#pragma once
 #include "ZombieStateBase.h"
-class ZombieStateHit :
+class ZombieStateDeath :
     public ZombieStateBase
 {
 public:
-	ZombieStateHit() = default;
-	virtual ~ZombieStateHit() = default;
+	ZombieStateDeath() = default;
+	virtual ~ZombieStateDeath() = default;
 
 	void Enter(std::weak_ptr<Zombie> pZombie) override;
 	void Update() override;
 	void Exit() override;
 };
+
