@@ -10,6 +10,7 @@
 
 #include "PlayerStateIdle.h"
 #include "PlayerStateDodge.h"
+#include "PlayerStateHit.h"
 
 namespace
 {
@@ -150,13 +151,23 @@ Vector3 Player::GetDir() const
 void Player::OnHitAttack(int damage)
 {
 	// 回避ステートのときは攻撃を食らわない
-	auto dodgeState = std::dynamic_pointer_cast<PlayerStateDodge>(m_pState);
-	if (dodgeState != nullptr)
+	std::shared_ptr<PlayerStateBase> state = nullptr;
+	state = std::dynamic_pointer_cast<PlayerStateDodge>(m_pState);
+	if (state != nullptr)
 	{
 		return;
 	}
+	state = nullptr;
+	// 被弾ステートの時は攻撃を食らわない
+	state = std::dynamic_pointer_cast<PlayerStateHit>(m_pState);
+	if (state != nullptr)
+	{
+		return;
+	}
+	state = nullptr;
 
 	m_hp -= damage;
+	m_pState->ChangeState(std::make_shared<PlayerStateHit>());
 	printfDx(L"プレイヤーが攻撃を食らった！HP:%d\n",m_hp);
 }
 
