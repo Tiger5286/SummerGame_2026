@@ -90,7 +90,9 @@ void ZombieStateAttack::Update()
 }
 
 void ZombieStateAttack::Exit()
-{}
+{
+	m_pAtk = nullptr;
+}
 
 void ZombieStateAttack::Draw()
 {

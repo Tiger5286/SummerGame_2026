@@ -50,6 +50,7 @@
     <ClCompile Include="Source\Game\Character\Enemy\Zombie\ZombieStateIdle.cpp" />
     <ClCompile Include="Source\Game\Character\Enemy\Zombie\ZombieStateMove.cpp" />
     <ClCompile Include="Source\Game\Character\Enemy\Zombie\ZombieStateAttack.cpp" />
+    <ClCompile Include="Source\Game\Character\Enemy\Zombie\ZombieStateHit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game\Character\Attack.h" />
@@ -84,6 +85,7 @@
     <ClInclude Include="Source\Game\Character\Enemy\Zombie\ZombieStateIdle.h" />
     <ClInclude Include="Source\Game\Character\Enemy\Zombie\ZombieStateMove.h" />
     <ClInclude Include="Source\Game\Character\Enemy\Zombie\ZombieStateAttack.h" />
+    <ClInclude Include="Source\Game\Character\Enemy\Zombie\ZombieStateHit.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

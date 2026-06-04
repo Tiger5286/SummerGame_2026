@@ -6,14 +6,14 @@
 #include "Utility/MyLib.h"
 #include "Game/Collider/CapsuleCollider.h"
 #include "Singleton/CollisionManager.h"
-#include "ZombieStateBase.h"
+
 #include "ZombieStateIdle.h"
+#include "ZombieStateHit.h"
 
 namespace
 {
 	// アニメーション名
 	const std::wstring kIdleAnimName = L"Zombie|Idle";
-	const std::wstring kHitAnimName = L"Zombie|Hit";
 	
 	// 当たり判定
 	constexpr float kColliderRadius = 25.0f;
@@ -141,6 +141,7 @@ void Zombie::OnCollision(Character& other)
 void Zombie::OnHitAttack(int damage)
 {
 	m_hp -= damage;
+	m_pState->ChangeState(std::make_shared<ZombieStateHit>());
 	printfDx(L"ゾンビが攻撃を食らった！HP:%d\n",m_hp);
 }
 
