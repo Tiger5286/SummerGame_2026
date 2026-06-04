@@ -16,9 +16,6 @@ public:
     void Draw() override;
 
 private:
-    void Tracking();
-
-private:
     int m_comboIndex = 0;
     bool m_isCanTransNextCombo = false;
     bool m_isOnCollider = false;

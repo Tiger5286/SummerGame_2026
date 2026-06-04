@@ -6,6 +6,7 @@
 #include "PlayerStateFall.h"
 #include "PlayerStateDodge.h"
 #include "PlayerStateAttack.h"
+#include "PlayerStateShift.h"
 
 namespace
 {
@@ -36,6 +37,12 @@ void PlayerStateIdle::Update()
 	if (input.IsTriggerd(XINPUT_BUTTON_X))
 	{
 		ChangeState(std::make_shared<PlayerStateAttack>());
+		return;
+	}
+	// シフトを入力していたらシフト
+	if (input.IsTriggerd(XINPUT_BUTTON_Y))
+	{
+		ChangeState(std::make_shared<PlayerStateShift>());
 		return;
 	}
 	// スティック入力があったらMoveへ

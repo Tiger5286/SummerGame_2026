@@ -13,6 +13,7 @@ class PlayerStateFall;
 class PlayerStateDodge;
 class PlayerStateAttack;
 class PlayerStateHit;
+class PlayerStateShift;
 
 class Player : public Character, public std::enable_shared_from_this<Player>
 {
@@ -47,6 +48,8 @@ private:
 
     void RotateInputDir();  // 入力方向を向く
 
+    void RotateToTarget(float activeDist);  // ターゲットの方向を向く
+
     // 接地判定
     void CheckGround();
 
@@ -60,6 +63,9 @@ private:
 	int m_mapHandle = -1;	// マップのモデルのハンドル
 
     std::shared_ptr<Character> m_target;   // ロックオンしているターゲット
+
+    // 見えなくなるかどうか
+    bool m_isInvisible = false;
 
     // カメラの角度
     float m_cameraAngleY = 0.0f;
@@ -79,5 +85,6 @@ private:
     friend PlayerStateDodge;
     friend PlayerStateAttack;
     friend PlayerStateHit;
+    friend PlayerStateShift;
 };
 

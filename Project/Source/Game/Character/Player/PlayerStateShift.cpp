@@ -1,0 +1,74 @@
+#include "PlayerStateShift.h"
+#include "Player.h"
+#include "Singleton/Input.h"
+#include "Utility/Matrix4x4.h"
+
+#include "PlayerStateIdle.h"
+#include "PlayerStateMove.h"
+
+namespace
+{
+	const std::wstring kShiftAnimName = L"Player|Shift";
+
+	constexpr float kTrackingDist = 1000.0f;
+
+	constexpr float kMoveStartTimeRate = 0.3f;
+	constexpr float kMoveEndTimeRate = 0.8f;
+	constexpr float kMoveSpeed = 20.0f;
+
+	constexpr float kInvisibleStartTimeRate = 0.3f;
+	constexpr float kInvisibleEndTimeRate = 0.9f;
+}
+
+void PlayerStateShift::Enter(std::weak_ptr<Player> pPlayer)
+{
+	m_pPlayer = pPlayer;
+	auto player = m_pPlayer.lock();
+	player->m_anim.ChangeAnim(kShiftAnimName, 0.5f, false);
+	player->RotateToTarget(kTrackingDist);
+}
+
+void PlayerStateShift::Update()
+{
+	auto player = m_pPlayer.lock();
+	auto& input = Input::GetInstance();
+
+	// 移動する
+	if (player->m_anim.GetAnimRate() > kMoveStartTimeRate && player->m_anim.GetAnimRate() < kMoveEndTimeRate)
+	{
+		player->m_vel = Vector3::Back() * kMoveSpeed * Matrix4x4::GetRotY(player->m_angle);
+	}
+	else
+	{
+		player->m_vel = Vector3::Zero();
+	}
+
+	// 透明化
+	if (player->m_anim.GetAnimRate() > kInvisibleStartTimeRate && player->m_anim.GetAnimRate() < kInvisibleEndTimeRate)
+	{
+		player->m_isInvisible = true;
+	}
+	else
+	{
+		player->m_isInvisible = false;
+	}
+
+	// アニメーションが終わったらステート遷移
+	if (player->m_anim.IsEnd())
+	{
+		// 移動していたらmoveへ
+		if (input.GetStickInput(LR::Left).SquaredLength() > 0.0f)
+		{
+			ChangeState(std::make_shared<PlayerStateMove>());
+			return;
+		}
+		// そうでないならidleへ
+		ChangeState(std::make_shared<PlayerStateIdle>());
+		return;
+	}
+}
+
+void PlayerStateShift::Exit()
+{
+	m_pPlayer.lock()->m_isInvisible = false;
+}

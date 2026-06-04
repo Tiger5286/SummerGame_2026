@@ -89,8 +89,8 @@ void PlayerStateAttack::Enter(std::weak_ptr<Player> pPlayer)
 {
 	m_pPlayer = pPlayer;
 	m_pPlayer.lock()->m_anim.ChangeAnim(kComboDatas[0].animName, 0.5f, false);
+	m_pPlayer.lock()->RotateToTarget(kTrackingAttackDist);
 	m_comboIndex = 0;
-	Tracking();
 }
 
 void PlayerStateAttack::Update()
@@ -172,7 +172,7 @@ void PlayerStateAttack::Update()
 	if (m_isCanTransNextCombo && animRate > kComboDatas[m_comboIndex].minTimeRate)
 	{
 		m_pPlayer.lock()->RotateInputDir();
-		Tracking();
+		m_pPlayer.lock()->RotateToTarget(kTrackingAttackDist);
 		m_pPlayer.lock()->m_anim.ChangeAnim(kComboDatas[m_comboIndex + 1].animName, 0.5f, false);
 		m_comboIndex++;
 		m_isCanTransNextCombo = false;
@@ -193,22 +193,4 @@ void PlayerStateAttack::Draw()
 		m_pAtk->Draw();
 	}
 #endif
-}
-
-void PlayerStateAttack::Tracking()
-{
-	// ターゲットがいないなら処理しない
-	if (m_pPlayer.lock()->m_target == nullptr)
-	{
-		return;
-	}
-
-	// ホーミングするターゲットへのベクトルを生成
-	Vector3 toTargetVec = m_pPlayer.lock()->m_target->GetPos() - m_pPlayer.lock()->m_pos;
-	// 条件を満たしたらプレイヤーの向きをターゲットのほうへ向ける
-	bool isTrackingDist = toTargetVec.SquaredLength() < kTrackingAttackDist * kTrackingAttackDist;	// ホーミングする距離内
-	if (isTrackingDist)	// 距離内、かつ一定の距離外
-	{
-		m_pPlayer.lock()->m_angle = toTargetVec.Angle();
-	}
 }

@@ -125,8 +125,12 @@ void Player::Update()
 
 void Player::Draw()
 {
-	// モデルを描画
-	MV1DrawModel(m_modelHandle);
+	// 透明フラグがoffのときのみ描画
+	if (!m_isInvisible)
+	{
+		// モデルを描画
+		MV1DrawModel(m_modelHandle);
+	}
 
 	// ステートに描画したい内容があったら描画
 	m_pState->Draw();
@@ -223,6 +227,24 @@ void Player::RotateInputDir()
 		stick.Normalize();
 		m_angle = atan2f(stick.y, -stick.x) + DX_PI_F / 2;
 		m_angle += m_cameraAngleY;
+	}
+}
+
+void Player::RotateToTarget(float activeDist)
+{
+	// ターゲットがいないなら処理しない
+	if (m_target == nullptr)
+	{
+		return;
+	}
+
+	// ホーミングするターゲットへのベクトルを生成
+	Vector3 toTargetVec = m_target->GetPos() - m_pos;
+	// 条件を満たしたらプレイヤーの向きをターゲットのほうへ向ける
+	bool isTrackingDist = toTargetVec.SquaredLength() < activeDist * activeDist;	// ホーミングする距離内
+	if (isTrackingDist)	// 距離内、かつ一定の距離外
+	{
+		m_angle = toTargetVec.Angle();
 	}
 }
 
