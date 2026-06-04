@@ -117,6 +117,9 @@ void SceneMain::Draw()
 
 	m_pEnemyManager->Draw();
 
+	// ターゲットUIの描画
+	m_pTargetManager->Draw();
+
 #ifdef _DEBUG
 	// デバッグ表示
 	DrawString(0,0,L"SceneMain",0xffffff);

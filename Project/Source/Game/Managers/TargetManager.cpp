@@ -74,3 +74,16 @@ void TargetManager::Update()
 	m_pPlayer->SetTarget(m_pTarget);
 	m_pCamera->SetTarget(m_pTarget);
 }
+
+void TargetManager::Draw()
+{
+	// ターゲットがいないなら処理しない
+	if (m_pTarget == nullptr)
+	{
+		return;
+	}
+
+	auto pos = m_pTarget->GetPos() + Vector3::Up() * 200.0f;
+	auto screenPos = ConvWorldPosToScreenPos(pos.ToDxLib());
+	DrawCircle(screenPos.x, screenPos.y, 10,0xff0000, true);
+}

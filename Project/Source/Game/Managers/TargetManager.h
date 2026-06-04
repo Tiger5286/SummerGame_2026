@@ -14,6 +14,7 @@ public:
 
 	void Init(std::shared_ptr<Player> pPlayer,std::shared_ptr<Camera> pCamera,std::shared_ptr<EnemyManager> pEnemyManager);
 	void Update();
+	void Draw();
 
 private:
 	std::shared_ptr<Player> m_pPlayer = nullptr;
