@@ -5,7 +5,7 @@ class Player;
 class Camera;
 class SkyBox;
 
-class CollisionManager;
+class TargetManager;
 
 class EnemyManager;
 
@@ -29,6 +29,7 @@ private:
 	std::shared_ptr<Camera> m_pCamera = nullptr;
 
 	std::shared_ptr<EnemyManager> m_pEnemyManager = nullptr;
+	std::shared_ptr<TargetManager> m_pTargetManager = nullptr;
 
 	std::shared_ptr<SkyBox> m_pSkyBox = nullptr;
 };

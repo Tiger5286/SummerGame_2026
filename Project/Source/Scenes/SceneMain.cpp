@@ -10,6 +10,7 @@
 #include "Game/Character/Enemy/Zombie/Zombie.h"
 
 #include "Game/Managers/EnemyManager.h"
+#include "Game/Managers/TargetManager.h"
 
 #include "Game/SkyBox.h"
 
@@ -57,9 +58,12 @@ void SceneMain::Init()
 
 	// 仮の敵を生成
 	m_pEnemyManager->AddEnemy(EnemyType::Zombie, Vector3(0, 0, 800));
-	// ロックオンする
-	m_pCamera->SetTarget(m_pEnemyManager->GetLastEnemy());
-	m_pPlayer->SetTarget(m_pEnemyManager->GetLastEnemy());
+	m_pEnemyManager->AddEnemy(EnemyType::Zombie, Vector3(300, 0, 800));
+	m_pEnemyManager->AddEnemy(EnemyType::Zombie, Vector3(-300, 0, 800));
+
+	// ターゲットマネージャーの生成
+	m_pTargetManager = std::make_shared<TargetManager>();
+	m_pTargetManager->Init(m_pPlayer, m_pCamera, m_pEnemyManager);
 
 	// スカイボックスの生成
 	m_pSkyBox = std::make_shared<SkyBox>();
@@ -88,6 +92,7 @@ void SceneMain::Update()
 	m_pCamera->Update();
 	
 	m_pEnemyManager->Update();
+	m_pTargetManager->Update();
 
 	m_pSkyBox->SetCameraPos(m_pCamera->GetPos());
 	m_pSkyBox->Update();

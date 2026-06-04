@@ -34,6 +34,12 @@ public:
 	void AddEnemy(EnemyType type, const Vector3& pos);
 
 	/// <summary>
+	/// 敵のリストを取得する
+	/// </summary>
+	/// <returns>敵のリスト</returns>
+	std::list<std::shared_ptr<EnemyBase>> GetEnemies() const { return m_enemyList; }
+
+	/// <summary>
 	/// リストの最後の敵のポインタを取得する
 	/// </summary>
 	/// <returns>敵のポインタ</returns>
