@@ -7,7 +7,7 @@
 #include "Singleton/EffectManager.h"
 
 #include "Game/Character/Player/Player.h"
-#include "Game/Camera.h"
+#include "Game/Camera/Camera.h"
 #include "Game/Character/Enemy/Zombie/Zombie.h"
 
 #include "Game/Managers/EnemyManager.h"

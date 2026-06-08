@@ -1,7 +1,7 @@
 #include "TargetManager.h"
 #include "EnemyManager.h"
 #include "../Character/Player/Player.h"
-#include "../Camera.h"
+#include "../Camera/Camera.h"
 #include "../Character/Enemy/EnemyBase.h"
 #include <limits>
 

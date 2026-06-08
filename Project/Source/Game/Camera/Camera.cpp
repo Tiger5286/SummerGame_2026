@@ -1,9 +1,8 @@
 ﻿#include "Camera.h"
 #include <cmath>
 #include "EffekseerForDXLib.h"
-#include "../Utility/Matrix4x4.h"
-
-#include "../Singleton/Input.h"
+#include "Utility/Matrix4x4.h"
+#include "Singleton/Input.h"
 #include "Game/Character/Player/Player.h"
 
 namespace
@@ -71,8 +70,8 @@ void Camera::Update()
 	if (m_angleX < kMinAngleX) m_angleX = kMinAngleX;
 
 	// プレイヤーの位置をもとにカメラの位置と注視点を設定
-		// 位置を設定
-		// 適当なベクトルを生成
+	// 位置を設定
+	// 適当なベクトルを生成
 	Vector3 pos = { 0,0,-1 };
 	pos.Normalize();
 	// ベクトルの長さを注視点との距離にする

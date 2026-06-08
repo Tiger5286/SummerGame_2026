@@ -7,6 +7,7 @@
 #include "PlayerStateDodge.h"
 #include "PlayerStateAttack.h"
 #include "PlayerStateShift.h"
+#include "PlayerStateBurning.h"
 
 namespace
 {
@@ -29,6 +30,13 @@ void PlayerStateIdle::Update()
 
 	// 入力を取得
 	auto& input = Input::GetInstance();
+
+	// バーニングを入力していたらバーニング
+	if (input.IsTriggerd(XINPUT_BUTTON_Y))
+	{
+		ChangeState(std::make_shared<PlayerStateBurning>());
+		return;
+	}
 	// 回避を入力していたら回避
 	if (input.IsTriggerd(player->kDodge))
 	{
