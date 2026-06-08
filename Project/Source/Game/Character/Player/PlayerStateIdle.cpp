@@ -22,25 +22,27 @@ void PlayerStateIdle::Enter(std::weak_ptr<Player> pPlayer)
 
 void PlayerStateIdle::Update()
 {
+	auto player = m_pPlayer.lock();
+
 	// ジャンプ処理
-	m_pPlayer.lock()->Jump();
+	player->Jump();
 
 	// 入力を取得
 	auto& input = Input::GetInstance();
 	// 回避を入力していたら回避
-	if (input.IsTriggerd(XINPUT_BUTTON_B))
+	if (input.IsTriggerd(player->kDodge))
 	{
 		ChangeState(std::make_shared<PlayerStateDodge>());
 		return;
 	}
 	// 攻撃を入力していたら攻撃
-	if (input.IsTriggerd(XINPUT_BUTTON_X))
+	if (input.IsTriggerd(player->kAttack))
 	{
 		ChangeState(std::make_shared<PlayerStateAttack>());
 		return;
 	}
 	// シフトを入力していたらシフト
-	if (input.IsTriggerd(XINPUT_BUTTON_Y))
+	if (input.IsTriggerd(player->kShift))
 	{
 		ChangeState(std::make_shared<PlayerStateShift>());
 		return;

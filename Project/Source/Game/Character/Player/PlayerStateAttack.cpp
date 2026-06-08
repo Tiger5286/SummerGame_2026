@@ -100,7 +100,7 @@ void PlayerStateAttack::Update()
 	// プレイヤーのshared_ptrを取得
 	auto player = m_pPlayer.lock();
 	// 回避を入力したら回避
-	if (input.IsTriggerd(XINPUT_BUTTON_B))
+	if (input.IsTriggerd(player->kDodge))
 	{
 		ChangeState(std::make_shared<PlayerStateDodge>());
 		return;
@@ -114,7 +114,7 @@ void PlayerStateAttack::Update()
 	// 効果時間内に攻撃ボタンを押したら移行フラグを立てる
 	float animRate = m_pPlayer.lock()->m_anim.GetAnimRate();	// 現在のアニメーションの再生時間の割合を取得
 	bool isCanTransTime = animRate > kComboDatas[m_comboIndex].minInputTimeRate && animRate < kComboDatas[m_comboIndex].maxInputTimeRate;	// 入力受付時間内だったらtrue
-	if (isCanTransTime && input.IsTriggerd(XINPUT_BUTTON_X))	// 入力受付時間内かつ入力があったら
+	if (isCanTransTime && input.IsTriggerd(player->kAttack))	// 入力受付時間内かつ入力があったら
 	{	// 移行フラグを立てる
 		m_isCanTransNextCombo = true;
 	}

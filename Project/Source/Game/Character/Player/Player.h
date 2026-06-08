@@ -77,6 +77,12 @@ private:
     // プレイヤーのステート
     std::shared_ptr<PlayerStateBase> m_pState = nullptr;
 
+    // ボタン配置
+    const int kJump = XINPUT_BUTTON_A;
+    const int kAttack = XINPUT_BUTTON_X;
+    const int kDodge = XINPUT_BUTTON_RIGHT_SHOULDER;
+    const int kShift = XINPUT_BUTTON_B;
+
     // プレイヤーのステートクラスがプレイヤーにアクセスできるようにする
     friend PlayerStateBase;
     friend PlayerStateIdle;
