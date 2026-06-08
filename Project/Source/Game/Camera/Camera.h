@@ -5,7 +5,10 @@
 class Player;
 class Character;
 
-class Camera
+class CameraStateBase;
+class CameraStateFree;
+
+class Camera : public std::enable_shared_from_this<Camera>
 {
 public:
 	Camera() = default;
@@ -28,8 +31,19 @@ public:
 	void SetTarget(std::shared_ptr<Character> pTarget) { m_pTarget = pTarget; }
 
 private:
+	/// <summary>
+	/// ステートの切り替え処理
+	/// </summary>
+	void CheckChangeState();
+
+private:
 	std::weak_ptr<Player> m_pPlayer;
 	int m_mapHandle = -1;
+
+	std::shared_ptr<CameraStateBase> m_pState;
+
+	Vector3 m_calcPos;
+	Vector3 m_calcTargetPos;
 
 	Vector3 m_pos;
 	Vector3 m_targetPos;
@@ -37,5 +51,7 @@ private:
 	float m_angleX = 0.0f;
 
 	std::shared_ptr<Character> m_pTarget = nullptr;
+
+	friend CameraStateFree;
 };
 

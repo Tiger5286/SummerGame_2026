@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\Camera\CameraStateFree.cpp" />
+    <ClCompile Include="Source\Game\Camera\CameraStateBase.cpp" />
     <ClCompile Include="Source\Game\Character\Player\PlayerStateBurning.cpp" />
     <ClCompile Include="Source\Game\Character\Player\PlayerStateShift.cpp" />
     <ClCompile Include="Source\Game\Character\Player\PlayerStateHit.cpp" />
@@ -59,6 +61,8 @@
     <ClCompile Include="Source\Game\Managers\TargetManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\Camera\CameraStateFree.h" />
+    <ClInclude Include="Source\Game\Camera\CameraStateBase.h" />
     <ClInclude Include="Source\Game\Character\Player\PlayerStateBurning.h" />
     <ClInclude Include="Source\Game\Character\Player\PlayerStateShift.h" />
     <ClInclude Include="Source\Game\Character\Player\PlayerStateHit.h" />
