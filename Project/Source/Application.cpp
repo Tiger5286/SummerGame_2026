@@ -10,6 +10,7 @@
 #include "Singleton/Input.h"
 #include "Singleton/IDManager.h"
 #include "Singleton/CollisionManager.h"
+#include "Singleton/EffectManager.h"
 
 #include "Scenes/SceneMain.h"
 
@@ -71,6 +72,7 @@ void Application::Run()
 	auto& input = Input::GetInstance();
 	auto& idManager = IDManager::GetInstance();
 	auto& colManager = CollisionManager::GetInstance();
+	auto& effManager = EffectManager::GetInstance();
 
 	// シーンの生成、初期化
 	auto pScene = std::make_shared<SceneMain>();
