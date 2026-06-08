@@ -1,7 +1,9 @@
 #include "PlayerStateShift.h"
 #include "Player.h"
 #include "Singleton/Input.h"
+#include "Singleton/EffectManager.h"
 #include "Utility/Matrix4x4.h"
+#include <EffekseerForDXLib.h>
 
 #include "PlayerStateIdle.h"
 #include "PlayerStateMove.h"
@@ -59,6 +61,12 @@ void PlayerStateShift::Update()
 	if (player->m_anim.GetAnimRate() > kInvisibleStartTimeRate && player->m_anim.GetAnimRate() < kInvisibleEndTimeRate)
 	{
 		player->m_isInvisible = true;
+		if (!m_isPlayedEffect)
+		{
+			auto effHandle = EffectManager::GetInstance().PlayEffect(L"Shift", player->m_pos);
+			SetRotationPlayingEffekseer3DEffect(effHandle, 0.0f, player->m_angle, 0.0f);
+			m_isPlayedEffect = true;
+		}
 	}
 	else
 	{

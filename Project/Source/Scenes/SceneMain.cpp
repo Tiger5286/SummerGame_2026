@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "../Singleton/ModelManager.h"
+#include "Singleton/EffectManager.h"
 
 #include "Game/Character/Player/Player.h"
 #include "Game/Camera.h"
@@ -41,6 +42,9 @@ void SceneMain::Init()
 	{
 		modelManager.LoadModel(modelFileName.second, modelFileName.first);
 	}
+	// エフェクトのロードと登録
+	auto& effManager = EffectManager::GetInstance();
+	effManager.LoadEffect(L"data/effects/ShiftEffect.efk", L"Shift",100.0f);
 
 	// プレイヤーの生成
 	m_pPlayer = std::make_shared<Player>();
@@ -96,6 +100,8 @@ void SceneMain::Update()
 
 	m_pSkyBox->SetCameraPos(m_pCamera->GetPos());
 	m_pSkyBox->Update();
+
+	EffectManager::GetInstance().Update();
 }
 
 void SceneMain::Draw()
@@ -116,6 +122,8 @@ void SceneMain::Draw()
 	m_pPlayer->Draw();
 
 	m_pEnemyManager->Draw();
+
+	EffectManager::GetInstance().Draw();
 
 	// ターゲットUIの描画
 	m_pTargetManager->Draw();

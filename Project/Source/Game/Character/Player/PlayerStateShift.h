@@ -10,5 +10,7 @@ public:
     void Enter(std::weak_ptr<Player> pPlayer) override;
     void Update() override;
     void Exit() override;
+private:
+    bool m_isPlayedEffect = false;
 };
 

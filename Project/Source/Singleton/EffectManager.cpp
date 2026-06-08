@@ -51,13 +51,13 @@ void EffectManager::LoadEffect(const std::wstring& filePath, const std::wstring&
 	m_effectResourceHandles[name] = handle;
 }
 
-void EffectManager::PlayEffect(const std::wstring& name, const Vector3& pos)
+int EffectManager::PlayEffect(const std::wstring& name, const Vector3& pos)
 {
 	// 指定されたエフェクトが存在するかどうかチェック
 	if (!(m_effectResourceHandles.contains(name)))
 	{
 		assert(false && "存在しないエフェクトを再生しようとしています");
-		return;
+		return -1;
 	}
 	// エフェクトを再生し正しく再生されたかチェック
 	auto handle = PlayEffekseer3DEffect(m_effectResourceHandles[name]);
@@ -66,6 +66,7 @@ void EffectManager::PlayEffect(const std::wstring& name, const Vector3& pos)
 	SetPosPlayingEffekseer3DEffect(handle, pos.x, pos.y, pos.z);
 	// リストに登録
 	m_effectPlayingHandles.push_back(handle);
+	return handle;
 }
 
 void EffectManager::StopEffectAll()

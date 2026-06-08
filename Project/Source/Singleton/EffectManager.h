@@ -32,7 +32,8 @@ public:
 	/// </summary>
 	/// <param name="name">再生するエフェクトの登録名</param>
 	/// <param name="pos">再生するエフェクトの位置</param>
-	void PlayEffect(const std::wstring& name, const Vector3& pos);
+	/// return : 再生したエフェクトのハンドル
+	int PlayEffect(const std::wstring& name, const Vector3& pos);
 
 	/// <summary>
 	/// すべての再生中のエフェクトを停止する
