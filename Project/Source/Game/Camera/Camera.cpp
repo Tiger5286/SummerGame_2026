@@ -70,6 +70,7 @@ void Camera::Update()
 	if (m_angleX < kMinAngleX) m_angleX = kMinAngleX;
 
 	// プレイヤーの位置をもとにカメラの位置と注視点を設定
+	auto player = m_pPlayer.lock();
 	// 位置を設定
 	// 適当なベクトルを生成
 	Vector3 pos = { 0,0,-1 };
@@ -79,14 +80,14 @@ void Camera::Update()
 	// 変形用の行列を生成
 	auto rotYMtx = Matrix4x4::GetRotY(m_angleY);
 	auto rotXMtx = Matrix4x4::GetRotX(m_angleX);
-	auto transMtx = Matrix4x4::GetTranslate(m_playerPos + kPosOffset);
+	auto transMtx = Matrix4x4::GetTranslate(player->GetPos() + kPosOffset);
 	// 行列を合成
 	auto mtx = rotXMtx * rotYMtx * transMtx;
 	// ベクトルを変形
 	pos = mtx * pos;
 
 	// 注視点を設定
-	Vector3 target = m_playerPos + kTargetOffset;
+	Vector3 target = player->GetPos() + kTargetOffset;
 	// ロックオンターゲット
 	if (m_pTarget != nullptr)
 	{
@@ -94,7 +95,7 @@ void Camera::Update()
 		Vector3 cameraDir = (m_targetPos - m_pos);
 		cameraDir.y = 0.0f;		// カメラの水平方向のみを見る
 		cameraDir.Normalize();
-		Vector3 playerToTargetVec = m_pTarget->GetPos() - m_playerPos;
+		Vector3 playerToTargetVec = m_pTarget->GetPos() - player->GetPos();
 		float playerToTargetDist = playerToTargetVec.SquaredLength();
 		// 二つのベクトルの角度の差を求める			// cameraDirは正規化されているので1.0
 		float dif = cameraDir.Dot(playerToTargetVec) / (1.0f * playerToTargetVec.Length());
@@ -131,7 +132,7 @@ void Camera::Update()
 	target += right * kOffsetX;
 
 	// マップとの当たり判定
-	auto result = MV1CollCheck_Line(m_mapHandle, -1, (m_playerPos + kPosOffset).ToDxLib(), pos.ToDxLib());
+	auto result = MV1CollCheck_Line(m_mapHandle, -1, (player->GetPos() + kPosOffset).ToDxLib(), pos.ToDxLib());
 	if (result.HitFlag)
 	{
 		pos = Vector3::FromDxLib(result.HitPosition);

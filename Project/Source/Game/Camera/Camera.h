@@ -21,14 +21,14 @@ public:
 	// マップのハンドルを設定する(Initの前に呼ぶ)
 	void SetMapHandle(int handle) { m_mapHandle = handle; }
 
-	// プレイヤーの位置を設定する(毎フレームUpdateの前に呼ぶ)
-	void SetPlayerPos(const Vector3& playerPos) { m_playerPos = playerPos; }
+	// プレイヤーのポインタを設定する
+	void SetPlayer(std::weak_ptr<Player> pPlayer) { m_pPlayer = pPlayer; }
 
 	// ターゲットを設定する
 	void SetTarget(std::shared_ptr<Character> pTarget) { m_pTarget = pTarget; }
 
 private:
-	Vector3 m_playerPos;
+	std::weak_ptr<Player> m_pPlayer;
 	int m_mapHandle = -1;
 
 	Vector3 m_pos;

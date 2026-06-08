@@ -56,6 +56,9 @@ void SceneMain::Init()
 	m_pCamera->SetMapHandle(modelManager.GetModelHandle(L"Collision"));
 	m_pCamera->Init();
 
+	m_pCamera->SetPlayer(m_pPlayer);
+	m_pPlayer->SetCamera(m_pCamera);
+
 	// 敵管理クラスの生成
 	m_pEnemyManager = std::make_shared<EnemyManager>();
 	m_pEnemyManager->Init(m_pPlayer);
@@ -86,10 +89,6 @@ void SceneMain::End()
 void SceneMain::Update()
 {
 	m_frameCount++;
-
-	// カメラの更新
-	m_pCamera->SetPlayerPos(m_pPlayer->GetPos());
-	m_pPlayer->SetCameraAngleY(m_pCamera->GetAngleY());
 
 	// 各クラスの更新
 	m_pPlayer->Update();

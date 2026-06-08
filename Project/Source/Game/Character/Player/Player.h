@@ -4,6 +4,7 @@
 #include <memory>
 
 class PlayerAttackCollider;
+class Camera;
 
 // プレイヤーのステートクラスをプロトタイプ宣言しておく
 class PlayerStateBase;
@@ -27,8 +28,8 @@ public:
     void Update() override;
     void Draw() override;
     
-    // カメラの角度を設定する(毎フレームUpdateの前に実行する)
-    void SetCameraAngleY(float cameraAngleY) { m_cameraAngleY = cameraAngleY; }
+    // カメラのポインタを設定する
+    void SetCamera(std::weak_ptr<Camera> pCamera) { m_pCamera = pCamera; }
 
 	// マップモデルのハンドルを設定する(Initの前に実行する)
 	void SetMapHandle(int mapHandle) { m_mapHandle = mapHandle; }
@@ -65,18 +66,18 @@ private:
 
     std::shared_ptr<Character> m_target;   // ロックオンしているターゲット
 
+    std::weak_ptr<Camera> m_pCamera;
+
+    // プレイヤーのステート
+    std::shared_ptr<PlayerStateBase> m_pState = nullptr;
+
     // 見えなくなるかどうか
     bool m_isInvisible = false;
 
-    // カメラの角度
-    float m_cameraAngleY = 0.0f;
 	// 自身のモデルの回転角度
     float m_angle = 0.0f;
 	// 描画用の回転角度(Lerpで滑らかに回転する)
 	float m_drawAngle = 0.0f;
-    
-    // プレイヤーのステート
-    std::shared_ptr<PlayerStateBase> m_pState = nullptr;
 
     // ボタン配置
     const int kJump = XINPUT_BUTTON_A;

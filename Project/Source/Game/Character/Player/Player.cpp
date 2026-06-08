@@ -7,6 +7,7 @@
 #include "Game/Collider/CapsuleCollider.h"
 #include "Game/Collider/SphereCollider.h"
 #include "Singleton/CollisionManager.h"
+#include "../../Camera/Camera.h"
 
 #include "PlayerStateIdle.h"
 #include "PlayerStateDodge.h"
@@ -189,7 +190,7 @@ void Player::Move()
 	Vector3 moveVec;
 	moveVec += Vector3(stick.x, 0.0f, stick.y) * kMoveAccel;
 	// カメラの向きに応じて移動ベクトルを回転させる
-	moveVec *= Matrix4x4::GetRotY(m_cameraAngleY);
+	moveVec *= Matrix4x4::GetRotY(m_pCamera.lock()->GetAngleY());
 	// 水平移動速度が上限を超えていなければ移動量を足す
 	auto velXZ = m_vel;
 	velXZ.y = 0.0f;
@@ -226,7 +227,7 @@ void Player::RotateInputDir()
 	{
 		stick.Normalize();
 		m_angle = atan2f(stick.y, -stick.x) + DX_PI_F / 2;
-		m_angle += m_cameraAngleY;
+		m_angle += m_pCamera.lock()->GetAngleY();
 	}
 }
 
