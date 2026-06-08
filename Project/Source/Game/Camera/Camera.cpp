@@ -51,6 +51,8 @@ void Camera::Init()
 
 void Camera::Update()
 {
+	CheckChangeState();
+
 	auto player = m_pPlayer.lock();
 
 	m_pState->Update();
@@ -71,6 +73,11 @@ void Camera::Update()
 	SetCameraPositionAndTarget_UpVecY(m_pos.ToDxLib(), m_targetPos.ToDxLib());
 	// DXライブラリのカメラとEffekseerのカメラを同期する。
 	Effekseer_Sync3DSetting();
+}
+
+void Camera::ChangeState(std::shared_ptr<CameraStateBase> pNextState)
+{
+	m_pState->ChangeState(pNextState);
 }
 
 void Camera::CheckChangeState()

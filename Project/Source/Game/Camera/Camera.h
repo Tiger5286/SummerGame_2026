@@ -7,6 +7,7 @@ class Character;
 
 class CameraStateBase;
 class CameraStateFree;
+class CameraStateBurning;
 
 class Camera : public std::enable_shared_from_this<Camera>
 {
@@ -29,6 +30,8 @@ public:
 
 	// ターゲットを設定する
 	void SetTarget(std::shared_ptr<Character> pTarget) { m_pTarget = pTarget; }
+
+	void ChangeState(std::shared_ptr<CameraStateBase> pNextState);
 
 private:
 	/// <summary>
@@ -53,5 +56,6 @@ private:
 	std::shared_ptr<Character> m_pTarget = nullptr;
 
 	friend CameraStateFree;
+	friend CameraStateBurning;
 };
 
