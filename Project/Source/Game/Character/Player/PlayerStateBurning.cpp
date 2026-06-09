@@ -31,6 +31,7 @@ void PlayerStateBurning::Enter(std::weak_ptr<Player> pPlayer)
 	player->m_anim.ChangeAnim(kBurningAnimName, 0.5f, false);
 	player->m_pCamera.lock()->ChangeState(std::make_shared<CameraStateBurning>());
 	player->RotateToTarget(FLT_MAX);
+	EffectManager::GetInstance().PlayEffect(L"Burning", player->m_pos + Vector3(0, 100, 0));
 }
 
 void PlayerStateBurning::Update()
@@ -42,7 +43,7 @@ void PlayerStateBurning::Update()
 	{
 		if (m_frame % static_cast<int>(60 * kAttackPerSecond) == 0)
 		{
-			EffectManager::GetInstance().PlayEffect(L"Distortion", player->m_pos + Vector3::Up() * 100);
+			//EffectManager::GetInstance().PlayEffect(L"Distortion", player->m_pos + Vector3::Up() * 100);
 			m_pAtk = std::make_shared<Attack>();
 			m_pAtk->SetData(kAttackData);
 			m_pAtk->Init();

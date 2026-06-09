@@ -24,7 +24,8 @@ namespace
 		{ L"Stage", L"data/models/Stage.mv1" },
 		{ L"Collision", L"data/models/Collision.mv1" },
 		{ L"Player", L"data/models/Player.mv1" },
-		{ L"Zombie", L"data/models/Zombie.mv1" }
+		{ L"Zombie", L"data/models/Zombie.mv1" },
+		{ L"Wing" , L"data/models/Wing.mv1" }
 	};
 }
 
@@ -49,6 +50,7 @@ void SceneMain::Init()
 	auto& effManager = EffectManager::GetInstance();
 	effManager.LoadEffect(L"data/effects/ShiftEffect.efkefc", L"Shift",100.0f);
 	effManager.LoadEffect(L"data/effects/Distortion.efkefc", L"Distortion", 30.0f);
+	effManager.LoadEffect(L"data/effects/Burning.efkefc", L"Burning", 50.0f);
 
 	// プレイヤーの生成
 	m_pPlayer = std::make_shared<Player>();
