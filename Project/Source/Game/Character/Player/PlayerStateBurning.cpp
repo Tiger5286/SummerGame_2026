@@ -17,7 +17,7 @@ void PlayerStateBurning::Enter(std::weak_ptr<Player> pPlayer)
 	auto player = m_pPlayer.lock();
 	player->m_anim.ChangeAnim(kBurningAnimName, 0.5f, false);
 	player->m_pCamera.lock()->ChangeState(std::make_shared<CameraStateBurning>());
-	player->RotateToTarget(99999.9f);
+	player->RotateToTarget(FLT_MAX);
 }
 
 void PlayerStateBurning::Update()

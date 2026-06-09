@@ -29,7 +29,7 @@ namespace
 	const float kFindAngleCos = cosf(kFindAngleRad);
 
 	// プレイヤーを攻撃する距離
-	constexpr float kAttackDist = 150.0f;
+	constexpr float kAttackDist = 140.0f;
 
 	// モデルのデフォルトの向き(angleが0の時の向き)
 	const Vector3 kDefaultDir = Vector3(0, 0, -1);
