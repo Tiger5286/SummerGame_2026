@@ -48,6 +48,8 @@ bool Application::Init()
 	// ウインドウとフルスクリーンの切り替えが発生する場合は必ず実行する。
 	// ただし、DirectX11を使用する場合は実行する必要はない。
 	Effekseer_SetGraphicsDeviceLostCallbackFunctions();
+	// エフェクトの歪みを有効にする
+	Effekseer_InitDistortion();
 
 	return true;
 }
