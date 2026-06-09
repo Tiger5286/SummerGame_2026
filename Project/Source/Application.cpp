@@ -12,7 +12,7 @@
 #include "Singleton/CollisionManager.h"
 #include "Singleton/EffectManager.h"
 
-#include "Scenes/SceneMain.h"
+#include "Scenes/SceneTitle.h"
 #include "Scenes/SceneManager.h"
 
 Application& Application::GetInstance()
@@ -79,7 +79,7 @@ void Application::Run()
 
 	// シーンの生成、初期化
 	SceneManager sceneManager;
-	sceneManager.ResetScene(std::make_shared<SceneMain>(sceneManager));
+	sceneManager.ResetScene(std::make_shared<SceneTitle>(sceneManager));
 
 	while (ProcessMessage() != -1 && !m_isRequestExit)
 	{
