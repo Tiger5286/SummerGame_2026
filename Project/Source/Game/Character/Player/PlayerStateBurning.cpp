@@ -3,12 +3,24 @@
 #include "../../Camera/Camera.h"
 #include "../../Camera/CameraStateBurning.h"
 #include "../../Camera/CameraStateFree.h"
+#include "../Attack.h"
 
 #include "PlayerStateIdle.h"
 
 namespace
 {
 	const std::wstring kBurningAnimName = L"Player|Power";
+
+	constexpr int kStartAttackFrame = 120;
+	constexpr int kEndAttackFrame = 300;
+
+	constexpr float kAttackPerSecond = 0.25f;
+
+	const Attack::Data kAttackData = {
+		1500.0f,
+		30,
+		Character::Type::Enemy
+	};
 }
 
 void PlayerStateBurning::Enter(std::weak_ptr<Player> pPlayer)
@@ -22,7 +34,29 @@ void PlayerStateBurning::Enter(std::weak_ptr<Player> pPlayer)
 
 void PlayerStateBurning::Update()
 {
+	m_frame++;
 	auto player = m_pPlayer.lock();
+
+	if (m_frame > kStartAttackFrame && m_frame < kEndAttackFrame)
+	{
+		if (m_frame % static_cast<int>(60 * kAttackPerSecond) == 0)
+		{
+			m_pAtk = std::make_shared<Attack>();
+			m_pAtk->SetData(kAttackData);
+			m_pAtk->Init();
+			m_pAtk->SetPos(player->m_pos);
+		}
+	}
+	else
+	{
+		m_pAtk = nullptr;
+	}
+
+	if (m_pAtk != nullptr)
+	{
+		m_pAtk->Update();
+	}
+
 	if (player->m_anim.IsEnd())
 	{
 		ChangeState(std::make_shared<PlayerStateIdle>());
@@ -33,4 +67,12 @@ void PlayerStateBurning::Update()
 void PlayerStateBurning::Exit()
 {
 	m_pPlayer.lock()->m_pCamera.lock()->ChangeState(std::make_shared<CameraStateFree>());
+}
+
+void PlayerStateBurning::Draw()
+{
+	if (m_pAtk != nullptr)
+	{
+		m_pAtk->Draw();
+	}
 }
