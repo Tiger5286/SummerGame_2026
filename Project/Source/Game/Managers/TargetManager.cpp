@@ -7,7 +7,7 @@
 
 namespace
 {
-	constexpr float kFloatMax = (std::numeric_limits<float>::max)();
+	constexpr float kNoTargetDist = 1000.0f;
 }
 
 void TargetManager::Init(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera> pCamera, std::shared_ptr<EnemyManager> pEnemyManager)
@@ -27,7 +27,7 @@ void TargetManager::Update()
 		{
 			// 敵とプレイヤーの最短距離を記録し、ターゲットをその敵にする
 			auto playerPos = m_pPlayer->GetPos();
-			float minDist = kFloatMax;
+			float minDist = FLT_MAX;
 			for (const auto& enemy : m_pEnemyManager->GetEnemies())
 			{
 				// 死んでいるモーション中なら無視する
@@ -42,9 +42,11 @@ void TargetManager::Update()
 				{
 					minDist = dist;
 					m_pTarget = enemy;
-					m_pPlayer->SetTarget(enemy);
-					m_pCamera->SetTarget(enemy);
 				}
+			}
+			if (minDist > kNoTargetDist * kNoTargetDist)
+			{
+				m_pTarget = nullptr;
 			}
 		}
 	}
@@ -63,6 +65,13 @@ void TargetManager::Update()
 					isFindEnemy = false;
 				}
 			}
+		}
+		// 一定の距離離れていたらnullptrにする
+		Vector3 playerToEnemyVec = m_pPlayer->GetPos() - m_pTarget->GetPos();
+		float squareDist = playerToEnemyVec.SquaredLength();
+		if (squareDist > kNoTargetDist * kNoTargetDist)
+		{
+			m_pTarget = nullptr;
 		}
 		// ターゲットが死んでいたらnullptrにする
 		if (!isFindEnemy)
