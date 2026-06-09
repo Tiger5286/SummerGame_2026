@@ -5,6 +5,7 @@
 #include "../../Camera/CameraStateFree.h"
 #include "../Attack.h"
 #include "Singleton/EffectManager.h"
+#include "BurningWing.h"
 
 #include "PlayerStateIdle.h"
 
@@ -32,12 +33,16 @@ void PlayerStateBurning::Enter(std::weak_ptr<Player> pPlayer)
 	player->m_pCamera.lock()->ChangeState(std::make_shared<CameraStateBurning>());
 	player->RotateToTarget(FLT_MAX);
 	EffectManager::GetInstance().PlayEffect(L"Burning", player->m_pos + Vector3(0, 100, 0));
+
+	m_pWing = std::make_shared<BurningWing>();
+	m_pWing->Init(player->m_pos, player->m_angle);
 }
 
 void PlayerStateBurning::Update()
 {
 	m_frame++;
 	auto player = m_pPlayer.lock();
+	m_pWing->Update();
 
 	if (m_frame > kStartAttackFrame && m_frame < kEndAttackFrame)
 	{
@@ -74,8 +79,11 @@ void PlayerStateBurning::Exit()
 
 void PlayerStateBurning::Draw()
 {
+	m_pWing->Draw();
+#ifdef _DEBUG
 	if (m_pAtk != nullptr)
 	{
 		m_pAtk->Draw();
 	}
+#endif
 }

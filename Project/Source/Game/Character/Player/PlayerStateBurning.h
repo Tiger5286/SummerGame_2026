@@ -2,6 +2,7 @@
 #include "PlayerStateBase.h"
 
 class Attack;
+class BurningWing;
 
 class PlayerStateBurning :
     public PlayerStateBase
@@ -17,4 +18,5 @@ public:
 private:
     int m_frame = 0;
     std::shared_ptr<Attack> m_pAtk = nullptr;
+    std::shared_ptr<BurningWing> m_pWing = nullptr;
 };
