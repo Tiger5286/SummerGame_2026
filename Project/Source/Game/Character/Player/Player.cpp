@@ -11,6 +11,7 @@
 #include "PlayerStateIdle.h"
 #include "PlayerStateDodge.h"
 #include "PlayerStateHit.h"
+#include "PlayerStateBurning.h"
 
 namespace
 {
@@ -164,6 +165,13 @@ void Player::OnHitAttack(int damage)
 	state = nullptr;
 	// 被弾ステートの時は攻撃を食らわない
 	state = std::dynamic_pointer_cast<PlayerStateHit>(m_pState);
+	if (state != nullptr)
+	{
+		return;
+	}
+	state = nullptr;
+	// バーニングの時は攻撃を食らわない
+	state = std::dynamic_pointer_cast<PlayerStateBurning>(m_pState);
 	if (state != nullptr)
 	{
 		return;
