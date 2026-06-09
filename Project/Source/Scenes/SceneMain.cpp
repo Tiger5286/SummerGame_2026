@@ -6,6 +6,8 @@
 #include "../Singleton/ModelManager.h"
 #include "Singleton/EffectManager.h"
 
+#include "SceneManager.h"
+
 #include "Game/Character/Player/Player.h"
 #include "Game/Camera/Camera.h"
 #include "Game/Character/Enemy/Zombie/Zombie.h"
@@ -26,7 +28,8 @@ namespace
 	};
 }
 
-SceneMain::SceneMain()
+SceneMain::SceneMain(SceneManager& sceneManager) :
+	SceneBase(sceneManager)
 {
 }
 
@@ -133,24 +136,4 @@ void SceneMain::Draw()
 	DrawString(0,0,L"SceneMain",0xffffff);
 	DrawFormatString(0, 16, 0xffffff, L"FRAME:%d", m_frameCount);
 #endif
-}
-
-void SceneMain::DrawGrid()
-{
-	// 直線の始点と終点
-	VECTOR startPos;
-	VECTOR endPos;
-
-	for (int z = -300; z <= 300; z += 100)
-	{
-		startPos = VGet(-300.0f, 0.0f, static_cast<float>(z));
-		endPos = VGet(300.0f, 0.0f, static_cast<float>(z));
-		DrawLine3D(startPos, endPos, 0xff0000);
-	}
-	for (int x = -300; x <= 300; x += 100)
-	{
-		startPos = VGet(static_cast<float>(x), 0.0f, -300.0f);
-		endPos = VGet(static_cast<float>(x), 0.0f, 300.0f);
-		DrawLine3D(startPos, endPos, 0x0000ff);
-	}
 }

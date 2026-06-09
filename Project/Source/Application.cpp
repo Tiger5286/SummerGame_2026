@@ -13,6 +13,7 @@
 #include "Singleton/EffectManager.h"
 
 #include "Scenes/SceneMain.h"
+#include "Scenes/SceneManager.h"
 
 Application& Application::GetInstance()
 {
@@ -77,8 +78,8 @@ void Application::Run()
 	auto& effManager = EffectManager::GetInstance();
 
 	// シーンの生成、初期化
-	auto pScene = std::make_shared<SceneMain>();
-	pScene->Init();
+	SceneManager sceneManager;
+	sceneManager.ResetScene(std::make_shared<SceneMain>(sceneManager));
 
 	while (ProcessMessage() != -1 && !m_isRequestExit)
 	{
@@ -90,10 +91,10 @@ void Application::Run()
 		// 当たり判定の更新
 		colManager.Update();
 		// シーンの更新
-		pScene->Update();
+		sceneManager.Update();
 		
 		// シーンの描画
-		pScene->Draw();
+		sceneManager.Draw();
 
 		// escキーで終了
 		if (CheckHitKey(KEY_INPUT_ESCAPE))
@@ -106,7 +107,7 @@ void Application::Run()
 	}
 	
 	// シーンの終了処理
-	pScene->End();
+	sceneManager.End();
 }
 
 void Application::Terminate()

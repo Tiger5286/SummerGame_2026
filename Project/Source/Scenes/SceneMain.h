@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <memory>
+#include "SceneBase.h"
 
 class Player;
 class Camera;
@@ -9,19 +10,16 @@ class TargetManager;
 
 class EnemyManager;
 
-class SceneMain
+class SceneMain : public SceneBase
 {
 public:
-	SceneMain();
+	SceneMain(SceneManager& sceneManager);
 	~SceneMain();
 
-	void Init();
-	void End();
-	void Update();
-	void Draw();
-private:
-	void DrawGrid();
-
+	void Init() override;
+	void End() override;
+	void Update() override;
+	void Draw() override;
 private:
 	int m_frameCount = 0;
 
