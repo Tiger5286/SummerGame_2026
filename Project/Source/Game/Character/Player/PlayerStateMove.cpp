@@ -8,6 +8,7 @@
 #include "PlayerStateDodge.h"
 #include "PlayerStateAttack.h"
 #include "PlayerStateShift.h"
+#include "PlayerStateBurning.h"
 
 namespace
 {
@@ -41,6 +42,12 @@ void PlayerStateMove::Update()
 	if (input.IsTriggerd(player->kAttack))
 	{
 		ChangeState(std::make_shared<PlayerStateAttack>());
+		return;
+	}
+	// バーニングを入力していたらバーニング
+	if (input.IsTriggerd(XINPUT_BUTTON_Y))
+	{
+		ChangeState(std::make_shared<PlayerStateBurning>());
 		return;
 	}
 	// シフトを入力していたらシフト

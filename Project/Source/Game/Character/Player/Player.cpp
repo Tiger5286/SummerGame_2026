@@ -4,9 +4,7 @@
 #include "Utility/Matrix4x4.h"
 #include "Utility/MyLib.h"
 #include "Singleton/Input.h"
-#include "Singleton/ModelManager.h"
 #include "Game/Collider/CapsuleCollider.h"
-#include "Game/Collider/SphereCollider.h"
 #include "Singleton/CollisionManager.h"
 #include "../../Camera/Camera.h"
 
@@ -133,8 +131,6 @@ void Player::Draw()
 		// モデルを描画
 		MV1DrawModel(m_modelHandle);
 	}
-
-	MV1DrawModel(ModelManager::GetInstance().GetModelHandle(L"Wing"));
 
 	// ステートに描画したい内容があったら描画
 	m_pState->Draw();
