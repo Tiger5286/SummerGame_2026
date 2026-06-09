@@ -45,6 +45,7 @@ void SceneMain::Init()
 	// エフェクトのロードと登録
 	auto& effManager = EffectManager::GetInstance();
 	effManager.LoadEffect(L"data/effects/ShiftEffect.efk", L"Shift",100.0f);
+	effManager.LoadEffect(L"data/effects/Distortion.efk", L"Distortion", 30.0f);
 
 	// プレイヤーの生成
 	m_pPlayer = std::make_shared<Player>();

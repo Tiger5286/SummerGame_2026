@@ -65,6 +65,9 @@ void PlayerStateShift::Update()
 		{
 			auto effHandle = EffectManager::GetInstance().PlayEffect(L"Shift", player->m_pos);
 			SetRotationPlayingEffekseer3DEffect(effHandle, 0.0f, player->m_angle, 0.0f);
+
+			EffectManager::GetInstance().PlayEffect(L"Distortion", player->m_pos + Vector3::Up() * 100);
+
 			m_isPlayedEffect = true;
 		}
 	}

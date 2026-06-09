@@ -4,6 +4,7 @@
 #include "../../Camera/CameraStateBurning.h"
 #include "../../Camera/CameraStateFree.h"
 #include "../Attack.h"
+#include "Singleton/EffectManager.h"
 
 #include "PlayerStateIdle.h"
 
@@ -41,6 +42,7 @@ void PlayerStateBurning::Update()
 	{
 		if (m_frame % static_cast<int>(60 * kAttackPerSecond) == 0)
 		{
+			EffectManager::GetInstance().PlayEffect(L"Distortion", player->m_pos + Vector3::Up() * 100);
 			m_pAtk = std::make_shared<Attack>();
 			m_pAtk->SetData(kAttackData);
 			m_pAtk->Init();
