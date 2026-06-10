@@ -8,6 +8,7 @@
 #include "PlayerStateAttack.h"
 #include "PlayerStateShift.h"
 #include "PlayerStateBurning.h"
+#include "PlayerStateSpin.h"
 
 namespace
 {
@@ -35,6 +36,12 @@ void PlayerStateIdle::Update()
 	if (input.IsTriggerd(player->kBurning))
 	{
 		ChangeState(std::make_shared<PlayerStateBurning>());
+		return;
+	}
+	// スピンを入力したいたらスピン
+	if (input.IsTriggerd(player->kSpin))
+	{
+		ChangeState(std::make_shared<PlayerStateSpin>());
 		return;
 	}
 	// 回避を入力していたら回避
