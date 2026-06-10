@@ -8,16 +8,23 @@
 
 namespace
 {
+	// アニメーション名
 	const std::wstring kAnimName = L"Player|SpinAttack";
-
+	// 攻撃を生成するフレーム
 	constexpr int kAttackFrame[3] = { 40,55,70 };
+	// 攻撃を消すフレーム
 	constexpr int kEndAttackFrame = 100;
-
+	// 攻撃の情報
 	const Attack::Data kAttackData = {
 		.colliderRadius = 100.0f,
 		.damage = 70,
 		.hitCharacterType = Character::Type::Enemy
 	};
+	// 攻撃のプレイヤーからのオフセット
+	const Vector3 kAttackOffsetL = Vector3(-130, 100, 0);
+	const Vector3 kAttackOffsetR = Vector3(130, 100, 0);
+	// 翼の位置のプレイヤーからのオフセット
+	const Vector3 kWingOffset = Vector3(0, 100, 0);
 }
 
 void PlayerStateSpin::Enter(std::weak_ptr<Player> pPlayer)
@@ -27,9 +34,7 @@ void PlayerStateSpin::Enter(std::weak_ptr<Player> pPlayer)
 	player->m_anim.ChangeAnim(kAnimName, 0.5f, false);
 
 	m_pWing = std::make_shared<SpinWing>();
-	m_pWing->Init(player->m_pos + Vector3(0,100,0));
-
-	m_angleVel = -0.3f;
+	m_pWing->Init(player->m_pos + kWingOffset);
 }
 
 void PlayerStateSpin::Update()
@@ -37,17 +42,9 @@ void PlayerStateSpin::Update()
 	m_frame++;
 
 	auto player = m_pPlayer.lock();
-
+	// 翼の更新
 	m_pWing->Update();
-
-	m_angleVel += 0.01f;
-	if (m_angleVel > 0.3f)
-	{
-		m_angleVel = 0.3f;
-	}
-	m_angle += m_angleVel;
-
-	// 攻撃の生成
+	// 攻撃の生成	// 指定のフレームになったら攻撃を生成する
 	if (m_frame == kAttackFrame[0] || m_frame == kAttackFrame[1] || m_frame == kAttackFrame[2])
 	{
 		m_pAttackL = std::make_shared<Attack>();
@@ -59,14 +56,14 @@ void PlayerStateSpin::Update()
 	}
 	// 攻撃の更新
 	if (m_pAttackL != nullptr)
-	{
-		Vector3 offset = Vector3(-130, 100, 0) * Matrix4x4::GetRotY(m_angle);
+	{	// 翼の回転に合わせて攻撃も回転させる
+		Vector3 offset = kAttackOffsetL * Matrix4x4::GetRotY(m_pWing->GetAngle());
 		m_pAttackL->SetPos(player->m_pos + offset);
 		m_pAttackL->Update();
 	}
 	if (m_pAttackR != nullptr)
-	{
-		Vector3 offset = Vector3(130, 100, 0) * Matrix4x4::GetRotY(m_angle);
+	{	// 翼の回転に合わせて攻撃も回転させる
+		Vector3 offset = kAttackOffsetR * Matrix4x4::GetRotY(m_pWing->GetAngle());
 		m_pAttackR->SetPos(player->m_pos + offset);
 		m_pAttackR->Update();
 	}
@@ -92,8 +89,10 @@ void PlayerStateSpin::Exit()
 
 void PlayerStateSpin::Draw()
 {
+	// 翼の描画
 	m_pWing->Draw();
 #ifdef _DEBUG
+	// 攻撃の描画(デバッグ用)
 	if (m_pAttackL != nullptr)
 	{
 		m_pAttackL->Draw();
