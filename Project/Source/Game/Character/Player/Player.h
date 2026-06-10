@@ -84,6 +84,8 @@ private:
     const int kAttack = XINPUT_BUTTON_X;
     const int kDodge = XINPUT_BUTTON_RIGHT_SHOULDER;
     const int kShift = XINPUT_BUTTON_B;
+    const int kBurning = XINPUT_BUTTON_LEFT_SHOULDER;
+    const int kSpin = XINPUT_BUTTON_Y;
 
     // プレイヤーのステートクラスがプレイヤーにアクセスできるようにする
     friend PlayerStateBase;
