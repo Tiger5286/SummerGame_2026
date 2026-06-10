@@ -38,7 +38,7 @@ void BurningWing::Update()
 	if (m_frame < kScaleMaxFrame)
 	{
 		float scale = 1.0f / kScaleMaxFrame;
-		m_scale += scale;
+		m_scale += scale * 1.2f;
 		if (m_scale > 1.0f)
 		{
 			m_scale = 1.0f;
@@ -48,7 +48,7 @@ void BurningWing::Update()
 	if (m_frame > kBurningEndFrame)
 	{
 		float scale = 1.0f / (kAnimMaxFrame - kBurningEndFrame);
-		m_scale -= scale;
+		m_scale -= scale * 1.4f;
 		if (m_scale < 0.0f)
 		{
 			m_scale = 0.0f;

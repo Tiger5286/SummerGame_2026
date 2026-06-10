@@ -35,7 +35,7 @@ void PlayerStateBurning::Enter(std::weak_ptr<Player> pPlayer)
 	EffectManager::GetInstance().PlayEffect(L"Burning", player->m_pos + Vector3(0, 100, 0));
 
 	m_pWing = std::make_shared<BurningWing>();
-	m_pWing->Init(player->m_pos + Vector3(0, 125, 0), player->m_angle);
+	m_pWing->Init(player->m_pos + Vector3(0, 100, 0), player->m_angle);
 }
 
 void PlayerStateBurning::Update()
