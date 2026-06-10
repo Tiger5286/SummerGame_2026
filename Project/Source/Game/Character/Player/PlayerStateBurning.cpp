@@ -5,7 +5,7 @@
 #include "../../Camera/CameraStateFree.h"
 #include "../Attack.h"
 #include "Singleton/EffectManager.h"
-#include "BurningWing.h"
+#include "Wing/BurningWing.h"
 
 #include "PlayerStateIdle.h"
 

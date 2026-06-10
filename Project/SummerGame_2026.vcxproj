@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game\Character\Player\PlayerStateSpin.cpp" />
-    <ClCompile Include="Source\Game\Character\Player\BurningWing.cpp" />
+    <ClCompile Include="Source\Game\Character\Player\Wing\BurningWing.cpp" />
     <ClCompile Include="Source\Scenes\SceneTitle.cpp" />
     <ClCompile Include="Source\Scenes\SceneManager.cpp" />
     <ClCompile Include="Source\Scenes\SceneBase.cpp" />
@@ -65,10 +65,11 @@
     <ClCompile Include="Source\Game\Character\Enemy\Zombie\ZombieStateHit.cpp" />
     <ClCompile Include="Source\Game\Character\Enemy\Zombie\ZombieStateDeath.cpp" />
     <ClCompile Include="Source\Game\Managers\TargetManager.cpp" />
+    <ClCompile Include="Source\Game\Character\Player\Wing\SpinWing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game\Character\Player\PlayerStateSpin.h" />
-    <ClInclude Include="Source\Game\Character\Player\BurningWing.h" />
+    <ClInclude Include="Source\Game\Character\Player\Wing\BurningWing.h" />
     <ClInclude Include="Source\Scenes\SceneTitle.h" />
     <ClInclude Include="Source\Scenes\SceneManager.h" />
     <ClInclude Include="Source\Scenes\SceneBase.h" />
@@ -114,6 +115,7 @@
     <ClInclude Include="Source\Game\Character\Enemy\Zombie\ZombieStateHit.h" />
     <ClInclude Include="Source\Game\Character\Enemy\Zombie\ZombieStateDeath.h" />
     <ClInclude Include="Source\Game\Managers\TargetManager.h" />
+    <ClInclude Include="Source\Game\Character\Player\Wing\SpinWing.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
