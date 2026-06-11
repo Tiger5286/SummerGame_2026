@@ -29,6 +29,7 @@ void SpinWing::Init(const Vector3& pos)
 	m_pos = pos;
 	// モデルの複製とアニメーションの初期化
 	m_handle = ModelManager::GetInstance().DuplicateModel(L"Wing");
+	//MV1SetOpacityRate(m_handle, 0.6f);
 	m_anim.Init(m_handle, kAnimName);
 	// 角度の初期化
 	m_angleVel = kDefaultAngleVel;

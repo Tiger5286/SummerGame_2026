@@ -3,6 +3,7 @@
 #include "../Attack.h"
 #include "Wing/SpinWing.h"
 #include "Utility/Matrix4x4.h"
+#include "Singleton/EffectManager.h"
 
 #include "PlayerStateIdle.h"
 
@@ -35,6 +36,8 @@ void PlayerStateSpin::Enter(std::weak_ptr<Player> pPlayer)
 
 	m_pWing = std::make_shared<SpinWing>();
 	m_pWing->Init(player->m_pos + kWingOffset);
+
+	EffectManager::GetInstance().PlayEffect(L"Spin", player->m_pos + kWingOffset);
 }
 
 void PlayerStateSpin::Update()

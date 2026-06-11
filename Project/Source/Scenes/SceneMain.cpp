@@ -44,12 +44,17 @@ namespace
 		{
 			.path = L"data/effects/Burning.efkefc",
 			.name = L"Burning",
-			.scale = 100.0f
+			.scale = 50.0f
 		},
 		{
 			.path = L"data/effects/ShiftEndEffect.efkefc",
 			.name = L"ShiftEnd",
 			.scale = 100.0f
+		},
+		{
+			.path = L"data/effects/SpinEffect.efkefc",
+			.name = L"Spin",
+			.scale = 60.0f
 		}
 	};
 }
