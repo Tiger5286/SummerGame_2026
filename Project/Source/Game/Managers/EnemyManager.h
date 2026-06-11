@@ -11,6 +11,7 @@ class CollisionManager;
 enum class EnemyType
 {
 	Zombie,
+	Vulture,
 
 	Num
 };
@@ -47,10 +48,6 @@ public:
 
 
 private:
-	int m_zombieModelHandle = -1;
-
-	std::shared_ptr<CollisionManager> m_pColManager = nullptr;
-
 	std::list<std::shared_ptr<EnemyBase>> m_enemyList;
 	std::shared_ptr<Player> m_pPlayer = nullptr;
 };

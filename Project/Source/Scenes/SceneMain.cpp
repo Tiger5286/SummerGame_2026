@@ -25,6 +25,7 @@ namespace
 		{ L"Collision", L"data/models/Collision.mv1" },
 		{ L"Player", L"data/models/Player.mv1" },
 		{ L"Zombie", L"data/models/Zombie.mv1" },
+		{ L"Vulture", L"data/models/Vulture.mv1" },
 		{ L"Wing" , L"data/models/Wing.mv1" }
 	};
 	// ロードするエフェクトのファイル名と登録名
@@ -105,6 +106,7 @@ void SceneMain::Init()
 	m_pEnemyManager->AddEnemy(EnemyType::Zombie, Vector3(0, 0, 800));
 	m_pEnemyManager->AddEnemy(EnemyType::Zombie, Vector3(300, 0, 800));
 	m_pEnemyManager->AddEnemy(EnemyType::Zombie, Vector3(-300, 0, 800));
+	m_pEnemyManager->AddEnemy(EnemyType::Vulture, Vector3(0, 300, 800));
 
 	// ターゲットマネージャーの生成
 	m_pTargetManager = std::make_shared<TargetManager>();

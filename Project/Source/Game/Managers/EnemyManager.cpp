@@ -2,6 +2,7 @@
 #include "../Character/Enemy/EnemyBase.h"
 #include <cassert>
 #include "../Character/Enemy/Zombie/Zombie.h"
+#include "../Character/Enemy/Vulture/Vulture.h"
 #include "Singleton/ModelManager.h"
 
 EnemyManager::EnemyManager()
@@ -67,6 +68,15 @@ void EnemyManager::AddEnemy(EnemyType type, const Vector3& pos)
 	case EnemyType::Zombie:
 		pEnemy = std::make_shared<Zombie>();
 		pEnemy->SetHandle(ModelManager::GetInstance().DuplicateModel(L"Zombie"));
+		pEnemy->SetPlayer(m_pPlayer);
+		pEnemy->SetMapHandle(ModelManager::GetInstance().GetModelHandle(L"Collision"));
+		pEnemy->SetPos(pos);
+		pEnemy->Init();
+		m_enemyList.push_back(pEnemy);
+		break;
+	case EnemyType::Vulture:
+		pEnemy = std::make_shared<Vulture>();
+		pEnemy->SetHandle(ModelManager::GetInstance().DuplicateModel(L"Vulture"));
 		pEnemy->SetPlayer(m_pPlayer);
 		pEnemy->SetMapHandle(ModelManager::GetInstance().GetModelHandle(L"Collision"));
 		pEnemy->SetPos(pos);
