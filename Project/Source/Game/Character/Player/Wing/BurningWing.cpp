@@ -35,6 +35,8 @@ void BurningWing::Init(const Vector3& pos, float angle)
 	// アニメーションを初期化
 	m_anim.Init(m_modelHandle, kAnimName);
 	m_anim.ChangeAnim(kAnimName, 0.5f, false);
+
+	//MV1SetOpacityRate(m_modelHandle, 0.99f);
 }
 
 void BurningWing::Update()

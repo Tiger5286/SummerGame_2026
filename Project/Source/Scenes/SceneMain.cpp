@@ -34,6 +34,7 @@ namespace
 		std::wstring name;
 		float scale;
 	};
+
 	const std::vector<EffectData> kEffectFileDatas =
 	{
 		{

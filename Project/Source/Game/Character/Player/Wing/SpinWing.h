@@ -13,6 +13,7 @@ public:
 	void Draw();
 
 	float GetAngle() const { return m_angle; }
+	void SetPos(const Vector3& pos) { m_pos = pos; }
 private:
 	int m_frame = 0;
 	int m_handle = -1;
