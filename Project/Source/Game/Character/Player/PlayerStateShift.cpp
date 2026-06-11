@@ -61,19 +61,29 @@ void PlayerStateShift::Update()
 	if (player->m_anim.GetAnimRate() > kInvisibleStartTimeRate && player->m_anim.GetAnimRate() < kInvisibleEndTimeRate)
 	{
 		player->m_isInvisible = true;
-		if (!m_isPlayedEffect)
+		// シフト開始のエフェクトを一回だけ再生
+		if (!m_isPlayedShiftEffect)
 		{
 			auto effHandle = EffectManager::GetInstance().PlayEffect(L"Shift", player->m_pos);
 			SetRotationPlayingEffekseer3DEffect(effHandle, 0.0f, player->m_angle, 0.0f);
 
-			EffectManager::GetInstance().PlayEffect(L"Distortion", player->m_pos + Vector3::Up() * 100);
-
-			m_isPlayedEffect = true;
+			m_isPlayedShiftEffect = true;
 		}
 	}
 	else
 	{
 		player->m_isInvisible = false;
+	}
+
+	if (player->m_anim.GetAnimRate() > kInvisibleEndTimeRate)
+	{	// シフト終了のエフェクトを一回だけ再生
+		if (!m_isPlayedShiftEndEffect)
+		{
+			auto effHandle = EffectManager::GetInstance().PlayEffect(L"ShiftEnd", player->m_pos);
+			SetRotationPlayingEffekseer3DEffect(effHandle, 0.0f, player->m_angle, 0.0f);
+
+			m_isPlayedShiftEndEffect = true;
+		}
 	}
 
 	// アニメーションが終わったらステート遷移

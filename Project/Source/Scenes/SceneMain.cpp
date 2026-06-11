@@ -27,6 +27,31 @@ namespace
 		{ L"Zombie", L"data/models/Zombie.mv1" },
 		{ L"Wing" , L"data/models/Wing.mv1" }
 	};
+	// ロードするエフェクトのファイル名と登録名
+	struct EffectData
+	{
+		std::wstring path;
+		std::wstring name;
+		float scale;
+	};
+	const std::vector<EffectData> kEffectFileDatas =
+	{
+		{
+			.path = L"data/effects/ShiftEffect.efkefc",
+			.name = L"Shift",
+			.scale = 100.0f
+		},
+		{
+			.path = L"data/effects/Burning.efkefc",
+			.name = L"Burning",
+			.scale = 100.0f
+		},
+		{
+			.path = L"data/effects/ShiftEndEffect.efkefc",
+			.name = L"ShiftEnd",
+			.scale = 100.0f
+		}
+	};
 }
 
 SceneMain::SceneMain(SceneManager& sceneManager) :
@@ -48,9 +73,10 @@ void SceneMain::Init()
 	}
 	// エフェクトのロードと登録
 	auto& effManager = EffectManager::GetInstance();
-	effManager.LoadEffect(L"data/effects/ShiftEffect.efkefc", L"Shift",100.0f);
-	effManager.LoadEffect(L"data/effects/Distortion.efkefc", L"Distortion", 30.0f);
-	effManager.LoadEffect(L"data/effects/Burning.efkefc", L"Burning", 50.0f);
+	for (const auto& effData : kEffectFileDatas)
+	{
+		effManager.LoadEffect(effData.path, effData.name, effData.scale);
+	}
 
 	// プレイヤーの生成
 	m_pPlayer = std::make_shared<Player>();

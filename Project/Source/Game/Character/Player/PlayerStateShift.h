@@ -11,6 +11,7 @@ public:
     void Update() override;
     void Exit() override;
 private:
-    bool m_isPlayedEffect = false;
+    bool m_isPlayedShiftEffect = false;
+    bool m_isPlayedShiftEndEffect = false;
 };
 
