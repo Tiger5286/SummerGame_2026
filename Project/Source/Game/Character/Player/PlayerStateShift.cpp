@@ -16,12 +16,13 @@ namespace
 
 	constexpr float kMoveStartTimeRate = 0.3f;
 	constexpr float kMoveEndTimeRate = 0.8f;
-	constexpr float kMoveSpeed = 20.0f;
+	constexpr int kMoveFrame = 30;
+	constexpr float kNoTargetMoveDist = 500.0f;
 
 	constexpr float kInvisibleStartTimeRate = 0.3f;
 	constexpr float kInvisibleEndTimeRate = 0.9f;
 
-	// 攻撃の前進をやめる距離
+	// 敵との距離がこれになったら止まる
 	constexpr float kStopTrackingDist = 120.0f;
 }
 
@@ -31,6 +32,11 @@ void PlayerStateShift::Enter(std::weak_ptr<Player> pPlayer)
 	auto player = m_pPlayer.lock();
 	player->m_anim.ChangeAnim(kShiftAnimName, 0.5f, false);
 	player->RotateToTarget(kTrackingDist);
+	// プレイヤーからターゲットへのベクトルを計算しておく
+	if (player->m_target != nullptr)
+	{
+		m_playerToTarget = player->m_target->GetPos() - player->m_pos;
+	}
 }
 
 void PlayerStateShift::Update()
@@ -38,18 +44,23 @@ void PlayerStateShift::Update()
 	auto player = m_pPlayer.lock();
 	auto& input = Input::GetInstance();
 
-	// 移動する
+	// 移動時間中なら移動する
 	if (player->m_anim.GetAnimRate() > kMoveStartTimeRate && player->m_anim.GetAnimRate() < kMoveEndTimeRate)
 	{
-		player->m_vel = Vector3::Back() * kMoveSpeed * Matrix4x4::GetRotY(player->m_angle);
-		// 敵との距離が近かったら速度を0にする
+		// ターゲットがいればそっちに移動する
 		if (player->m_target != nullptr)
-		{
+		{	// ターゲットの方向へ移動するベクトル
+			player->m_vel = m_playerToTarget / kMoveFrame;
+			// 距離が近かったら移動を止める
 			float squareDist = (player->GetPos() - player->m_target->GetPos()).SquaredLength();
 			if (squareDist < kStopTrackingDist * kStopTrackingDist)
 			{
 				player->m_vel = Vector3::Zero();
 			}
+		}
+		else	// ターゲットがいなかったら
+		{
+			player->m_vel = Vector3::Back() * kNoTargetMoveDist * Matrix4x4::GetRotY(player->m_angle) / kMoveFrame;
 		}
 	}
 	else

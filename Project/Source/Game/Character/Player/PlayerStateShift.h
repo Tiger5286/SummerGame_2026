@@ -1,5 +1,7 @@
 #pragma once
 #include "PlayerStateBase.h"
+#include "Utility/Vector3.h"
+
 class PlayerStateShift :
     public PlayerStateBase
 {
@@ -13,5 +15,6 @@ public:
 private:
     bool m_isPlayedShiftEffect = false;
     bool m_isPlayedShiftEndEffect = false;
+    Vector3 m_playerToTarget;
 };
 
