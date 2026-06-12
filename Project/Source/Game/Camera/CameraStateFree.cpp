@@ -69,12 +69,14 @@ void CameraStateFree::Update()
 	// ロックオンターゲット
 	if (camera->m_pTarget != nullptr)
 	{
+		// カメラのY軸の向きの補正
 		// カメラの向き、プレイヤー→ターゲットの二つのベクトルを生成
 		Vector3 cameraDir = (camera->m_targetPos - camera->m_pos);
 		cameraDir.y = 0.0f;		// カメラの水平方向のみを見る
 		cameraDir.Normalize();
 		Vector3 playerToTargetVec = camera->m_pTarget->GetPos() - player->GetPos();
 		float playerToTargetDist = playerToTargetVec.SquaredLength();
+		playerToTargetVec.y = 0.0f;	// 水平方向のみを見る
 		// 二つのベクトルの角度の差を求める			// cameraDirは正規化されているので1.0
 		float dif = cameraDir.Dot(playerToTargetVec) / (1.0f * playerToTargetVec.Length());
 		// ターゲットが視界から外れようとしたら、かつ一定の距離が開いていたら
