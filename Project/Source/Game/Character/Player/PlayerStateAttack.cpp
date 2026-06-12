@@ -142,6 +142,8 @@ void PlayerStateAttack::Update()
 		// 速度に適用
 		m_pPlayer.lock()->m_vel = moveVec;
 	}
+	// 落ちないようにする
+	m_pPlayer.lock()->m_vel.y = 0.0f;
 
 	// 当たり判定処理
 	// 当たり判定開始	当たり判定開始の時間、かつまだ当たり判定をonにしていないなら
