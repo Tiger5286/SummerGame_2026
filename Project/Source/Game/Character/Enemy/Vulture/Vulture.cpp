@@ -4,6 +4,8 @@
 #include "Singleton/CollisionManager.h"
 #include "Utility/Matrix4x4.h"
 
+#include "VultureStateIdle.h"
+
 namespace
 {
 	constexpr float kScale = 0.5f;
@@ -11,7 +13,9 @@ namespace
 
 	constexpr float kColliderRadius = 50.0f;
 
-	const std::wstring kIdleAnimName = L"VultureCinereous_Skelmesh|AA_VultureCinereous_Idle";
+	const std::wstring kIdleAnimName = L"VultureCinereous_Skelmesh|VultureCinereous_Flying";
+
+	constexpr int kMaxHP = 200;
 }
 
 void Vulture::Init()
@@ -22,19 +26,19 @@ void Vulture::Init()
 	// 当たり判定の初期化
 	m_pCollider = std::make_shared<SphereCollider>(kColliderRadius);
 	// 当たり判定の登録
-	//CollisionManager::GetInstance().Register(shared_from_this());
+	CollisionManager::GetInstance().Register(shared_from_this());
 
 	// アニメーションの初期化
 	m_anim.Init(m_modelHandle, kIdleAnimName);
 
 	// Hpの初期化
-	//m_hp = kMaxHP;
+	m_hp = kMaxHP;
 
 	// ステートの初期化
-	//m_pState = std::make_shared<ZombieStateIdle>();
-	//m_pState->ChangeState(m_pState);
-	//m_pState->Enter(weak_from_this());
-	//CheckChangeState();
+	m_pState = std::make_shared<VultureStateIdle>();
+	m_pState->ChangeState(m_pState);
+	m_pState->Enter(weak_from_this());
+	CheckChangeState();
 
 	// キャラクタータイプをEnemyにする
 	m_type = Type::Enemy;
@@ -67,4 +71,20 @@ void Vulture::Draw()
 void Vulture::OnHitAttack(int damage)
 {
 
+}
+
+void Vulture::CheckChangeState()
+{
+	auto nextState = m_pState->GetNextState();
+	// 次のステートがある場合は切り替え
+	if (m_pState != nextState)
+	{
+		m_pState->Exit();
+
+		m_pState = nextState;
+
+		m_pState->Enter(weak_from_this());
+
+		m_pState->ChangeState(m_pState);
+	}
 }

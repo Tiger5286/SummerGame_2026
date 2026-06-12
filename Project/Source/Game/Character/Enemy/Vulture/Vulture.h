@@ -2,6 +2,8 @@
 #include "../EnemyBase.h"
 #include "System/Animator.h"
 
+class VultureStateBase;
+
 class Vulture : public EnemyBase, public std::enable_shared_from_this<Vulture>
 {
 public:
@@ -18,6 +20,10 @@ public:
 	void OnHitAttack(int damage) override;
 
 private:
+	void CheckChangeState();
+
+private:
+	std::shared_ptr<VultureStateBase> m_pState = nullptr;
 	Animator m_anim;
 	float m_angle = 0.0f;
 	float m_drawAngle = 0.0f;
