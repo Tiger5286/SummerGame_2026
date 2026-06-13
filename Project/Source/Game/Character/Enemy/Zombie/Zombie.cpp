@@ -67,7 +67,7 @@ void Zombie::Init()
 	CheckChangeState();
 
 	// キャラクタータイプをEnemyにする
-	m_type = Type::Enemy;
+	m_type = MyLib::CharacterType::Enemy;
 }
 
 void Zombie::End()

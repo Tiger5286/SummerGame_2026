@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "../../Utility/Vector3.h"
 #include "DxLib.h"
+#include "Utility/MyLib.h"
 #include <memory>
 
 class ColliderBase;
@@ -16,15 +17,6 @@ public:
 	virtual void Update() abstract;
 	virtual void Draw() abstract;
 
-	enum class Type
-	{
-		None,
-		Player,
-		Enemy,
-
-		Num
-	};
-
 	/// <summary>
 	/// モデルのハンドルを設定する。Initの前に実行すること
 	/// </summary>
@@ -38,7 +30,7 @@ public:
 	// 当たり判定を取得する
 	std::shared_ptr<ColliderBase> GetCollider() const { return m_pCollider; }
 	// キャラクタータイプを取得する
-	Type GetType() const { return m_type; }
+	MyLib::CharacterType GetType() const { return m_type; }
 
 	// IDを取得する
 	const int GetID() const { return m_id; }
@@ -80,7 +72,7 @@ protected:
 	Vector3 m_pos;	// 位置
 	Vector3 m_vel;	// 速度
 
-	Type m_type = Type::None;
+	MyLib::CharacterType m_type = MyLib::CharacterType::None;
 
 	bool m_isGround = false;	// 接地しているかどうか
 

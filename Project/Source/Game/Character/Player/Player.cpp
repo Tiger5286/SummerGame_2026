@@ -60,7 +60,7 @@ void Player::Init()
 	CheckChangeState();
 
 	// キャラクタータイプをプレイヤーにする
-	m_type = Type::Player;
+	m_type = MyLib::CharacterType::Player;
 }
 
 void Player::End()

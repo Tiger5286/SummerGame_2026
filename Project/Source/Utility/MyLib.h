@@ -5,11 +5,20 @@
 
 namespace MyLib
 {
+	enum class CharacterType
+	{
+		None,
+		Player,
+		Enemy,
+
+		Num
+	};
+
 	struct AttackData
 	{
 		float colliderRadius = 0.0f;
 		int damage = 0;
-		Character::Type hitCharacterType = Character::Type::None;
+		CharacterType hitCharacterType = CharacterType::None;
 		bool isKnockDown = false;
 	};
 

@@ -19,7 +19,7 @@ namespace
 	const MyLib::AttackData kAttackData = {
 		.colliderRadius = 100.0f,
 		.damage = 70,
-		.hitCharacterType = Character::Type::Enemy
+		.hitCharacterType = MyLib::CharacterType::Enemy
 	};
 	// 攻撃のプレイヤーからのオフセット
 	const Vector3 kAttackOffsetL = Vector3(-130, 100, 0);

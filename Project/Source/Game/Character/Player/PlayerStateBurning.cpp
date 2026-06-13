@@ -22,7 +22,7 @@ namespace
 	const MyLib::AttackData kAttackData = {
 		1500.0f,
 		30,
-		Character::Type::Enemy
+		MyLib::CharacterType::Enemy
 	};
 }
 

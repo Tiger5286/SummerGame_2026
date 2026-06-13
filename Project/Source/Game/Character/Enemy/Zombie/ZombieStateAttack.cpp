@@ -17,7 +17,7 @@ namespace
 	const MyLib::AttackData kAttackData = {
 		60.0f,
 		20,
-		Character::Type::Player
+		MyLib::CharacterType::Player
 	};
 }
 
