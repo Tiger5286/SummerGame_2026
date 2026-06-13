@@ -11,6 +11,7 @@ void VultureStateIdle::Enter(std::weak_ptr<Vulture> pVulture)
 	m_pVulture = pVulture;
 	auto vulture = m_pVulture.lock();
 	vulture->m_anim.ChangeAnim(kIdleAnimName);
+	vulture->m_isFlying = true;
 }
 
 void VultureStateIdle::Update()

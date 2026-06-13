@@ -61,8 +61,6 @@ void Vulture::Update()
 
 	m_pState->Update();
 
-	m_pos += m_vel;
-
 	// 飛んでいなかったら落下する
 	if (!m_isFlying)
 	{
@@ -72,6 +70,8 @@ void Vulture::Update()
 	{
 		KeepHeight();
 	}
+
+	m_pos += m_vel;
 
 	// 当たり判定の更新
 	m_pCollider->SetPos(m_pos + Vector3::Up() * kColliderRadius);

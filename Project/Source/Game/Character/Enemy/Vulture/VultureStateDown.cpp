@@ -1,9 +1,13 @@
 #include "VultureStateDown.h"
 #include "Vulture.h"
 
+#include "VultureStateIdle.h"
+
 namespace
 {
 	const std::wstring kAnimName = L"VultureCinereous_Skelmesh|AA_VultureCinereous_Idle";
+
+	constexpr int kReturnFrame = 120;
 }
 
 void VultureStateDown::Enter(std::weak_ptr<Vulture> pVulture)
@@ -17,7 +21,18 @@ void VultureStateDown::Enter(std::weak_ptr<Vulture> pVulture)
 
 void VultureStateDown::Update()
 {
-
+	auto vulture = m_pVulture.lock();
+	// 接地してからの時間をカウント
+	if (vulture->m_isGround)
+	{
+		m_groundFrame++;
+	}
+	// 一定時間たったら復帰する
+	if (m_groundFrame > kReturnFrame)
+	{
+		ChangeState(std::make_shared<VultureStateIdle>());
+		return;
+	}
 }
 
 void VultureStateDown::Exit()
