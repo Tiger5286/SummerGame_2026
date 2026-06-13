@@ -5,6 +5,14 @@
 
 namespace MyLib
 {
+	struct AttackData
+	{
+		float colliderRadius = 0.0f;
+		int damage = 0;
+		Character::Type hitCharacterType = Character::Type::None;
+		bool isKnockDown = false;
+	};
+
 	const Vector3 kDefaultDir = Vector3(0, 0, -1);
 
 	/// <summary>

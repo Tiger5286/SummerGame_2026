@@ -2,18 +2,12 @@
 #include "Character.h"
 #include <memory>
 #include <list>
+#include "Utility/MyLib.h"
 
 class Attack :
     public Character, public std::enable_shared_from_this<Attack>
 {
 public:
-    struct Data
-    {
-        float colliderRadius = 0.0f;
-        int damage = 0;
-        Character::Type hitCharacterType = Character::Type::None;
-    };
-
     Attack() = default;
     ~Attack() = default;
 
@@ -28,10 +22,10 @@ public:
     /// 攻撃の情報を設定する。Initの前に実行する。
     /// </summary>
     /// <param name="data"></param>
-    void SetData(Data data) { m_data = data; }
+    void SetData(MyLib::AttackData data) { m_data = data; }
 
 private:
     std::list<int> m_hitIds;
-    Data m_data;
+    MyLib::AttackData m_data;
 };
 

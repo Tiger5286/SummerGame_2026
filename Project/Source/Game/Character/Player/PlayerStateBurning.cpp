@@ -19,7 +19,7 @@ namespace
 	// 1秒あたりの攻撃回数
 	constexpr float kAttackPerSecond = 0.25f;
 	// 攻撃の情報
-	const Attack::Data kAttackData = {
+	const MyLib::AttackData kAttackData = {
 		1500.0f,
 		30,
 		Character::Type::Enemy

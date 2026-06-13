@@ -14,7 +14,7 @@ namespace
 	constexpr float kEndColTimeRate = 0.45f;
 
 	const Vector3 kColliderOffset = Vector3(0, 100, -60);
-	const Attack::Data kAttackData = {
+	const MyLib::AttackData kAttackData = {
 		60.0f,
 		20,
 		Character::Type::Player

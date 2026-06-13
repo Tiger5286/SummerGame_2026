@@ -16,7 +16,7 @@ namespace
 	// 攻撃を消すフレーム
 	constexpr int kEndAttackFrame = 100;
 	// 攻撃の情報
-	const Attack::Data kAttackData = {
+	const MyLib::AttackData kAttackData = {
 		.colliderRadius = 100.0f,
 		.damage = 70,
 		.hitCharacterType = Character::Type::Enemy

@@ -5,6 +5,7 @@
 #include <vector>
 #include "Game/Character/Attack.h"
 #include "Singleton/CollisionManager.h"
+#include "Utility/MyLib.h"
 
 #include "PlayerStateIdle.h"
 #include "PlayerStateDodge.h"
@@ -66,7 +67,7 @@ namespace
 	// 攻撃の位置オフセット
 	const Vector3 kAttackColliderOffset = Vector3(0, 100, -100);
 	// 攻撃のデータ
-	const std::vector<Attack::Data> kAttackData = {
+	const std::vector<MyLib::AttackData> kAttackData = {
 		{
 			100.0f,
 			40,
