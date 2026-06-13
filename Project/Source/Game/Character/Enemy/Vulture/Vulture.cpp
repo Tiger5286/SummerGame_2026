@@ -5,6 +5,7 @@
 #include "Utility/Matrix4x4.h"
 
 #include "VultureStateIdle.h"
+#include "VultureStateHit.h"
 
 namespace
 {
@@ -49,6 +50,10 @@ void Vulture::End()
 
 void Vulture::Update()
 {
+	CheckChangeState();
+
+	m_pState->Update();
+
 	auto rotMtx = Matrix4x4::GetRotY(m_drawAngle);
 	auto transMtx = Matrix4x4::GetTranslate(m_pos);
 	auto mtx = kScaleMatrix * rotMtx * transMtx;
@@ -63,6 +68,8 @@ void Vulture::Draw()
 {
 	MV1DrawModel(m_modelHandle);
 
+	m_pState->Draw();
+
 #ifdef _DEBUG
 	m_pCollider->Draw();
 #endif
@@ -70,7 +77,8 @@ void Vulture::Draw()
 
 void Vulture::OnHitAttack(int damage)
 {
-
+	m_pState->ChangeState(std::make_shared<VultureStateHit>());
+	return;
 }
 
 void Vulture::CheckChangeState()

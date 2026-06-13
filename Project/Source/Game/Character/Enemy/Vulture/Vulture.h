@@ -3,6 +3,8 @@
 #include "System/Animator.h"
 
 class VultureStateBase;
+class VultureStateIdle;
+class VultureStateHit;
 
 class Vulture : public EnemyBase, public std::enable_shared_from_this<Vulture>
 {
@@ -27,5 +29,8 @@ private:
 	Animator m_anim;
 	float m_angle = 0.0f;
 	float m_drawAngle = 0.0f;
+
+	friend VultureStateIdle;
+	friend VultureStateHit;
 };
 

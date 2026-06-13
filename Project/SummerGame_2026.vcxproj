@@ -69,6 +69,7 @@
     <ClCompile Include="Source\Game\Character\Enemy\Vulture\Vulture.cpp" />
     <ClCompile Include="Source\Game\Character\Enemy\Vulture\VultureStateBase.cpp" />
     <ClCompile Include="Source\Game\Character\Enemy\Vulture\VultureStateIdle.cpp" />
+    <ClCompile Include="Source\Game\Character\Enemy\Vulture\VultureStateHit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game\Character\Player\PlayerStateSpin.h" />
@@ -122,6 +123,7 @@
     <ClInclude Include="Source\Game\Character\Enemy\Vulture\Vulture.h" />
     <ClInclude Include="Source\Game\Character\Enemy\Vulture\VultureStateBase.h" />
     <ClInclude Include="Source\Game\Character\Enemy\Vulture\VultureStateIdle.h" />
+    <ClInclude Include="Source\Game\Character\Enemy\Vulture\VultureStateHit.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
