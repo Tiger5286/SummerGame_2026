@@ -89,7 +89,7 @@ void Player::Update()
 
 	// マップとの当たり判定
 	auto collResult = m_pCollider->CheckCollModel(m_mapHandle);
-	CheckHitMap(collResult);
+	CheckHitMapCapsule(collResult);
 	// 当たり判定に使用したメモリを解放
 	MV1CollResultPolyDimTerminate(collResult);
 

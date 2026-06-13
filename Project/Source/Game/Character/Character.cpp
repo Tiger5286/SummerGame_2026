@@ -1,5 +1,6 @@
 ﻿#include "Character.h"
 #include "../Collider/CapsuleCollider.h"
+#include "../Collider/SphereCollider.h"
 #include "Singleton/IDManager.h"
 
 namespace
@@ -43,7 +44,7 @@ void Character::Gravity(float power)
 void Character::OnCollision(Character& other)
 {}
 
-void Character::CheckHitMap(MV1_COLL_RESULT_POLY_DIM coll)
+void Character::CheckHitMapCapsule(MV1_COLL_RESULT_POLY_DIM coll)
 {
 	auto capsule = std::dynamic_pointer_cast<CapsuleCollider>(m_pCollider);
 	for (int i = 0; i < coll.HitNum; i++)
@@ -65,6 +66,35 @@ void Character::CheckHitMap(MV1_COLL_RESULT_POLY_DIM coll)
 			coll.Dim[i].Position[0], coll.Dim[i].Position[1], coll.Dim[i].Position[2]);
 		// 押し戻し量を計算
 		auto pushDist = capsule->GetRadius() - minDist;
+
+		// 法線方向に押し戻す
+		m_pos += normal * pushDist;
+		if (isFloor)
+		{
+			m_vel.y = 0.0f;
+			m_isGround = true;
+		}
+	}
+}
+
+void Character::CheckHitMapSphere(MV1_COLL_RESULT_POLY_DIM coll)
+{
+	auto sphere = std::dynamic_pointer_cast<SphereCollider>(m_pCollider);
+	for (int i = 0; i < coll.HitNum; i++)
+	{
+		// 当たったポリゴンの法線を取得
+		auto normal = Vector3::FromDxLib(coll.Dim[i].Normal);
+
+		// 法線が少しでも上を向いていれば床判定
+		bool isFloor = normal.y > 0.0f;	// true:床 / false:壁
+		// 床判定なら法線を真上向きにする
+		if (isFloor) normal = Vector3::Up();
+
+		// 球の中心とポリゴンの最短距離を取得
+		auto minDist = Triangle_Point_MinLength(coll.Dim[i].Position[0], coll.Dim[i].Position[1], coll.Dim[i].Position[2],
+			sphere->GetPos().ToDxLib());
+		// 押し戻し量を計算
+		auto pushDist = sphere->GetRadius() - minDist;
 
 		// 法線方向に押し戻す
 		m_pos += normal * pushDist;

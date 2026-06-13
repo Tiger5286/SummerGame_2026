@@ -59,10 +59,15 @@ public:
 	/// <param name="other">当たったオブジェクト</param>
 	virtual void OnCollision(Character& other);
 
+	/// <summary>
+	/// 攻撃を喰らったときに呼ばれる関数
+	/// </summary>
+	/// <param name="damage"></param>
 	virtual void OnHitAttack(int damage) {};
 
 	// マップに当たったときの処理
-	void CheckHitMap(MV1_COLL_RESULT_POLY_DIM coll);
+	void CheckHitMapCapsule(MV1_COLL_RESULT_POLY_DIM coll);
+	void CheckHitMapSphere(MV1_COLL_RESULT_POLY_DIM coll);
 
 protected:
 	// モデルのハンドル
