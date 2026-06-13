@@ -106,7 +106,7 @@ void SceneMain::Init()
 	m_pEnemyManager->AddEnemy(EnemyType::Zombie, Vector3(0, 0, 800));
 	m_pEnemyManager->AddEnemy(EnemyType::Zombie, Vector3(300, 0, 800));
 	m_pEnemyManager->AddEnemy(EnemyType::Zombie, Vector3(-300, 0, 800));
-	m_pEnemyManager->AddEnemy(EnemyType::Vulture, Vector3(0, 300, 800));
+	m_pEnemyManager->AddEnemy(EnemyType::Vulture, Vector3(0, 100, 800));
 
 	// ターゲットマネージャーの生成
 	m_pTargetManager = std::make_shared<TargetManager>();

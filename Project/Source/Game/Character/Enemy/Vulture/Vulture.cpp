@@ -3,9 +3,11 @@
 #include "../../../Collider/SphereCollider.h"
 #include "Singleton/CollisionManager.h"
 #include "Utility/Matrix4x4.h"
+#include "Utility/MyLib.h"
 
 #include "VultureStateIdle.h"
 #include "VultureStateHit.h"
+#include "VultureStateDeath.h"
 
 namespace
 {
@@ -17,6 +19,8 @@ namespace
 	const std::wstring kIdleAnimName = L"VultureCinereous_Skelmesh|VultureCinereous_Flying";
 
 	constexpr int kMaxHP = 200;
+
+	constexpr float kRiseSpeed = 2.0f;
 }
 
 void Vulture::Init()
@@ -54,13 +58,38 @@ void Vulture::Update()
 
 	m_pState->Update();
 
+	m_pos += m_vel;
+
+	// 飛んでいなかったら落下する
+	if (!m_isFlying)
+	{
+		Gravity();
+	}
+	else	// 飛んでいたら高度を維持する
+	{
+		KeepHeight();
+	}
+
+	// 当たり判定の更新
+	m_pCollider->SetPos(m_pos + Vector3::Up() * kColliderRadius);
+
+	// マップとの当たり判定
+	auto collResult = m_pCollider->CheckCollModel(m_mapHandle);
+	CheckHitMap(collResult);
+	// 当たり判定に使用したメモリを解放
+	MV1CollResultPolyDimTerminate(collResult);
+
+	// モデルの回転角度を更新
+	float diff = MyLib::GetAngleDif(m_angle, m_drawAngle);
+	m_drawAngle += diff * 0.1f;
+
+	// 行列を生成してモデルに適用
 	auto rotMtx = Matrix4x4::GetRotY(m_drawAngle);
 	auto transMtx = Matrix4x4::GetTranslate(m_pos);
 	auto mtx = kScaleMatrix * rotMtx * transMtx;
 	MV1SetMatrix(m_modelHandle, mtx.ToDxLib());
 
-	m_pCollider->SetPos(m_pos + Vector3::Up() * kColliderRadius);
-
+	// アニメーションの更新
 	m_anim.Update();
 }
 
@@ -77,8 +106,25 @@ void Vulture::Draw()
 
 void Vulture::OnHitAttack(int damage)
 {
-	m_pState->ChangeState(std::make_shared<VultureStateHit>());
-	return;
+	// 死亡ステートなら被弾しない
+	std::shared_ptr<VultureStateBase> state = nullptr;
+	state = std::dynamic_pointer_cast<VultureStateDeath>(m_pState);
+	if (state != nullptr)
+	{
+		return;
+	}
+	state = nullptr;
+
+	m_hp -= damage;
+	// hpがなくなったら死亡
+	if (m_hp <= 0)
+	{
+		m_pState->ChangeState(std::make_shared<VultureStateDeath>());
+	}
+	else	// hpがあるなら被弾
+	{
+		m_pState->ChangeState(std::make_shared<VultureStateHit>());
+	}
 }
 
 void Vulture::CheckChangeState()
@@ -94,5 +140,19 @@ void Vulture::CheckChangeState()
 		m_pState->Enter(weak_from_this());
 
 		m_pState->ChangeState(m_pState);
+	}
+}
+
+void Vulture::KeepHeight()
+{
+	Vector3 end = m_pos - Vector3::Up() * m_flyHeight;
+	auto result = MV1CollCheck_Line(m_mapHandle, -1, m_pos.ToDxLib(), end.ToDxLib());
+	if (result.HitFlag)
+	{
+		m_vel.y = kRiseSpeed;
+	}
+	else
+	{
+		m_vel.y = 0.0f;
 	}
 }

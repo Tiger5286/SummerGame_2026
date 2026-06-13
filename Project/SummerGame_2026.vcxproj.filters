@@ -168,6 +168,9 @@
     <ClCompile Include="Source\Game\Character\Enemy\Vulture\VultureStateHit.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\Character\Enemy\Vulture\VultureStateDeath.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Scenes\SceneMain.h">
@@ -324,6 +327,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Character\Enemy\Vulture\VultureStateHit.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Character\Enemy\Vulture\VultureStateDeath.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

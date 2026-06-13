@@ -5,6 +5,7 @@
 class VultureStateBase;
 class VultureStateIdle;
 class VultureStateHit;
+class VultureStateDeath;
 
 class Vulture : public EnemyBase, public std::enable_shared_from_this<Vulture>
 {
@@ -24,13 +25,19 @@ public:
 private:
 	void CheckChangeState();
 
+	void KeepHeight();
+
 private:
 	std::shared_ptr<VultureStateBase> m_pState = nullptr;
 	Animator m_anim;
 	float m_angle = 0.0f;
 	float m_drawAngle = 0.0f;
 
+	bool m_isFlying = true;
+	float m_flyHeight = 300.0f;
+
 	friend VultureStateIdle;
 	friend VultureStateHit;
+	friend VultureStateDeath;
 };
 
