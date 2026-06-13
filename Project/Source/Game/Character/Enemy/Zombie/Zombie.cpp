@@ -35,7 +35,7 @@ namespace
 	const Vector3 kDefaultDir = Vector3(0, 0, -1);
 
 	// 最大Hp
-	constexpr int kMaxHP = 300;
+	constexpr int kMaxHP = 400;
 }
 
 Zombie::Zombie()

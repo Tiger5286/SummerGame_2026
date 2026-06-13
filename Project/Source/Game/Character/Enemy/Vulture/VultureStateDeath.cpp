@@ -11,6 +11,8 @@ void VultureStateDeath::Enter(std::weak_ptr<Vulture> pVulture)
 	m_pVulture = pVulture;
 	auto vulture = m_pVulture.lock();
 	vulture->m_anim.ChangeAnim(kAnimName, 0.5f, false);
+	vulture->m_isDying = true;
+	vulture->m_isFlying = false;
 }
 
 void VultureStateDeath::Update()

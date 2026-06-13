@@ -7,6 +7,7 @@
 
 #include "VultureStateIdle.h"
 #include "VultureStateHit.h"
+#include "VultureStateDown.h"
 #include "VultureStateDeath.h"
 
 namespace
@@ -18,7 +19,7 @@ namespace
 
 	const std::wstring kIdleAnimName = L"VultureCinereous_Skelmesh|VultureCinereous_Flying";
 
-	constexpr int kMaxHP = 200;
+	constexpr int kMaxHP = 300;
 
 	constexpr float kRiseSpeed = 2.0f;
 }
@@ -38,6 +39,8 @@ void Vulture::Init()
 
 	// Hpの初期化
 	m_hp = kMaxHP;
+	// 飛んでいるので接地フラグを切る
+	m_isGround = false;
 
 	// ステートの初期化
 	m_pState = std::make_shared<VultureStateIdle>();
@@ -123,7 +126,14 @@ void Vulture::OnHitAttack(const MyLib::AttackData& atkData)
 	}
 	else	// hpがあるなら被弾
 	{
-		m_pState->ChangeState(std::make_shared<VultureStateHit>());
+		if (atkData.isKnockDown)
+		{	// ノックダウン属性の攻撃ならダウンする
+			m_pState->ChangeState(std::make_shared<VultureStateDown>());
+		}
+		else	// そうでなければ普通に被弾する
+		{
+			m_pState->ChangeState(std::make_shared<VultureStateHit>());
+		}
 	}
 }
 

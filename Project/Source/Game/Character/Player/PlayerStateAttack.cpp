@@ -71,17 +71,18 @@ namespace
 		{
 			100.0f,
 			40,
-			MyLib::CharacterType::Enemy
+			MyLib::CharacterType::Enemy,
 		},
 		{
 			100.0f,
 			60,
-			MyLib::CharacterType::Enemy
+			MyLib::CharacterType::Enemy,
 		},
 		{
 			100.0f,
 			100,
-			MyLib::CharacterType::Enemy
+			MyLib::CharacterType::Enemy,
+			true
 		},
 	};
 }
