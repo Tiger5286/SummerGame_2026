@@ -42,7 +42,7 @@ public:
     // 自身の向きを表すベクトルを取得する
     Vector3 GetDir() const;
 
-    void OnHitAttack(int damage) override;
+    void OnHitAttack(const MyLib::AttackData& atkData) override;
 
 private:
 

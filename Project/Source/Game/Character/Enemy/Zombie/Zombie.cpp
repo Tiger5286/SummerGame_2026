@@ -139,7 +139,7 @@ void Zombie::OnCollision(Character& other)
 {
 }
 
-void Zombie::OnHitAttack(int damage)
+void Zombie::OnHitAttack(const MyLib::AttackData& atkData)
 {
 	// 死亡ステートなら被弾しない
 	std::shared_ptr<ZombieStateBase> state = nullptr;
@@ -150,7 +150,7 @@ void Zombie::OnHitAttack(int damage)
 	}
 	state = nullptr;
 
-	m_hp -= damage;
+	m_hp -= atkData.damage;
 	// hpがなくなったら死亡
 	if (m_hp <= 0)
 	{

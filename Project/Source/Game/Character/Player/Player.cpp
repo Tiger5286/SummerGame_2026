@@ -153,7 +153,7 @@ Vector3 Player::GetDir() const
 	return kDefaultDir * Matrix4x4::GetRotY(m_angle);
 }
 
-void Player::OnHitAttack(int damage)
+void Player::OnHitAttack(const MyLib::AttackData& atkData)
 {
 	// 回避ステートのときは攻撃を食らわない
 	std::shared_ptr<PlayerStateBase> state = nullptr;
@@ -178,7 +178,7 @@ void Player::OnHitAttack(int damage)
 	}
 	state = nullptr;
 
-	m_hp -= damage;
+	m_hp -= atkData.damage;
 	m_pState->ChangeState(std::make_shared<PlayerStateHit>());
 	//printfDx(L"プレイヤーが攻撃を食らった！HP:%d\n",m_hp);
 }

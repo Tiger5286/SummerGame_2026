@@ -55,7 +55,7 @@ public:
 	/// 攻撃を喰らったときに呼ばれる関数
 	/// </summary>
 	/// <param name="damage"></param>
-	virtual void OnHitAttack(int damage) {};
+	virtual void OnHitAttack(const MyLib::AttackData& atkData) {};
 
 	// マップに当たったときの処理
 	void CheckHitMapCapsule(MV1_COLL_RESULT_POLY_DIM coll);

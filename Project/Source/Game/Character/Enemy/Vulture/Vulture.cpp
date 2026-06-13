@@ -104,7 +104,7 @@ void Vulture::Draw()
 #endif
 }
 
-void Vulture::OnHitAttack(int damage)
+void Vulture::OnHitAttack(const MyLib::AttackData& atkData)
 {
 	// 死亡ステートなら被弾しない
 	std::shared_ptr<VultureStateBase> state = nullptr;
@@ -115,7 +115,7 @@ void Vulture::OnHitAttack(int damage)
 	}
 	state = nullptr;
 
-	m_hp -= damage;
+	m_hp -= atkData.damage;
 	// hpがなくなったら死亡
 	if (m_hp <= 0)
 	{
