@@ -27,5 +27,8 @@ public:
 	int GetHandle(const std::wstring& key);
 
 private:
+	void LoadMV1DefaultShader();
+
+private:
 	std::map<std::wstring, int>  m_shaderHandles;
 };

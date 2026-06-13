@@ -1,6 +1,8 @@
 #include "ShaderManager.h"
 #include "DxLib.h"
 #include <cassert>
+#include <d3dcompiler.h>
+#include <vector>
 
 ShaderManager& ShaderManager::GetInstance()
 {
@@ -11,6 +13,7 @@ ShaderManager& ShaderManager::GetInstance()
 ShaderManager::~ShaderManager()
 {
     InitShader();
+    LoadMV1DefaultShader();
 }
 
 void ShaderManager::Init()
@@ -48,4 +51,37 @@ void ShaderManager::LoadShader(const std::wstring & fileName, const std::wstring
 int ShaderManager::GetHandle(const std::wstring & key)
 {
     return m_shaderHandles[key];
+}
+
+void ShaderManager::LoadMV1DefaultShader()
+{
+    // シェーダーをコンパイルするのに必要なマクロを準備
+    std::vector<D3D_SHADER_MACRO> macros = {
+        {"SKINMESH",""},
+        {nullptr,nullptr}
+    };
+
+    ID3DBlob* pVSShader = nullptr;
+    ID3DBlob* pMsg = nullptr;
+    HRESULT result = D3DCompileFromFile(L"Shader/Default/MV1VertexShader.hlsl",
+        macros.data(),
+        D3D_COMPILE_STANDARD_FILE_INCLUDE,
+        "main",
+        "vs_5_0",
+        0, 0, &pVSShader, &pMsg);
+
+    //失敗したらエラー出力
+    if (result != S_OK) {
+        auto size = pMsg->GetBufferSize();
+        std::string strMsg;
+        strMsg.resize(size);
+        std::copy_n((char*)pMsg->GetBufferPointer(), size, strMsg.data());
+        OutputDebugStringA(strMsg.c_str());
+        assert(0);
+    }
+
+    int handle = LoadVertexShaderFromMem(pVSShader->GetBufferPointer(), pVSShader->GetBufferSize());
+    assert(handle != -1);
+
+    m_shaderHandles[L"DefaultVS"] = handle;
 }
