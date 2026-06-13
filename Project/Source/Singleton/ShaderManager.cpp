@@ -1,4 +1,4 @@
-#include "ShaderManager.h"
+﻿#include "ShaderManager.h"
 #include "DxLib.h"
 #include <cassert>
 #include <d3dcompiler.h>
@@ -13,12 +13,12 @@ ShaderManager& ShaderManager::GetInstance()
 ShaderManager::~ShaderManager()
 {
     InitShader();
-    LoadMV1DefaultShader();
 }
 
 void ShaderManager::Init()
 {
     InitShader();
+    LoadMV1DefaultShader();
 }
 
 void ShaderManager::LoadShader(const std::wstring & fileName, const std::wstring & key, ShaderType type)
@@ -35,11 +35,14 @@ void ShaderManager::LoadShader(const std::wstring & fileName, const std::wstring
     {
     case ShaderType::Pixel:
         handle = LoadPixelShader(fileName.c_str());
+        m_shaderHandles[key] = handle;
         assert(handle != -1 && "シェーダーが正しくロードできませんでした");
         break;
         
     case ShaderType::Vertex:
         handle = LoadVertexShader(fileName.c_str());
+        m_shaderHandles[key] = handle;
+
         assert(handle != -1 && "シェーダーが正しくロードできませんでした");
         break;
 
@@ -63,7 +66,7 @@ void ShaderManager::LoadMV1DefaultShader()
 
     ID3DBlob* pVSShader = nullptr;
     ID3DBlob* pMsg = nullptr;
-    HRESULT result = D3DCompileFromFile(L"Shader/Default/MV1VertexShader.hlsl",
+    HRESULT result = D3DCompileFromFile(L"Source/Shader/Default/MV1VertexShader.hlsl",
         macros.data(),
         D3D_COMPILE_STANDARD_FILE_INCLUDE,
         "main",

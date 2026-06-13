@@ -6,6 +6,7 @@
 #include "Singleton/Input.h"
 #include "Game/Collider/CapsuleCollider.h"
 #include "Singleton/CollisionManager.h"
+#include "Singleton/ShaderManager.h"
 #include "../../Camera/Camera.h"
 
 #include "PlayerStateIdle.h"
@@ -61,6 +62,10 @@ void Player::Init()
 
 	// キャラクタータイプをプレイヤーにする
 	m_type = Type::Player;
+
+	// 定数バッファを作成
+	m_cBuffRimLightH = CreateShaderConstantBuffer(sizeof(CBufferRimLightPS));
+	m_pCBuffRimLight = static_cast<CBufferRimLightPS*>(GetBufferShaderConstantBuffer(m_cBuffRimLightH));
 }
 
 void Player::End()
@@ -129,8 +134,17 @@ void Player::Draw()
 	// 透明フラグがoffのときのみ描画
 	if (!m_isInvisible)
 	{
+		m_pCBuffRimLight->cameraPos = m_pCamera.lock()->GetPos();
+		UpdateShaderConstantBuffer(m_cBuffRimLightH);
+		SetShaderConstantBuffer(m_cBuffRimLightH, DX_SHADERTYPE_PIXEL, 4);
+
 		// モデルを描画
-		MV1DrawModel(m_modelHandle);
+		auto& shaderManager = ShaderManager::GetInstance();
+		int vsH = shaderManager.GetHandle(L"DefaultVS");
+		int psH = shaderManager.GetHandle(L"RimLightPS");
+		MyLib::MV1DrawModelToShader(m_modelHandle, vsH, psH);
+
+		//MV1DrawModel(m_modelHandle);
 	}
 
 	// ステートに描画したい内容があったら描画

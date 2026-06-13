@@ -11,6 +11,7 @@
 #include "Singleton/IDManager.h"
 #include "Singleton/CollisionManager.h"
 #include "Singleton/EffectManager.h"
+#include "Singleton/ShaderManager.h"
 
 #include "Scenes/SceneTitle.h"
 #include "Scenes/SceneManager.h"
@@ -76,6 +77,8 @@ void Application::Run()
 	auto& idManager = IDManager::GetInstance();
 	auto& colManager = CollisionManager::GetInstance();
 	auto& effManager = EffectManager::GetInstance();
+	auto& shaderManager = ShaderManager::GetInstance();
+	shaderManager.Init();
 
 	// シーンの生成、初期化
 	SceneManager sceneManager;

@@ -66,4 +66,23 @@ namespace MyLib
 		while (diff < -DX_PI_F) diff += DX_TWO_PI_F;
 		return diff;
 	}
+
+	/// <summary>
+	/// 自作のシェーダーを使用してモデルを描画する
+	/// </summary>
+	/// <param name="modelHandle">モデルのハンドル</param>
+	/// <param name="vsH">頂点シェーダーのハンドル</param>
+	/// <param name="psH">ピクセルシェーダーのハンドル</param>
+	inline void MV1DrawModelToShader(int modelHandle, int vsH, int psH)
+	{
+		MV1SetUseOrigShader(true);
+		SetUseVertexShader(vsH);
+		SetUsePixelShader(psH);
+
+		MV1DrawModel(modelHandle);
+
+		MV1SetUseOrigShader(false);
+		SetUseVertexShader(-1);
+		SetUsePixelShader(-1);
+	}
 }

@@ -5,6 +5,7 @@
 
 #include "../Singleton/ModelManager.h"
 #include "Singleton/EffectManager.h"
+#include "Singleton/ShaderManager.h"
 
 #include "SceneManager.h"
 
@@ -84,6 +85,9 @@ void SceneMain::Init()
 	{
 		effManager.LoadEffect(effData.path, effData.name, effData.scale);
 	}
+	// シェーダーのロード
+	auto& shaderManager = ShaderManager::GetInstance();
+	shaderManager.LoadShader(L"ModelShaderPS.pso", L"RimLightPS", ShaderManager::ShaderType::Pixel);
 
 	// プレイヤーの生成
 	m_pPlayer = std::make_shared<Player>();

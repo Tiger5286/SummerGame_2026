@@ -61,6 +61,12 @@ private:
     /// </summary>
     void CheckChangeState();
 
+    struct CBufferRimLightPS
+    {
+        Vector3 cameraPos;
+        float dummy;
+    };
+
 private:
 	Animator m_anim;    // アニメーションクラス
 	int m_mapHandle = -1;	// マップのモデルのハンドル
@@ -79,6 +85,9 @@ private:
     float m_angle = 0.0f;
 	// 描画用の回転角度(Lerpで滑らかに回転する)
 	float m_drawAngle = 0.0f;
+
+    int m_cBuffRimLightH = -1;
+    CBufferRimLightPS* m_pCBuffRimLight = nullptr;
 
     // ボタン配置
     const int kJump = XINPUT_BUTTON_A;

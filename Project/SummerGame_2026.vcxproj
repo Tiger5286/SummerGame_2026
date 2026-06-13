@@ -44,6 +44,7 @@
     <ClCompile Include="Source\Game\Character\Enemy\EnemyBase.cpp" />
     <ClCompile Include="Source\Game\Collider\CapsuleCollider.cpp" />
     <ClCompile Include="Source\Singleton\ModelManager.cpp" />
+    <ClCompile Include="Source\Singleton\ShaderManager.cpp" />
     <ClCompile Include="Source\System\Animator.cpp" />
     <ClCompile Include="Source\Game\Character\Player\Player.cpp" />
     <ClCompile Include="Source\Game\Collider\ColliderBase.cpp" />
@@ -97,6 +98,7 @@
     <ClInclude Include="Source\Game\Character\Enemy\EnemyBase.h" />
     <ClInclude Include="Source\Game\Collider\CapsuleCollider.h" />
     <ClInclude Include="Source\Singleton\ModelManager.h" />
+    <ClInclude Include="Source\Singleton\ShaderManager.h" />
     <ClInclude Include="Source\System\Animator.h" />
     <ClInclude Include="Source\Game\Character\Player\Player.h" />
     <ClInclude Include="Source\Game\Collider\ColliderBase.h" />
@@ -124,6 +126,16 @@
     <ClInclude Include="Source\Game\Character\Enemy\Vulture\VultureStateBase.h" />
     <ClInclude Include="Source\Game\Character\Enemy\Vulture\VultureStateIdle.h" />
     <ClInclude Include="Source\Game\Character\Enemy\Vulture\VultureStateHit.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Source\Shader\ModelShaderPS.hlsl">
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).pso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)%(Filename).pso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
