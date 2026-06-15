@@ -60,7 +60,9 @@ void ShaderManager::LoadMV1DefaultShader()
 {
     // シェーダーをコンパイルするのに必要なマクロを準備
     std::vector<D3D_SHADER_MACRO> macros = {
+        {"BUMPMAP",""},
         {"SKINMESH",""},
+        {"BONE8",""},
         {nullptr,nullptr}
     };
 

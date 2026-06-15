@@ -26,12 +26,13 @@ struct PSOutput
 
 PSOutput main(PSInput input)
 {
+    //return float4(0.0f, 1.0f, 0.0f, 1.0f);
     PSOutput output;
-    //output.col = float4(1.0, 1.0, 1.0, 1.0);
-    //output.bloom = float4(0.0, 0.0, 0.0, 0.0);
-    //return output;
+    output.col = float4(input.color);
+    output.bloom = float4(0.0, 0.0, 0.0, 0.0);
+    return output;
     
-    //float3 cameraPos = float3(0, 20, -50);
+    float3 cameraPos = float3(0, 20, -50);
     float3 light = normalize(float3(1, -1, 1));
     const float ambient = 0.2;
     float3 ray = normalize(input.pos.xyz - cameraPos);
