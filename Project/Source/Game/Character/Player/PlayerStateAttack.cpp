@@ -144,8 +144,11 @@ void PlayerStateAttack::Update()
 		// 速度に適用
 		m_pPlayer.lock()->m_vel = moveVec;
 	}
-	// 落ちないようにする
-	m_pPlayer.lock()->m_vel.y = 0.0f;
+	// 攻撃中は落下速度を低減
+	if (player->m_vel.y < -2.0f)
+	{
+		player->m_vel.y = -2.0f;
+	}
 
 	// 当たり判定処理
 	// 当たり判定開始	当たり判定開始の時間、かつまだ当たり判定をonにしていないなら
@@ -182,6 +185,11 @@ void PlayerStateAttack::Update()
 		m_isCanTransNextCombo = false;
 		m_isOnCollider = false;
 		m_isOffCollider = false;
+		// コンボ時接地していなかったらちょっと上昇する
+		if (!player->m_isGround)
+		{
+			player->m_vel.y = 5.0f;
+		}
 	}
 }
 
