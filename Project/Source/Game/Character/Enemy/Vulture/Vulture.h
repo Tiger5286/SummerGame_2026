@@ -7,6 +7,7 @@ class VultureStateIdle;
 class VultureStateHit;
 class VultureStateDeath;
 class VultureStateDown;
+class VultureStateAttack;
 
 class Vulture : public EnemyBase, public std::enable_shared_from_this<Vulture>
 {
@@ -41,5 +42,6 @@ private:
 	friend VultureStateHit;
 	friend VultureStateDeath;
 	friend VultureStateDown;
+	friend VultureStateAttack;
 };
 

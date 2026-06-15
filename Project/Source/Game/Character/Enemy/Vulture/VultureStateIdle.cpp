@@ -1,6 +1,8 @@
 #include "VultureStateIdle.h"
 #include "Vulture.h"
 
+#include "VultureStateAttack.h"
+
 namespace
 {
 	const std::wstring kIdleAnimName = L"VultureCinereous_Skelmesh|VultureCinereous_Flying";
@@ -16,7 +18,11 @@ void VultureStateIdle::Enter(std::weak_ptr<Vulture> pVulture)
 
 void VultureStateIdle::Update()
 {
-
+	if (CheckHitKey(KEY_INPUT_C))
+	{
+		ChangeState(std::make_shared<VultureStateAttack>());
+		return;
+	}
 }
 
 void VultureStateIdle::Exit()

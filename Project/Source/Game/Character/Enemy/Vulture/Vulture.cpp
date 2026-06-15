@@ -70,6 +70,7 @@ void Vulture::Update()
 	{
 		KeepHeight();
 	}
+	Resistance();
 
 	m_pos += m_vel;
 
@@ -104,6 +105,9 @@ void Vulture::Draw()
 
 #ifdef _DEBUG
 	m_pCollider->Draw();
+
+	Vector3 end = m_pos - Vector3::Up() * m_flyHeight;
+	DrawLine3D(m_pos.ToDxLib(), end.ToDxLib(), 0xffff00);
 #endif
 }
 
