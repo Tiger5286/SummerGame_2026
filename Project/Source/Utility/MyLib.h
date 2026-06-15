@@ -2,6 +2,7 @@
 #include "DxLib.h"
 #include "Vector3.h"
 #include "Matrix4x4.h"
+#include <cmath>
 
 namespace MyLib
 {
@@ -82,5 +83,15 @@ namespace MyLib
 		while (diff > DX_PI_F) diff -= DX_TWO_PI_F;
 		while (diff < -DX_PI_F) diff += DX_TWO_PI_F;
 		return diff;
+	}
+
+	inline float GetAngleVec(float y,float x)
+	{
+		return atan2f(y, -x) + DX_PI_F / 2;
+	}
+
+	inline Vector3 GetVecAngle(float angle)
+	{
+		return kDefaultDir * Matrix4x4::GetRotY(angle);
 	}
 }
