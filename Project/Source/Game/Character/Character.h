@@ -71,6 +71,8 @@ protected:
 
 	Vector3 m_pos;	// 位置
 	Vector3 m_vel;	// 速度
+	float m_angle = 0.0f;
+	float m_drawAngle = 0.0f;
 
 	MyLib::CharacterType m_type = MyLib::CharacterType::None;
 

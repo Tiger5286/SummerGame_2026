@@ -27,7 +27,8 @@ namespace
 		{ L"Wing" , L"data/models/Wing.mv1" },
 		{ L"Zombie", L"data/models/Zombie.mv1" },
 		{ L"Vulture", L"data/models/Vulture.mv1" },
-		{L"General",L"data/models/General.mv1"}
+		{L"General",L"data/models/General.mv1"},
+		{L"GeneralSword",L"data/models/sword.mv1"}
 	};
 	// ロードするエフェクトのファイル名と登録名
 	struct EffectData

@@ -75,11 +75,6 @@ private:
     // 見えなくなるかどうか
     bool m_isInvisible = false;
 
-	// 自身のモデルの回転角度
-    float m_angle = 0.0f;
-	// 描画用の回転角度(Lerpで滑らかに回転する)
-	float m_drawAngle = 0.0f;
-
     // ボタン配置
     const int kJump = XINPUT_BUTTON_A;
     const int kAttack = XINPUT_BUTTON_X;

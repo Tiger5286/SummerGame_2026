@@ -49,8 +49,6 @@ private:
 
 private:
 	Animator m_anim;
-	float m_angle = 0.0f;
-	float m_drawAngle = 0.0f;
 
 	bool m_isFighting = false;
 

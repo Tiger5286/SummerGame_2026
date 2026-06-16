@@ -32,8 +32,6 @@ private:
 private:
 	std::shared_ptr<VultureStateBase> m_pState = nullptr;
 	Animator m_anim;
-	float m_angle = 0.0f;
-	float m_drawAngle = 0.0f;
 
 	bool m_isFlying = true;
 	float m_flyHeight = 300.0f;
