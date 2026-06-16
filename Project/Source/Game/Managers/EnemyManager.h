@@ -12,6 +12,7 @@ enum class EnemyType
 {
 	Zombie,
 	Vulture,
+	General,
 
 	Num
 };

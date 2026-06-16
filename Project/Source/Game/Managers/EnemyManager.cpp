@@ -1,9 +1,11 @@
 ﻿#include "EnemyManager.h"
 #include "../Character/Enemy/EnemyBase.h"
 #include <cassert>
+#include "Singleton/ModelManager.h"
+
 #include "../Character/Enemy/Zombie/Zombie.h"
 #include "../Character/Enemy/Vulture/Vulture.h"
-#include "Singleton/ModelManager.h"
+#include "../Character/Enemy/General/General.h"
 
 EnemyManager::EnemyManager()
 {}
@@ -83,6 +85,16 @@ void EnemyManager::AddEnemy(EnemyType type, const Vector3& pos)
 		pEnemy->Init();
 		m_enemyList.push_back(pEnemy);
 		break;
+	case EnemyType::General:
+		pEnemy = std::make_shared<General>();
+		pEnemy->SetHandle(ModelManager::GetInstance().DuplicateModel(L"General"));
+		pEnemy->SetPlayer(m_pPlayer);
+		pEnemy->SetMapHandle(ModelManager::GetInstance().GetModelHandle(L"Collision"));
+		pEnemy->SetPos(pos);
+		pEnemy->Init();
+		m_enemyList.push_back(pEnemy);
+		break;
+
 	default:
 		assert(false && "EnemyManager::AddEnemy() : 未知のEnemyTypeが渡されました");
 	}

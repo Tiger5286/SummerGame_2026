@@ -24,9 +24,10 @@ namespace
 		{ L"Stage", L"data/models/Stage.mv1" },
 		{ L"Collision", L"data/models/Collision.mv1" },
 		{ L"Player", L"data/models/Player.mv1" },
+		{ L"Wing" , L"data/models/Wing.mv1" },
 		{ L"Zombie", L"data/models/Zombie.mv1" },
 		{ L"Vulture", L"data/models/Vulture.mv1" },
-		{ L"Wing" , L"data/models/Wing.mv1" }
+		{L"General",L"data/models/General.mv1"}
 	};
 	// ロードするエフェクトのファイル名と登録名
 	struct EffectData
@@ -103,7 +104,7 @@ void SceneMain::Init()
 	m_pEnemyManager->Init(m_pPlayer);
 
 	// 仮の敵を生成
-	m_pEnemyManager->AddEnemy(EnemyType::Zombie, Vector3(0, 0, 800));
+	m_pEnemyManager->AddEnemy(EnemyType::General, Vector3(0, 0, 800));
 	m_pEnemyManager->AddEnemy(EnemyType::Zombie, Vector3(300, 0, 800));
 	m_pEnemyManager->AddEnemy(EnemyType::Zombie, Vector3(-300, 0, 800));
 	m_pEnemyManager->AddEnemy(EnemyType::Vulture, Vector3(0, 100, 800));
