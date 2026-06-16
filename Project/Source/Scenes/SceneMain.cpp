@@ -21,14 +21,14 @@ namespace
 {
 	// ロードするモデルのファイル名と登録名
 	const std::vector<std::pair<std::wstring, std::wstring>> kModelFileNames = {
-		{ L"Stage", L"data/models/Stage.mv1" },
-		{ L"Collision", L"data/models/Collision.mv1" },
-		{ L"Player", L"data/models/Player.mv1" },
-		{ L"Wing" , L"data/models/Wing.mv1" },
-		{ L"Zombie", L"data/models/Zombie.mv1" },
-		{ L"Vulture", L"data/models/Vulture.mv1" },
-		{L"General",L"data/models/General.mv1"},
-		{L"GeneralSword",L"data/models/sword.mv1"}
+		{ L"Stage", L"data/models/Stage/Stage.mv1" },
+		{ L"Collision", L"data/models/Stage/Collision.mv1" },
+		{ L"Player", L"data/models/Player/Player.mv1" },
+		{ L"Wing" , L"data/models/Player/Wing.mv1" },
+		{ L"Zombie", L"data/models/Enemy/Zombie.mv1" },
+		{ L"Vulture", L"data/models/Enemy/Vulture.mv1" },
+		{L"General",L"data/models/Enemy/General.mv1"},
+		{L"GeneralSword",L"data/models/Enemy/sword.mv1"}
 	};
 	// ロードするエフェクトのファイル名と登録名
 	struct EffectData

@@ -7,7 +7,7 @@ namespace
 
 	constexpr float kSwordScale = 2.5f;
 	constexpr float kSwordRotZ = -DX_PI_F / 2;
-	const Vector3 kSwordOffset = Vector3(0, 10, 0);
+	const Vector3 kSwordOffset = Vector3(0, 35, 0);
 }
 
 General::~General()
@@ -19,7 +19,7 @@ void General::Init()
 {
 	m_swordModelHandle = ModelManager::GetInstance().DuplicateModel(L"GeneralSword");
 
-	m_anim.Init(m_modelHandle, L"Armature|Idle");
+	m_anim.Init(m_modelHandle, L"General|Idle");
 }
 
 void General::End()
