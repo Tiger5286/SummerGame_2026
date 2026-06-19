@@ -65,19 +65,22 @@ protected:
 	// モデルのハンドル
 	int m_modelHandle = -1;
 
+	// 当たり判定
 	std::shared_ptr<ColliderBase> m_pCollider = nullptr;
 
+	// hp
 	int m_hp = -1;
 
 	Vector3 m_pos;	// 位置
 	Vector3 m_vel;	// 速度
-	float m_angle = 0.0f;
-	float m_drawAngle = 0.0f;
+	float m_angle = 0.0f;	// 向き
+	float m_drawAngle = 0.0f;	// 描画時の向き
 
+	// キャラクターのタイプ(タグ)
 	MyLib::CharacterType m_type = MyLib::CharacterType::None;
 
 	bool m_isGround = false;	// 接地しているかどうか
 
-	const int m_id;
+	const int m_id;	// ID
 };
 

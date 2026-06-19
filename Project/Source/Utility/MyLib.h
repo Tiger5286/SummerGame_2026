@@ -21,6 +21,7 @@ namespace MyLib
 		int damage = 0;
 		CharacterType hitCharacterType = CharacterType::None;
 		bool isKnockDown = false;
+		bool isIgnoreInvincible = false;
 	};
 
 	const Vector3 kDefaultDir = Vector3(0, 0, -1);

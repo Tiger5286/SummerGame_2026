@@ -6,6 +6,10 @@
 namespace
 {
 	const std::wstring kAnimName = L"General|HeavySlash";
+
+	constexpr int kAttackFrame = 33 * 2;
+	constexpr int kStartSlashFrame = 54 * 2;
+	constexpr int kEndSlashFrame = 85 * 2;
 }
 
 void GeneralStateHeavySlash::Enter(std::weak_ptr<General> pGeneral)

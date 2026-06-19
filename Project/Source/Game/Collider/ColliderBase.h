@@ -9,7 +9,7 @@ enum class ColliderType
 	None,
 	Sphere,
 	Capsule,
-	Polygon,
+	//Polygon,
 
 	Num
 };
