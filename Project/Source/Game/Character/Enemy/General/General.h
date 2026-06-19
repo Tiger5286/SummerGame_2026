@@ -4,6 +4,7 @@
 
 class GeneralStateBase;
 class GeneralStateWalk;
+class GeneralStateHeavySlash;
 
 class General :
     public EnemyBase,public std::enable_shared_from_this<General>
@@ -28,4 +29,5 @@ private:
 
 private:
     friend GeneralStateWalk;
+    friend GeneralStateHeavySlash;
 };

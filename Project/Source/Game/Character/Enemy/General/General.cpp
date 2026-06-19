@@ -5,6 +5,7 @@
 
 #include "GeneralStateBase.h"
 #include "GeneralStateWalk.h"
+#include "GeneralStateHeavySlash.h"
 
 namespace
 {
@@ -32,7 +33,7 @@ void General::Init()
 	CollisionManager::GetInstance().Register(shared_from_this());
 
 	// ステートの初期化
-	m_pState = std::make_shared<GeneralStateWalk>();
+	m_pState = std::make_shared<GeneralStateHeavySlash>();
 	m_pState->ChangeState(m_pState);
 	m_pState->Enter(weak_from_this());
 	CheckChangeState();
