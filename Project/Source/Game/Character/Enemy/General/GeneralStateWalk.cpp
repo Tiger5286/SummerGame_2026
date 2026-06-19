@@ -22,14 +22,15 @@ void GeneralStateWalk::Update()
 {
 	auto general = m_pGeneral.lock();
 	auto player = general->m_pPlayer;
-
+	// プレイヤーへの方向を取得
 	Vector3 toPlayer = player->GetPos() - general->m_pos;
 	toPlayer.y = 0.0f;
 	toPlayer.Normalize();
+	// プレイヤーから見て左に移動する
 	Vector3 moveVec = toPlayer * Matrix4x4::GetRotY(DX_PI_F / 2);
 	moveVec *= kMoveSpeed;
 	general->m_vel = moveVec;
-
+	// プレイヤーの方を向く
 	general->m_angle = MyLib::GetAngleVec(toPlayer.z, toPlayer.x);
 }
 
