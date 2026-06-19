@@ -183,6 +183,9 @@
     <ClCompile Include="Source\Game\Character\Enemy\General\GeneralStateBase.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\Character\Enemy\General\GeneralStateWalk.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Scenes\SceneMain.h">
@@ -354,6 +357,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Character\Enemy\General\GeneralStateBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Character\Enemy\General\GeneralStateWalk.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
