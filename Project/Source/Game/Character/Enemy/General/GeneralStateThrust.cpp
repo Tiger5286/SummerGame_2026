@@ -4,12 +4,14 @@
 #include "Utility/MyLib.h"
 #include "../../Attack.h"
 
+#include "GeneralStateWalk.h"
+
 namespace
 {
 	const std::wstring kAnimName = L"General|Thrust";
 
 	constexpr int kStartThrustFrame = 60;
-	constexpr int kEndThrustFrame = 120;
+	constexpr int kEndThrustFrame = 90;
 	constexpr int kEndStateFrame = 240;
 
 	constexpr float kThrustSpeed = 25.0f;
@@ -74,7 +76,7 @@ void GeneralStateThrust::Update()
 	// 一定時間経過したらステートを終了
 	if (m_frame > kEndStateFrame)
 	{
-		ChangeState(std::make_shared<GeneralStateThrust>());
+		ChangeState(std::make_shared<GeneralStateWalk>());
 		return;
 	}
 }

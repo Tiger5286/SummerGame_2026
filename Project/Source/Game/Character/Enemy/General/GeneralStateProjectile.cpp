@@ -3,6 +3,8 @@
 #include "../../Player/Player.h"
 #include "../../Attack.h"
 
+#include "GeneralStateWalk.h"
+
 namespace
 {
 	const std::wstring kAnimName = L"General|SlashShot";
@@ -57,7 +59,7 @@ void GeneralStateProjectile::Update()
 	// アニメーションが終わったらステートを終了
 	if (general->m_anim.IsEnd())
 	{
-		ChangeState(std::make_shared<GeneralStateProjectile>());
+		ChangeState(std::make_shared<GeneralStateWalk>());
 		return;
 	}
 }

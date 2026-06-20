@@ -69,10 +69,10 @@ void GeneralStateHeavySlash::Update()
 		m_pAttack->Update();
 	}
 
-	// HeavySlashを繰り返す(デバッグ用)
+	// アニメーションが終わったらステートを終了
 	if (general->m_anim.IsEnd())
 	{
-		ChangeState(std::make_shared<GeneralStateHeavySlash>());
+		ChangeState(std::make_shared<GeneralStateWalk>());
 		return;
 	}
 }
