@@ -167,7 +167,11 @@ void Player::OnHitAttack(const MyLib::AttackData& atkData)
 	state = std::dynamic_pointer_cast<PlayerStateHit>(m_pState);
 	if (state != nullptr)
 	{
-		return;
+		// 攻撃が無敵を無効する攻撃なら食らう
+		if (!atkData.isIgnoreInvincible)
+		{
+			return;
+		}
 	}
 	state = nullptr;
 	// バーニングの時は攻撃を食らわない
@@ -180,7 +184,7 @@ void Player::OnHitAttack(const MyLib::AttackData& atkData)
 
 	m_hp -= atkData.damage;
 	m_pState->ChangeState(std::make_shared<PlayerStateHit>());
-	//printfDx(L"プレイヤーが攻撃を食らった！HP:%d\n",m_hp);
+	printfDx(L"プレイヤーが攻撃を食らった！DAMAGE:%d,HP:%d\n",atkData.damage,m_hp);
 }
 
 void Player::Move()

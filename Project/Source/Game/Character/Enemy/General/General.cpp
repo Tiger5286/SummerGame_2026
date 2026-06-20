@@ -87,6 +87,9 @@ void General::Draw()
 	MV1SetMatrix(m_swordModelHandle, resultMat);
 	MV1DrawModel(m_swordModelHandle);
 
+	// ステートに描画したいものがあったら描画
+	m_pState->Draw();
+
 #ifdef _DEBUG
 	m_pCollider->Draw();
 #endif

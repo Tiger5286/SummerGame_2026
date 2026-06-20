@@ -1,5 +1,9 @@
 #include "GeneralStateHeavySlash.h"
 #include "General.h"
+#include "../../Player/Player.h"
+#include "Utility/MyLib.h"
+#include "Utility/Matrix4x4.h"
+#include "../../Attack.h"
 
 #include "GeneralStateWalk.h"
 
@@ -10,6 +14,15 @@ namespace
 	constexpr int kAttackFrame = 33 * 2;
 	constexpr int kStartSlashFrame = 54 * 2;
 	constexpr int kEndSlashFrame = 85 * 2;
+
+	const Vector3 kAttackOffset = Vector3(0, 150, -150);
+	const MyLib::AttackData kAttackData = {
+		.colliderRadius		= 150.0f,
+		.damage				= 20,
+		.hitCharacterType	= MyLib::CharacterType::Player,
+		.isKnockDown		= false,
+		.isIgnoreInvincible	= true
+	};
 }
 
 void GeneralStateHeavySlash::Enter(std::weak_ptr<General> pGeneral)
@@ -17,16 +30,48 @@ void GeneralStateHeavySlash::Enter(std::weak_ptr<General> pGeneral)
 	m_pGeneral = pGeneral;
 	auto general = m_pGeneral.lock();
 	general->m_anim.ChangeAnim(kAnimName, 0.5f, false);
+	Vector3 toPlayer = general->m_pPlayer->GetPos() - general->m_pos;
+	general->m_angle = MyLib::GetAngleVec(toPlayer.z, toPlayer.x);
 }
 
 void GeneralStateHeavySlash::Update()
 {
+	m_frame++;
 	auto general = m_pGeneral.lock();
 
-	// アニメーションが終わったらWalk
+	// 初撃
+	if (m_frame == kAttackFrame)
+	{
+		Vector3 colPos = general->m_pos + kAttackOffset * Matrix4x4::GetRotY(general->m_angle);
+		m_pAttack = std::make_shared<Attack>();
+		m_pAttack->SetData(kAttackData);
+		m_pAttack->Init();
+		m_pAttack->SetPos(colPos);
+	}
+
+	// 連続斬撃
+	if (m_frame > kStartSlashFrame && m_frame < kEndSlashFrame)
+	{
+		if (m_frame % 10 == 0)
+		{
+			Vector3 colPos = general->m_pos + kAttackOffset * Matrix4x4::GetRotY(general->m_angle);
+			m_pAttack = std::make_shared<Attack>();
+			m_pAttack->SetData(kAttackData);
+			m_pAttack->Init();
+			m_pAttack->SetPos(colPos);
+		}
+	}
+
+	// 攻撃の更新
+	if (m_pAttack != nullptr)
+	{
+		m_pAttack->Update();
+	}
+
+	// HeavySlashを繰り返す(デバッグ用)
 	if (general->m_anim.IsEnd())
 	{
-		ChangeState(std::make_shared<GeneralStateWalk>());
+		ChangeState(std::make_shared<GeneralStateHeavySlash>());
 		return;
 	}
 }
@@ -34,4 +79,14 @@ void GeneralStateHeavySlash::Update()
 void GeneralStateHeavySlash::Exit()
 {
 
+}
+
+void GeneralStateHeavySlash::Draw()
+{
+#ifdef _DEBUG
+	if (m_pAttack != nullptr)
+	{
+		m_pAttack->Draw();
+	}
+#endif
 }
