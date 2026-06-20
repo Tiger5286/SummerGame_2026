@@ -27,6 +27,10 @@ public:
 	Vector3 GetPos() const { return m_pos; }
 	// 位置を設定する
 	void SetPos(const Vector3& pos) { m_pos = pos; }
+	// 加速度を取得する
+	Vector3 GetVel() const { return m_vel; }
+	// 加速度を設定する
+	void SetVel(const Vector3& vel) { m_vel = vel; }
 	// 当たり判定を取得する
 	std::shared_ptr<ColliderBase> GetCollider() const { return m_pCollider; }
 	// キャラクタータイプを取得する

@@ -13,6 +13,8 @@ void Attack::End()
 
 void Attack::Update()
 {
+	m_pos += m_vel;
+
 	m_pCollider->SetPos(m_pos);
 }
 
