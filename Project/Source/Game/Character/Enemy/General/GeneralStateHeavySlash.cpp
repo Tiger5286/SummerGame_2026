@@ -30,6 +30,7 @@ void GeneralStateHeavySlash::Enter(std::weak_ptr<General> pGeneral)
 	m_pGeneral = pGeneral;
 	auto general = m_pGeneral.lock();
 	general->m_anim.ChangeAnim(kAnimName, 0.5f, false);
+	// プレイヤーの方向を向く
 	Vector3 toPlayer = general->m_pPlayer->GetPos() - general->m_pos;
 	general->m_angle = MyLib::GetAngleVec(toPlayer.z, toPlayer.x);
 }

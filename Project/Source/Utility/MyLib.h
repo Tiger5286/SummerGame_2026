@@ -86,11 +86,22 @@ namespace MyLib
 		return diff;
 	}
 
+	/// <summary>
+	/// ベクトルからatan2で角度を取得する。
+	/// </summary>
+	/// <param name="y">y</param>
+	/// <param name="x">x</param>
+	/// <returns>角度(ラジアン)</returns>
 	inline float GetAngleVec(float y,float x)
 	{
 		return atan2f(y, -x) + DX_PI_F / 2;
 	}
 
+	/// <summary>
+	/// 角度からベクトルを取得する。
+	/// </summary>
+	/// <param name="angle">角度(ラジアン)</param>
+	/// <returns>向いている方向の単位ベクトル</returns>
 	inline Vector3 GetVecAngle(float angle)
 	{
 		return kDefaultDir * Matrix4x4::GetRotY(angle);

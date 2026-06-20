@@ -6,6 +6,7 @@
 #include "GeneralStateBase.h"
 #include "GeneralStateWalk.h"
 #include "GeneralStateHeavySlash.h"
+#include "GeneralStateThrust.h"
 
 namespace
 {
@@ -33,7 +34,7 @@ void General::Init()
 	CollisionManager::GetInstance().Register(shared_from_this());
 
 	// ステートの初期化
-	m_pState = std::make_shared<GeneralStateHeavySlash>();
+	m_pState = std::make_shared<GeneralStateThrust>();
 	m_pState->ChangeState(m_pState);
 	m_pState->Enter(weak_from_this());
 	CheckChangeState();
@@ -50,6 +51,9 @@ void General::Update()
 	m_pState->Update();
 
 	m_pos += m_vel;
+
+	Gravity();
+	Resistance();
 
 	// 当たり判定の位置更新
 	auto capsule = std::dynamic_pointer_cast<CapsuleCollider>(m_pCollider);
