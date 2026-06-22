@@ -14,7 +14,7 @@ namespace
 
 	constexpr float kMoveSpeed = 4.0f;
 
-	constexpr int kChangeStateFrame = 240;
+	constexpr int kChangeStateFrame = 180;
 }
 
 void GeneralStateWalk::Enter(std::weak_ptr<General> pGeneral)
@@ -41,25 +41,6 @@ void GeneralStateWalk::Update()
 	general->m_vel = moveVec;
 	// プレイヤーの方を向く
 	general->m_angle = MyLib::GetAngleVec(toPlayer.z, toPlayer.x);
-
-	// 一定時間経過したら攻撃
-	if (m_frame > kChangeStateFrame)
-	{
-		// 攻撃の種類をランダムで決定する
-		int rand = GetRand(2);
-		switch (rand)
-		{
-		case 0:
-			ChangeState(std::make_shared<GeneralStateHeavySlash>());
-			return;
-		case 1:
-			ChangeState(std::make_shared<GeneralStateThrust>());
-			return;
-		case 2:
-			ChangeState(std::make_shared<GeneralStateProjectile>());
-			return;
-		}
-	}
 }
 
 void GeneralStateWalk::Exit()

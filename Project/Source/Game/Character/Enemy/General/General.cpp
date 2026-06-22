@@ -4,7 +4,10 @@
 #include "Singleton/CollisionManager.h"
 
 #include "GeneralStateBase.h"
-#include "GeneralStateWalk.h"
+#include "GeneralStateIdle.h"
+#include "GeneralStateHeavySlash.h"
+#include "GeneralStateThrust.h"
+#include "GeneralStateProjectile.h"
 
 namespace
 {
@@ -12,7 +15,7 @@ namespace
 
 	constexpr float kSwordScale = 2.5f;
 	constexpr float kSwordRotZ = -DX_PI_F / 2;
-	const Vector3 kSwordOffset = Vector3(0, 35, 0);
+	const Vector3 kSwordOffset = Vector3(0, 10, 0);
 }
 
 General::~General()
@@ -32,7 +35,7 @@ void General::Init()
 	CollisionManager::GetInstance().Register(shared_from_this());
 
 	// ステートの初期化
-	m_pState = std::make_shared<GeneralStateWalk>();
+	m_pState = std::make_shared<GeneralStateIdle>();
 	m_pState->ChangeState(m_pState);
 	m_pState->Enter(weak_from_this());
 	CheckChangeState();
@@ -84,7 +87,8 @@ void General::Draw()
 	scale = MGetScale(VGet(kSwordScale, kSwordScale, kSwordScale));
 	rot = MGetRotZ(kSwordRotZ);
 	trans = MGetTranslate(kSwordOffset.ToDxLib());
-	auto m = MV1GetFrameLocalWorldMatrix(m_modelHandle, 37);
+	auto frameIndex = MV1SearchFrame(m_modelHandle, L"mixamorig:RightHand");
+	auto m = MV1GetFrameLocalWorldMatrix(m_modelHandle, frameIndex);
 	resultMat = MMult(MMult(MMult(scale, rot), trans), m);
 	MV1SetMatrix(m_swordModelHandle, resultMat);
 	MV1DrawModel(m_swordModelHandle);
@@ -110,5 +114,23 @@ void General::CheckChangeState()
 		m_pState->Enter(weak_from_this());
 
 		m_pState->ChangeState(m_pState);
+	}
+}
+
+void General::AttackRandom()
+{
+	// 攻撃の種類をランダムで決定する
+	int rand = GetRand(2);
+	switch (rand)
+	{
+	case 0:
+		m_pState->ChangeState(std::make_shared<GeneralStateHeavySlash>());
+		return;
+	case 1:
+		m_pState->ChangeState(std::make_shared<GeneralStateThrust>());
+		return;
+	case 2:
+		m_pState->ChangeState(std::make_shared<GeneralStateProjectile>());
+		return;
 	}
 }

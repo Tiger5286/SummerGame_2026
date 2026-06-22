@@ -1,0 +1,15 @@
+#pragma once
+#include "GeneralStateBase.h"
+class GeneralStateIdle :
+    public GeneralStateBase
+{
+    GeneralStateIdle() = default;
+    ~GeneralStateIdle() = default;
+
+    void Enter(std::weak_ptr<General> pGeneral) override;
+    void Update() override;
+    void Exit() override;
+private:
+
+};
+

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\Character\Enemy\General\GeneralStateIdle.cpp" />
     <ClCompile Include="Source\Game\Character\Enemy\General\GeneralStateProjectile.cpp" />
     <ClCompile Include="Source\Game\Character\Enemy\General\GeneralStateThrust.cpp" />
     <ClCompile Include="Source\Game\Character\Enemy\General\GeneralStateHeavySlash.cpp" />
@@ -81,6 +82,7 @@
     <ClCompile Include="Source\Game\Character\Enemy\Vulture\VultureStateAttack.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\Character\Enemy\General\GeneralStateIdle.h" />
     <ClInclude Include="Source\Game\Character\Enemy\General\GeneralStateProjectile.h" />
     <ClInclude Include="Source\Game\Character\Enemy\General\GeneralStateThrust.h" />
     <ClInclude Include="Source\Game\Character\Enemy\General\GeneralStateHeavySlash.h" />

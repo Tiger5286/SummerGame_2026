@@ -3,6 +3,7 @@
 #include "System/Animator.h"
 
 class GeneralStateBase;
+class GeneralStateIdle;
 class GeneralStateWalk;
 class GeneralStateHeavySlash;
 class GeneralStateThrust;
@@ -23,13 +24,18 @@ public:
 private:
     void CheckChangeState();
 
+    void AttackRandom();
+
 private:
     int m_swordModelHandle = -1;
     Animator m_anim;
 
     std::shared_ptr<GeneralStateBase> m_pState = nullptr;
 
+    int m_attackCooltime = 180;
+
 private:
+    friend GeneralStateIdle;
     friend GeneralStateWalk;
     friend GeneralStateHeavySlash;
     friend GeneralStateThrust;
