@@ -1,7 +1,6 @@
 #pragma once
 #include <memory>
 #include <vector>
-#include "Utility/MyLib.h"
 
 class EnemySpawner;
 class EnemyManager;

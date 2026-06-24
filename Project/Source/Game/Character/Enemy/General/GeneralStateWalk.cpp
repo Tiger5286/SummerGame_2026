@@ -40,6 +40,7 @@ void GeneralStateWalk::Update()
 	// プレイヤーから見て左に移動する
 	Vector3 moveVec = toPlayer * Matrix4x4::GetRotY(DX_PI_F / 2);
 	moveVec *= kMoveSpeed;
+	moveVec.y = general->m_vel.y;
 	general->m_vel = moveVec;
 	// プレイヤーの方を向く
 	general->m_angle = MyLib::GetAngleVec(toPlayer.z, toPlayer.x);
@@ -50,14 +51,6 @@ void GeneralStateWalk::Update()
 		general->AttackRandom();
 		return;
 	}
-
-	// プレイヤーとの距離が一定以下ならIdle
-	//toPlayer = player->GetPos() - general->m_pos;
-	//if (toPlayer.SquaredLength() < kIdleDist * kIdleDist)
-	//{
-	//	ChangeState(std::make_shared<GeneralStateIdle>());
-	//	return;
-	//}
 }
 
 void GeneralStateWalk::Exit()

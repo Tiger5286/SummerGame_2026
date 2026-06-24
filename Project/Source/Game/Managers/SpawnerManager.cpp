@@ -5,6 +5,7 @@
 #include <sstream>
 #include <cassert>
 #include <unordered_map>
+#include "Utility/MyLib.h"
 
 namespace
 {
@@ -33,10 +34,6 @@ void SpawnerManager::Load()
 	// 行単位で読み込む(行ごとにループする)
 	while (std::getline(file, line))
 	{
-		//auto wstr = MyLib::StringToWString(line);
-		//printfDx(L"%s\n", wstr.c_str());
-		//continue;
-
 		// 行が空、または行の1文字目が#ならその行は無視する
 		if (line.empty() || line[0] == '#') continue;
 
@@ -61,7 +58,6 @@ void SpawnerManager::Load()
 			{
 				break;
 			}
-
 			// 最初の4データ：スポナー自身の情報
 			if (index == 0)		 data.pos.x = std::stof(cell);
 			else if (index == 1) data.pos.y = std::stof(cell);
@@ -98,11 +94,9 @@ void SpawnerManager::Load()
 			{
 				data.enemyDatas.back() = enemyData;
 			}
-
 			// カウンターをカウントアップ
 			index++;
 		}
-
 		// スポナーの初期化(データを渡す)
 		spawner->Init(m_pEnemyManager, m_pPlayer, data);
 		// 行の終わり
