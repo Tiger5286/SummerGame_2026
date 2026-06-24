@@ -52,8 +52,8 @@ void Character::CheckHitMapCapsule(MV1_COLL_RESULT_POLY_DIM coll)
 		// 当たったポリゴンの法線を取得
 		auto normal = Vector3::FromDxLib(coll.Dim[i].Normal);
 
-		// 法線が少しでも上を向いていれば床判定
-		bool isFloor = normal.y > 0.0f;	// true:床 / false:壁
+		// 法線のy要素で床壁判定をする
+		bool isFloor = normal.y > 0.2f;	// true:床 / false:壁
 		// 床判定なら法線を真上向きにする
 		if (isFloor) normal = Vector3::Up();
 
@@ -85,8 +85,8 @@ void Character::CheckHitMapSphere(MV1_COLL_RESULT_POLY_DIM coll)
 		// 当たったポリゴンの法線を取得
 		auto normal = Vector3::FromDxLib(coll.Dim[i].Normal);
 
-		// 法線が少しでも上を向いていれば床判定
-		bool isFloor = normal.y > 0.0f;	// true:床 / false:壁
+		// 法線のy要素で床壁判定をする
+		bool isFloor = normal.y > 0.2f;	// true:床 / false:壁
 		// 床判定なら法線を真上向きにする
 		if (isFloor) normal = Vector3::Up();
 
