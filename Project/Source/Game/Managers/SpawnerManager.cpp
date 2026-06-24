@@ -1,5 +1,11 @@
 #include "SpawnerManager.h"
 #include "../EnemySpawner.h"
+#include <string>
+
+namespace
+{
+	const std::wstring kfilePath = L"data/csv/SpawnerData.csv";
+}
 
 void SpawnerManager::Load()
 {
