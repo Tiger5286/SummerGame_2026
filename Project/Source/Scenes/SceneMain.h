@@ -10,6 +10,9 @@ class TargetManager;
 
 class EnemyManager;
 
+// TODO: SpawnerManagerとかで管理する
+class EnemySpawner;
+
 class SceneMain : public SceneBase
 {
 public:
@@ -30,4 +33,7 @@ private:
 	std::shared_ptr<TargetManager> m_pTargetManager = nullptr;
 
 	std::shared_ptr<SkyBox> m_pSkyBox = nullptr;
+
+	// TODO: SpawnerManagerとかで管理する
+	std::shared_ptr<EnemySpawner> m_pEnemySpawner = nullptr;
 };

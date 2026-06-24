@@ -62,12 +62,12 @@ void EnemyManager::Draw()
 	}
 }
 
-void EnemyManager::AddEnemy(EnemyType type, const Vector3& pos)
+void EnemyManager::AddEnemy(MyLib::EnemyType type, const Vector3& pos)
 {
 	std::shared_ptr<EnemyBase> pEnemy = nullptr;
 	switch (type)
 	{
-	case EnemyType::Zombie:
+	case MyLib::EnemyType::Zombie:
 		pEnemy = std::make_shared<Zombie>();
 		pEnemy->SetHandle(ModelManager::GetInstance().DuplicateModel(L"Zombie"));
 		pEnemy->SetPlayer(m_pPlayer);
@@ -76,7 +76,7 @@ void EnemyManager::AddEnemy(EnemyType type, const Vector3& pos)
 		pEnemy->Init();
 		m_enemyList.push_back(pEnemy);
 		break;
-	case EnemyType::Vulture:
+	case MyLib::EnemyType::Vulture:
 		pEnemy = std::make_shared<Vulture>();
 		pEnemy->SetHandle(ModelManager::GetInstance().DuplicateModel(L"Vulture"));
 		pEnemy->SetPlayer(m_pPlayer);
@@ -85,7 +85,7 @@ void EnemyManager::AddEnemy(EnemyType type, const Vector3& pos)
 		pEnemy->Init();
 		m_enemyList.push_back(pEnemy);
 		break;
-	case EnemyType::General:
+	case MyLib::EnemyType::General:
 		pEnemy = std::make_shared<General>();
 		pEnemy->SetHandle(ModelManager::GetInstance().DuplicateModel(L"General"));
 		pEnemy->SetPlayer(m_pPlayer);

@@ -17,6 +17,9 @@
 
 #include "Game/SkyBox.h"
 
+// TODO: SpawnerManagerとかで管理する
+#include "../Game/EnemySpawner.h"
+
 namespace
 {
 	// ロードするモデルのファイル名と登録名
@@ -105,6 +108,20 @@ void SceneMain::Init()
 	m_pEnemyManager->Init(m_pPlayer);
 
 	// 仮の敵を生成
+
+	std::vector<EnemySpawner::EnemyData> enemyDatas;
+	enemyDatas.resize(3);
+	enemyDatas[0].type = MyLib::EnemyType::Zombie;	enemyDatas[0].localPos = Vector3(0, 0, 0);
+	enemyDatas[1].type = MyLib::EnemyType::Zombie;	enemyDatas[1].localPos = Vector3(300, 0, 0);
+	enemyDatas[2].type = MyLib::EnemyType::Vulture;	enemyDatas[2].localPos = Vector3(-300, 0, 0);
+
+	EnemySpawner::Data spawnerData;
+	spawnerData.pos = Vector3(0, 0, 2000);
+	spawnerData.radius = 800.0f;
+	spawnerData.enemyDatas = enemyDatas;
+
+	m_pEnemySpawner = std::make_shared<EnemySpawner>();
+	m_pEnemySpawner->Init(m_pEnemyManager, m_pPlayer, spawnerData);
 	//m_pEnemyManager->AddEnemy(EnemyType::General, Vector3(0, 0, 800));
 	//m_pEnemyManager->AddEnemy(EnemyType::Zombie, Vector3(300, 0, 800));
 	//m_pEnemyManager->AddEnemy(EnemyType::Zombie, Vector3(-300, 0, 800));
@@ -142,6 +159,8 @@ void SceneMain::Update()
 	m_pSkyBox->SetCameraPos(m_pCamera->GetPos());
 	m_pSkyBox->Update();
 
+	m_pEnemySpawner->Update();
+
 	EffectManager::GetInstance().Update();
 }
 
@@ -173,6 +192,8 @@ void SceneMain::Draw()
 	m_pPlayer->Draw();
 
 	m_pEnemyManager->Draw();
+
+	m_pEnemySpawner->Draw();
 
 	EffectManager::GetInstance().Draw();
 

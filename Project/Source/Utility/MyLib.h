@@ -15,6 +15,17 @@ namespace MyLib
 		Num
 	};
 
+	// 敵の種類を表す列挙体
+	enum class EnemyType
+	{
+		None,
+		Zombie,
+		Vulture,
+		General,
+
+		Num
+	};
+
 	struct AttackData
 	{
 		float colliderRadius = 0.0f;

@@ -1,21 +1,12 @@
 ﻿#pragma once
 #include <list>
 #include <memory>
+#include "Utility/MyLib.h"
 #include "../../Utility/Vector3.h"
 
 class EnemyBase;
 class Player;
 class CollisionManager;
-
-// 敵の種類を表す列挙体
-enum class EnemyType
-{
-	Zombie,
-	Vulture,
-	General,
-
-	Num
-};
 
 class EnemyManager
 {
@@ -33,7 +24,7 @@ public:
 	/// </summary>
 	/// <param name="enemy">新しい敵のポインタ</param>
 	/// <param name="pos">敵の位置</param>
-	void AddEnemy(EnemyType type, const Vector3& pos);
+	void AddEnemy(MyLib::EnemyType type, const Vector3& pos);
 
 	/// <summary>
 	/// 敵のリストを取得する
