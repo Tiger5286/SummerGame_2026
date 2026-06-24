@@ -32,7 +32,8 @@ private:
 
     std::shared_ptr<GeneralStateBase> m_pState = nullptr;
 
-    int m_attackCooltime = 180;
+    const int kAttackCooltime = 180;
+    int m_attackCooltime = kAttackCooltime;
 
 private:
     friend GeneralStateIdle;

@@ -4,7 +4,7 @@
 #include "Singleton/CollisionManager.h"
 
 #include "GeneralStateBase.h"
-#include "GeneralStateIdle.h"
+#include "GeneralStateWalk.h"
 #include "GeneralStateHeavySlash.h"
 #include "GeneralStateThrust.h"
 #include "GeneralStateProjectile.h"
@@ -35,7 +35,7 @@ void General::Init()
 	CollisionManager::GetInstance().Register(shared_from_this());
 
 	// ステートの初期化
-	m_pState = std::make_shared<GeneralStateIdle>();
+	m_pState = std::make_shared<GeneralStateWalk>();
 	m_pState->ChangeState(m_pState);
 	m_pState->Enter(weak_from_this());
 	CheckChangeState();
@@ -119,6 +119,8 @@ void General::CheckChangeState()
 
 void General::AttackRandom()
 {
+	// クールタイムをリセット
+	m_attackCooltime = kAttackCooltime;
 	// 攻撃の種類をランダムで決定する
 	int rand = GetRand(2);
 	switch (rand)

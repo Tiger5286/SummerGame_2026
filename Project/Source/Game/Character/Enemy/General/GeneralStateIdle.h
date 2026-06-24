@@ -3,6 +3,7 @@
 class GeneralStateIdle :
     public GeneralStateBase
 {
+public:
     GeneralStateIdle() = default;
     ~GeneralStateIdle() = default;
 

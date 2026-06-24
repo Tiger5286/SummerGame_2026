@@ -4,9 +4,7 @@
 #include "Utility/Matrix4x4.h"
 #include "Utility/MyLib.h"
 
-#include "GeneralStateHeavySlash.h"
-#include "GeneralStateThrust.h"
-#include "GeneralStateProjectile.h"
+#include "GeneralStateIdle.h"
 
 namespace
 {
@@ -15,6 +13,8 @@ namespace
 	constexpr float kMoveSpeed = 4.0f;
 
 	constexpr int kChangeStateFrame = 180;
+
+	constexpr float kIdleDist = 500.0f;
 }
 
 void GeneralStateWalk::Enter(std::weak_ptr<General> pGeneral)
@@ -26,9 +26,11 @@ void GeneralStateWalk::Enter(std::weak_ptr<General> pGeneral)
 
 void GeneralStateWalk::Update()
 {
-	m_frame++;
 	auto general = m_pGeneral.lock();
 	auto player = general->m_pPlayer;
+
+	// クールタイムを減らす
+	general->m_attackCooltime--;
 
 	// 移動処理
 	// プレイヤーへの方向を取得
@@ -41,6 +43,21 @@ void GeneralStateWalk::Update()
 	general->m_vel = moveVec;
 	// プレイヤーの方を向く
 	general->m_angle = MyLib::GetAngleVec(toPlayer.z, toPlayer.x);
+
+	// クールタイムが終わっていたら攻撃
+	if (general->m_attackCooltime < 0)
+	{
+		general->AttackRandom();
+		return;
+	}
+
+	// プレイヤーとの距離が一定以下ならIdle
+	//toPlayer = player->GetPos() - general->m_pos;
+	//if (toPlayer.SquaredLength() < kIdleDist * kIdleDist)
+	//{
+	//	ChangeState(std::make_shared<GeneralStateIdle>());
+	//	return;
+	//}
 }
 
 void GeneralStateWalk::Exit()

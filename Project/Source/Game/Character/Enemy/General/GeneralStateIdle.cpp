@@ -2,6 +2,8 @@
 #include "General.h"
 #include "../../Player/Player.h"
 
+#include "GeneralStateWalk.h"
+
 namespace
 {
 	const std::wstring kAnimName = L"General|Idle";
@@ -21,7 +23,23 @@ void GeneralStateIdle::Update()
 	auto general = m_pGeneral.lock();
 	auto player = general->m_pPlayer;
 
+	// クールタイムを減らす
+	general->m_attackCooltime--;
+
+	// クールタイムが終わっていたら攻撃
+	if (general->m_attackCooltime < 0)
+	{
+		general->AttackRandom();
+		return;
+	}
+
 	// プレイヤーとの距離が一定以上なら歩く
+	Vector3 toPlayer = player->GetPos() - general->m_pos;
+	if (toPlayer.SquaredLength() > kWalkDist * kWalkDist)
+	{
+		ChangeState(std::make_shared<GeneralStateWalk>());
+		return;
+	}
 	
 }
 
