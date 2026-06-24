@@ -22,7 +22,7 @@ namespace
 	// ロードするモデルのファイル名と登録名
 	const std::vector<std::pair<std::wstring, std::wstring>> kModelFileNames = {
 		{ L"Stage", L"data/models/Stage/Stage.mv1" },
-		{ L"Collision", L"data/models/Stage/Collision.mv1" },
+		{ L"Collision", L"data/models/Stage/NewMapCollision.mv1" },
 		{ L"Player", L"data/models/Player/Player.mv1" },
 		{ L"Wing" , L"data/models/Player/Wing.mv1" },
 		{ L"Zombie", L"data/models/Enemy/Zombie.mv1" },
@@ -105,7 +105,7 @@ void SceneMain::Init()
 	m_pEnemyManager->Init(m_pPlayer);
 
 	// 仮の敵を生成
-	m_pEnemyManager->AddEnemy(EnemyType::General, Vector3(0, 0, 800));
+	//m_pEnemyManager->AddEnemy(EnemyType::General, Vector3(0, 0, 800));
 	//m_pEnemyManager->AddEnemy(EnemyType::Zombie, Vector3(300, 0, 800));
 	//m_pEnemyManager->AddEnemy(EnemyType::Zombie, Vector3(-300, 0, 800));
 	//m_pEnemyManager->AddEnemy(EnemyType::Vulture, Vector3(0, 100, 800));
@@ -150,15 +150,25 @@ void SceneMain::Draw()
 	// 空の描画
 	m_pSkyBox->Draw();
 
+	// ステージ用のライトの向きを設定する
+	Vector3 lightVec = m_pPlayer->GetPos() - m_pCamera->GetPos();
+	lightVec.Normalize();
+	lightVec.y = -0.5f;
+	SetLightDirection(lightVec.ToDxLib());
 	// ステージの描画
 	auto& modelManager = ModelManager::GetInstance();
-	MV1DrawModel(modelManager.GetModelHandle(L"Stage"));
+	//MV1DrawModel(modelManager.GetModelHandle(L"Stage"));
+	MV1DrawModel(modelManager.GetModelHandle(L"Collision"));
 
 #ifdef _DEBUG
 	// グリッドの描画
 	DrawGrid();
 #endif
 
+	// ライトの向きを設定する
+	lightVec = m_pPlayer->GetPos() - m_pCamera->GetPos();
+	lightVec.Normalize();
+	SetLightDirection(lightVec.ToDxLib());
 	// 各クラスの描画
 	m_pPlayer->Draw();
 
