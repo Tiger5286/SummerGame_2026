@@ -17,6 +17,9 @@ public:
 	void Draw();
 
 private:
+	std::shared_ptr<EnemyBase> SearchTarget();
+
+private:
 	std::shared_ptr<Player> m_pPlayer = nullptr;
 	std::shared_ptr<Camera> m_pCamera = nullptr;
 	std::shared_ptr<EnemyManager> m_pEnemyManager = nullptr;
