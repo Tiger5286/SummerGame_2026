@@ -1,12 +1,7 @@
 ﻿#pragma once
 #include "DxLib.h"
 #include "../Utility/Vector3.h"
-
-enum class LR
-{
-	Left,
-	Right
-};
+#include "Utility/MyLib.h"
 
 class Input
 {
@@ -41,14 +36,14 @@ public:
 	/// </summary>
 	/// <param name="lr">左右どちらの入力を取得するか</param>
 	/// <returns>スティック入力値</returns>
-	Vector3 GetStickInput(LR lr);
+	Vector3 GetStickInput(MyLib::LR lr);
 
 	/// <summary>
 	/// トリガー入力を取得する
 	/// </summary>
 	/// <param name="lr">左右どちらの入力を取得するか</param>
 	/// <returns>トリガー入力値</returns>
-	float GetTriggerInput(LR lr);
+	float GetTriggerInput(MyLib::LR lr);
 
 private:
 	/// <summary>

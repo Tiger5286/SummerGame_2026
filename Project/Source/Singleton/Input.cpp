@@ -32,16 +32,16 @@ bool Input::IsTriggerd(int button)
 	return m_nowPadInput.Buttons[button] && !m_prevPadInput.Buttons[button];
 }
 
-Vector3 Input::GetStickInput(LR lr)
+Vector3 Input::GetStickInput(MyLib::LR lr)
 {
 	Vector3 stick;
-	if (lr == LR::Left)
+	if (lr == MyLib::LR::Left)
 	{
 		stick.x = m_nowPadInput.ThumbLX;
 		stick.y = m_nowPadInput.ThumbLY;
 		stick = ConvertStickInput(stick);
 	}
-	else if (lr == LR::Right)
+	else if (lr == MyLib::LR::Right)
 	{
 		stick.x = m_nowPadInput.ThumbRX;
 		stick.y = m_nowPadInput.ThumbRY;
@@ -50,13 +50,13 @@ Vector3 Input::GetStickInput(LR lr)
 	return stick;
 }
 
-float Input::GetTriggerInput(LR lr)
+float Input::GetTriggerInput(MyLib::LR lr)
 {
-	if (lr == LR::Left)
+	if (lr == MyLib::LR::Left)
 	{
 		return ConvertTriggerInput(m_nowPadInput.LeftTrigger);
 	}
-	else if (lr == LR::Right)
+	else if (lr == MyLib::LR::Right)
 	{
 		return ConvertTriggerInput(m_nowPadInput.RightTrigger);
 	}

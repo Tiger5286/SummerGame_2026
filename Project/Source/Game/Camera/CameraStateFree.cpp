@@ -2,6 +2,7 @@
 #include "Singleton/Input.h"
 #include "Camera.h"
 #include "Utility/Matrix4x4.h"
+#include "Utility/MyLib.h"
 #include "../Character/Player/Player.h"
 
 namespace
@@ -39,7 +40,7 @@ void CameraStateFree::Update()
 	auto camera = m_pCamera.lock();
 
 	// スティック入力に応じて角度を更新
-	auto rightStick = Input::GetInstance().GetStickInput(LR::Right);
+	auto rightStick = Input::GetInstance().GetStickInput(MyLib::LR::Right);
 	camera->m_angleY += rightStick.x * kRotSpeed;
 	if (camera->m_angleY < 0.0f) camera->m_angleY += DX_TWO_PI_F;
 	if (camera->m_angleY > DX_TWO_PI_F) camera->m_angleY -= DX_TWO_PI_F;

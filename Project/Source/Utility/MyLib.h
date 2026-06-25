@@ -8,6 +8,12 @@
 
 namespace MyLib
 {
+	enum class LR
+	{
+		Left,
+		Right
+	};
+
 	enum class CharacterType
 	{
 		None,

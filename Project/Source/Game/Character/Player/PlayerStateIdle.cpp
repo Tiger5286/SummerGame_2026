@@ -63,7 +63,7 @@ void PlayerStateIdle::Update()
 		return;
 	}
 	// スティック入力があったらMoveへ
-	if (input.GetStickInput(LR::Left).SquaredLength() > 0.0f)
+	if (input.GetStickInput(MyLib::LR::Left).SquaredLength() > 0.0f)
 	{
 		ChangeState(std::make_shared<PlayerStateMove>());
 		return;

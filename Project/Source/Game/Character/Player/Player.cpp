@@ -196,7 +196,7 @@ void Player::Move()
 	RotateInputDir();
 
 	// スティック入力を取得
-	auto stick = input.GetStickInput(LR::Left);
+	auto stick = input.GetStickInput(MyLib::LR::Left);
 	// 移動ベクトルに入力を反映する
 	Vector3 moveVec;
 	moveVec += Vector3(stick.x, 0.0f, stick.y) * kMoveAccel;
@@ -233,7 +233,7 @@ void Player::Jump()
 void Player::RotateInputDir()
 {
 	auto& input = Input::GetInstance();
-	auto stick = input.GetStickInput(LR::Left);
+	auto stick = input.GetStickInput(MyLib::LR::Left);
 	if (stick.SquaredLength() > 0.0f)
 	{
 		stick.Normalize();
