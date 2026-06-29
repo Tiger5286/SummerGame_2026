@@ -31,11 +31,16 @@ void PlayerStateShift::Enter(std::weak_ptr<Player> pPlayer)
 	m_pPlayer = pPlayer;
 	auto player = m_pPlayer.lock();
 	player->m_anim.ChangeAnim(kShiftAnimName, 0.5f, false);
-	player->RotateToTarget(kTrackingDist);
+	player->RotateToTarget(1500.0f);
 	// プレイヤーからターゲットへのベクトルを計算しておく
 	if (player->m_target != nullptr)
 	{
 		m_playerToTarget = player->m_target->GetPos() - player->m_pos;
+		if (m_playerToTarget.SquaredLength() > kTrackingDist * kTrackingDist)
+		{
+			m_playerToTarget.Normalize();
+			m_playerToTarget *= kTrackingDist;
+		}
 	}
 	// 空中で発動可能フラグを消す
 	player->m_isCanAirShift = false;
