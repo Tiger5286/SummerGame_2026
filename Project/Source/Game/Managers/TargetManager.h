@@ -70,5 +70,7 @@ private:
 
 	std::shared_ptr<EnemyBase> m_pTarget = nullptr;
 	bool m_isTarget = false;
+
+	int m_arrowHandle = -1;
 };
 

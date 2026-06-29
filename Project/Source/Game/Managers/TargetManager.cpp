@@ -9,6 +9,7 @@
 #include <map>
 #include <vector>
 #include "DxLib.h"
+#include <cassert>
 
 namespace
 {
@@ -20,6 +21,9 @@ void TargetManager::Init(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera
 	m_pPlayer = pPlayer;
 	m_pCamera = pCamera;
 	m_pEnemyManager = pEnemyManager;
+
+	m_arrowHandle = LoadGraph(L"data/Graphs/EnemyArrow.png");
+	assert(m_arrowHandle != -1);
 }
 
 void TargetManager::Update()
@@ -86,6 +90,7 @@ void TargetManager::Draw()
 	auto inScreenEnemies = GetInScreenEnemies(enemies);
 	auto outScreenEnemies = enemies;
 	outScreenEnemies = GetAliveEnemies(outScreenEnemies);
+	outScreenEnemies = GetInSearchAreaEnemies(outScreenEnemies);
 	for (auto& enemy : inScreenEnemies)
 	{
 		outScreenEnemies.remove(enemy);
@@ -104,12 +109,17 @@ void TargetManager::Draw()
 		if (m_pCamera->GetAngleX() > -0.3f)
 		{
 			y = -y;
+			angle = -angle;
 		}
 		// 方向を描画
-		DrawLine(Game::kScreenWidth / 2, Game::kScreenHeight / 2,
-			Game::kScreenWidth / 2 + x * 200,
-			Game::kScreenHeight / 2 + y * 200,
-			0x0000ff);
+		int graphX = Game::kScreenWidth / 2 + x * (Game::kScreenWidth / 2 - Game::kScreenWidth / 10);
+		int graphY = Game::kScreenHeight / 2 + y * (Game::kScreenHeight / 2 - Game::kScreenHeight / 10);
+		DrawRotaGraph(graphX, graphY, 0.5, angle, m_arrowHandle, true);
+
+		//DrawLine(Game::kScreenWidth / 2, Game::kScreenHeight / 2,
+		//	Game::kScreenWidth / 2 + x * 200,
+		//	Game::kScreenHeight / 2 + y * 200,
+		//	0x0000ff);
 	}
 	
 	// ターゲットがいないなら処理しない
