@@ -34,7 +34,7 @@ void VultureStateAttack::Enter(std::weak_ptr<Vulture> pVulture)
 {
 	m_pVulture = pVulture;
 	auto vulture = m_pVulture.lock();
-
+	// プレイヤーとの高さの差を記録
 	m_toPlayerHeightDif = vulture->m_pos.y - (vulture->m_pPlayer->GetPos().y + 50.0f);
 }
 
@@ -46,7 +46,7 @@ void VultureStateAttack::Update()
 	// 下降
 	if (m_frame < kDescentFrame)
 	{
-		vulture->m_flyHeight = vulture->m_pPlayer->GetPos().y + 50.0f;
+		vulture->m_flyHeight = 50.0f;
 		vulture->m_pos.y -= abs(m_toPlayerHeightDif) / kDescentFrame;
 	}
 	// 突進待機
