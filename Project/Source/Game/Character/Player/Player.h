@@ -75,6 +75,9 @@ private:
     // 見えなくなるかどうか
     bool m_isInvisible = false;
 
+    // 空中でテレポートが発動可能かどうか
+    bool m_isCanAirShift = true;
+
     // ボタン配置
     const int kJump = XINPUT_BUTTON_A;
     const int kAttack = XINPUT_BUTTON_X;

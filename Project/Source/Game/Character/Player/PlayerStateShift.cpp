@@ -37,6 +37,8 @@ void PlayerStateShift::Enter(std::weak_ptr<Player> pPlayer)
 	{
 		m_playerToTarget = player->m_target->GetPos() - player->m_pos;
 	}
+	// 空中で発動可能フラグを消す
+	player->m_isCanAirShift = false;
 }
 
 void PlayerStateShift::Update()

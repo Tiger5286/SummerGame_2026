@@ -279,6 +279,7 @@ void Player::CheckGround()
 		{
 			m_pos.y = result.HitPosition.y;
 			m_isGround = true;
+			m_isCanAirShift = true;
 		}
 	}
 	else

@@ -42,7 +42,7 @@ void PlayerStateFall::Update()
 		return;
 	}
 	// シフトを入力していたらシフト
-	if (input.IsTriggerd(player->kShift))
+	if (input.IsTriggerd(player->kShift) && player->m_isCanAirShift)
 	{
 		ChangeState(std::make_shared<PlayerStateShift>());
 		return;
