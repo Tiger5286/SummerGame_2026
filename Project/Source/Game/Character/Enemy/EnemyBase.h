@@ -21,6 +21,9 @@ public:
 	// マップモデルのハンドルを設定する(Initの前に実行する)
 	void SetMapHandle(int mapHandle) { m_mapHandle = mapHandle; }
 
+	// プレイヤーの方を向く
+	void RotateToPlayer();
+
 	bool IsDead() const { return m_isDead; }
 	bool IsDying() const { return m_isDying; }
 

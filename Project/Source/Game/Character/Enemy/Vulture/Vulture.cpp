@@ -50,6 +50,8 @@ void Vulture::Init()
 
 	// キャラクタータイプをEnemyにする
 	m_type = MyLib::CharacterType::Enemy;
+
+	RotateToPlayer();
 }
 
 void Vulture::End()

@@ -39,6 +39,8 @@ void General::Init()
 	m_pState->ChangeState(m_pState);
 	m_pState->Enter(weak_from_this());
 	CheckChangeState();
+
+	RotateToPlayer();
 }
 
 void General::End()

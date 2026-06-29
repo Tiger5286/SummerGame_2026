@@ -68,6 +68,8 @@ void Zombie::Init()
 
 	// キャラクタータイプをEnemyにする
 	m_type = MyLib::CharacterType::Enemy;
+
+	RotateToPlayer();
 }
 
 void Zombie::End()
