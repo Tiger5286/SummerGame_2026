@@ -1,18 +1,33 @@
 #include "SceneManager.h"
 #include "SceneBase.h"
+#include "SceneLoad.h"
+#include "DxLib.h"
 
-void SceneManager::ChangeScene(std::shared_ptr<SceneBase> pNewScene)
+void SceneManager::ChangeScene(std::shared_ptr<SceneBase> pNewScene, bool isCallLoadScene)
 {
+	// シーンが空なら新しいシーンを追加する
 	if (m_pScenes.empty())
 	{
 		m_pScenes.push_back(pNewScene);
 	}
-	else
+	else	// シーンが空でないなら最後のシーンを新しいシーンにする
 	{
 		m_pScenes.back()->End();
 		m_pScenes.back() = pNewScene;
 	}
+
+	// ロードシーンを使用するなら非同期読み込みを有効にする
+	if (isCallLoadScene) SetUseASyncLoadFlag(true);
+
+	// 新しいシーンの初期化
 	pNewScene->Init();
+
+	// ロードシーンを追加する
+	if (isCallLoadScene)
+	{
+		m_pScenes.push_back(std::make_shared<SceneLoad>(*this));
+		m_pScenes.back()->Init();
+	}
 }
 
 void SceneManager::PushScene(std::shared_ptr<SceneBase> pNewScene)

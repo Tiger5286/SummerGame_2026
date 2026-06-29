@@ -10,9 +10,28 @@ public:
 	SceneManager() = default;
 	~SceneManager() = default;
 
-	void ChangeScene(std::shared_ptr<SceneBase> pNewScene);
+	/// <summary>
+	/// 一番上のシーンを変更する
+	/// </summary>
+	/// <param name="pNewScene">新しいシーン</param>
+	/// <param name="isCallLoadScene">ロードシーンを使うかどうか</param>
+	void ChangeScene(std::shared_ptr<SceneBase> pNewScene,bool isCallLoadScene);
+
+	/// <summary>
+	/// シーンを追加する
+	/// </summary>
+	/// <param name="pNewScene">新しいシーン</param>
 	void PushScene(std::shared_ptr<SceneBase> pNewScene);
+
+	/// <summary>
+	/// 一番上のシーンを削除する
+	/// </summary>
 	void PopScene();
+
+	/// <summary>
+	/// シーンをリセットする
+	/// </summary>
+	/// <param name="pNewScene">新しいシーン</param>
 	void ResetScene(std::shared_ptr<SceneBase> pNewScene);
 
 	void Update();
