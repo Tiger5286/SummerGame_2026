@@ -7,6 +7,8 @@
 #include <limits>
 #include "Game.h"
 #include <map>
+#include <vector>
+#include "DxLib.h"
 
 namespace
 {
@@ -75,6 +77,41 @@ void TargetManager::Update()
 
 void TargetManager::Draw()
 {
+	//printfDx(L"%.2f\n", m_pCamera->GetAngleX());
+
+	// 敵がいなかったらreturn
+	auto enemies = m_pEnemyManager->GetEnemies();
+	if (enemies.empty()) return;
+	// 画面外の敵のみのリストを作成
+	auto inScreenEnemies = GetInScreenEnemies(enemies);
+	auto outScreenEnemies = enemies;
+	outScreenEnemies = GetAliveEnemies(outScreenEnemies);
+	for (auto& enemy : inScreenEnemies)
+	{
+		outScreenEnemies.remove(enemy);
+	}
+	// 画面外の敵でforを回す
+	for (auto& enemy : outScreenEnemies)
+	{
+		// プレイヤーから敵へのベクトルを作成
+		Vector3 vec = enemy->GetPos() - m_pPlayer->GetPos();
+		// ベクトルの角度を算出			// カメラの方向を足す
+		float angle = atan2(vec.z, vec.x) + m_pCamera->GetAngleY();
+		// 2D座標にする
+		float x = cos(angle);
+		float y = sin(angle);
+		// カメラがある程度上を向いていたらyを反転
+		if (m_pCamera->GetAngleX() > -0.3f)
+		{
+			y = -y;
+		}
+		// 方向を描画
+		DrawLine(Game::kScreenWidth / 2, Game::kScreenHeight / 2,
+			Game::kScreenWidth / 2 + x * 200,
+			Game::kScreenHeight / 2 + y * 200,
+			0x0000ff);
+	}
+	
 	// ターゲットがいないなら処理しない
 	if (m_pTarget == nullptr)
 	{

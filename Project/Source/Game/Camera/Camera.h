@@ -19,6 +19,7 @@ public:
 	void Update();
 
 	float GetAngleY() const { return m_angleY; }
+	float GetAngleX() const { return m_angleX; }
 	Vector3 GetPos() const { return m_pos; }
 	void SetPos(const Vector3& pos) { m_pos = pos; }
 
