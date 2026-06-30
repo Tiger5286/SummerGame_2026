@@ -25,12 +25,9 @@ public:
 	void OnHitAttack(const MyLib::AttackData& atkData) override;
 
 private:
-	void CheckChangeState();
-
 	void KeepHeight();
 
 private:
-	std::shared_ptr<VultureStateBase> m_pState = nullptr;
 	Animator m_anim;
 
 	bool m_isFlying = true;

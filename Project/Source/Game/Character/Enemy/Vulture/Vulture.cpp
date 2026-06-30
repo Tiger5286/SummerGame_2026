@@ -4,6 +4,7 @@
 #include "Singleton/CollisionManager.h"
 #include "Utility/Matrix4x4.h"
 #include "Utility/MyLib.h"
+#include "../../CharacterStateBase.h"
 
 #include "VultureStateIdle.h"
 #include "VultureStateHit.h"
@@ -141,23 +142,6 @@ void Vulture::OnHitAttack(const MyLib::AttackData& atkData)
 		{
 			m_pState->ChangeState(std::make_shared<VultureStateHit>());
 		}
-	}
-}
-
-void Vulture::CheckChangeState()
-{
-	auto nextState = m_pState->GetNextState();
-	// 次のステートがある場合は切り替え
-	if (m_pState != nextState)
-	{
-		m_pState->Exit();
-
-		m_pState = nextState;
-
-		auto vulture = std::dynamic_pointer_cast<Vulture>(shared_from_this());
-		m_pState->Enter(vulture);
-
-		m_pState->ChangeState(m_pState);
 	}
 }
 

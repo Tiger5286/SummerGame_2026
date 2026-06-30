@@ -7,7 +7,7 @@ public:
     VultureStateIdle() = default;
     ~VultureStateIdle() = default;
 
-    void Enter(std::weak_ptr<Vulture> pVulture) override;
+    void Enter(std::weak_ptr<Character> pOwner) override;
     void Update() override;
     void Exit() override;
 private:

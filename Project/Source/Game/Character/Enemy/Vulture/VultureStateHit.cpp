@@ -8,9 +8,9 @@ namespace
 	const std::wstring kAnimName = L"VultureCinereous_Skelmesh|VultureCinereous_TakeOff";
 }
 
-void VultureStateHit::Enter(std::weak_ptr<Vulture> pVulture)
+void VultureStateHit::Enter(std::weak_ptr<Character> pOwner)
 {
-	m_pVulture = pVulture;
+	m_pVulture = std::dynamic_pointer_cast<Vulture>(pOwner.lock());
 	auto vulture = m_pVulture.lock();
 	vulture->m_anim.ChangeAnim(kAnimName, 1.0f, false);
 }

@@ -6,9 +6,9 @@ namespace
 	const std::wstring kAnimName = L"VultureCinereous_Skelmesh|VultureCinereous_Land";
 }
 
-void VultureStateDeath::Enter(std::weak_ptr<Vulture> pVulture)
+void VultureStateDeath::Enter(std::weak_ptr<Character> pOwner)
 {
-	m_pVulture = pVulture;
+	m_pVulture = std::dynamic_pointer_cast<Vulture>(pOwner.lock());
 	auto vulture = m_pVulture.lock();
 	vulture->m_anim.ChangeAnim(kAnimName, 0.5f, false);
 	vulture->m_isDying = true;
