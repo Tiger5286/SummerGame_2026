@@ -10,7 +10,7 @@ public:
     GeneralStateHeavySlash() = default;
     ~GeneralStateHeavySlash() = default;
 
-    void Enter(std::weak_ptr<General> pGeneral) override;
+    void Enter(std::weak_ptr<Character> pOwner) override;
     void Update() override;
     void Exit() override;
     void Draw() override;

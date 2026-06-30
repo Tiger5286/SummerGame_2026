@@ -17,9 +17,9 @@ namespace
 	constexpr float kIdleDist = 500.0f;
 }
 
-void GeneralStateWalk::Enter(std::weak_ptr<General> pGeneral)
+void GeneralStateWalk::Enter(std::weak_ptr<Character> pOwner)
 {
-	m_pGeneral = pGeneral;
+	m_pGeneral = std::dynamic_pointer_cast<General>(pOwner.lock());
 	auto general = m_pGeneral.lock();
 	general->m_anim.ChangeAnim(kAnimName);
 }

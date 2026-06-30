@@ -10,7 +10,7 @@ class GeneralStateThrust;
 class GeneralStateProjectile;
 
 class General :
-    public EnemyBase//,public std::enable_shared_from_this<General>
+    public EnemyBase
 {
 public:
     General() = default;
@@ -22,15 +22,11 @@ public:
     void Draw() override;
 
 private:
-    void CheckChangeState();
-
     void AttackRandom();
 
 private:
     int m_swordModelHandle = -1;
     Animator m_anim;
-
-    std::shared_ptr<GeneralStateBase> m_pState = nullptr;
 
     const int kAttackCooltime = 180;
     int m_attackCooltime = kAttackCooltime;

@@ -104,23 +104,6 @@ void General::Draw()
 #endif
 }
 
-void General::CheckChangeState()
-{
-	auto nextState = m_pState->GetNextState();
-	// 次のステートがある場合は切り替え
-	if (m_pState != nextState)
-	{
-		m_pState->Exit();
-
-		m_pState = nextState;
-
-		auto general = std::dynamic_pointer_cast<General>(shared_from_this());
-		m_pState->Enter(general);
-
-		m_pState->ChangeState(m_pState);
-	}
-}
-
 void General::AttackRandom()
 {
 	// クールタイムをリセット
