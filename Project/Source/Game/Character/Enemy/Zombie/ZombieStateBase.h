@@ -1,31 +1,21 @@
 ﻿#pragma once
+#include "../../CharacterStateBase.h"
 #include <memory>
 
 class Zombie;
 
-class ZombieStateBase
+class ZombieStateBase : public CharacterStateBase
 {
 public:
 	ZombieStateBase() = default;
 	virtual ~ZombieStateBase() = default;
 
-	virtual void Enter(std::weak_ptr<Zombie> pZombie) abstract;
-	virtual void Update() abstract;
-	virtual void Exit() abstract;
-	virtual void Draw() {}
-
-	std::shared_ptr<ZombieStateBase> GetNextState()
-	{
-		return m_pNextState;
-	}
-
-	void ChangeState(std::shared_ptr<ZombieStateBase> pNextState)
-	{
-		m_pNextState = pNextState;
-	}
+	virtual void Enter(std::weak_ptr<Character> pOwner) override = 0;
+	virtual void Update() override = 0;
+	virtual void Exit() override = 0;
+	virtual void Draw() override {}
 
 protected:
 	std::weak_ptr<Zombie> m_pZombie;
-	std::shared_ptr<ZombieStateBase> m_pNextState = nullptr;
 };
 

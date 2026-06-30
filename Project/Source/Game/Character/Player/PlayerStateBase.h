@@ -13,7 +13,7 @@ public:
 	virtual void Enter(std::weak_ptr<Character> pOwner) override = 0;
 	virtual void Update() override = 0;
 	virtual void Exit() override = 0;
-	virtual void Draw() {}
+	virtual void Draw() override {}
 
 protected:
 	std::weak_ptr<Player> m_pPlayer;

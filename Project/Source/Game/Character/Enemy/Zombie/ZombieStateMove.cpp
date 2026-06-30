@@ -21,9 +21,9 @@ namespace
 	constexpr float kStopChaseDist = 100.0f;
 }
 
-void ZombieStateMove::Enter(std::weak_ptr<Zombie> pZombie)
+void ZombieStateMove::Enter(std::weak_ptr<Character> pOwner)
 {
-	m_pZombie = pZombie;
+	m_pZombie = std::dynamic_pointer_cast<Zombie>(pOwner.lock());
 	m_pZombie.lock()->m_anim.ChangeAnim(kWalkAnimName);
 	m_pZombie.lock()->m_isFighting = true;
 }

@@ -7,6 +7,7 @@
 #include "Game/Collider/CapsuleCollider.h"
 #include "Singleton/CollisionManager.h"
 #include "../../../UI/EnemyHpBar.h"
+#include "../../CharacterStateBase.h"
 
 #include "ZombieStateIdle.h"
 #include "ZombieStateHit.h"
@@ -171,23 +172,6 @@ void Zombie::OnHitAttack(const MyLib::AttackData& atkData)
 	}
 
 	//printfDx(L"ゾンビが攻撃を食らった！HP:%d\n",m_hp);
-}
-
-void Zombie::CheckChangeState()
-{
-	auto nextState = m_pState->GetNextState();
-	// 次のステートがある場合は切り替え
-	if (m_pState != nextState)
-	{
-		m_pState->Exit();
-
-		m_pState = nextState;
-
-		auto zombie = std::dynamic_pointer_cast<Zombie>(shared_from_this());
-		m_pState->Enter(zombie);
-
-		m_pState->ChangeState(m_pState);
-	}
 }
 
 bool Zombie::IsPlayerInFan()

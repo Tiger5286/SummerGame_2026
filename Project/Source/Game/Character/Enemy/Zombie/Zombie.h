@@ -11,7 +11,7 @@ class ZombieStateAttack;
 class ZombieStateHit;
 class ZombieStateDeath;
 
-class Zombie : public EnemyBase//, public std::enable_shared_from_this<Zombie>
+class Zombie : public EnemyBase
 {
 public:
 	Zombie();
@@ -27,8 +27,6 @@ public:
 	void OnHitAttack(const MyLib::AttackData& atkData) override;
 
 private:
-	void CheckChangeState();	// ステートの切り替え処理
-
 	/// <summary>
 	/// プレイヤーが検知範囲の扇の中にいるか判定する
 	/// </summary>
@@ -51,8 +49,6 @@ private:
 	Animator m_anim;
 
 	bool m_isFighting = false;
-
-	std::shared_ptr<ZombieStateBase> m_pState = nullptr;
 
 	friend ZombieStateBase;
 	friend ZombieStateIdle;

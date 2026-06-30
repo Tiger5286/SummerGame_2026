@@ -8,9 +8,9 @@ namespace
 	const std::wstring kIdleAnimName = L"Zombie|Idle";
 }
 
-void ZombieStateIdle::Enter(std::weak_ptr<Zombie> pZombie)
+void ZombieStateIdle::Enter(std::weak_ptr<Character> pOwner)
 {
-	m_pZombie = pZombie;
+	m_pZombie = std::dynamic_pointer_cast<Zombie>(pOwner.lock());
 	m_pZombie.lock()->m_anim.ChangeAnim(kIdleAnimName);
 	m_pZombie.lock()->m_isFighting = false;
 }
