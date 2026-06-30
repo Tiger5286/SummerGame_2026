@@ -11,7 +11,7 @@ class ZombieStateAttack;
 class ZombieStateHit;
 class ZombieStateDeath;
 
-class Zombie : public EnemyBase, public std::enable_shared_from_this<Zombie>
+class Zombie : public EnemyBase//, public std::enable_shared_from_this<Zombie>
 {
 public:
 	Zombie();

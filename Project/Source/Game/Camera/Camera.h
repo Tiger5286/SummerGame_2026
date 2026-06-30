@@ -21,6 +21,7 @@ public:
 	float GetAngleY() const { return m_angleY; }
 	float GetAngleX() const { return m_angleX; }
 	Vector3 GetPos() const { return m_pos; }
+	Vector3 GetTargetPos() const { return m_targetPos; }
 	void SetPos(const Vector3& pos) { m_pos = pos; }
 
 	// マップのハンドルを設定する(Initの前に呼ぶ)

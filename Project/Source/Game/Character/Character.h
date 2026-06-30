@@ -35,9 +35,10 @@ public:
 	std::shared_ptr<ColliderBase> GetCollider() const { return m_pCollider; }
 	// キャラクタータイプを取得する
 	MyLib::CharacterType GetType() const { return m_type; }
-
 	// IDを取得する
 	const int GetID() const { return m_id; }
+	// HPを取得する
+	int GetHP() const { return m_hp; }
 
 	/// <summary>
 	/// 速度に抵抗をつける(なにもしなかったら徐々に速度が遅くなる)

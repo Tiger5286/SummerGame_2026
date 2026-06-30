@@ -37,7 +37,8 @@ void General::Init()
 	// ステートの初期化
 	m_pState = std::make_shared<GeneralStateWalk>();
 	m_pState->ChangeState(m_pState);
-	m_pState->Enter(weak_from_this());
+	auto general = std::dynamic_pointer_cast<General>(shared_from_this());
+	m_pState->Enter(general);
 	CheckChangeState();
 
 	RotateToPlayer();
@@ -113,7 +114,8 @@ void General::CheckChangeState()
 
 		m_pState = nextState;
 
-		m_pState->Enter(weak_from_this());
+		auto general = std::dynamic_pointer_cast<General>(shared_from_this());
+		m_pState->Enter(general);
 
 		m_pState->ChangeState(m_pState);
 	}

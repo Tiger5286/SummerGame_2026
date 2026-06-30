@@ -3,9 +3,10 @@
 #include <memory>
 
 class Player;
+class EnemyHpBar;
 
 class EnemyBase :
-    public Character
+	public Character,public std::enable_shared_from_this<EnemyBase>
 {
 public:
     EnemyBase();
@@ -15,6 +16,8 @@ public:
 	virtual void End() override = 0;
 	virtual void Update() override = 0;
 	virtual void Draw() override = 0;
+
+	void BaseInit(int maxHp);
 
 	// プレイヤーのポインタを設定する(Initの前に実行する)
 	void SetPlayer(const std::shared_ptr<Player> pPlayer) { m_pPlayer = pPlayer; }
@@ -30,6 +33,7 @@ public:
 protected:
 	int m_mapHandle = -1;
 	std::shared_ptr<Player> m_pPlayer = nullptr;
+	std::shared_ptr<EnemyHpBar> m_pHpBar = nullptr;
 	bool m_isDead = false;	// 完全に死んだときにtrue
 	bool m_isDying = false;	// 死ぬモーションの間true
 };

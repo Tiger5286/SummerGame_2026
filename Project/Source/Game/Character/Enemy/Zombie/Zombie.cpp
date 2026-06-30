@@ -6,6 +6,7 @@
 #include "Utility/MyLib.h"
 #include "Game/Collider/CapsuleCollider.h"
 #include "Singleton/CollisionManager.h"
+#include "../../../UI/EnemyHpBar.h"
 
 #include "ZombieStateIdle.h"
 #include "ZombieStateHit.h"
@@ -63,13 +64,17 @@ void Zombie::Init()
 	// ステートの初期化
 	m_pState = std::make_shared<ZombieStateIdle>();
 	m_pState->ChangeState(m_pState);
-	m_pState->Enter(weak_from_this());
+	auto zombie = std::dynamic_pointer_cast<Zombie>(shared_from_this());
+	m_pState->Enter(zombie);
 	CheckChangeState();
 
 	// キャラクタータイプをEnemyにする
 	m_type = MyLib::CharacterType::Enemy;
 
+	// プレイヤーの方を向く
 	RotateToPlayer();
+
+	BaseInit(kMaxHP);
 }
 
 void Zombie::End()
@@ -132,6 +137,8 @@ void Zombie::Draw()
 
 	m_pState->Draw();
 
+	m_pHpBar->Draw();
+
 #ifdef _DEBUG
 	m_pCollider->Draw();
 #endif
@@ -176,7 +183,8 @@ void Zombie::CheckChangeState()
 
 		m_pState = nextState;
 
-		m_pState->Enter(weak_from_this());
+		auto zombie = std::dynamic_pointer_cast<Zombie>(shared_from_this());
+		m_pState->Enter(zombie);
 
 		m_pState->ChangeState(m_pState);
 	}

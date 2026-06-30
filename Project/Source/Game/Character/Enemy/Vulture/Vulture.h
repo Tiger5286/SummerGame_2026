@@ -9,7 +9,7 @@ class VultureStateDeath;
 class VultureStateDown;
 class VultureStateAttack;
 
-class Vulture : public EnemyBase, public std::enable_shared_from_this<Vulture>
+class Vulture : public EnemyBase//, public std::enable_shared_from_this<Vulture>
 {
 public:
     Vulture() = default;

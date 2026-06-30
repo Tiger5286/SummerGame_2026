@@ -10,7 +10,7 @@ class GeneralStateThrust;
 class GeneralStateProjectile;
 
 class General :
-    public EnemyBase,public std::enable_shared_from_this<General>
+    public EnemyBase//,public std::enable_shared_from_this<General>
 {
 public:
     General() = default;

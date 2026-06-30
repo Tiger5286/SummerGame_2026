@@ -5,6 +5,7 @@
 
 #include "../Singleton/ModelManager.h"
 #include "Singleton/EffectManager.h"
+#include "Singleton/CameraSetter.h"
 
 #include "SceneManager.h"
 
@@ -101,6 +102,9 @@ void SceneMain::Init()
 
 	m_pCamera->SetPlayer(m_pPlayer);
 	m_pPlayer->SetCamera(m_pCamera);
+
+	// カメラ設定クラスの初期化
+	CameraSetter::GetInstance().Init(m_pCamera);
 
 	// 敵管理クラスの生成
 	m_pEnemyManager = std::make_shared<EnemyManager>();

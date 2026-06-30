@@ -45,7 +45,8 @@ void Vulture::Init()
 	// ステートの初期化
 	m_pState = std::make_shared<VultureStateIdle>();
 	m_pState->ChangeState(m_pState);
-	m_pState->Enter(weak_from_this());
+	auto vulture = std::dynamic_pointer_cast<Vulture>(shared_from_this());
+	m_pState->Enter(vulture);
 	CheckChangeState();
 
 	// キャラクタータイプをEnemyにする
@@ -153,7 +154,8 @@ void Vulture::CheckChangeState()
 
 		m_pState = nextState;
 
-		m_pState->Enter(weak_from_this());
+		auto vulture = std::dynamic_pointer_cast<Vulture>(shared_from_this());
+		m_pState->Enter(vulture);
 
 		m_pState->ChangeState(m_pState);
 	}
