@@ -287,19 +287,3 @@ void Player::CheckGround()
 		m_isGround = false;
 	}
 }
-
-void Player::CheckChangeState()
-{
-	auto nextState = m_pState->GetNextState();
-	// 次のステートがある場合は切り替え
-	if (m_pState != nextState)
-	{
-		m_pState->Exit();
-
-		m_pState = nextState;
-
-		m_pState->Enter(weak_from_this());
-
-		m_pState->ChangeState(m_pState);
-	}
-}

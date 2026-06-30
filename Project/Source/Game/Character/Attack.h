@@ -5,7 +5,7 @@
 #include "Utility/MyLib.h"
 
 class Attack :
-    public Character, public std::enable_shared_from_this<Attack>
+    public Character
 {
 public:
     Attack() = default;

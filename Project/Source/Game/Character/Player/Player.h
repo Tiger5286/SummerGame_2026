@@ -18,7 +18,7 @@ class PlayerStateShift;
 class PlayerStateBurning;
 class PlayerStateSpin;
 
-class Player : public Character, public std::enable_shared_from_this<Player>
+class Player : public Character
 {
 public:
     Player() = default;
@@ -56,11 +56,6 @@ private:
     // 接地判定
     void CheckGround();
 
-    /// <summary>
-    /// ステートの切り替え処理
-    /// </summary>
-    void CheckChangeState();
-
 private:
 	Animator m_anim;    // アニメーションクラス
 	int m_mapHandle = -1;	// マップのモデルのハンドル
@@ -68,9 +63,6 @@ private:
     std::shared_ptr<Character> m_target;   // ロックオンしているターゲット
 
     std::weak_ptr<Camera> m_pCamera;
-
-    // プレイヤーのステート
-    std::shared_ptr<PlayerStateBase> m_pState = nullptr;
 
     // 見えなくなるかどうか
     bool m_isInvisible = false;

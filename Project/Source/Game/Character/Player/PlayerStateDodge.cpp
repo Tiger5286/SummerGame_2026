@@ -15,9 +15,9 @@ namespace
 	constexpr int kDodgeFrame = 30;
 }
 
-void PlayerStateDodge::Enter(std::weak_ptr<Player> pPlayer)
+void PlayerStateDodge::Enter(std::weak_ptr<Character> pOwner)
 {
-	m_pPlayer = pPlayer;
+	m_pPlayer = std::dynamic_pointer_cast<Player>(pOwner.lock());
 	m_pPlayer.lock()->m_anim.ChangeAnim(kRollingAnimName, 0.5f, false);
 	m_pPlayer.lock()->RotateInputDir();
 }

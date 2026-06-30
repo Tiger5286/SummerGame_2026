@@ -26,9 +26,9 @@ namespace
 	};
 }
 
-void PlayerStateBurning::Enter(std::weak_ptr<Player> pPlayer)
+void PlayerStateBurning::Enter(std::weak_ptr<Character> pOwner)
 {
-	m_pPlayer = pPlayer;
+	m_pPlayer = std::dynamic_pointer_cast<Player>(pOwner.lock());
 	auto player = m_pPlayer.lock();
 	// アニメーションを切り替える
 	player->m_anim.ChangeAnim(kBurningAnimName, 0.5f, false);

@@ -14,9 +14,9 @@ namespace
 	const std::wstring kFallAnimName = L"Player|Fall";
 }
 
-void PlayerStateFall::Enter(std::weak_ptr<Player> pPlayer)
+void PlayerStateFall::Enter(std::weak_ptr<Character> pOwner)
 {
-	m_pPlayer = pPlayer;
+	m_pPlayer = std::dynamic_pointer_cast<Player>(pOwner.lock());
 	m_pPlayer.lock()->m_anim.ChangeAnim(kFallAnimName);
 }
 

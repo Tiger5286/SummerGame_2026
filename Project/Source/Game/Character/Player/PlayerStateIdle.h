@@ -7,7 +7,7 @@ public:
     PlayerStateIdle() = default;
     ~PlayerStateIdle() = default;
 
-    void Enter(std::weak_ptr<Player> pPlayer) override;
+    void Enter(std::weak_ptr<Character> pOwner) override;
     void Update() override;
     void Exit() override;
 };

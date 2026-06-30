@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\Character\CharacterStateBase.cpp" />
     <ClCompile Include="Source\Singleton\CameraSetter.cpp" />
     <ClCompile Include="Source\Game\UI\EnemyHpBar.cpp" />
     <ClCompile Include="Source\Scenes\SceneLoad.cpp" />
@@ -87,6 +88,7 @@
     <ClCompile Include="Source\Game\Managers\SpawnerManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\Character\CharacterStateBase.h" />
     <ClInclude Include="Source\Singleton\CameraSetter.h" />
     <ClInclude Include="Source\Game\UI\EnemyHpBar.h" />
     <ClInclude Include="Source\Scenes\SceneLoad.h" />

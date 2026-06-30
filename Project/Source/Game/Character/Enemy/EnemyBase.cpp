@@ -15,7 +15,8 @@ EnemyBase::~EnemyBase()
 void EnemyBase::BaseInit(int maxHp)
 {
 	m_pHpBar = std::make_shared<EnemyHpBar>();
-	m_pHpBar->Init(shared_from_this(), maxHp);
+	auto enemy = std::dynamic_pointer_cast<EnemyBase>(shared_from_this());
+	m_pHpBar->Init(enemy, maxHp);
 }
 
 void EnemyBase::RotateToPlayer()

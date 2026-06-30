@@ -5,8 +5,9 @@
 #include <memory>
 
 class ColliderBase;
+class CharacterStateBase;
 
-class Character
+class Character : public std::enable_shared_from_this<Character>
 {
 public:
 	Character();
@@ -66,12 +67,17 @@ public:
 	void CheckHitMapCapsule(MV1_COLL_RESULT_POLY_DIM coll);
 	void CheckHitMapSphere(MV1_COLL_RESULT_POLY_DIM coll);
 
+	// ステートの切り替え処理
+	void CheckChangeState();
+
 protected:
 	// モデルのハンドル
 	int m_modelHandle = -1;
 
 	// 当たり判定
 	std::shared_ptr<ColliderBase> m_pCollider = nullptr;
+
+	std::shared_ptr<CharacterStateBase> m_pState = nullptr;
 
 	// hp
 	int m_hp = -1;

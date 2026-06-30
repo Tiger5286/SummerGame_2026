@@ -6,7 +6,7 @@ class Player;
 class EnemyHpBar;
 
 class EnemyBase :
-	public Character,public std::enable_shared_from_this<EnemyBase>
+	public Character
 {
 public:
     EnemyBase();

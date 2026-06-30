@@ -2,6 +2,7 @@
 #include "../Collider/CapsuleCollider.h"
 #include "../Collider/SphereCollider.h"
 #include "Singleton/IDManager.h"
+#include "CharacterStateBase.h"
 
 namespace
 {
@@ -103,5 +104,18 @@ void Character::CheckHitMapSphere(MV1_COLL_RESULT_POLY_DIM coll)
 			m_vel.y = 0.0f;
 			m_isGround = true;
 		}
+	}
+}
+
+void Character::CheckChangeState()
+{
+	auto nextState = m_pState->GetNextState();
+	// 次のステートがある場合は切り替え
+	if (m_pState != nextState)
+	{
+		m_pState->Exit();
+		m_pState = nextState;
+		m_pState->Enter(shared_from_this());
+		m_pState->ChangeState(m_pState);
 	}
 }

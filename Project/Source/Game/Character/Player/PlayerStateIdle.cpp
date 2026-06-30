@@ -16,9 +16,9 @@ namespace
 	const std::wstring kIdleAnimName = L"Player|Idle";
 }
 
-void PlayerStateIdle::Enter(std::weak_ptr<Player> pPlayer)
+void PlayerStateIdle::Enter(std::weak_ptr<Character> pOwner)
 {
-	m_pPlayer = pPlayer;
+	m_pPlayer = std::dynamic_pointer_cast<Player>(pOwner.lock());
 	m_pPlayer.lock()->m_anim.ChangeAnim(kIdleAnimName);
 }
 

@@ -1,31 +1,21 @@
 #pragma once
 #include <memory>
+#include "../CharacterStateBase.h"
 
 class Player;
 
-class PlayerStateBase
+class PlayerStateBase : public CharacterStateBase
 {
 public:
 	PlayerStateBase() = default;
 	virtual ~PlayerStateBase() = default;
 
-	virtual void Enter(std::weak_ptr<Player> pPlayer) abstract;
-	virtual void Update() abstract;
-	virtual void Exit() abstract;
+	virtual void Enter(std::weak_ptr<Character> pOwner) override = 0;
+	virtual void Update() override = 0;
+	virtual void Exit() override = 0;
 	virtual void Draw() {}
-
-	std::shared_ptr<PlayerStateBase> GetNextState()
-	{
-		return m_pNextState;
-	}
-
-	void ChangeState(std::shared_ptr<PlayerStateBase> pNextState)
-	{
-		m_pNextState = pNextState;
-	}
 
 protected:
 	std::weak_ptr<Player> m_pPlayer;
-	std::shared_ptr<PlayerStateBase> m_pNextState = nullptr;
+	std::shared_ptr<PlayerStateBase> m_pNextStatePlayer = nullptr;
 };
-
