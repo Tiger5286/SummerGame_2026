@@ -4,36 +4,46 @@
 #include "../Camera/Camera.h"
 #include "Singleton/CameraSetter.h"
 
-EnemyHpBar::~EnemyHpBar()
+EnemyHpBar::EnemyHpBar() : 
+	UIBase(0)
 {
-	DeleteGraph(m_RTHandle);
+
 }
 
-void EnemyHpBar::Init(std::shared_ptr<EnemyBase> pEnemy, int maxHp)
+EnemyHpBar::~EnemyHpBar()
+{
+}
+
+void EnemyHpBar::SetInfo(std::shared_ptr<EnemyBase> pEnemy, int maxHp)
 {
 	m_pEnemy = pEnemy;
 	m_maxHp = maxHp;
-	m_currentHp = maxHp;
-	m_RTHandle = MakeScreen(100, 10);
 }
 
-void EnemyHpBar::End()
+void EnemyHpBar::Init()
 {
-
+	m_RTHandle = MakeScreen(100, 10);
+	m_currentHp = m_maxHp;
 }
 
 void EnemyHpBar::Update()
 {
-
+	auto pEnemy = m_pEnemy.lock();
+	if (pEnemy->IsDying())
+	{
+		m_isAlive = false;
+	}
 }
 
 void EnemyHpBar::Draw()
 {
+	auto pEnemy = m_pEnemy.lock();
+
 	// Hpバーを描画
 	SetDrawScreen(m_RTHandle);
 	ClearDrawScreen();
 
-	float hpRate = static_cast<float>(m_pEnemy->GetHP()) / static_cast<float>(m_maxHp);
+	float hpRate = static_cast<float>(pEnemy->GetHP()) / static_cast<float>(m_maxHp);
 
 	float x = 100 * hpRate;
 	DrawBox(0, 0, 100 * hpRate, 10, 0xff0000, true);
@@ -45,7 +55,7 @@ void EnemyHpBar::Draw()
 	CameraSetter::GetInstance().SetCameraSetting();
 
 	// UIの描画位置(2D)を算出
-	auto screenPos = ConvWorldPosToScreenPos((m_pEnemy->GetPos() + Vector3(0, 200, 0)).ToDxLib());
+	auto screenPos = ConvWorldPosToScreenPos((pEnemy->GetPos() + Vector3(0, 200, 0)).ToDxLib());
 	// UIを描画
 	if (screenPos.z > 0.0f && screenPos.z < 1.0f)
 	{

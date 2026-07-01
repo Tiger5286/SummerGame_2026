@@ -61,7 +61,6 @@ void Vulture::Init()
 
 void Vulture::End()
 {
-	m_pHpBar->End();
 }
 
 void Vulture::Update()
@@ -104,8 +103,6 @@ void Vulture::Update()
 
 	// アニメーションの更新
 	m_anim.Update();
-
-	m_pHpBar->Update();
 }
 
 void Vulture::Draw()
@@ -113,8 +110,6 @@ void Vulture::Draw()
 	MV1DrawModel(m_modelHandle);
 
 	m_pState->Draw();
-
-	m_pHpBar->Draw();
 
 #ifdef _DEBUG
 	m_pCollider->Draw();

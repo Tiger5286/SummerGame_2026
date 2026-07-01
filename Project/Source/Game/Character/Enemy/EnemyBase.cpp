@@ -2,6 +2,7 @@
 #include "DxLib.h"
 #include "../Player/Player.h"
 #include "../../UI/EnemyHpBar.h"
+#include "Singleton/UIManager.h"
 
 EnemyBase::EnemyBase()
 {}
@@ -16,7 +17,8 @@ void EnemyBase::BaseInit(int maxHp)
 {
 	m_pHpBar = std::make_shared<EnemyHpBar>();
 	auto enemy = std::dynamic_pointer_cast<EnemyBase>(shared_from_this());
-	m_pHpBar->Init(enemy, maxHp);
+	m_pHpBar->SetInfo(enemy, maxHp);
+	UIManager::GetInstance().AddUI(m_pHpBar);
 }
 
 void EnemyBase::RotateToPlayer()

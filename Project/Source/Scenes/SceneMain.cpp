@@ -7,6 +7,7 @@
 #include "Singleton/EffectManager.h"
 #include "Singleton/CameraSetter.h"
 #include "Singleton/Input.h"
+#include "Singleton/UIManager.h"
 
 #include "SceneManager.h"
 #include "ScenePause.h"
@@ -159,6 +160,9 @@ void SceneMain::Update()
 
 	EffectManager::GetInstance().Update();
 
+	// UIの更新
+	UIManager::GetInstance().Update();
+
 	// ポーズが押されたらポーズシーンに遷移する
 	auto& input = Input::GetInstance();
 	if (input.IsTriggerd(XINPUT_BUTTON_START))
@@ -203,6 +207,9 @@ void SceneMain::Draw()
 
 	// ターゲットUIの描画
 	m_pTargetManager->Draw();
+
+	// UIの描画
+	UIManager::GetInstance().Draw();
 
 #ifdef _DEBUG
 	// デバッグ表示

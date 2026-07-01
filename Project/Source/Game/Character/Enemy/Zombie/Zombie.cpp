@@ -80,7 +80,6 @@ void Zombie::Init()
 
 void Zombie::End()
 {
-	m_pHpBar->End();
 }
 
 void Zombie::Update()
@@ -139,8 +138,6 @@ void Zombie::Draw()
 	MV1DrawModel(m_modelHandle);
 
 	m_pState->Draw();
-
-	m_pHpBar->Draw();
 
 #ifdef _DEBUG
 	m_pCollider->Draw();
