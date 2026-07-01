@@ -16,14 +16,22 @@ namespace
 	constexpr float kNoTargetDist = 1500.0f;
 }
 
+TargetManager::~TargetManager()
+{
+	DeleteGraph(m_arrowGraphHandle);
+	DeleteGraph(m_targetGraphHandle);
+}
+
 void TargetManager::Init(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera> pCamera, std::shared_ptr<EnemyManager> pEnemyManager)
 {
 	m_pPlayer = pPlayer;
 	m_pCamera = pCamera;
 	m_pEnemyManager = pEnemyManager;
 
-	m_arrowHandle = LoadGraph(L"data/Graphs/EnemyArrow.png");
-	assert(m_arrowHandle != -1);
+	m_arrowGraphHandle = LoadGraph(L"data/Graphs/EnemyArrow.png");
+	assert(m_arrowGraphHandle != -1);
+	m_targetGraphHandle = LoadGraph(L"data/Graphs/target.png");
+	assert(m_targetGraphHandle != -1);
 }
 
 void TargetManager::Update()
@@ -49,6 +57,7 @@ void TargetManager::Update()
 			{
 				m_isTarget = false;
 			}
+			m_targetFrame = 0;
 		}
 		else	// ターゲットがいれば解除
 		{
@@ -61,10 +70,12 @@ void TargetManager::Update()
 	if (input.IsTriggerd(XINPUT_BUTTON_DPAD_LEFT))
 	{
 		SelectTarget(MyLib::LR::Left);
+		m_targetFrame = 0;
 	}
 	if (input.IsTriggerd(XINPUT_BUTTON_DPAD_RIGHT))
 	{
 		SelectTarget(MyLib::LR::Right);
+		m_targetFrame = 0;
 	}
 
 
@@ -72,6 +83,7 @@ void TargetManager::Update()
 	if (m_isTarget)
 	{
 		CheckTarget();
+		m_targetFrame++;
 	}
 
 	// ターゲットを設定
@@ -114,12 +126,7 @@ void TargetManager::Draw()
 		// 方向を描画
 		int graphX = Game::kScreenWidth / 2 + x * (Game::kScreenWidth / 2 - Game::kScreenWidth / 10);
 		int graphY = Game::kScreenHeight / 2 + y * (Game::kScreenHeight / 2 - Game::kScreenHeight / 10);
-		DrawRotaGraph(graphX, graphY, 0.5, angle, m_arrowHandle, true);
-
-		//DrawLine(Game::kScreenWidth / 2, Game::kScreenHeight / 2,
-		//	Game::kScreenWidth / 2 + x * 200,
-		//	Game::kScreenHeight / 2 + y * 200,
-		//	0x0000ff);
+		DrawRotaGraph(graphX, graphY, 0.5, angle, m_arrowGraphHandle, true);
 	}
 	
 	// ターゲットがいないなら処理しない
@@ -128,12 +135,21 @@ void TargetManager::Draw()
 		return;
 	}
 
-	auto pos = m_pTarget->GetPos() + Vector3::Up() * 200.0f;
+	auto pos = m_pTarget->GetPos() + Vector3::Up() * 100.0f;
 	auto screenPos = ConvWorldPosToScreenPos(pos.ToDxLib());
 	// スクリーン座標のzが0.0~1.0の範囲でなければ無効
 	if (screenPos.z > 0.0f && screenPos.z < 1.0f)
 	{
-		DrawCircle(screenPos.x, screenPos.y, 10, 0xff0000, true);
+		m_targetGraphAngle += 0.01f;
+
+		if (m_targetFrame > 120)
+		{
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
+		}
+
+		DrawRotaGraph(screenPos.x, screenPos.y, 0.1, m_targetGraphAngle, m_targetGraphHandle, true);
+
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 }
 
@@ -165,6 +181,7 @@ void TargetManager::CheckTarget()
 		enemies = GetAliveEnemies(enemies);			// 生きている敵
 		enemies = GetInSearchAreaEnemies(enemies);	// ターゲット範囲内の敵
 		m_pTarget = GetNearestEnemy(enemies);		// 最も近い敵
+		m_targetFrame = 0;
 	}
 
 }

@@ -12,7 +12,7 @@ class TargetManager
 {
 public:
 	TargetManager() = default;
-	~TargetManager() = default;
+	~TargetManager();
 
 	void Init(std::shared_ptr<Player> pPlayer,std::shared_ptr<Camera> pCamera,std::shared_ptr<EnemyManager> pEnemyManager);
 	void Update();
@@ -24,7 +24,6 @@ private:
 	/// ターゲットをするかしないかを判断する
 	/// </summary>
 	void CheckTarget();
-
 
 	void SelectTarget(MyLib::LR lr);
 
@@ -71,6 +70,10 @@ private:
 	std::shared_ptr<EnemyBase> m_pTarget = nullptr;
 	bool m_isTarget = false;
 
-	int m_arrowHandle = -1;
+	int m_arrowGraphHandle = -1;
+
+	int m_targetGraphHandle = -1;
+	float m_targetGraphAngle = 0.0f;
+	int m_targetFrame = 0;
 };
 
