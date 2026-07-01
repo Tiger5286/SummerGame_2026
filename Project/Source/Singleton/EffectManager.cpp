@@ -43,7 +43,8 @@ void EffectManager::LoadEffect(const std::wstring& filePath, const std::wstring&
 {
 	if (m_effectResourceHandles.contains(name))
 	{
-		assert(false && "登録するエフェクトの名前が重複しています");
+		// 同じ名前のエフェクトが登録されている場合はロードしない
+		//assert(false && "登録するエフェクトの名前が重複しています");
 		return;
 	}
 	auto handle = LoadEffekseerEffect(filePath.c_str(), scale);
