@@ -10,6 +10,8 @@
 #include <vector>
 #include "DxLib.h"
 #include <cassert>
+#include "../Collider/ColliderBase.h"
+#include "../Collider/CapsuleCollider.h"
 
 namespace
 {
@@ -135,7 +137,19 @@ void TargetManager::Draw()
 		return;
 	}
 
-	auto pos = m_pTarget->GetPos() + Vector3::Up() * 100.0f;
+	// ターゲットのコライダーの種類によって描画位置を変える
+	auto pos = Vector3::Zero();
+	auto colType = m_pTarget->GetCollider()->GetType();
+	if (colType == ColliderType::Sphere)
+	{	// 球なら球の中心を描画位置にする
+		auto col = m_pTarget->GetCollider();
+		pos = col->GetPos();
+	}
+	else if (colType == ColliderType::Capsule)
+	{	// カプセルならカプセルの真ん中を描画位置にする
+		auto capsule = std::dynamic_pointer_cast<CapsuleCollider>(m_pTarget->GetCollider());
+		pos = capsule->GetPos() + Vector3::Up() * capsule->GetHeight() / 2;
+	}
 	auto screenPos = ConvWorldPosToScreenPos(pos.ToDxLib());
 	// スクリーン座標のzが0.0~1.0の範囲でなければ無効
 	if (screenPos.z > 0.0f && screenPos.z < 1.0f)
