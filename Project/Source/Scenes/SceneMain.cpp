@@ -6,8 +6,10 @@
 #include "../Singleton/ModelManager.h"
 #include "Singleton/EffectManager.h"
 #include "Singleton/CameraSetter.h"
+#include "Singleton/Input.h"
 
 #include "SceneManager.h"
+#include "ScenePause.h"
 
 #include "Game/Character/Player/Player.h"
 #include "Game/Camera/Camera.h"
@@ -150,6 +152,14 @@ void SceneMain::Update()
 	m_pSpawnerManager->Update();
 
 	EffectManager::GetInstance().Update();
+
+	// ポーズが押されたらポーズシーンに遷移する
+	auto& input = Input::GetInstance();
+	if (input.IsTriggerd(XINPUT_BUTTON_START))
+	{
+		m_sceneManager.PushScene(std::make_shared<ScenePause>(m_sceneManager));
+		return;
+	}
 }
 
 void SceneMain::Draw()
