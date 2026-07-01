@@ -79,7 +79,9 @@ void Zombie::Init()
 }
 
 void Zombie::End()
-{}
+{
+	m_pHpBar->End();
+}
 
 void Zombie::Update()
 {

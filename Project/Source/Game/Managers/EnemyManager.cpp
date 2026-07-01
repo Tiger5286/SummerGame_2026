@@ -50,6 +50,7 @@ void EnemyManager::Update()
 	// 死んでいる敵をリストから削除する
 	for (auto& enemy : m_deadEnemyList)
 	{
+		enemy->End();
 		m_enemyList.remove(enemy);
 	}
 }
