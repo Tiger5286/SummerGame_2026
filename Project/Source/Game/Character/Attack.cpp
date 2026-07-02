@@ -1,6 +1,7 @@
 ﻿#include "Attack.h"
 #include "Game/Collider/SphereCollider.h"
 #include "Singleton/CollisionManager.h"
+#include "../Character/Player/PlayerStateBase.h"
 
 void Attack::Init()
 {
@@ -38,6 +39,18 @@ void Attack::OnCollision(Character & other)
 		if (other.GetType() == m_data.hitCharacterType)
 		{
 			other.OnHitAttack(m_data);
+			// 攻撃を当てた時必殺技ゲージを貯める
+			auto playerState = std::dynamic_pointer_cast<PlayerStateBase>(m_pOwner.lock());
+			if (playerState != nullptr)
+			{
+				playerState->AddSpecialCharge(m_data.specialCharge);
+			}
 		}
 	}
+}
+
+void Attack::SetData(MyLib::AttackData data, std::shared_ptr<CharacterStateBase> pOwner)
+{
+	m_data = data;
+	m_pOwner = pOwner;
 }

@@ -5,6 +5,7 @@
 
 class Camera;
 class PlayerHPUI;
+class PlayerSpecialUI;
 
 // プレイヤーのステートクラスをプロトタイプ宣言しておく
 class PlayerStateBase;
@@ -42,6 +43,8 @@ public:
     // 自身の向きを表すベクトルを取得する
     Vector3 GetDir() const;
 
+    int GetSpecialCharge() const { return m_specialCharge; }
+
     void OnHitAttack(const MyLib::AttackData& atkData) override;
 
 private:
@@ -65,12 +68,16 @@ private:
     std::weak_ptr<Camera> m_pCamera;
 
     std::shared_ptr<PlayerHPUI> m_pHPUI = nullptr;
+    std::shared_ptr<PlayerSpecialUI> m_pSpecialUI = nullptr;
 
     // 見えなくなるかどうか
     bool m_isInvisible = false;
 
     // 空中でテレポートが発動可能かどうか
     bool m_isCanAirShift = true;
+
+    // 必殺技ゲージ
+    int m_specialCharge = 0;
 
     // ボタン配置
     const int kJump = XINPUT_BUTTON_A;

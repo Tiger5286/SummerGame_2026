@@ -45,7 +45,7 @@ void GeneralStateHeavySlash::Update()
 	{
 		Vector3 colPos = general->m_pos + kAttackOffset * Matrix4x4::GetRotY(general->m_angle);
 		m_pAttack = std::make_shared<Attack>();
-		m_pAttack->SetData(kAttackData);
+		m_pAttack->SetData(kAttackData,shared_from_this());
 		m_pAttack->Init();
 		m_pAttack->SetPos(colPos);
 	}
@@ -57,7 +57,7 @@ void GeneralStateHeavySlash::Update()
 		{
 			Vector3 colPos = general->m_pos + kAttackOffset * Matrix4x4::GetRotY(general->m_angle);
 			m_pAttack = std::make_shared<Attack>();
-			m_pAttack->SetData(kAttackData);
+			m_pAttack->SetData(kAttackData,shared_from_this());
 			m_pAttack->Init();
 			m_pAttack->SetPos(colPos);
 		}

@@ -41,7 +41,7 @@ void ZombieStateAttack::Update()
 	if (animRate > kStartColTimeRate && !m_isOnCollider)
 	{
 		m_pAtk = std::make_shared<Attack>();
-		m_pAtk->SetData(kAttackData);
+		m_pAtk->SetData(kAttackData,shared_from_this());
 		m_pAtk->Init();
 		m_isOnCollider = true;
 	}

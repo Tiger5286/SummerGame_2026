@@ -46,7 +46,7 @@ void GeneralStateThrust::Update()
 	{
 		// 当たり判定の生成
 		m_pAtk = std::make_shared<Attack>();
-		m_pAtk->SetData(kAttackData);
+		m_pAtk->SetData(kAttackData,shared_from_this());
 		m_pAtk->Init();
 		Vector3 colPos = general->m_pos + kAttackOffset * Matrix4x4::GetRotY(general->m_angle);
 		m_pAtk->SetPos(colPos);

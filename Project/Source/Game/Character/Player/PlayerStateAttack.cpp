@@ -69,20 +69,28 @@ namespace
 	// 攻撃のデータ
 	const std::vector<MyLib::AttackData> kAttackData = {
 		{
-			100.0f,
-			40,
-			MyLib::CharacterType::Enemy,
+			.colliderRadius = 100.0f,
+			.damage = 40,
+			.hitCharacterType = MyLib::CharacterType::Enemy,
+			.isKnockDown = false,
+			.isIgnoreInvincible = false,
+			.specialCharge = 20,
 		},
 		{
-			100.0f,
-			60,
-			MyLib::CharacterType::Enemy,
+			.colliderRadius = 100.0f,
+			.damage = 60,
+			.hitCharacterType = MyLib::CharacterType::Enemy,
+			.isKnockDown = false,
+			.isIgnoreInvincible = false,
+			.specialCharge = 30,
 		},
 		{
-			100.0f,
-			100,
-			MyLib::CharacterType::Enemy,
-			true
+			.colliderRadius = 100.0f,
+			.damage = 100,
+			.hitCharacterType = MyLib::CharacterType::Enemy,
+			.isKnockDown = true,
+			.isIgnoreInvincible = false,
+			.specialCharge = 50,
 		},
 	};
 }
@@ -156,7 +164,7 @@ void PlayerStateAttack::Update()
 	{
 		// 当たり判定を生成し、当たり判定をonにする
 		m_pAtk = std::make_shared<Attack>();
-		m_pAtk->SetData(kAttackData[m_comboIndex]);
+		m_pAtk->SetData(kAttackData[m_comboIndex], shared_from_this());
 		m_pAtk->Init();
 		m_isOnCollider = true;
 	}

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <memory>
 #include "../CharacterStateBase.h"
 
@@ -14,6 +14,8 @@ public:
 	virtual void Update() override = 0;
 	virtual void Exit() override = 0;
 	virtual void Draw() override {}
+
+	void AddSpecialCharge(int value);
 
 protected:
 	std::weak_ptr<Player> m_pPlayer;

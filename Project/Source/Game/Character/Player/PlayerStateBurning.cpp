@@ -42,6 +42,8 @@ void PlayerStateBurning::Enter(std::weak_ptr<Character> pOwner)
 	// 翼を生成する
 	m_pWing = std::make_shared<BurningWing>();
 	m_pWing->Init(player->m_pos + Vector3(0, 100, 0), player->m_angle);
+
+	player->m_specialCharge = 0;
 }
 
 void PlayerStateBurning::Update()
@@ -58,7 +60,7 @@ void PlayerStateBurning::Update()
 		{
 			// 攻撃を生成する
 			m_pAtk = std::make_shared<Attack>();
-			m_pAtk->SetData(kAttackData);
+			m_pAtk->SetData(kAttackData, shared_from_this());
 			m_pAtk->Init();
 			m_pAtk->SetPos(player->m_pos);
 		}

@@ -19,7 +19,10 @@ namespace
 	const MyLib::AttackData kAttackData = {
 		.colliderRadius = 100.0f,
 		.damage = 70,
-		.hitCharacterType = MyLib::CharacterType::Enemy
+		.hitCharacterType = MyLib::CharacterType::Enemy,
+		.isKnockDown = true,
+		.isIgnoreInvincible = false,
+		.specialCharge = 25
 	};
 	// 攻撃のプレイヤーからのオフセット
 	const Vector3 kAttackOffsetL = Vector3(-130, 100, 0);
@@ -52,10 +55,10 @@ void PlayerStateSpin::Update()
 	if (m_frame == kAttackFrame[0] || m_frame == kAttackFrame[1] || m_frame == kAttackFrame[2])
 	{
 		m_pAttackL = std::make_shared<Attack>();
-		m_pAttackL->SetData(kAttackData);
+		m_pAttackL->SetData(kAttackData,shared_from_this());
 		m_pAttackL->Init();
 		m_pAttackR = std::make_shared<Attack>();
-		m_pAttackR->SetData(kAttackData);
+		m_pAttackR->SetData(kAttackData, shared_from_this());
 		m_pAttackR->Init();
 	}
 	// 攻撃の更新

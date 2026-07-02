@@ -10,6 +10,7 @@
 #include "../../Camera/Camera.h"
 
 #include "../../UI/PlayerHPUI.h"
+#include "../../UI/PlayerSpecialUI.h"
 
 #include "PlayerStateIdle.h"
 #include "PlayerStateDodge.h"
@@ -66,10 +67,15 @@ void Player::Init()
 	m_type = MyLib::CharacterType::Player;
 
 	// UIの生成と初期化
-	m_pHPUI = std::make_shared<PlayerHPUI>();
 	auto player = std::dynamic_pointer_cast<Player>(shared_from_this());
+
+	m_pHPUI = std::make_shared<PlayerHPUI>();
 	m_pHPUI->SetInfo(player);
 	UIManager::GetInstance().AddUI(m_pHPUI);
+
+	m_pSpecialUI = std::make_shared<PlayerSpecialUI>();
+	m_pSpecialUI->SetInfo(player);
+	UIManager::GetInstance().AddUI(m_pSpecialUI);
 }
 
 void Player::End()
@@ -111,6 +117,8 @@ void Player::Update()
 	DrawFormatString(0, 64 + 32, 0xffffff, L"vel.length:%.2f", m_vel.Length());
 	DrawFormatString(0, 64 + 48, 0xffffff, L"pos.x:%.2f,y:%.2f,z:%.2f", m_pos.x, m_pos.y, m_pos.z);
 #endif
+	// 必殺技ゲージの上限
+	if (m_specialCharge > 1000) m_specialCharge = 1000;
 
 	// 奈落に落ちたら初期位置に戻す
 	if (m_pos.y < -2000.0f)

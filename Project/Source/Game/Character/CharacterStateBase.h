@@ -1,9 +1,9 @@
-#pragma once
+﻿#pragma once
 #include <memory>
 
 class Character;
 
-class CharacterStateBase
+class CharacterStateBase : public std::enable_shared_from_this<CharacterStateBase>
 {
 public:
 	CharacterStateBase() = default;

@@ -62,7 +62,7 @@ void VultureStateAttack::Update()
 	{
 		// 攻撃を生成
 		m_pAtk = std::make_shared<Attack>();
-		m_pAtk->SetData(kAttackData);
+		m_pAtk->SetData(kAttackData, shared_from_this());
 		m_pAtk->Init();
 		m_pAtk->SetPos(vulture->m_pos + Vector3(0,50,0));
 		// アニメーションを変更

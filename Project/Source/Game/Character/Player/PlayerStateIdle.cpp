@@ -33,7 +33,7 @@ void PlayerStateIdle::Update()
 	auto& input = Input::GetInstance();
 
 	// バーニングを入力していたらバーニング
-	if (input.IsTriggerd(player->kBurning))
+	if (input.IsTriggerd(player->kBurning) && player->GetSpecialCharge() >= 1000)
 	{
 		ChangeState(std::make_shared<PlayerStateBurning>());
 		return;

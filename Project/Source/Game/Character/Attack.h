@@ -4,6 +4,8 @@
 #include <list>
 #include "Utility/MyLib.h"
 
+class CharacterStateBase;
+
 class Attack :
     public Character
 {
@@ -22,10 +24,13 @@ public:
     /// 攻撃の情報を設定する。Initの前に実行する。
     /// </summary>
     /// <param name="data"></param>
-    void SetData(MyLib::AttackData data) { m_data = data; }
+    //void SetData(MyLib::AttackData data) { m_data = data; }
+
+    void SetData(MyLib::AttackData data, std::shared_ptr<CharacterStateBase> pOwner);
 
 private:
     std::list<int> m_hitIds;
     MyLib::AttackData m_data;
+    std::weak_ptr<CharacterStateBase> m_pOwner;
 };
 
