@@ -1,4 +1,4 @@
-#include "GeneralStateProjectile.h"
+﻿#include "GeneralStateProjectile.h"
 #include "General.h"
 #include "../../Player/Player.h"
 #include "../../Attack.h"

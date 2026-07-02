@@ -1,4 +1,4 @@
-#include "General.h"
+﻿#include "General.h"
 #include "Singleton/ModelManager.h"
 #include "../../../Collider/CapsuleCollider.h"
 #include "Singleton/CollisionManager.h"

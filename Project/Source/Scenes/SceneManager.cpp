@@ -1,4 +1,4 @@
-#include "SceneManager.h"
+﻿#include "SceneManager.h"
 #include "SceneBase.h"
 #include "SceneLoad.h"
 #include "DxLib.h"

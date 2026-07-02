@@ -1,4 +1,4 @@
-#include "EnemyHpBar.h"
+﻿#include "EnemyHpBar.h"
 #include "DxLib.h"
 #include "../Character/Enemy/EnemyBase.h"
 #include "../Camera/Camera.h"

@@ -1,4 +1,4 @@
-#include "CameraStateBurning.h"
+﻿#include "CameraStateBurning.h"
 #include "Camera.h"
 #include "../Character/Player/Player.h"
 #include "Utility/Matrix4x4.h"

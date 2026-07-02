@@ -1,4 +1,4 @@
-#include "SceneBase.h"
+﻿#include "SceneBase.h"
 #include "DxLib.h"
 
 SceneBase::SceneBase(SceneManager& sceneManager):

@@ -1,4 +1,4 @@
-#include "GeneralStateIdle.h"
+﻿#include "GeneralStateIdle.h"
 #include "General.h"
 #include "../../Player/Player.h"
 

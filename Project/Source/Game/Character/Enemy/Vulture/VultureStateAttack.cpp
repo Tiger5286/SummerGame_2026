@@ -1,4 +1,4 @@
-#include "VultureStateAttack.h"
+﻿#include "VultureStateAttack.h"
 #include "Vulture.h"
 #include "../../Player/Player.h"
 #include "Utility/MyLib.h"

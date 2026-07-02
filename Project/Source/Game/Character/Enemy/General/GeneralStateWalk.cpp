@@ -1,4 +1,4 @@
-#include "GeneralStateWalk.h"
+﻿#include "GeneralStateWalk.h"
 #include "General.h"
 #include "../../Player/Player.h"
 #include "Utility/Matrix4x4.h"

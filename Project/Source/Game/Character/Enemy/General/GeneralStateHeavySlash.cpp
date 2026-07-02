@@ -1,4 +1,4 @@
-#include "GeneralStateHeavySlash.h"
+﻿#include "GeneralStateHeavySlash.h"
 #include "General.h"
 #include "../../Player/Player.h"
 #include "Utility/MyLib.h"

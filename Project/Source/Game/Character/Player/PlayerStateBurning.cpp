@@ -1,4 +1,4 @@
-#include "PlayerStateBurning.h"
+﻿#include "PlayerStateBurning.h"
 #include "Player.h"
 #include "../../Camera/Camera.h"
 #include "../../Camera/CameraStateBurning.h"

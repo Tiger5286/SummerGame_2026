@@ -1,4 +1,4 @@
-#include "ScenePause.h"
+﻿#include "ScenePause.h"
 #include "DxLib.h"
 #include "Game.h"
 #include "Singleton/Input.h"

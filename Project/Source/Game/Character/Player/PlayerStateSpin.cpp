@@ -1,4 +1,4 @@
-#include "PlayerStateSpin.h"
+﻿#include "PlayerStateSpin.h"
 #include "Player.h"
 #include "../Attack.h"
 #include "Wing/SpinWing.h"
