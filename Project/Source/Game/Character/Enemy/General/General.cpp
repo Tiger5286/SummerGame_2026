@@ -2,6 +2,9 @@
 #include "Singleton/ModelManager.h"
 #include "../../../Collider/CapsuleCollider.h"
 #include "Singleton/CollisionManager.h"
+#include "Singleton/UIManager.h"
+
+#include "Game/UI/BossHpBar.h"
 
 #include "GeneralStateBase.h"
 #include "GeneralStateWalk.h"
@@ -46,7 +49,11 @@ void General::Init()
 
 	m_type = MyLib::CharacterType::Enemy;
 
-	m_hp = kMaxHP;
+	m_hp = kMaxHp;
+
+	m_pBossBar = std::make_shared<BossHpBar>();
+	m_pBossBar->SetInfo(general);
+	UIManager::GetInstance().AddUI(m_pBossBar);
 }
 
 void General::End()
@@ -111,7 +118,13 @@ void General::Draw()
 
 void General::OnHitAttack(const MyLib::AttackData& atkData)
 {
+	std::shared_ptr<GeneralStateDeath> state = nullptr;
+	state = std::dynamic_pointer_cast<GeneralStateDeath>(m_pState);
+	if (state != nullptr) return;	// 現在のステートがDeathならreturn
+	state = nullptr;
+
 	m_hp -= atkData.damage;
+
 	if (m_hp <= 0)
 	{
 		m_pState->ChangeState(std::make_shared<GeneralStateDeath>());

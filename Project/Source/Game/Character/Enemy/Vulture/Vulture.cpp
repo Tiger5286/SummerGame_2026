@@ -21,8 +21,6 @@ namespace
 
 	const std::wstring kIdleAnimName = L"VultureCinereous_Skelmesh|VultureCinereous_Flying";
 
-	constexpr int kMaxHP = 300;
-
 	constexpr float kRiseSpeed = 2.0f;
 }
 
@@ -40,7 +38,7 @@ void Vulture::Init()
 	m_anim.Init(m_modelHandle, kIdleAnimName);
 
 	// Hpの初期化
-	m_hp = kMaxHP;
+	m_hp = kMaxHp;
 	// 飛んでいるので接地フラグを切る
 	m_isGround = false;
 
@@ -56,7 +54,7 @@ void Vulture::Init()
 
 	RotateToPlayer();
 
-	BaseInit(kMaxHP);
+	BaseInit(kMaxHp);
 }
 
 void Vulture::End()

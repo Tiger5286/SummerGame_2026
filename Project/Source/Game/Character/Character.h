@@ -40,6 +40,8 @@ public:
 	const int GetID() const { return m_id; }
 	// HPを取得する
 	int GetHP() const { return m_hp; }
+	// 最大HPを取得する
+	virtual int GetMaxHP() const = 0;
 
 	/// <summary>
 	/// 速度に抵抗をつける(なにもしなかったら徐々に速度が遅くなる)

@@ -31,6 +31,7 @@ public:
     void Update() override;
     void Draw() override;
     
+
     // カメラのポインタを設定する
     void SetCamera(std::weak_ptr<Camera> pCamera) { m_pCamera = pCamera; }
 
@@ -48,6 +49,9 @@ public:
     int GetSkillCooltime() const { return m_skillCooltime; }
 
     void OnHitAttack(const MyLib::AttackData& atkData) override;
+
+    const int kMaxHp = 1000;
+    int GetMaxHP() const override { return kMaxHp; }
 
 private:
 

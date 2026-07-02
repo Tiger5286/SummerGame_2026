@@ -38,8 +38,6 @@ namespace
 	// 接地判定に使うレイの長さ
 	constexpr float kLineLength = 10.0f;
 
-	// 最大HP
-	constexpr int kMaxHp = 1000;
 	// 最大必殺技チャージ
 	constexpr int kMaxSpecialCharge = 1000;
 	// スキルクールタイム

@@ -2,6 +2,8 @@
 #include "../EnemyBase.h"
 #include "System/Animator.h"
 
+class BossHpBar;
+
 class GeneralStateBase;
 class GeneralStateIdle;
 class GeneralStateWalk;
@@ -24,7 +26,8 @@ public:
 
     void OnHitAttack(const MyLib::AttackData& atkData) override;
 
-    const int kMaxHP = 5000;
+    const int kMaxHp = 5000;
+    int GetMaxHP() const override { return kMaxHp; }
 
 private:
     void AttackRandom();
@@ -35,6 +38,8 @@ private:
 
     const int kAttackCooltime = 180;
     int m_attackCooltime = kAttackCooltime;
+
+    std::shared_ptr<BossHpBar> m_pBossBar = nullptr;
 
 private:
     friend GeneralStateIdle;

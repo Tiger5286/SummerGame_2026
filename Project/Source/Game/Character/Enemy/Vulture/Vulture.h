@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "../EnemyBase.h"
 #include "System/Animator.h"
 
@@ -23,6 +23,9 @@ public:
 	void OnCollision(Character& other) override {}
 
 	void OnHitAttack(const MyLib::AttackData& atkData) override;
+
+	const int kMaxHp = 300;
+	int GetMaxHP() const override { return kMaxHp; }
 
 private:
 	void KeepHeight();

@@ -28,6 +28,8 @@ public:
 
     void SetData(MyLib::AttackData data, std::shared_ptr<CharacterStateBase> pOwner);
 
+    int GetMaxHP() const override { return -1; }
+
 private:
     std::list<int> m_hitIds;
     MyLib::AttackData m_data;

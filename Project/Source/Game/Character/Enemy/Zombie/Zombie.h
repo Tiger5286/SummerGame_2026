@@ -26,6 +26,9 @@ public:
 
 	void OnHitAttack(const MyLib::AttackData& atkData) override;
 
+	const int kMaxHp = 400;
+	int GetMaxHP() const override { return kMaxHp; }
+
 private:
 	/// <summary>
 	/// プレイヤーが検知範囲の扇の中にいるか判定する

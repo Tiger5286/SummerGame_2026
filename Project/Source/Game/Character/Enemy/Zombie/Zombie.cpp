@@ -35,9 +35,6 @@ namespace
 
 	// モデルのデフォルトの向き(angleが0の時の向き)
 	const Vector3 kDefaultDir = Vector3(0, 0, -1);
-
-	// 最大Hp
-	constexpr int kMaxHP = 400;
 }
 
 Zombie::Zombie()
@@ -60,7 +57,7 @@ void Zombie::Init()
 	m_anim.Init(m_modelHandle, kIdleAnimName);
 
 	// Hpの初期化
-	m_hp = kMaxHP;
+	m_hp = kMaxHp;
 
 	// ステートの初期化
 	m_pState = std::make_shared<ZombieStateIdle>();
@@ -75,7 +72,7 @@ void Zombie::Init()
 	// プレイヤーの方を向く
 	RotateToPlayer();
 
-	BaseInit(kMaxHP);
+	BaseInit(kMaxHp);
 }
 
 void Zombie::End()
