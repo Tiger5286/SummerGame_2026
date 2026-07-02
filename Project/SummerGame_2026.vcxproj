@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\UI\PlayerHPUI.cpp" />
+    <ClCompile Include="Source\Game\UI\PlayerUIBase.cpp" />
     <ClCompile Include="Source\Scenes\ScenePause.cpp" />
     <ClCompile Include="Source\Game\Character\CharacterStateBase.cpp" />
     <ClCompile Include="Source\Singleton\CameraSetter.cpp" />
@@ -92,6 +94,8 @@
     <ClCompile Include="Source\Game\UI\TargetUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\UI\PlayerHPUI.h" />
+    <ClInclude Include="Source\Game\UI\PlayerUIBase.h" />
     <ClInclude Include="Source\Scenes\ScenePause.h" />
     <ClInclude Include="Source\Game\Character\CharacterStateBase.h" />
     <ClInclude Include="Source\Singleton\CameraSetter.h" />

@@ -3,8 +3,8 @@
 #include "System/Animator.h"
 #include <memory>
 
-class PlayerAttackCollider;
 class Camera;
+class PlayerHPUI;
 
 // プレイヤーのステートクラスをプロトタイプ宣言しておく
 class PlayerStateBase;
@@ -60,9 +60,11 @@ private:
 	Animator m_anim;    // アニメーションクラス
 	int m_mapHandle = -1;	// マップのモデルのハンドル
 
-    std::shared_ptr<Character> m_target;   // ロックオンしているターゲット
+    std::shared_ptr<Character> m_target = nullptr;   // ロックオンしているターゲット
 
     std::weak_ptr<Camera> m_pCamera;
+
+    std::shared_ptr<PlayerHPUI> m_pHPUI = nullptr;
 
     // 見えなくなるかどうか
     bool m_isInvisible = false;

@@ -6,7 +6,10 @@
 #include "Singleton/Input.h"
 #include "Game/Collider/CapsuleCollider.h"
 #include "Singleton/CollisionManager.h"
+#include "Singleton/UIManager.h"
 #include "../../Camera/Camera.h"
+
+#include "../../UI/PlayerHPUI.h"
 
 #include "PlayerStateIdle.h"
 #include "PlayerStateDodge.h"
@@ -61,6 +64,12 @@ void Player::Init()
 
 	// キャラクタータイプをプレイヤーにする
 	m_type = MyLib::CharacterType::Player;
+
+	// UIの生成と初期化
+	m_pHPUI = std::make_shared<PlayerHPUI>();
+	auto player = std::dynamic_pointer_cast<Player>(shared_from_this());
+	m_pHPUI->SetInfo(player);
+	UIManager::GetInstance().AddUI(m_pHPUI);
 }
 
 void Player::End()
