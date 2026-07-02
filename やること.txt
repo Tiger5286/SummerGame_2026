@@ -1,0 +1,28 @@
+やること
+
+・スキルクールタイム	〇
+・スキルUI		〇
+・必殺技チャージ	〇
+・必殺技ゲージUI	〇
+・プレイヤーのHPUI	〇
+・プレイヤーの死亡
+
+・ボスのHPUI
+・ボスの死亡
+・ボスの登場演出
+・ボスの撃破演出
+
+・クリアシーン
+・ゲームオーバーシーン
+
+設計
+
+3D描画→UI描画(2D)っていう順番でやるなら
+UIManagerみたいなクラスを作るべき？
+
+UIManager(シングルトン)
+AddUI(shared_ptr<UIBase> ui)
+Update()
+Draw()
+
+UIBase→PlayerHP,SpecialGauge,EnemyHP,BossHP

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "../EnemyBase.h"
 #include "System/Animator.h"
 
@@ -8,6 +8,7 @@ class GeneralStateWalk;
 class GeneralStateHeavySlash;
 class GeneralStateThrust;
 class GeneralStateProjectile;
+class GeneralStateDeath;
 
 class General :
     public EnemyBase
@@ -20,6 +21,10 @@ public:
     void End() override;
     void Update() override;
     void Draw() override;
+
+    void OnHitAttack(const MyLib::AttackData& atkData) override;
+
+    const int kMaxHP = 5000;
 
 private:
     void AttackRandom();
@@ -37,4 +42,5 @@ private:
     friend GeneralStateHeavySlash;
     friend GeneralStateThrust;
     friend GeneralStateProjectile;
+    friend GeneralStateDeath;
 };

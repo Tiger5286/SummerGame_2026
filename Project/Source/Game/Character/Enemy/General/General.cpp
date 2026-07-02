@@ -8,6 +8,7 @@
 #include "GeneralStateHeavySlash.h"
 #include "GeneralStateThrust.h"
 #include "GeneralStateProjectile.h"
+#include "GeneralStateDeath.h"
 
 namespace
 {
@@ -42,6 +43,10 @@ void General::Init()
 	CheckChangeState();
 
 	RotateToPlayer();
+
+	m_type = MyLib::CharacterType::Enemy;
+
+	m_hp = kMaxHP;
 }
 
 void General::End()
@@ -102,6 +107,15 @@ void General::Draw()
 #ifdef _DEBUG
 	m_pCollider->Draw();
 #endif
+}
+
+void General::OnHitAttack(const MyLib::AttackData& atkData)
+{
+	m_hp -= atkData.damage;
+	if (m_hp <= 0)
+	{
+		m_pState->ChangeState(std::make_shared<GeneralStateDeath>());
+	}
 }
 
 void General::AttackRandom()
