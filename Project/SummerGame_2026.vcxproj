@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\UI\PlayerSkillUI.cpp" />
     <ClCompile Include="Source\Game\UI\PlayerSpecialUI.cpp" />
     <ClCompile Include="Source\Game\UI\PlayerHPUI.cpp" />
     <ClCompile Include="Source\Game\UI\PlayerUIBase.cpp" />
@@ -95,6 +96,7 @@
     <ClCompile Include="Source\Game\UI\TargetUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\UI\PlayerSkillUI.h" />
     <ClInclude Include="Source\Game\UI\PlayerSpecialUI.h" />
     <ClInclude Include="Source\Game\UI\PlayerHPUI.h" />
     <ClInclude Include="Source\Game\UI\PlayerUIBase.h" />

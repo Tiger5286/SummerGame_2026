@@ -52,7 +52,7 @@ void PlayerStateMove::Update()
 		return;
 	}
 	// スピンを入力していたらスピン
-	if (input.IsTriggerd(player->kSpin))
+	if (input.IsTriggerd(player->kSpin) && player->m_skillCooltime >= 10 * 60)
 	{
 		ChangeState(std::make_shared<PlayerStateSpin>());
 		return;

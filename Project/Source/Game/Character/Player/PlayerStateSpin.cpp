@@ -41,6 +41,8 @@ void PlayerStateSpin::Enter(std::weak_ptr<Character> pOwner)
 	m_pWing->Init(player->m_pos + kWingOffset);
 
 	EffectManager::GetInstance().PlayEffect(L"Spin", player->m_pos + kWingOffset);
+
+	player->m_skillCooltime = 0;
 }
 
 void PlayerStateSpin::Update()
