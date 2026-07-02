@@ -7,6 +7,13 @@ UIManager& UIManager::GetInstance()
 	return instance;
 }
 
+void UIManager::Init()
+{
+	m_uiList.clear();
+	m_minLayer = 0;
+	m_maxLayer = 0;
+}
+
 void UIManager::Update()
 {
 	// UIの更新処理を行う

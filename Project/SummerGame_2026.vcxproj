@@ -89,6 +89,7 @@
     <ClCompile Include="Source\Game\Managers\SpawnerManager.cpp" />
     <ClCompile Include="Source\Game\UI\UIBase.cpp" />
     <ClCompile Include="Source\Singleton\UIManager.cpp" />
+    <ClCompile Include="Source\Game\UI\TargetUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Scenes\ScenePause.h" />
@@ -162,6 +163,7 @@
     <ClInclude Include="Source\Game\Managers\SpawnerManager.h" />
     <ClInclude Include="Source\Game\UI\UIBase.h" />
     <ClInclude Include="Source\Singleton\UIManager.h" />
+    <ClInclude Include="Source\Game\UI\TargetUI.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

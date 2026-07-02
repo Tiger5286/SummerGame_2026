@@ -92,6 +92,9 @@ void SceneMain::Init()
 		effManager.LoadEffect(effData.path, effData.name, effData.scale);
 	}
 
+	// UIの初期化
+	UIManager::GetInstance().Init();
+
 	// プレイヤーの生成
 	m_pPlayer = std::make_shared<Player>();
 	m_pPlayer->SetHandle(modelManager.GetModelHandle(L"Player"));
@@ -204,9 +207,6 @@ void SceneMain::Draw()
 	m_pSpawnerManager->Draw();
 
 	EffectManager::GetInstance().Draw();
-
-	// ターゲットUIの描画
-	m_pTargetManager->Draw();
 
 	// UIの描画
 	UIManager::GetInstance().Draw();

@@ -28,6 +28,13 @@ void EnemyHpBar::Init()
 
 void EnemyHpBar::Update()
 {
+	// 敵が死んでいたらUIを消す
+	if (m_pEnemy.expired())
+	{
+		m_isAlive = false;
+		return;
+	}
+
 	auto pEnemy = m_pEnemy.lock();
 	if (pEnemy->IsDying())
 	{

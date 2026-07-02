@@ -7,8 +7,9 @@ class Player;
 class Camera;
 class EnemyManager;
 class EnemyBase;
+class TargetUI;
 
-class TargetManager
+class TargetManager : public std::enable_shared_from_this<TargetManager>
 {
 public:
 	TargetManager() = default;
@@ -16,7 +17,6 @@ public:
 
 	void Init(std::shared_ptr<Player> pPlayer,std::shared_ptr<Camera> pCamera,std::shared_ptr<EnemyManager> pEnemyManager);
 	void Update();
-	void Draw();
 
 private:
 
@@ -70,10 +70,9 @@ private:
 	std::shared_ptr<EnemyBase> m_pTarget = nullptr;
 	bool m_isTarget = false;
 
-	int m_arrowGraphHandle = -1;
+	std::shared_ptr<TargetUI> m_pTargetUI = nullptr;
 
-	int m_targetGraphHandle = -1;
-	float m_targetGraphAngle = 0.0f;
-	int m_targetFrame = 0;
+	// TargetUIはTargetManagerの情報を必要とするため、TargetUIをフレンドにする
+	friend TargetUI;
 };
 

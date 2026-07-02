@@ -4,6 +4,7 @@
 #include "../Camera/Camera.h"
 #include "../Character/Enemy/EnemyBase.h"
 #include "Singleton/Input.h"
+#include "Singleton/UIManager.h"
 #include <limits>
 #include "Game.h"
 #include <map>
@@ -12,6 +13,7 @@
 #include <cassert>
 #include "../Collider/ColliderBase.h"
 #include "../Collider/CapsuleCollider.h"
+#include "../UI/TargetUI.h"
 
 namespace
 {
@@ -20,8 +22,6 @@ namespace
 
 TargetManager::~TargetManager()
 {
-	DeleteGraph(m_arrowGraphHandle);
-	DeleteGraph(m_targetGraphHandle);
 }
 
 void TargetManager::Init(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera> pCamera, std::shared_ptr<EnemyManager> pEnemyManager)
@@ -30,10 +30,9 @@ void TargetManager::Init(std::shared_ptr<Player> pPlayer, std::shared_ptr<Camera
 	m_pCamera = pCamera;
 	m_pEnemyManager = pEnemyManager;
 
-	m_arrowGraphHandle = LoadGraph(L"data/Graphs/EnemyArrow.png");
-	assert(m_arrowGraphHandle != -1);
-	m_targetGraphHandle = LoadGraph(L"data/Graphs/target.png");
-	assert(m_targetGraphHandle != -1);
+	m_pTargetUI = std::make_shared<TargetUI>();
+	m_pTargetUI->SetInfo(shared_from_this());
+	UIManager::GetInstance().AddUI(m_pTargetUI);
 }
 
 void TargetManager::Update()
@@ -59,7 +58,7 @@ void TargetManager::Update()
 			{
 				m_isTarget = false;
 			}
-			m_targetFrame = 0;
+			m_pTargetUI->SetTargetFrame(0);
 		}
 		else	// ターゲットがいれば解除
 		{
@@ -72,12 +71,12 @@ void TargetManager::Update()
 	if (input.IsTriggerd(XINPUT_BUTTON_DPAD_LEFT))
 	{
 		SelectTarget(MyLib::LR::Left);
-		m_targetFrame = 0;
+		m_pTargetUI->SetTargetFrame(0);
 	}
 	if (input.IsTriggerd(XINPUT_BUTTON_DPAD_RIGHT))
 	{
 		SelectTarget(MyLib::LR::Right);
-		m_targetFrame = 0;
+		m_pTargetUI->SetTargetFrame(0);
 	}
 
 
@@ -85,86 +84,12 @@ void TargetManager::Update()
 	if (m_isTarget)
 	{
 		CheckTarget();
-		m_targetFrame++;
+		m_pTargetUI->Update();
 	}
 
 	// ターゲットを設定
 	m_pPlayer->SetTarget(m_pTarget);
 	m_pCamera->SetTarget(m_pTarget);
-}
-
-void TargetManager::Draw()
-{
-	//printfDx(L"%.2f\n", m_pCamera->GetAngleX());
-
-	// 敵がいなかったらreturn
-	auto enemies = m_pEnemyManager->GetEnemies();
-	if (enemies.empty()) return;
-	// 画面外の敵のみのリストを作成
-	auto inScreenEnemies = GetInScreenEnemies(enemies);
-	auto outScreenEnemies = enemies;
-	outScreenEnemies = GetAliveEnemies(outScreenEnemies);
-	outScreenEnemies = GetInSearchAreaEnemies(outScreenEnemies);
-	for (auto& enemy : inScreenEnemies)
-	{
-		outScreenEnemies.remove(enemy);
-	}
-	// 画面外の敵でforを回す
-	for (auto& enemy : outScreenEnemies)
-	{
-		// プレイヤーから敵へのベクトルを作成
-		Vector3 vec = enemy->GetPos() - m_pPlayer->GetPos();
-		// ベクトルの角度を算出			// カメラの方向を足す
-		float angle = atan2(vec.z, vec.x) + m_pCamera->GetAngleY();
-		// 2D座標にする
-		float x = cos(angle);
-		float y = sin(angle);
-		// カメラがある程度上を向いていたらyを反転
-		if (m_pCamera->GetAngleX() > -0.3f)
-		{
-			y = -y;
-			angle = -angle;
-		}
-		// 方向を描画
-		int graphX = Game::kScreenWidth / 2 + x * (Game::kScreenWidth / 2 - Game::kScreenWidth / 10);
-		int graphY = Game::kScreenHeight / 2 + y * (Game::kScreenHeight / 2 - Game::kScreenHeight / 10);
-		DrawRotaGraph(graphX, graphY, 0.5, angle, m_arrowGraphHandle, true);
-	}
-	
-	// ターゲットがいないなら処理しない
-	if (m_pTarget == nullptr)
-	{
-		return;
-	}
-
-	// ターゲットのコライダーの種類によって描画位置を変える
-	auto pos = Vector3::Zero();
-	auto colType = m_pTarget->GetCollider()->GetType();
-	if (colType == ColliderType::Sphere)
-	{	// 球なら球の中心を描画位置にする
-		auto col = m_pTarget->GetCollider();
-		pos = col->GetPos();
-	}
-	else if (colType == ColliderType::Capsule)
-	{	// カプセルならカプセルの真ん中を描画位置にする
-		auto capsule = std::dynamic_pointer_cast<CapsuleCollider>(m_pTarget->GetCollider());
-		pos = capsule->GetPos() + Vector3::Up() * capsule->GetHeight() / 2;
-	}
-	auto screenPos = ConvWorldPosToScreenPos(pos.ToDxLib());
-	// スクリーン座標のzが0.0~1.0の範囲でなければ無効
-	if (screenPos.z > 0.0f && screenPos.z < 1.0f)
-	{
-		m_targetGraphAngle += 0.01f;
-
-		if (m_targetFrame > 120)
-		{
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
-		}
-
-		DrawRotaGraph(screenPos.x, screenPos.y, 0.1, m_targetGraphAngle, m_targetGraphHandle, true);
-
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	}
 }
 
 void TargetManager::CheckTarget()
@@ -195,7 +120,7 @@ void TargetManager::CheckTarget()
 		enemies = GetAliveEnemies(enemies);			// 生きている敵
 		enemies = GetInSearchAreaEnemies(enemies);	// ターゲット範囲内の敵
 		m_pTarget = GetNearestEnemy(enemies);		// 最も近い敵
-		m_targetFrame = 0;
+		m_pTargetUI->SetTargetFrame(0);
 	}
 
 }

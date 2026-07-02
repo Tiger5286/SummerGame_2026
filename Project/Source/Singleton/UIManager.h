@@ -16,6 +16,7 @@ private:
 	UIManager() = default;
 public:
 
+	void Init();
 	void Update();
 	void Draw();
 
