@@ -36,6 +36,10 @@ public:
 	VECTOR ToDxLib() const;
 	// DxLib用のベクトルをこのクラスのベクトルに変換して返す
 	static Vector3 FromDxLib(const VECTOR& vec);
+	// DxLib用のベクトルに自動変換
+	operator VECTOR() const;
+	// DxLib用のベクトルを代入できるようにする
+	Vector3& operator=(const VECTOR& v);
 
 // ----- 計算関数 -----
 	// ベクトルの大きさの二乗を返す

@@ -44,6 +44,19 @@ Vector3 Vector3::FromDxLib(const VECTOR& vec)
 	return Vector3(vec.x, vec.y, vec.z);
 }
 
+Vector3::operator VECTOR() const
+{
+	return VGet(x, y, z);
+}
+
+Vector3& Vector3::operator=(const VECTOR& v)
+{
+	x = v.x;
+	y = v.y;
+	z = v.z;
+	return *this;
+}
+
 float Vector3::SquaredLength() const
 {
 	return x * x + y * y + z * z;
