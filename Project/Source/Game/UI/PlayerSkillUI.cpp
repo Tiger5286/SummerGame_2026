@@ -27,5 +27,5 @@ void PlayerSkillUI::Draw()
 {
 	auto player = m_pPlayer.lock();
 	float rate = static_cast<float>(player->GetSkillCooltime()) / static_cast<float>(kSkillCTFrame);
-	DrawCircleGauge(Game::kScreenWidth - kOffset, Game::kScreenHeight - kOffset, rate * 100, m_handle);
+	//DrawCircleGauge(Game::kScreenWidth - kOffset, Game::kScreenHeight - kOffset, rate * 100, m_handle);
 }

@@ -7,6 +7,7 @@ class Camera;
 class PlayerHPUI;
 class PlayerSpecialUI;
 class PlayerSkillUI;
+class ControlUI;
 
 // プレイヤーのステートクラスをプロトタイプ宣言しておく
 class PlayerStateBase;
@@ -50,8 +51,13 @@ public:
 
     void OnHitAttack(const MyLib::AttackData& atkData) override;
 
+    // 最大HP
     const int kMaxHp = 1000;
     int GetMaxHP() const override { return kMaxHp; }
+    // 最大必殺技チャージ
+    const int kMaxSpecialCharge = 1000;
+    // スキルクールタイム
+    const int kSkillCooltime = 10 * 60;
 
 private:
 
@@ -76,6 +82,7 @@ private:
     std::shared_ptr<PlayerHPUI> m_pHPUI = nullptr;
     std::shared_ptr<PlayerSpecialUI> m_pSpecialUI = nullptr;
     std::shared_ptr<PlayerSkillUI> m_pSkillUI = nullptr;
+    std::shared_ptr<ControlUI> m_pControlUI = nullptr;
 
     // 見えなくなるかどうか
     bool m_isInvisible = false;
@@ -86,7 +93,7 @@ private:
     // 必殺技ゲージ
     int m_specialCharge = 0;
     // スキルクールタイム
-    int m_skillCooltime = 10 * 60;
+    int m_skillCooltime = kSkillCooltime;
 
     // ボタン配置
     const int kJump = XINPUT_BUTTON_A;

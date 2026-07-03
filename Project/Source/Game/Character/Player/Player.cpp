@@ -12,6 +12,7 @@
 #include "../../UI/PlayerHPUI.h"
 #include "../../UI/PlayerSpecialUI.h"
 #include "../../UI/PlayerSkillUI.h"
+#include "../../UI/ControlUI.h"
 
 #include "PlayerStateIdle.h"
 #include "PlayerStateDodge.h"
@@ -37,11 +38,6 @@ namespace
 
 	// 接地判定に使うレイの長さ
 	constexpr float kLineLength = 10.0f;
-
-	// 最大必殺技チャージ
-	constexpr int kMaxSpecialCharge = 1000;
-	// スキルクールタイム
-	constexpr int kSkillCoolTimeFrame = 10 * 60;
 }
 
 void Player::Init()
@@ -83,6 +79,10 @@ void Player::Init()
 	m_pSkillUI = std::make_shared<PlayerSkillUI>();
 	m_pSkillUI->SetInfo(player);
 	UIManager::GetInstance().AddUI(m_pSkillUI);
+
+	m_pControlUI = std::make_shared<ControlUI>();
+	m_pControlUI->SetInfo(player);
+	UIManager::GetInstance().AddUI(m_pControlUI);
 }
 
 void Player::End()
@@ -127,7 +127,7 @@ void Player::Update()
 	// 必殺技ゲージの上限
 	if (m_specialCharge > kMaxSpecialCharge) m_specialCharge = kMaxSpecialCharge;
 	// スキルクールタイム
-	if (m_skillCooltime < kSkillCoolTimeFrame) m_skillCooltime++;
+	if (m_skillCooltime < kSkillCooltime) m_skillCooltime++;
 
 	// 奈落に落ちたら初期位置に戻す
 	if (m_pos.y < -2000.0f)

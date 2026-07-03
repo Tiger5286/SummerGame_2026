@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\UI\ControlUI.cpp" />
     <ClCompile Include="Source\Game\UI\BossHpBar.cpp" />
     <ClCompile Include="Source\Game\Character\Enemy\General\GeneralStateDeath.cpp" />
     <ClCompile Include="Source\Game\UI\PlayerSkillUI.cpp" />
@@ -98,6 +99,7 @@
     <ClCompile Include="Source\Game\UI\TargetUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\UI\ControlUI.h" />
     <ClInclude Include="Source\Game\UI\BossHpBar.h" />
     <ClInclude Include="Source\Game\Character\Enemy\General\GeneralStateDeath.h" />
     <ClInclude Include="Source\Game\UI\PlayerSkillUI.h" />
