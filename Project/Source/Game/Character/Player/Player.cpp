@@ -18,6 +18,7 @@
 #include "PlayerStateDodge.h"
 #include "PlayerStateHit.h"
 #include "PlayerStateBurning.h"
+#include "PlayerStateDeath.h"
 
 namespace
 {
@@ -55,6 +56,7 @@ void Player::Init()
 
 	// hpの初期化
 	m_hp = kMaxHp;
+	m_hp = 1;
 
 	// ステートの初期化
 	m_pState = std::make_shared<PlayerStateIdle>();
@@ -207,10 +209,26 @@ void Player::OnHitAttack(const MyLib::AttackData& atkData)
 		return;
 	}
 	state = nullptr;
+	// 死亡しているときは攻撃を食らわない
+	state = std::dynamic_pointer_cast<PlayerStateDeath>(m_pState);
+	if (state != nullptr)
+	{
+		return;
+	}
+	state = nullptr;
 
+	// ダメージを食らう
 	m_hp -= atkData.damage;
+	// 死ぬダメージを食らったら死ぬ
+	if (m_hp <= 0)
+	{
+		m_pState->ChangeState(std::make_shared<PlayerStateDeath>());
+		return;
+	}
+
+	// 死ななかったら被弾
 	m_pState->ChangeState(std::make_shared<PlayerStateHit>());
-	printfDx(L"プレイヤーが攻撃を食らった！DAMAGE:%d,HP:%d\n",atkData.damage,m_hp);
+	//printfDx(L"プレイヤーが攻撃を食らった！DAMAGE:%d,HP:%d\n",atkData.damage,m_hp);
 }
 
 void Player::Move()

@@ -20,6 +20,7 @@ class PlayerStateHit;
 class PlayerStateShift;
 class PlayerStateBurning;
 class PlayerStateSpin;
+class PlayerStateDeath;
 
 class Player : public Character
 {
@@ -48,6 +49,8 @@ public:
 
     int GetSpecialCharge() const { return m_specialCharge; }
     int GetSkillCooltime() const { return m_skillCooltime; }
+
+    bool IsDead() const { return m_isDead; }
 
     void OnHitAttack(const MyLib::AttackData& atkData) override;
 
@@ -87,6 +90,8 @@ private:
     // 見えなくなるかどうか
     bool m_isInvisible = false;
 
+    bool m_isDead = false;
+
     // 空中でテレポートが発動可能かどうか
     bool m_isCanAirShift = true;
 
@@ -114,4 +119,5 @@ private:
     friend PlayerStateShift;
     friend PlayerStateBurning;
     friend PlayerStateSpin;
+    friend PlayerStateDeath;
 };
