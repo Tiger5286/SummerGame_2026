@@ -38,6 +38,9 @@ ControlUI::~ControlUI()
 	{
 		DeleteGraph(handle);
 	}
+	DeleteGraph(m_spinBlackHandle);
+	DeleteGraph(m_cooltimeHandle);
+	DeleteGraph(m_cooltimeBlackHandle);
 }
 
 void ControlUI::Init()
@@ -47,7 +50,9 @@ void ControlUI::Init()
 		m_handles.push_back(LoadGraph(path.c_str()));
 		m_scale.push_back(1.0f);
 	}
+	m_spinBlackHandle = LoadGraph(L"data/Graphs/SpinIcon_black.png");
 	m_cooltimeHandle = LoadGraph(L"data/Graphs/Cooltime.png");
+	m_cooltimeBlackHandle = LoadGraph(L"data/Graphs/Cooltime_black.png");
 }
 
 void ControlUI::Update()
@@ -57,11 +62,11 @@ void ControlUI::Update()
 	{
 		if (input.IsPressed(kButton[i]))
 		{
-			m_scale[i] = std::lerp(m_scale[i], kMaxScale, 0.1f);
+			m_scale[i] = std::lerp(m_scale[i], kMaxScale, 0.5f);
 		}
 		else
 		{
-			m_scale[i] = std::lerp(m_scale[i], 1.0f, 0.7f);
+			m_scale[i] = std::lerp(m_scale[i], 1.0f, 0.5f);
 		}
 	}
 }
@@ -82,17 +87,20 @@ void ControlUI::Draw()
 
 	for (int i = 0; i < static_cast<int>(Graph::Num); i++)
 	{
+		float scale = exRate * m_scale[i];
+		DrawRotaGraph(x[i], y[i], scale, 0.0, m_handles[i], true);
+
 		if (i == static_cast<int>(Graph::Spin))
 		{
 			auto player = m_pPlayer.lock();
 			float rate = static_cast<float>(player->GetSkillCooltime()) / static_cast<float>(player->kSkillCooltime);
 			if (rate < 1.0f)
 			{
-				DrawCircleGauge(x[i], y[i], rate * 100.0f, m_cooltimeHandle, 0.0, exRate * m_scale[i] * 1.2f);
+				DrawRotaGraph(x[i], y[i], scale * 1.2f, 0.0, m_cooltimeBlackHandle, true);
+				DrawCircleGauge(x[i], y[i], rate * 100.0f, m_cooltimeHandle, 0.0, scale * 1.2f);
+
+				auto a = DrawRotaGraph(x[i], y[i], scale, 0.0, m_spinBlackHandle, true);
 			}
 		}
-
-		float scale = exRate * m_scale[i];
-		DrawRotaGraph(x[i], y[i], scale, 0.0, m_handles[i], true);
 	}
 }
