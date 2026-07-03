@@ -11,6 +11,7 @@
 
 #include "SceneManager.h"
 #include "ScenePause.h"
+#include "SceneGameOver.h"
 
 #include "Game/Character/Player/Player.h"
 #include "Game/Camera/Camera.h"
@@ -171,6 +172,12 @@ void SceneMain::Update()
 	if (input.IsTriggerd(XINPUT_BUTTON_START))
 	{
 		m_sceneManager.PushScene(std::make_shared<ScenePause>(m_sceneManager));
+		return;
+	}
+	// プレイヤーが死んだらゲームオーバー
+	if (m_pPlayer->IsDead())
+	{
+		m_sceneManager.ChangeScene(std::make_shared<SceneGameOver>(m_sceneManager),false);
 		return;
 	}
 }
