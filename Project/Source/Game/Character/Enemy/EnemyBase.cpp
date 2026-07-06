@@ -17,7 +17,7 @@ void EnemyBase::BaseInit(int maxHp)
 {
 	m_pHpBar = std::make_shared<EnemyHpBar>();
 	auto enemy = std::dynamic_pointer_cast<EnemyBase>(shared_from_this());
-	m_pHpBar->SetInfo(enemy, maxHp);
+	m_pHpBar->SetInfo(enemy, m_pPlayer,maxHp);
 	UIManager::GetInstance().AddUI(m_pHpBar);
 }
 

@@ -3,6 +3,12 @@
 #include "../Character/Enemy/EnemyBase.h"
 #include "../Camera/Camera.h"
 #include "Singleton/CameraSetter.h"
+#include "../Character/Player/Player.h"
+
+namespace
+{
+	constexpr float kDrawDist = 1500;
+}
 
 EnemyHpBar::EnemyHpBar() : 
 	UIBase(0)
@@ -14,9 +20,10 @@ EnemyHpBar::~EnemyHpBar()
 {
 }
 
-void EnemyHpBar::SetInfo(std::shared_ptr<EnemyBase> pEnemy, int maxHp)
+void EnemyHpBar::SetInfo(std::shared_ptr<EnemyBase> pEnemy, std::shared_ptr<Player> pPlayer, int maxHp)
 {
 	m_pEnemy = pEnemy;
+	m_pPlayer = pPlayer;
 	m_maxHp = maxHp;
 }
 
@@ -64,7 +71,10 @@ void EnemyHpBar::Draw()
 	// UIの描画位置(2D)を算出
 	auto screenPos = ConvWorldPosToScreenPos((pEnemy->GetPos() + Vector3(0, 200, 0)).ToDxLib());
 	// UIを描画
-	if (screenPos.z > 0.0f && screenPos.z < 1.0f)
+	bool isInScreen = screenPos.z > 0.0f && screenPos.z < 1.0f;
+	float sqrDist = (m_pPlayer.lock()->GetPos() - pEnemy->GetPos()).SquaredLength();
+	bool isDrawDist = sqrDist < kDrawDist * kDrawDist;
+	if (isInScreen && isDrawDist)
 	{
 		DrawRotaGraph(screenPos.x, screenPos.y, 1.0, 0.0, m_RTHandle, false);
 	}

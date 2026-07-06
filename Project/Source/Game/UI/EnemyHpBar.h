@@ -3,6 +3,7 @@
 
 class EnemyBase;
 class Camera;
+class Player;
 
 class EnemyHpBar : public UIBase
 {
@@ -19,10 +20,11 @@ public:
 	/// </summary>
 	/// <param name="pEnemy">このUIを持つ敵のポインタ</param>
 	/// <param name="maxHp">このUIを持つ敵の最大HP</param>
-	void SetInfo(std::shared_ptr<EnemyBase> pEnemy, int maxHp);
+	void SetInfo(std::shared_ptr<EnemyBase> pEnemy,std::shared_ptr<Player> pPlayer, int maxHp);
 
 private:
 	std::weak_ptr<EnemyBase> m_pEnemy;
+	std::weak_ptr<Player> m_pPlayer;
 	int m_maxHp = 0;
 	int m_currentHp = 0;
 };
