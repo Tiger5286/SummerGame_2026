@@ -1,6 +1,7 @@
 ﻿#include "Input.h"
 #include <cassert>
 #include <cmath>
+#include "FadeManager.h"
 
 namespace
 {
@@ -20,6 +21,11 @@ void Input::Update()
 	m_prevPadInput = m_nowPadInput;
 
 	GetJoypadXInputState(DX_INPUT_PAD1, &m_nowPadInput);
+	// フェード中は操作を無効にする
+	if (!FadeManager::GetInstance().IsNotFading())
+	{
+		m_nowPadInput = {};
+	}
 }
 
 bool Input::IsPressed(int button)
