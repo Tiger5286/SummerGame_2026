@@ -186,4 +186,11 @@ namespace MyLib
 			ret.size());
 		return ret;
 	}
+
+	inline void ReadVector3(Vector3& vec, int fileHandle)
+	{
+		FileRead_read(&vec.x, sizeof(float), fileHandle);
+		FileRead_read(&vec.y, sizeof(float), fileHandle);
+		FileRead_read(&vec.z, sizeof(float), fileHandle);
+	}
 }

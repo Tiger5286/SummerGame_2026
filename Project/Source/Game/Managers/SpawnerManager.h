@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <memory>
 #include <vector>
 
@@ -12,7 +12,8 @@ public:
 	SpawnerManager() = default;
 	~SpawnerManager() = default;
 
-	void Load();
+	void Loadcsv();
+	void LoadBinaly();
 
 	void Init(std::shared_ptr<EnemyManager> pEnemyManager, std::shared_ptr<Player> pPlayer);
 	void Update();

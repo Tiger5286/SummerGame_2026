@@ -19,7 +19,7 @@ namespace
 	};
 }
 
-void SpawnerManager::Load()
+void SpawnerManager::Loadcsv()
 {
 	// ファイルを開く
 	std::ifstream file(kfilePath);
@@ -101,6 +101,71 @@ void SpawnerManager::Load()
 		spawner->Init(m_pEnemyManager, m_pPlayer, data);
 		// 行の終わり
 	}
+}
+
+void SpawnerManager::LoadBinaly()
+{
+	bool asyncLoadFlag = GetUseASyncLoadFlag();
+	SetUseASyncLoadFlag(false);
+
+	// バイナリを開く
+	auto handle = FileRead_open(L"data/SpawnerData.dat");
+	assert(handle != -1);
+
+	// スポナーの数を読み込む
+	int spawnerNum = 0;
+	FileRead_read(&spawnerNum, sizeof(int), handle);
+	// スポナーの数だけループ
+	for (int i = 0; i < spawnerNum; i++)
+	{
+		m_pEnemySpawners.push_back(std::make_shared<EnemySpawner>());
+		auto spawner = m_pEnemySpawners.back();
+
+		EnemySpawner::Data data;
+
+		Vector3 spawnerPos;	// スポナーの位置
+		MyLib::ReadVector3(spawnerPos, handle);
+		float spawnerRadius = 0.0f;	// スポナーの半径
+		FileRead_read(&spawnerRadius, sizeof(float), handle);
+
+		data.pos = spawnerPos * 100;
+		data.radius = spawnerRadius * 100;
+
+		int enemyNum = 0;	// 敵の数
+		FileRead_read(&enemyNum, sizeof(int), handle);
+		// 敵の数だけループ
+		for (int j = 0; j < enemyNum; j++)
+		{
+			EnemySpawner::EnemyData enemyData;
+
+			char byteNum;	// 敵の種類の文字列のバイト数
+			FileRead_read(&byteNum, sizeof(char), handle);
+			std::string enemyType;
+			enemyType.resize(byteNum);
+			FileRead_read(enemyType.data(), byteNum, handle);
+			Vector3 enemyPos;	// 敵の位置
+			MyLib::ReadVector3(enemyPos, handle);
+			enemyPos -= spawnerPos;
+			// 文字列から敵タイプに変換して代入
+			auto it = kEnemyTypeTable.find(enemyType);
+			if (it != kEnemyTypeTable.end())
+			{
+				enemyData.type = it->second;
+				enemyData.localPos = enemyPos * 100;
+				data.enemyDatas.push_back(enemyData);
+			}
+			else
+			{
+				assert(false && "error SpawnerManager::LoadBinaly()");
+			}
+		}
+
+		spawner->Init(m_pEnemyManager, m_pPlayer, data);
+	}
+
+	FileRead_close(handle);
+
+	SetUseASyncLoadFlag(asyncLoadFlag);
 }
 
 void SpawnerManager::Init(std::shared_ptr<EnemyManager> pEnemyManager, std::shared_ptr<Player> pPlayer)

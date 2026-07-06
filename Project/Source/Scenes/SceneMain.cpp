@@ -97,6 +97,10 @@ void SceneMain::Init()
 	// UIの初期化
 	UIManager::GetInstance().Init();
 
+	// ステージの初期化
+	auto stage = modelManager.GetModelHandle(L"Collision");
+	MV1SetMatrix(stage, Matrix4x4::GetRotY(DX_PI_F).ToDxLib());
+
 	// プレイヤーの生成
 	m_pPlayer = std::make_shared<Player>();
 	m_pPlayer->SetHandle(modelManager.GetModelHandle(L"Player"));
@@ -120,7 +124,8 @@ void SceneMain::Init()
 	// スポナークラスの生成(スポナーのデータをロード)
 	m_pSpawnerManager = std::make_shared<SpawnerManager>();
 	m_pSpawnerManager->Init(m_pEnemyManager, m_pPlayer);
-	m_pSpawnerManager->Load();
+	//m_pSpawnerManager->Loadcsv();
+	m_pSpawnerManager->LoadBinaly();
 
 	// ターゲットマネージャーの生成
 	m_pTargetManager = std::make_shared<TargetManager>();
