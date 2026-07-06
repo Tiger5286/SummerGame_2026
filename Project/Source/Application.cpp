@@ -11,6 +11,7 @@
 #include "Singleton/IDManager.h"
 #include "Singleton/CollisionManager.h"
 #include "Singleton/EffectManager.h"
+#include "Singleton/FadeManager.h"
 
 #include "Scenes/SceneTitle.h"
 #include "Scenes/SceneManager.h"
@@ -71,15 +72,16 @@ void Application::Run()
 	SetUseLighting(true);
 
 	// シングルトンクラスの生成
-	auto& modelManager = ModelManager::GetInstance();
 	auto& input = Input::GetInstance();
-	auto& idManager = IDManager::GetInstance();
 	auto& colManager = CollisionManager::GetInstance();
-	auto& effManager = EffectManager::GetInstance();
+	auto& fadeManager = FadeManager::GetInstance();
 
 	// シーンの生成、初期化
 	SceneManager sceneManager;
 	sceneManager.ResetScene(std::make_shared<SceneTitle>(sceneManager));
+
+	// フェード
+	fadeManager.StartFadeIn();
 
 	while (ProcessMessage() != -1 && !m_isRequestExit)
 	{
@@ -92,9 +94,11 @@ void Application::Run()
 		colManager.Update();
 		// シーンの更新
 		sceneManager.Update();
-		
+		fadeManager.Update();
+
 		// シーンの描画
 		sceneManager.Draw();
+		fadeManager.Draw();
 
 		// escキーで終了
 		if (CheckHitKey(KEY_INPUT_ESCAPE))
