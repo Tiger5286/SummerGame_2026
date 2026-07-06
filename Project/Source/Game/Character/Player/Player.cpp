@@ -56,7 +56,6 @@ void Player::Init()
 
 	// hpの初期化
 	m_hp = kMaxHp;
-	m_hp = 1;
 
 	// ステートの初期化
 	m_pState = std::make_shared<PlayerStateIdle>();

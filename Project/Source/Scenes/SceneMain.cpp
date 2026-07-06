@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "../Singleton/ModelManager.h"
+#include "Singleton/ModelManager.h"
 #include "Singleton/EffectManager.h"
 #include "Singleton/CameraSetter.h"
 #include "Singleton/Input.h"
@@ -12,6 +12,7 @@
 #include "SceneManager.h"
 #include "ScenePause.h"
 #include "SceneGameOver.h"
+#include "SceneClear.h"
 
 #include "Game/Character/Player/Player.h"
 #include "Game/Camera/Camera.h"
@@ -174,7 +175,8 @@ void SceneMain::Update()
 	}
 	else if (m_isBossBattle == true)	// ボスがいない、かつボス戦中ならボスが死んだと判断し、クリアに遷移する
 	{
-		
+		m_sceneManager.ChangeScene(std::make_shared<SceneClear>(m_sceneManager), false);
+		return;
 	}
 
 	// ポーズが押されたらポーズシーンに遷移する
@@ -190,6 +192,17 @@ void SceneMain::Update()
 		m_sceneManager.ChangeScene(std::make_shared<SceneGameOver>(m_sceneManager),false);
 		return;
 	}
+
+#ifdef _DEBUG
+	// デバッグ機能
+	char key[256];
+	GetHitKeyStateAll(key);
+	// 1キーでボス部屋にテレポート
+	if (key[KEY_INPUT_1])
+	{
+		m_pPlayer->SetPos(Vector3(3100, -150, -4700));
+	}
+#endif
 }
 
 void SceneMain::Draw()
