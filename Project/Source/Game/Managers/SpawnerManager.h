@@ -12,7 +12,7 @@ public:
 	SpawnerManager() = default;
 	~SpawnerManager() = default;
 
-	void Loadcsv();
+	//void Loadcsv();
 	void LoadBinaly();
 
 	void Init(std::shared_ptr<EnemyManager> pEnemyManager, std::shared_ptr<Player> pPlayer);
