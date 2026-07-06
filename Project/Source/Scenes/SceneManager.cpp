@@ -2,6 +2,7 @@
 #include "SceneBase.h"
 #include "SceneLoad.h"
 #include "DxLib.h"
+#include "Singleton/FadeManager.h"
 
 void SceneManager::ChangeScene(std::shared_ptr<SceneBase> pNewScene, bool isCallLoadScene)
 {
@@ -30,6 +31,13 @@ void SceneManager::ChangeScene(std::shared_ptr<SceneBase> pNewScene, bool isCall
 	}
 }
 
+void SceneManager::ChangeSceneWithFade(std::shared_ptr<SceneBase> pNewScene, bool isCallLoadScene)
+{
+	m_pNextScene = pNewScene;
+	m_isCallLoadSceneNext = isCallLoadScene;
+	FadeManager::GetInstance().StartFadeOut();
+}
+
 void SceneManager::PushScene(std::shared_ptr<SceneBase> pNewScene)
 {
 	m_pScenes.push_back(pNewScene);
@@ -56,9 +64,33 @@ void SceneManager::ResetScene(std::shared_ptr<SceneBase> pNewScene)
 	pNewScene->Init();
 }
 
+void SceneManager::ResetSceneWithFade(std::shared_ptr<SceneBase> pNewScene)
+{
+	m_pNextScene = pNewScene;
+	m_isCallResetSceneWithFade;
+	FadeManager::GetInstance().StartFadeOut();
+}
+
 void SceneManager::Update()
 {
 	m_pScenes.back()->Update();
+	auto& fadeManager = FadeManager::GetInstance();
+
+	if (fadeManager.IsNotFading() && m_pNextScene != nullptr)
+	{
+		fadeManager.StartFadeIn();
+		if (m_isCallResetSceneWithFade)
+		{
+			ResetScene(m_pNextScene);
+		}
+		else
+		{
+			ChangeScene(m_pNextScene, m_isCallLoadSceneNext);
+		}
+		m_pNextScene = nullptr;
+		m_isCallLoadSceneNext = false;
+		m_isCallResetSceneWithFade = false;
+	}
 }
 
 void SceneManager::Draw()

@@ -16,6 +16,7 @@ public:
 	/// <param name="pNewScene">新しいシーン</param>
 	/// <param name="isCallLoadScene">ロードシーンを使うかどうか</param>
 	void ChangeScene(std::shared_ptr<SceneBase> pNewScene,bool isCallLoadScene);
+	void ChangeSceneWithFade(std::shared_ptr<SceneBase> pNewScene, bool isCallLoadScene);
 
 	/// <summary>
 	/// シーンを追加する
@@ -33,6 +34,7 @@ public:
 	/// </summary>
 	/// <param name="pNewScene">新しいシーン</param>
 	void ResetScene(std::shared_ptr<SceneBase> pNewScene);
+	void ResetSceneWithFade(std::shared_ptr<SceneBase> pNewScene);
 
 	void Update();
 	void Draw();
@@ -40,5 +42,8 @@ public:
 
 private:
 	std::list<std::shared_ptr<SceneBase>> m_pScenes;
+	std::shared_ptr<SceneBase> m_pNextScene = nullptr;
+	bool m_isCallLoadSceneNext = false;
+	bool m_isCallResetSceneWithFade = false;
 };
 
