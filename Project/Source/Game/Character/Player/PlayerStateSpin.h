@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "PlayerStateBase.h"
 
 class SpinWing;
@@ -17,6 +17,7 @@ public:
     void Draw() override;
 private:
     int m_frame = 0;
+    int m_effHandle = -1;
     std::shared_ptr<SpinWing> m_pWing = nullptr;
     std::shared_ptr<Attack> m_pAttackL = nullptr;
     std::shared_ptr<Attack> m_pAttackR = nullptr;

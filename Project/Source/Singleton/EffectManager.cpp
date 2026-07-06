@@ -70,6 +70,12 @@ int EffectManager::PlayEffect(const std::wstring& name, const Vector3& pos)
 	return handle;
 }
 
+void EffectManager::StopEffect(int handle)
+{
+	StopEffekseer3DEffect(handle);
+	m_effectPlayingHandles.remove(handle);
+}
+
 void EffectManager::StopEffectAll()
 {
 	// 再生中のエフェクトをすべて停止する

@@ -36,6 +36,12 @@ public:
 	int PlayEffect(const std::wstring& name, const Vector3& pos);
 
 	/// <summary>
+	/// 再生中のエフェクトを停止する
+	/// </summary>
+	/// <param name="handle">再生中のエフェクトのハンドル</param>
+	void StopEffect(int handle);
+
+	/// <summary>
 	/// すべての再生中のエフェクトを停止する
 	/// </summary>
 	void StopEffectAll();
