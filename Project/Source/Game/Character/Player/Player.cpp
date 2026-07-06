@@ -45,6 +45,9 @@ void Player::Init()
 {
 	// 位置の初期化
 	m_pos = Vector3(0.0f, 0.0f, 0.0f);
+	// 向きの初期化(出現時に背中を向けてほしいため180度回転)
+	m_angle = DX_PI_F;
+	m_drawAngle = DX_PI_F;
 
 	// 当たり判定の生成と初期化
 	m_pCollider = std::make_shared<CapsuleCollider>(kColliderRadius, kColliderHeight);
