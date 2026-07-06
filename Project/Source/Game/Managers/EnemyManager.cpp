@@ -105,3 +105,17 @@ std::shared_ptr<EnemyBase> EnemyManager::GetLastEnemy()
 {
 	return m_enemyList.back();
 }
+
+bool EnemyManager::IsAliveBoss()
+{
+	bool result = false;
+	for (auto& enemy : m_enemyList)
+	{
+		if (enemy->IsBoss())
+		{
+			result = true;
+			break;
+		}
+	}
+	return result;
+}

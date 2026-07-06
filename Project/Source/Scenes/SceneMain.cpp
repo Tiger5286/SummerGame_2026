@@ -167,6 +167,16 @@ void SceneMain::Update()
 	// UIの更新
 	UIManager::GetInstance().Update();
 
+	// ボスがいたらボス戦フラグをつける
+	if (m_pEnemyManager->IsAliveBoss())
+	{
+		m_isBossBattle = true;
+	}
+	else if (m_isBossBattle == true)	// ボスがいない、かつボス戦中ならボスが死んだと判断し、クリアに遷移する
+	{
+		
+	}
+
 	// ポーズが押されたらポーズシーンに遷移する
 	auto& input = Input::GetInstance();
 	if (input.IsTriggerd(XINPUT_BUTTON_START))

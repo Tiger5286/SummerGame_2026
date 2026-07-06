@@ -29,6 +29,7 @@ public:
 
 	bool IsDead() const { return m_isDead; }
 	bool IsDying() const { return m_isDying; }
+	bool IsBoss() const { return m_isBoss; }
 
 protected:
 	int m_mapHandle = -1;
@@ -36,5 +37,6 @@ protected:
 	std::shared_ptr<EnemyHpBar> m_pHpBar = nullptr;
 	bool m_isDead = false;	// 完全に死んだときにtrue
 	bool m_isDying = false;	// 死ぬモーションの間true
+	bool m_isBoss = false;	// 敵自身がボスだったらtrue
 };
 

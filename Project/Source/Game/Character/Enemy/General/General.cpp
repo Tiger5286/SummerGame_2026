@@ -29,6 +29,8 @@ General::~General()
 
 void General::Init()
 {
+	m_isBoss = true;
+
 	m_swordModelHandle = ModelManager::GetInstance().DuplicateModel(L"GeneralSword");
 
 	m_anim.Init(m_modelHandle, L"General|Idle");

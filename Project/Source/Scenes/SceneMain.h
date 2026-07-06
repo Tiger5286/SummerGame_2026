@@ -25,6 +25,8 @@ public:
 private:
 	int m_frameCount = 0;
 
+	bool m_isBossBattle = false;
+
 	std::shared_ptr<Player> m_pPlayer = nullptr;
 	std::shared_ptr<Camera> m_pCamera = nullptr;
 

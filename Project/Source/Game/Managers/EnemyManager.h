@@ -38,6 +38,12 @@ public:
 	/// <returns>敵のポインタ</returns>
 	std::shared_ptr<EnemyBase> GetLastEnemy();
 
+	/// <summary>
+	/// ボスが存在するかどうか取得する
+	/// </summary>
+	/// <returns>true:存在する / false:存在しない</returns>
+	bool IsAliveBoss();
+
 
 private:
 	std::list<std::shared_ptr<EnemyBase>> m_enemyList;
