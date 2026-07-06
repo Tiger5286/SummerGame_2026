@@ -100,5 +100,5 @@ void ScenePause::Option()
 
 void ScenePause::BackToTitle()
 {
-	m_sceneManager.ResetScene(std::make_shared<SceneTitle>(m_sceneManager));
+	m_sceneManager.ResetSceneWithFade(std::make_shared<SceneTitle>(m_sceneManager));
 }

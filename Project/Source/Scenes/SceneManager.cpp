@@ -35,6 +35,7 @@ void SceneManager::ChangeSceneWithFade(std::shared_ptr<SceneBase> pNewScene, boo
 {
 	m_pNextScene = pNewScene;
 	m_isCallLoadSceneNext = isCallLoadScene;
+	m_nextChangeScene = NextChangeScene::Change;
 	FadeManager::GetInstance().StartFadeOut();
 }
 
@@ -53,6 +54,12 @@ void SceneManager::PopScene()
 	}
 }
 
+void SceneManager::PopSceneWithFade()
+{
+	m_nextChangeScene = NextChangeScene::Pop;
+	FadeManager::GetInstance().StartFadeOut();
+}
+
 void SceneManager::ResetScene(std::shared_ptr<SceneBase> pNewScene)
 {
 	for (auto& scene : m_pScenes)
@@ -67,7 +74,7 @@ void SceneManager::ResetScene(std::shared_ptr<SceneBase> pNewScene)
 void SceneManager::ResetSceneWithFade(std::shared_ptr<SceneBase> pNewScene)
 {
 	m_pNextScene = pNewScene;
-	m_isCallResetSceneWithFade;
+	m_nextChangeScene = NextChangeScene::Reset;
 	FadeManager::GetInstance().StartFadeOut();
 }
 
@@ -76,20 +83,25 @@ void SceneManager::Update()
 	m_pScenes.back()->Update();
 	auto& fadeManager = FadeManager::GetInstance();
 
-	if (fadeManager.IsNotFading() && m_pNextScene != nullptr)
+	if (fadeManager.IsNotFading() && m_nextChangeScene != NextChangeScene::None)
 	{
 		fadeManager.StartFadeIn();
-		if (m_isCallResetSceneWithFade)
+		switch (m_nextChangeScene)
 		{
-			ResetScene(m_pNextScene);
-		}
-		else
-		{
+		case NextChangeScene::Change:
 			ChangeScene(m_pNextScene, m_isCallLoadSceneNext);
+			break;
+		case NextChangeScene::Reset:
+			ResetScene(m_pNextScene);
+			break;
+		case NextChangeScene::Pop:
+			PopScene();
+			break;
 		}
+
 		m_pNextScene = nullptr;
 		m_isCallLoadSceneNext = false;
-		m_isCallResetSceneWithFade = false;
+		m_nextChangeScene = NextChangeScene::None;
 	}
 }
 

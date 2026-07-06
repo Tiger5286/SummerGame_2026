@@ -178,9 +178,10 @@ void SceneMain::Update()
 	{
 		m_isBossBattle = true;
 	}
-	else if (m_isBossBattle == true)	// ボスがいない、かつボス戦中ならボスが死んだと判断し、クリアに遷移する
+	else if (m_isBossBattle == true && !m_isEndScene)	// ボスがいない、かつボス戦中ならボスが死んだと判断し、クリアに遷移する
 	{
-		m_sceneManager.ChangeScene(std::make_shared<SceneClear>(m_sceneManager), false);
+		m_isEndScene = true;
+		m_sceneManager.ChangeSceneWithFade(std::make_shared<SceneClear>(m_sceneManager), false);
 		return;
 	}
 
@@ -192,9 +193,10 @@ void SceneMain::Update()
 		return;
 	}
 	// プレイヤーが死んだらゲームオーバー
-	if (m_pPlayer->IsDead())
+	if (m_pPlayer->IsDead() && !m_isEndScene)
 	{
-		m_sceneManager.ChangeScene(std::make_shared<SceneGameOver>(m_sceneManager),false);
+		m_sceneManager.ChangeSceneWithFade(std::make_shared<SceneGameOver>(m_sceneManager),false);
+		m_isEndScene = true;
 		return;
 	}
 

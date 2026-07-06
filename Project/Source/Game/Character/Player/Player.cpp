@@ -122,12 +122,6 @@ void Player::Update()
 	// 接地判定
 	CheckGround();
 
-#ifdef _DEBUG
-	// デバッグ用の情報を表示
-	DrawFormatString(0, 64 + 16, 0xffffff, L"vel.x:%.2f,y:%.2f,z:%.2f", m_vel.x, m_vel.y, m_vel.z);
-	DrawFormatString(0, 64 + 32, 0xffffff, L"vel.length:%.2f", m_vel.Length());
-	DrawFormatString(0, 64 + 48, 0xffffff, L"pos.x:%.2f,y:%.2f,z:%.2f", m_pos.x, m_pos.y, m_pos.z);
-#endif
 	// 必殺技ゲージの上限
 	if (m_specialCharge > kMaxSpecialCharge) m_specialCharge = kMaxSpecialCharge;
 	// スキルクールタイム
@@ -152,6 +146,13 @@ void Player::Update()
 
 	// アニメーションの更新
 	m_anim.Update();
+
+#ifdef _DEBUG
+	if (CheckHitKey(KEY_INPUT_2))
+	{
+		m_hp = 1;
+	}
+#endif
 }
 
 void Player::Draw()

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "SceneBase.h"
 class SceneLoad :
     public SceneBase
@@ -14,5 +14,6 @@ public:
 private:
     int m_loadEndCount = 0;
     int m_firstLoadNum = 0;
+    bool m_isEndScene = false;
 };
 

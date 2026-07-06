@@ -55,3 +55,17 @@ void FadeManager::StartFadeOut()
 {
 	m_fadeState = State::FadeOut;
 }
+
+void FadeManager::SetFadeState(bool isFade)
+{
+	m_fadeState = State::None;
+
+	if (isFade)
+	{
+		m_fadeRate = 1.0f;
+	}
+	else
+	{	
+		m_fadeRate = 0.0f;
+	}
+}

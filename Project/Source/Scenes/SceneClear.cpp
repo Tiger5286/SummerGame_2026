@@ -22,7 +22,7 @@ void SceneClear::Update()
 	auto& input = Input::GetInstance();
 	if (input.IsTriggerd(XINPUT_BUTTON_A))
 	{
-		m_sceneManager.ChangeScene(std::make_shared<SceneTitle>(m_sceneManager), false);
+		m_sceneManager.ChangeSceneWithFade(std::make_shared<SceneTitle>(m_sceneManager), false);
 		return;
 	}
 }

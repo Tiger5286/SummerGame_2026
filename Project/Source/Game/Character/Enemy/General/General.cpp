@@ -84,6 +84,13 @@ void General::Update()
 	MV1CollResultPolyDimTerminate(collResult);
 
 	m_anim.Update();
+
+#ifdef _DEBUG
+	if (CheckHitKey(KEY_INPUT_3))
+	{
+		m_hp = 1;
+	}
+#endif
 }
 
 void General::Draw()

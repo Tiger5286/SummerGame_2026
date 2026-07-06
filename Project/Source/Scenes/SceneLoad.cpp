@@ -2,13 +2,14 @@
 #include "DxLib.h"
 #include "SceneManager.h"
 #include "Game.h"
+#include "Singleton/FadeManager.h"
 
 namespace
 {
 	constexpr int kLoadBarWidth = 800;
 	constexpr int kLoadBarHeight = 100;
 
-	constexpr int kMinLoadFrame = 60;
+	constexpr int kMinLoadFrame = 30;
 }
 
 SceneLoad::SceneLoad(SceneManager& sceneManager) : 
@@ -26,6 +27,7 @@ SceneLoad::~SceneLoad()
 void SceneLoad::Init()
 {
 	m_firstLoadNum = GetASyncLoadNum();
+	FadeManager::GetInstance().SetFadeState(false);
 }
 
 void SceneLoad::End()
@@ -43,9 +45,10 @@ void SceneLoad::Update()
 		m_loadEndCount++;
 	}
 	// ロードが終わって一定時間たったらロードシーンをポップ
-	if (m_loadEndCount > kMinLoadFrame)
+	if (m_loadEndCount > kMinLoadFrame && !m_isEndScene)
 	{
-		m_sceneManager.PopScene();
+		m_isEndScene = true;
+		m_sceneManager.PopSceneWithFade();
 		return;
 	}
 }

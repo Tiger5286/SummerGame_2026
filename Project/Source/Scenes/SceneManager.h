@@ -28,6 +28,7 @@ public:
 	/// 一番上のシーンを削除する
 	/// </summary>
 	void PopScene();
+	void PopSceneWithFade();
 
 	/// <summary>
 	/// シーンをリセットする
@@ -41,9 +42,17 @@ public:
 	void End();
 
 private:
+	enum class NextChangeScene
+	{
+		None,
+		Change,
+		Reset,
+		Pop
+	};
+
 	std::list<std::shared_ptr<SceneBase>> m_pScenes;
 	std::shared_ptr<SceneBase> m_pNextScene = nullptr;
 	bool m_isCallLoadSceneNext = false;
-	bool m_isCallResetSceneWithFade = false;
+	NextChangeScene m_nextChangeScene = NextChangeScene::None;
 };
 
