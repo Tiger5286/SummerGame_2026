@@ -8,6 +8,7 @@ class Character;
 class CameraStateBase;
 class CameraStateFree;
 class CameraStateBurning;
+class CameraStateAppearBoss;
 
 class Camera : public std::enable_shared_from_this<Camera>
 {
@@ -59,5 +60,6 @@ private:
 
 	friend CameraStateFree;
 	friend CameraStateBurning;
+	friend CameraStateAppearBoss;
 };
 
