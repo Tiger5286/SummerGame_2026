@@ -121,11 +121,17 @@ void SpawnerManager::LoadBinaly()
 
 		EnemySpawner::Data data;
 
+		char byteNum;	// スポナーのタグのバイト数
+		FileRead_read(&byteNum, sizeof(char), handle);
+		std::string spawnerTag;	// スポナーのタグ
+		spawnerTag.resize(byteNum);
+		FileRead_read(spawnerTag.data(), byteNum, handle);
 		Vector3 spawnerPos;	// スポナーの位置
 		MyLib::ReadVector3(spawnerPos, handle);
 		float spawnerRadius = 0.0f;	// スポナーの半径
 		FileRead_read(&spawnerRadius, sizeof(float), handle);
 
+		data.tag = spawnerTag;
 		data.pos = spawnerPos * 100;
 		data.radius = spawnerRadius * 100;
 

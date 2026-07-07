@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <memory>
 #include <vector>
+#include <string>
 #include "Utility/Vector3.h"
 #include "Utility/MyLib.h"
 
@@ -22,6 +23,7 @@ public:
 		Vector3 pos;
 		float radius = 0.0f;
 		std::vector<EnemyData> enemyDatas;
+		std::string tag;
 	};
 public:
 	EnemySpawner() = default;
@@ -41,7 +43,7 @@ private:
 	Vector3 m_pos;
 	float m_radius = 0.0f;
 	std::vector<EnemyData> m_enemyDatas;
+	std::string m_tag;
 
 	bool m_isSpawned = false;
-
 };

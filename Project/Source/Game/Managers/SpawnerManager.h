@@ -24,4 +24,3 @@ private:
 	std::shared_ptr<EnemyManager> m_pEnemyManager = nullptr;
 	std::shared_ptr<Player> m_pPlayer = nullptr;
 };
-
