@@ -1,5 +1,9 @@
 ﻿#pragma once
 #include "SceneBase.h"
+#include <functional>
+#include <array>
+#include <string>
+
 class SceneGameOver :
     public SceneBase
 {
@@ -12,6 +16,25 @@ public:
     void Update() override;
     void Draw() override;
 private:
+    void Retry();
+    void Title();
 
+    enum class Menu
+    {
+        Retry,
+        Title,
+
+        Num
+    };
+
+    struct MenuItem
+    {
+        std::wstring name;
+        std::function<void()> action;
+    };
+
+private:
+    int m_selectIndex = 0;
+    std::array<MenuItem, static_cast<int>(Menu::Num)> m_menuActions;
 };
 
