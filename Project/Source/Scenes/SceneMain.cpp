@@ -257,8 +257,12 @@ void SceneMain::Draw()
 
 	EffectManager::GetInstance().Draw();
 
-	// UIの描画
-	UIManager::GetInstance().Draw();
+	// ボス出現演出中はUIを描画しない
+	if (!m_isDirectionSpawnBoss)
+	{
+		// UIの描画
+		UIManager::GetInstance().Draw();
+	}
 
 #ifdef _DEBUG
 	// デバッグ表示
