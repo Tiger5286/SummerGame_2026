@@ -41,7 +41,7 @@ private:
     // メニューのアクション(関数)を格納する配列
     std::array<MenuItem, static_cast<int>(OptionMenu::Num)> m_menuActions;
 
-    float m_volume[2];
+    int m_volume[2];
     bool m_windowMode = true;   // true:ウィンドウ / false:フルスクリーン
 };
 

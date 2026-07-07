@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "Singleton/Input.h"
 #include "SceneManager.h"
+#include "Singleton/SoundManager.h"
 
 namespace
 {
@@ -28,13 +29,16 @@ SceneOption::SceneOption(SceneManager& sceneManager) :
 
 	for (int i = 0; i < 2; i++)
 	{
-		m_volume[i] = 0.5f;
+		m_volume[i] = 255 / 10 * 7;
 	}
 }
 
 void SceneOption::Init()
 {
 	m_windowMode = GetWindowModeFlag();
+	auto& soundManager = SoundManager::GetInstance();
+	m_volume[0] = soundManager.GetSEVolume();
+	m_volume[1] = soundManager.GetBGMVolume();
 }
 
 void SceneOption::End()
@@ -94,7 +98,8 @@ void SceneOption::Draw()
 			int y = y1 + 50 + i * 20 + 8;
 			int barLen = 100;
 			DrawLine(x, y, x + barLen, y, 0xffffff, 2);
-			DrawCircle(x + m_volume[i] * barLen, y, 8, 0xff0000, true);
+			float rate = m_volume[i] / 255.0f;
+			DrawCircle(x + rate * barLen, y, 8, 0xff0000, true);
 		}
 		else if (i == static_cast<int>(OptionMenu::WindowMode))
 		{
@@ -124,21 +129,23 @@ void SceneOption::SeVolume()
 	auto& input = Input::GetInstance();
 	if (input.IsPressed(XINPUT_BUTTON_DPAD_RIGHT))
 	{
-		m_volume[0] += 0.02f;
+		m_volume[0]+=2;
 	}
 	if (input.IsPressed(XINPUT_BUTTON_DPAD_LEFT))
 	{
-		m_volume[0] -= 0.02f;
+		m_volume[0]-=2;
 	}
 
-	if (m_volume[0] > 1.0f)
+	if (m_volume[0] > 255)
 	{
-		m_volume[0] = 1.0f;
+		m_volume[0] = 255;
 	}
-	if (m_volume[0] < 0.0f)
+	if (m_volume[0] < 0)
 	{
-		m_volume[0] = 0.0f;
+		m_volume[0] = 0;
 	}
+
+	SoundManager::GetInstance().ChangeVolume(SoundType::SE, m_volume[0]);
 }
 
 void SceneOption::BgmVolume()
@@ -146,21 +153,23 @@ void SceneOption::BgmVolume()
 	auto& input = Input::GetInstance();
 	if (input.IsPressed(XINPUT_BUTTON_DPAD_RIGHT))
 	{
-		m_volume[1] += 0.02f;
+		m_volume[1]+=2;
 	}
 	if (input.IsPressed(XINPUT_BUTTON_DPAD_LEFT))
 	{
-		m_volume[1] -= 0.02f;
+		m_volume[1]-=2;
 	}
 
-	if (m_volume[1] > 1.0f)
+	if (m_volume[1] > 255)
 	{
-		m_volume[1] = 1.0f;
+		m_volume[1] = 255;
 	}
-	if (m_volume[1] < 0.0f)
+	if (m_volume[1] < 0)
 	{
-		m_volume[1] = 0.0f;
+		m_volume[1] = 0;
 	}
+
+	SoundManager::GetInstance().ChangeVolume(SoundType::BGM, m_volume[1]);
 }
 
 void SceneOption::WindowMode()
