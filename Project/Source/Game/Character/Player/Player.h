@@ -54,6 +54,8 @@ public:
 
     void OnHitAttack(const MyLib::AttackData& atkData) override;
 
+    void SetCanControl(bool canControl) { m_isCanControl = canControl; }
+
     // 最大HP
     const int kMaxHp = 1000;
     int GetMaxHP() const override { return kMaxHp; }
@@ -94,6 +96,8 @@ private:
 
     // 空中でテレポートが発動可能かどうか
     bool m_isCanAirShift = true;
+    // 操作可能かどうか
+    bool m_isCanControl = true;
 
     // 必殺技ゲージ
     int m_specialCharge = 0;

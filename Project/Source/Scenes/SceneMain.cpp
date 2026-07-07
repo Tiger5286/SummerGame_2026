@@ -9,6 +9,7 @@
 #include "Singleton/Input.h"
 #include "Singleton/UIManager.h"
 #include "Singleton/EventManager.h"
+#include "Singleton/FadeManager.h"
 
 #include "SceneManager.h"
 #include "ScenePause.h"
@@ -17,7 +18,8 @@
 
 #include "Game/Character/Player/Player.h"
 #include "Game/Camera/Camera.h"
-#include "Game/Character/Enemy/Zombie/Zombie.h"
+#include "Game/Camera/CameraStateAppearBoss.h"
+#include "Game/Camera/CameraStateFree.h"
 
 #include "Game/Managers/EnemyManager.h"
 #include "Game/Managers/TargetManager.h"
@@ -78,6 +80,7 @@ SceneMain::SceneMain(SceneManager& sceneManager) :
 
 SceneMain::~SceneMain()
 {
+	EventManager::GetInstance().UnRegister(m_onSpawnBossHandle);
 }
 
 void SceneMain::Init()
@@ -95,7 +98,7 @@ void SceneMain::Init()
 		effManager.LoadEffect(effData.path, effData.name, effData.scale);
 	}
 
-	EventManager::GetInstance().Register("SpawnBoss", [this]() {OnSpawnBoss(); });
+	m_onSpawnBossHandle = EventManager::GetInstance().Register("SpawnBoss", [this]() {OnSpawnBoss(); });
 
 	// UIの初期化
 	UIManager::GetInstance().Init();
@@ -175,6 +178,12 @@ void SceneMain::Update()
 
 	// UIの更新
 	UIManager::GetInstance().Update();
+
+	// ボス戦前演出
+	if (m_isDirectionSpawnBoss)
+	{
+		SpawnBossUpdate();
+	}
 
 	// ボスがいたらボス戦フラグをつける
 	if (m_pEnemyManager->IsAliveBoss())
@@ -260,5 +269,23 @@ void SceneMain::Draw()
 
 void SceneMain::OnSpawnBoss()
 {
-	printfDx(L"Called:OnSpawnBoss()");
+	m_isDirectionSpawnBoss = true;
+	FadeManager::GetInstance().StartFadeOut();
+	m_pPlayer->SetCanControl(false);
+}
+
+void SceneMain::SpawnBossUpdate()
+{
+	m_directionBossFrameCount++;
+	auto& fadeManager = FadeManager::GetInstance();
+	if (m_directionBossFrameCount == 60)
+	{
+		fadeManager.StartFadeIn();
+		m_pCamera->ChangeState(std::make_shared<CameraStateAppearBoss>());
+	}
+	if (m_directionBossFrameCount > 270)
+	{
+		m_isDirectionSpawnBoss = false;
+		m_pPlayer->SetCanControl(true);
+	}
 }

@@ -26,11 +26,17 @@ public:
 private:
 	void OnSpawnBoss();
 
+	void SpawnBossUpdate();
+
 private:
 	int m_frameCount = 0;
 
 	bool m_isBossBattle = false;
 	bool m_isEndScene = false;
+
+	int m_onSpawnBossHandle = -1;
+	bool m_isDirectionSpawnBoss = false;
+	int m_directionBossFrameCount = 0;
 
 	std::shared_ptr<Player> m_pPlayer = nullptr;
 	std::shared_ptr<Camera> m_pCamera = nullptr;

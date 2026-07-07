@@ -31,43 +31,46 @@ void PlayerStateIdle::Update()
 
 	// 入力を取得
 	auto& input = Input::GetInstance();
-
-	// バーニングを入力していたらバーニング
-	if (input.IsTriggerd(player->kBurning) && player->GetSpecialCharge() >= 1000)
+	if (player->m_isCanControl)
 	{
-		ChangeState(std::make_shared<PlayerStateBurning>());
-		return;
+		// バーニングを入力していたらバーニング
+		if (input.IsTriggerd(player->kBurning) && player->GetSpecialCharge() >= 1000)
+		{
+			ChangeState(std::make_shared<PlayerStateBurning>());
+			return;
+		}
+		// スピンを入力したいたらスピン
+		if (input.IsTriggerd(player->kSpin) && player->m_skillCooltime >= 10 * 60)
+		{
+			ChangeState(std::make_shared<PlayerStateSpin>());
+			return;
+		}
+		// 回避を入力していたら回避
+		if (input.IsTriggerd(player->kDodge))
+		{
+			ChangeState(std::make_shared<PlayerStateDodge>());
+			return;
+		}
+		// 攻撃を入力していたら攻撃
+		if (input.IsTriggerd(player->kAttack))
+		{
+			ChangeState(std::make_shared<PlayerStateAttack>());
+			return;
+		}
+		// シフトを入力していたらシフト
+		if (input.IsTriggerd(player->kShift))
+		{
+			ChangeState(std::make_shared<PlayerStateShift>());
+			return;
+		}
+		// スティック入力があったらMoveへ
+		if (input.GetStickInput(MyLib::LR::Left).SquaredLength() > 0.0f)
+		{
+			ChangeState(std::make_shared<PlayerStateMove>());
+			return;
+		}
 	}
-	// スピンを入力したいたらスピン
-	if (input.IsTriggerd(player->kSpin) && player->m_skillCooltime >= 10 * 60)
-	{
-		ChangeState(std::make_shared<PlayerStateSpin>());
-		return;
-	}
-	// 回避を入力していたら回避
-	if (input.IsTriggerd(player->kDodge))
-	{
-		ChangeState(std::make_shared<PlayerStateDodge>());
-		return;
-	}
-	// 攻撃を入力していたら攻撃
-	if (input.IsTriggerd(player->kAttack))
-	{
-		ChangeState(std::make_shared<PlayerStateAttack>());
-		return;
-	}
-	// シフトを入力していたらシフト
-	if (input.IsTriggerd(player->kShift))
-	{
-		ChangeState(std::make_shared<PlayerStateShift>());
-		return;
-	}
-	// スティック入力があったらMoveへ
-	if (input.GetStickInput(MyLib::LR::Left).SquaredLength() > 0.0f)
-	{
-		ChangeState(std::make_shared<PlayerStateMove>());
-		return;
-	}
+	
 	// 接地していなかったらFallにする
 	if (!(m_pPlayer.lock()->m_isGround))
 	{

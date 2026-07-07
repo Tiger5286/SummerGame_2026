@@ -12,6 +12,7 @@
 #include "GeneralStateThrust.h"
 #include "GeneralStateProjectile.h"
 #include "GeneralStateDeath.h"
+#include "GeneralStateAppear.h"
 
 namespace
 {
@@ -41,7 +42,7 @@ void General::Init()
 	CollisionManager::GetInstance().Register(shared_from_this());
 
 	// ステートの初期化
-	m_pState = std::make_shared<GeneralStateWalk>();
+	m_pState = std::make_shared<GeneralStateAppear>();
 	m_pState->ChangeState(m_pState);
 	auto general = std::dynamic_pointer_cast<General>(shared_from_this());
 	m_pState->Enter(general);

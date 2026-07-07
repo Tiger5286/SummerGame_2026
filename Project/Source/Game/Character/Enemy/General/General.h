@@ -11,6 +11,7 @@ class GeneralStateHeavySlash;
 class GeneralStateThrust;
 class GeneralStateProjectile;
 class GeneralStateDeath;
+class GeneralStateAppear;
 
 class General :
     public EnemyBase
@@ -48,4 +49,5 @@ private:
     friend GeneralStateThrust;
     friend GeneralStateProjectile;
     friend GeneralStateDeath;
+    friend GeneralStateAppear;
 };

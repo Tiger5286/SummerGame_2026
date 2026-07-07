@@ -12,6 +12,6 @@ public:
     void Exit() override;
 
 private:
-
+    int m_frame = 0;
 };
 

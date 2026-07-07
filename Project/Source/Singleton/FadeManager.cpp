@@ -4,7 +4,7 @@
 
 namespace
 {
-	constexpr int kFadeFrame = 60;
+	constexpr int kFadeFrame = 30;
 }
 
 FadeManager& FadeManager::GetInstance()
