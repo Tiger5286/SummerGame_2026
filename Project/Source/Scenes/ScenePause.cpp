@@ -12,15 +12,15 @@ ScenePause::ScenePause(SceneManager& sceneManager) :
 	SceneBase(sceneManager)
 {
 	// メニューのアクションを設定する
-	m_menuActions[static_cast<int>(PauseMenu::Resume)] = {
+	m_menuActions[static_cast<int>(Menu::Resume)] = {
 		.name = L"Resume",
 		.action = [this]() { Resume(); }
 	};
-	m_menuActions[static_cast<int>(PauseMenu::Option)] = {
+	m_menuActions[static_cast<int>(Menu::Option)] = {
 		.name = L"Option",
 		.action = [this]() { Option(); }
 	};
-	m_menuActions[static_cast<int>(PauseMenu::BackToTitle)] = {
+	m_menuActions[static_cast<int>(Menu::BackToTitle)] = {
 		.name = L"Back to Title",
 		.action = [this]() { BackToTitle(); }
 	};
@@ -44,7 +44,7 @@ void ScenePause::Update()
 	if (input.IsTriggerd(XINPUT_BUTTON_DPAD_DOWN))
 	{
 		m_selectIndex++;
-		if (m_selectIndex >= static_cast<int>(PauseMenu::Num))
+		if (m_selectIndex >= static_cast<int>(Menu::Num))
 		{
 			m_selectIndex = 0;
 		}
@@ -54,7 +54,7 @@ void ScenePause::Update()
 		m_selectIndex--;
 		if (m_selectIndex < 0)
 		{
-			m_selectIndex = static_cast<int>(PauseMenu::Num) - 1;
+			m_selectIndex = static_cast<int>(Menu::Num) - 1;
 		}
 	}
 	// 決定ボタンで選択中のメニューのアクションを実行する
@@ -77,7 +77,7 @@ void ScenePause::Draw()
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	for (int i = 0; i < static_cast<int>(PauseMenu::Num); i++)
+	for (int i = 0; i < static_cast<int>(Menu::Num); i++)
 	{
 		unsigned int color = 0xffffff;
 		if (i == m_selectIndex) color = 0xff0000;

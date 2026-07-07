@@ -14,15 +14,15 @@ namespace
 SceneOption::SceneOption(SceneManager& sceneManager) :
 	SceneBase(sceneManager)
 {
-	m_menuActions[static_cast<int>(OptionMenu::SeVolume)] = {
+	m_menuActions[static_cast<int>(Menu::SeVolume)] = {
 		.name = L"SeVolume",
 		.action = [this]() {SeVolume(); }
 	};
-	m_menuActions[static_cast<int>(OptionMenu::BgmVolume)] = {
+	m_menuActions[static_cast<int>(Menu::BgmVolume)] = {
 		.name = L"BgmVolume",
 		.action = [this]() {BgmVolume(); }
 	};
-	m_menuActions[static_cast<int>(OptionMenu::WindowMode)] = {
+	m_menuActions[static_cast<int>(Menu::WindowMode)] = {
 		.name = L"WindowMode",
 		.action = [this]() {WindowMode(); }
 	};
@@ -53,7 +53,7 @@ void SceneOption::Update()
 	if (input.IsTriggerd(XINPUT_BUTTON_DPAD_DOWN))
 	{
 		m_selectIndex++;
-		if (m_selectIndex >= static_cast<int>(OptionMenu::Num))
+		if (m_selectIndex >= static_cast<int>(Menu::Num))
 		{
 			m_selectIndex = 0;
 		}
@@ -63,7 +63,7 @@ void SceneOption::Update()
 		m_selectIndex--;
 		if (m_selectIndex < 0)
 		{
-			m_selectIndex = static_cast<int>(OptionMenu::Num) - 1;
+			m_selectIndex = static_cast<int>(Menu::Num) - 1;
 		}
 	}
 	m_menuActions[m_selectIndex].action();
@@ -85,13 +85,13 @@ void SceneOption::Draw()
 	y2 = Game::kScreenHeight / 2 + kWindowHeight / 2;
 	DrawBox(x1, y1, x2, y2, 0x000000, true);
 
-	for (int i = 0; i < static_cast<int>(OptionMenu::Num); i++)
+	for (int i = 0; i < static_cast<int>(Menu::Num); i++)
 	{
 		unsigned int color = 0xffffff;
 		if (i == m_selectIndex) color = 0xff0000;
 		DrawString(x1 + 50, y1 + 50 + i * 20, m_menuActions[i].name.c_str(), color);
 		
-		if (i == static_cast<int>(OptionMenu::SeVolume) || i == static_cast<int>(OptionMenu::BgmVolume))
+		if (i == static_cast<int>(Menu::SeVolume) || i == static_cast<int>(Menu::BgmVolume))
 		{
 			int stringWidth = GetDrawStringWidth(m_menuActions[i].name.c_str(), m_menuActions[i].name.size());
 			int x = x1 + 50 + stringWidth + 15;
@@ -101,7 +101,7 @@ void SceneOption::Draw()
 			float rate = m_volume[i] / 255.0f;
 			DrawCircle(x + rate * barLen, y, 8, 0xff0000, true);
 		}
-		else if (i == static_cast<int>(OptionMenu::WindowMode))
+		else if (i == static_cast<int>(Menu::WindowMode))
 		{
 			int stringWidth = GetDrawStringWidth(m_menuActions[i].name.c_str(), m_menuActions[i].name.size());
 			int x = x1 + 50 + stringWidth + 15;

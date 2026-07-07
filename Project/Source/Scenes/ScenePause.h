@@ -21,7 +21,7 @@ private:
 	void Option();
 	void BackToTitle();
 
-	enum class PauseMenu
+	enum class Menu
 	{
 		Resume,
 		Option,
@@ -39,7 +39,7 @@ private:
 private:
 	int m_selectIndex = 0;	// 選択中のメニューのインデックス
 	// メニューのアクション(関数)を格納する配列
-	std::array<MenuItem, static_cast<int>(PauseMenu::Num)> m_menuActions;
+	std::array<MenuItem, static_cast<int>(Menu::Num)> m_menuActions;
 
 };
 
