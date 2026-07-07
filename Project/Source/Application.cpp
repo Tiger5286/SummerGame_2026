@@ -24,8 +24,11 @@ Application& Application::GetInstance()
 
 bool Application::Init()
 {
-	ChangeWindowMode(true); // ウインドウモードで起動
-	SetMainWindowText(L"ゲーム名"); // ウインドウのタイトルを設定
+	ChangeWindowMode(false);	// フルスクリーンで起動
+#ifdef _DEBUG
+	ChangeWindowMode(true); // Debugならウィンドウモードで起動
+#endif
+	SetMainWindowText(L"Sword of Phoenix"); // ウインドウのタイトルを設定
 	SetGraphMode(Game::kScreenWidth, Game::kScreenHeight, Game::kColorBitNum); // 画面サイズと色数を設定
 
 	// DirectX11を使用するようにする。(DirectX9も可、一部機能不可)
