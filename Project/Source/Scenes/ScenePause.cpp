@@ -6,6 +6,7 @@
 #include <map>
 
 #include "SceneTitle.h"
+#include "SceneOption.h"
 
 ScenePause::ScenePause(SceneManager& sceneManager) :
 	SceneBase(sceneManager)
@@ -95,7 +96,7 @@ void ScenePause::Resume()
 
 void ScenePause::Option()
 {
-	
+	m_sceneManager.PushScene(std::make_shared<SceneOption>(m_sceneManager));
 }
 
 void ScenePause::BackToTitle()

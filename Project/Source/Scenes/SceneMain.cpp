@@ -80,6 +80,7 @@ SceneMain::SceneMain(SceneManager& sceneManager) :
 
 SceneMain::~SceneMain()
 {
+	// イベントマネージャーに登録した関数を削除
 	EventManager::GetInstance().UnRegister(m_onSpawnBossHandle);
 }
 
