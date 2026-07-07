@@ -22,6 +22,10 @@ public:
 	void End() override;
 	void Update() override;
 	void Draw() override;
+
+private:
+	void OnSpawnBoss();
+
 private:
 	int m_frameCount = 0;
 

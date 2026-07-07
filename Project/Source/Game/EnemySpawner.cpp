@@ -9,6 +9,7 @@ void EnemySpawner::Init(std::shared_ptr<EnemyManager> pEnemyManager, std::shared
 	m_pos = spawnerData.pos;
 	m_radius = spawnerData.radius;
 	m_enemyDatas = spawnerData.enemyDatas;
+	m_tag = spawnerData.tag;
 }
 
 void EnemySpawner::Update()

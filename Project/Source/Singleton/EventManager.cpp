@@ -1,5 +1,11 @@
 ﻿#include "EventManager.h"
 
+EventManager& EventManager::GetInstance()
+{
+	static EventManager instance;
+	return instance;
+}
+
 void EventManager::CallEvent(const std::string& eventName)
 {
 	for (auto& data : m_eventDatas)

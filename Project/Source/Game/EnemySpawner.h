@@ -33,6 +33,9 @@ public:
 	void Update();
 	void Draw();
 
+	bool IsSpawned() const { return m_isSpawned; }
+	std::string GetTag() const { return m_tag; }
+
 private:
 	void Spawn();
 

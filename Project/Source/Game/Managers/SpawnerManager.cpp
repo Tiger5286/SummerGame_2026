@@ -6,6 +6,7 @@
 #include <cassert>
 #include <unordered_map>
 #include "Utility/MyLib.h"
+#include "Singleton/EventManager.h"
 
 namespace
 {
@@ -182,7 +183,18 @@ void SpawnerManager::Update()
 {
 	for (auto& spawner : m_pEnemySpawners)
 	{
+		// 前のフレームで出現させたか取得
+		bool isPrevSpawned = spawner->IsSpawned();
+		// 更新
 		spawner->Update();
+		// 出現させた瞬間
+		if (!isPrevSpawned && spawner->IsSpawned())
+		{
+			if (spawner->GetTag() == "BossSpawner")
+			{
+				EventManager::GetInstance().CallEvent("SpawnBoss");
+			}
+		}
 	}
 }
 

@@ -8,6 +8,7 @@
 #include "Singleton/CameraSetter.h"
 #include "Singleton/Input.h"
 #include "Singleton/UIManager.h"
+#include "Singleton/EventManager.h"
 
 #include "SceneManager.h"
 #include "ScenePause.h"
@@ -93,6 +94,8 @@ void SceneMain::Init()
 	{
 		effManager.LoadEffect(effData.path, effData.name, effData.scale);
 	}
+
+	EventManager::GetInstance().Register("SpawnBoss", [this]() {OnSpawnBoss(); });
 
 	// UIの初期化
 	UIManager::GetInstance().Init();
@@ -253,4 +256,9 @@ void SceneMain::Draw()
 	DrawString(0,0,L"SceneMain",0xffffff);
 	DrawFormatString(0, 16, 0xffffff, L"FRAME:%d", m_frameCount);
 #endif
+}
+
+void SceneMain::OnSpawnBoss()
+{
+	printfDx(L"Called:OnSpawnBoss()");
 }
