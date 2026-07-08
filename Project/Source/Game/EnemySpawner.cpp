@@ -2,6 +2,7 @@
 #include "Character/Player/Player.h"
 #include "Managers/EnemyManager.h"
 #include "Character/Enemy/EnemyBase.h"
+#include "Singleton/EffectManager.h"
 
 void EnemySpawner::Init(std::shared_ptr<EnemyManager> pEnemyManager, std::shared_ptr<Player> pPlayer, EnemySpawner::Data spawnerData)
 {
@@ -26,6 +27,8 @@ void EnemySpawner::Update()
 	if (isEnemiesEmpty && m_isSpawned)
 	{
 		m_isDefeatedEnemies = true;
+		//EffectManager::GetInstance().GetManager()->SendTrigger(m_effHandle, 0);
+		EffectManager::GetInstance().StopEffect(m_effHandle);
 	}
 
 	// 敵がいる場合、かつすでに出現させた場合はプレイヤー、敵を範囲内にとどめる
@@ -64,6 +67,9 @@ void EnemySpawner::Spawn()
 	{
 		m_pEnemyManager->AddEnemy(data.type, m_pos + data.localPos);
 	}
+	m_effHandle = EffectManager::GetInstance().PlayEffect(L"BattleArea", m_pos);
+	float scale = m_radius / 1000 * 2;
+	SetScalePlayingEffekseer3DEffect(m_effHandle, scale, scale, scale);
 }
 
 void EnemySpawner::KeepCharacterInArea()

@@ -3,6 +3,7 @@
 #include <list>
 #include <map>
 #include "../Utility/Vector3.h"
+#include "EffekseerForDXLib.h"
 
 class EffectManager
 {
@@ -13,7 +14,7 @@ public:
 	EffectManager(const EffectManager&) = delete;
 	EffectManager& operator=(const EffectManager&) = delete;
 private:
-	EffectManager() = default;
+	EffectManager();
 public:
 
 	void Update();
@@ -46,7 +47,10 @@ public:
 	/// </summary>
 	void StopEffectAll();
 
+	Effekseer::ManagerRef GetManager() { return m_efkManager; }
+
 private:
 	std::map<std::wstring, int> m_effectResourceHandles;
 	std::list<int> m_effectPlayingHandles;
+	Effekseer::ManagerRef m_efkManager = {};
 };

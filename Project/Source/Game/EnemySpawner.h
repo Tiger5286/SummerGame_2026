@@ -51,4 +51,6 @@ private:
 
 	bool m_isSpawned = false;
 	bool m_isDefeatedEnemies = false;
+
+	int m_effHandle = -1;
 };

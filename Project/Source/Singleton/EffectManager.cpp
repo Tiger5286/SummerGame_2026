@@ -1,10 +1,14 @@
 ﻿#include "EffectManager.h"
-#include "EffekseerForDXLib.h"
 
 EffectManager& EffectManager::GetInstance()
 {
 	static EffectManager instance;
 	return instance;
+}
+
+EffectManager::EffectManager()
+{
+	m_efkManager = Effekseer::Manager::Create(2000);
 }
 
 EffectManager::~EffectManager()
@@ -37,6 +41,8 @@ void EffectManager::Draw()
 		return;	// 再生中のエフェクトがなければ描画しない
 	}
 	DrawEffekseer3D();
+
+	//m_efkManager->SendTrigger();
 }
 
 void EffectManager::LoadEffect(const std::wstring& filePath, const std::wstring& name, float scale)

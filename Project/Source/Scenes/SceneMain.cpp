@@ -69,6 +69,11 @@ namespace
 			.path = L"data/effects/SpinEffect.efkefc",
 			.name = L"Spin",
 			.scale = 60.0f
+		},
+		{
+			.path = L"data/effects/BattleArea.efkefc",
+			.name = L"BattleArea",
+			.scale = 100.0f
 		}
 	};
 }
