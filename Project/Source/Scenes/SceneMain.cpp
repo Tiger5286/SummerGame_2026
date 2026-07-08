@@ -167,6 +167,8 @@ void SceneMain::End()
 	{
 		modelManager.DeleteModel(model.first);
 	}
+
+	EffectManager::GetInstance().StopEffectAll();
 }
 
 void SceneMain::Update()
