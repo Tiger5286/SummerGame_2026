@@ -3,6 +3,7 @@
 #include "Singleton/Input.h"
 #include "SceneManager.h"
 #include "Game.h"
+#include "Singleton/EffectManager.h"
 
 #include "SceneMain.h"
 #include "SceneOption.h"
@@ -27,12 +28,21 @@ SceneTitle::SceneTitle(SceneManager& sceneManager) :
 
 void SceneTitle::Init()
 {
-	m_titleGraphHandle = LoadGraph(L"data/Graphs/title.png");
+	m_titleHandle = LoadGraph(L"data/Graphs/title.png");
+	m_titleBackHandle = LoadGraph(L"data/Graphs/StoneBrick.png");
+	EffectManager::GetInstance().LoadEffect(L"data/effects/TitleBackFlame.efkefc", L"TitleBackFlame", 100.0f);
+
+	m_effHandle = EffectManager::GetInstance().PlayEffect(L"TitleBackFlame", Vector3::Zero());
+
+	SetCameraPositionAndTarget_UpVecY(Vector3(0, 50, -500), Vector3(0, 50, 0));
+	Effekseer_Sync3DSetting();
 }
 
 void SceneTitle::End()
 {
-	DeleteGraph(m_titleGraphHandle);
+	DeleteGraph(m_titleHandle);
+	DeleteGraph(m_titleBackHandle);
+	EffectManager::GetInstance().StopEffect(m_effHandle);
 }
 
 void SceneTitle::Update()
@@ -62,11 +72,17 @@ void SceneTitle::Update()
 		m_menuActions[m_selectIndex].action();
 		return;
 	}
+
+	EffectManager::GetInstance().Update();
 }
 
 void SceneTitle::Draw()
 {
-	DrawRotaGraph(Game::kScreenWidth / 2, Game::kScreenHeight / 2 - 100, 0.8, 0.0, m_titleGraphHandle, true);
+	DrawRotaGraph(Game::kScreenWidth / 2, Game::kScreenHeight / 2, 1.3, 0.0, m_titleBackHandle, false);
+
+	EffectManager::GetInstance().Draw();
+
+	DrawRotaGraph(Game::kScreenWidth / 2, Game::kScreenHeight / 2, 0.8, 0.0, m_titleHandle, true);
 
 	int x = Game::kScreenWidth / 2;
 	int y = Game::kScreenHeight / 2 + 250;
@@ -80,6 +96,7 @@ void SceneTitle::Draw()
 
 #ifdef _DEBUG
 	DrawString(0, 0, L"SceneTitle", 0xffffff);
+	//DrawGrid();
 #endif
 }
 

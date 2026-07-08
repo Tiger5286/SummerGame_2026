@@ -37,7 +37,9 @@ private:
     };
 
 private:
-    int m_titleGraphHandle = -1;
+    int m_titleHandle = -1;
+    int m_titleBackHandle = -1;
+    int m_effHandle = -1;
 
     int m_selectIndex = 0;
     std::array<MenuItem, static_cast<int>(Menu::Num)> m_menuActions;
