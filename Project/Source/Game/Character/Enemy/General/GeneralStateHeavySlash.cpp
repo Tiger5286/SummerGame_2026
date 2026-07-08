@@ -4,6 +4,7 @@
 #include "Utility/MyLib.h"
 #include "Utility/Matrix4x4.h"
 #include "../../Attack.h"
+#include "Singleton/EffectManager.h"
 
 #include "GeneralStateWalk.h"
 
@@ -40,14 +41,17 @@ void GeneralStateHeavySlash::Update()
 	m_frame++;
 	auto general = m_pGeneral.lock();
 
+	// 攻撃の位置
+	Vector3 colPos = general->m_pos + kAttackOffset * Matrix4x4::GetRotY(general->m_angle);
 	// 初撃
 	if (m_frame == kAttackFrame)
 	{
-		Vector3 colPos = general->m_pos + kAttackOffset * Matrix4x4::GetRotY(general->m_angle);
+		//Vector3 colPos = general->m_pos + kAttackOffset * Matrix4x4::GetRotY(general->m_angle);
 		m_pAttack = std::make_shared<Attack>();
 		m_pAttack->SetData(kAttackData,shared_from_this());
 		m_pAttack->Init();
 		m_pAttack->SetPos(colPos);
+		EffectManager::GetInstance().PlayEffect(L"SwordRush", colPos);
 	}
 
 	// 連続斬撃
@@ -55,7 +59,7 @@ void GeneralStateHeavySlash::Update()
 	{
 		if (m_frame % 10 == 0)
 		{
-			Vector3 colPos = general->m_pos + kAttackOffset * Matrix4x4::GetRotY(general->m_angle);
+			//Vector3 colPos = general->m_pos + kAttackOffset * Matrix4x4::GetRotY(general->m_angle);
 			m_pAttack = std::make_shared<Attack>();
 			m_pAttack->SetData(kAttackData,shared_from_this());
 			m_pAttack->Init();

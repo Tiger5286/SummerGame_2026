@@ -74,6 +74,11 @@ namespace
 			.path = L"data/effects/BattleArea.efkefc",
 			.name = L"BattleArea",
 			.scale = 100.0f
+		},
+		{
+			.path = L"data/effects/SwordRush.efkefc",
+			.name = L"SwordRush",
+			.scale = 50.0f
 		}
 	};
 }
