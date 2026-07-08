@@ -15,7 +15,8 @@ namespace
 	constexpr float kMinAngleX = -DX_PI_F / 4.0f + 0.1f;
 
 	// 注視点との距離
-	constexpr float kTargetDis = 300.0f;
+	constexpr float kTargetDist = 300.0f;
+	constexpr float kTargetDistBoss = 500.0f;
 
 	// オフセット
 	constexpr float kOffsetX = -75.0f;
@@ -55,7 +56,14 @@ void CameraStateFree::Update()
 	Vector3 pos = { 0,0,-1 };
 	pos.Normalize();
 	// ベクトルの長さを注視点との距離にする
-	pos *= kTargetDis;
+	if (camera->m_isBossBattle)
+	{
+		pos *= kTargetDistBoss;
+	}
+	else
+	{
+		pos *= kTargetDist;
+	}
 	// 変形用の行列を生成
 	auto rotYMtx = Matrix4x4::GetRotY(camera->m_angleY);
 	auto rotXMtx = Matrix4x4::GetRotX(camera->m_angleX);

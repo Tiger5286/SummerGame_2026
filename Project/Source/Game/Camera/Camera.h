@@ -34,6 +34,8 @@ public:
 	// ターゲットを設定する
 	void SetTarget(std::shared_ptr<Character> pTarget) { m_pTarget = pTarget; }
 
+	void SetBossBattle(bool flag) { m_isBossBattle = flag; }
+
 	void ChangeState(std::shared_ptr<CameraStateBase> pNextState);
 
 private:
@@ -45,6 +47,7 @@ private:
 private:
 	std::weak_ptr<Player> m_pPlayer;
 	int m_mapHandle = -1;
+	bool m_isBossBattle = false;
 
 	std::shared_ptr<CameraStateBase> m_pState;
 

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "CameraStateBase.h"
 class CameraStateFree :
     public CameraStateBase
@@ -11,6 +11,5 @@ public:
     void Update() override;
     void Exit() override;
 private:
-
 };
 

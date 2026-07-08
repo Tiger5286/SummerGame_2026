@@ -287,6 +287,7 @@ void SceneMain::SpawnBossUpdate()
 	{
 		fadeManager.StartFadeIn();
 		m_pCamera->ChangeState(std::make_shared<CameraStateAppearBoss>());
+		m_pCamera->SetBossBattle(true);
 	}
 	if (m_directionBossFrameCount > 270)
 	{
