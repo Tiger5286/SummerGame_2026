@@ -38,6 +38,7 @@ public:
 
 private:
 	void Spawn();
+	void KeepCharacterInArea();
 
 private:
 	std::shared_ptr<Player> m_pPlayer = nullptr;
@@ -49,4 +50,5 @@ private:
 	std::string m_tag;
 
 	bool m_isSpawned = false;
+	bool m_isDefeatedEnemies = false;
 };
