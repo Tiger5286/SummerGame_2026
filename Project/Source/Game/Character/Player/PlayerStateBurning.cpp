@@ -21,7 +21,7 @@ namespace
 	// 攻撃の情報
 	const MyLib::AttackData kAttackData = {
 		1500.0f,
-		30,
+		60,
 		MyLib::CharacterType::Enemy
 	};
 }
