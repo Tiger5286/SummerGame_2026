@@ -98,7 +98,7 @@ void EnemySpawner::KeepCharacterInArea()
 		if (squaredDist > m_radius * m_radius)
 		{
 			float pushDist = sqrtf(squaredDist) - m_radius;
-			Vector3 pushVec = (spawnerPosXZ - playerPosXZ).Normalized();
+			Vector3 pushVec = (spawnerPosXZ - enemyPosXZ).Normalized();
 			pushVec *= pushDist;
 			enemy->SetPos(enemy->GetPos() + pushVec);
 		}
