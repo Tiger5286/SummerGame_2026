@@ -73,6 +73,8 @@ void Zombie::Init()
 	RotateToPlayer();
 
 	BaseInit(kMaxHp);
+
+	m_targetUIOffset = Vector3(0, 120, 0);
 }
 
 void Zombie::End()

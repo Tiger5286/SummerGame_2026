@@ -85,19 +85,7 @@ void TargetUI::Draw()
 		return;
 	}
 
-	// ターゲットのコライダーの種類によって描画位置を変える
-	auto pos = Vector3::Zero();
-	auto colType = pTM->m_pTarget->GetCollider()->GetType();
-	if (colType == ColliderType::Sphere)
-	{	// 球なら球の中心を描画位置にする
-		auto col = pTM->m_pTarget->GetCollider();
-		pos = col->GetPos();
-	}
-	else if (colType == ColliderType::Capsule)
-	{	// カプセルならカプセルの真ん中を描画位置にする
-		auto capsule = std::dynamic_pointer_cast<CapsuleCollider>(pTM->m_pTarget->GetCollider());
-		pos = capsule->GetPos() + Vector3::Up() * capsule->GetHeight() / 2;
-	}
+	auto pos = pTM->m_pTarget->GetPos() + pTM->m_pTarget->GetTargetUIOffset();
 	auto screenPos = ConvWorldPosToScreenPos(pos.ToDxLib());
 	// スクリーン座標のzが0.0~1.0の範囲でなければ無効
 	if (screenPos.z > 0.0f && screenPos.z < 1.0f)

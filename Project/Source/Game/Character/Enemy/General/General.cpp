@@ -57,6 +57,8 @@ void General::Init()
 	m_pBossBar = std::make_shared<BossHpBar>();
 	m_pBossBar->SetInfo(general);
 	UIManager::GetInstance().AddUI(m_pBossBar);
+
+	m_targetUIOffset = Vector3(0, 280, 0);
 }
 
 void General::End()

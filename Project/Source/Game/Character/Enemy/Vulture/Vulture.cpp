@@ -55,6 +55,8 @@ void Vulture::Init()
 	RotateToPlayer();
 
 	BaseInit(kMaxHp);
+
+	m_targetUIOffset = Vector3(0, 30, 0);
 }
 
 void Vulture::End()
