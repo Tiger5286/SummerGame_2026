@@ -119,6 +119,11 @@ void CameraStateFree::Update()
 	auto right = forwardVec.Cross(Vector3::Up()).Normalized();
 	pos += right * kOffsetX;
 	target += right * kOffsetX;
+	if (camera->m_isBossBattle)
+	{
+		pos.y += 100.0f;
+		target.y += 100.0f;
+	}
 
 	camera->m_calcPos = pos;
 	camera->m_calcTargetPos = target;
