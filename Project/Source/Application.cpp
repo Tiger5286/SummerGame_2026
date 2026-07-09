@@ -56,6 +56,9 @@ bool Application::Init()
 	// エフェクトの歪みを有効にする
 	Effekseer_InitDistortion();
 
+	// フォントを読み込む
+	AddFontResourceExA("data/Fonts/NanoGothicText-W3.otf", FR_PRIVATE, NULL);
+
 	return true;
 }
 
@@ -74,7 +77,7 @@ void Application::Run()
 	// ライティングの設定
 	SetUseLighting(true);
 
-	// シングルトンクラスの生成
+	// シングルトンクラス
 	auto& input = Input::GetInstance();
 	auto& colManager = CollisionManager::GetInstance();
 	auto& fadeManager = FadeManager::GetInstance();
@@ -115,6 +118,9 @@ void Application::Run()
 	
 	// シーンの終了処理
 	sceneManager.End();
+
+	// フォントを削除
+	RemoveFontResourceExA("", FR_PRIVATE, NULL);
 }
 
 void Application::Terminate()

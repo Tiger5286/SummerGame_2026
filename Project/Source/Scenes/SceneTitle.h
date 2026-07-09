@@ -3,6 +3,7 @@
 #include <string>
 #include <functional>
 #include <array>
+#include <vector>
 
 class SceneTitle :
     public SceneBase
@@ -37,9 +38,9 @@ private:
     };
 
 private:
-    int m_titleHandle = -1;
-    int m_titleBackHandle = -1;
+    std::vector<int> m_handles;
     int m_effHandle = -1;
+    int m_fontHandle = -1;
 
     int m_selectIndex = 0;
     std::array<MenuItem, static_cast<int>(Menu::Num)> m_menuActions;
