@@ -16,7 +16,7 @@ namespace
 
 	// 注視点との距離
 	constexpr float kTargetDist = 300.0f;
-	constexpr float kTargetDistBoss = 500.0f;
+	constexpr float kTargetDistBoss = 400.0f;
 
 	// オフセット
 	constexpr float kOffsetX = -75.0f;
