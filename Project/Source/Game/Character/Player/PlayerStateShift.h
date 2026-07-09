@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "PlayerStateBase.h"
 #include "Utility/Vector3.h"
 
@@ -16,5 +16,6 @@ private:
     bool m_isPlayedShiftEffect = false;
     bool m_isPlayedShiftEndEffect = false;
     Vector3 m_playerToTarget;
+    float m_moveDist = 1000.0f;
 };
 

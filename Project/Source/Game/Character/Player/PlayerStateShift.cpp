@@ -35,11 +35,17 @@ void PlayerStateShift::Enter(std::weak_ptr<Character> pOwner)
 	// プレイヤーからターゲットへのベクトルを計算しておく
 	if (player->m_target != nullptr)
 	{
-		m_playerToTarget = player->m_target->GetPos() - player->m_pos;
+		Vector3 target = player->m_target->GetPos() + player->m_target->GetVel() * 10;
+		m_playerToTarget = target - player->m_pos;
 		if (m_playerToTarget.SquaredLength() > kTrackingDist * kTrackingDist)
 		{
 			m_playerToTarget.Normalize();
 			m_playerToTarget *= kTrackingDist;
+		}
+		auto len = m_playerToTarget.Length();
+		if (m_moveDist < len)
+		{
+			m_moveDist = len;
 		}
 	}
 	// 空中で発動可能フラグを消す
@@ -54,15 +60,38 @@ void PlayerStateShift::Update()
 	// 移動時間中なら移動する
 	if (player->m_anim.GetAnimRate() > kMoveStartTimeRate && player->m_anim.GetAnimRate() < kMoveEndTimeRate)
 	{
+		// プレイヤーからターゲットへのベクトルを計算しておく
+		if (player->m_target != nullptr)
+		{
+			Vector3 target = player->m_target->GetPos() + player->m_target->GetVel() * 10;
+			m_playerToTarget = target - player->m_pos;
+			if (m_playerToTarget.SquaredLength() > kTrackingDist * kTrackingDist)
+			{
+				m_playerToTarget.Normalize();
+				m_playerToTarget *= kTrackingDist;
+			}
+			auto len = m_playerToTarget.Length();
+			if (m_moveDist < len)
+			{
+				m_moveDist = len;
+			}
+		}
+
 		// ターゲットがいればそっちに移動する
 		if (player->m_target != nullptr)
 		{	// ターゲットの方向へ移動するベクトル
-			player->m_vel = m_playerToTarget / kMoveFrame;
+			player->m_vel = m_playerToTarget.Normalized() * m_moveDist / kMoveFrame;
 			// 距離が近かったら移動を止める
 			float squareDist = (player->GetPos() - player->m_target->GetPos()).SquaredLength();
 			if (squareDist < kStopTrackingDist * kStopTrackingDist)
 			{
 				player->m_vel = Vector3::Zero();
+				// y軸だけは一致するまで移動する
+				float yDif = abs(player->GetPos().y - player->m_target->GetPos().y);
+				if (yDif > 1.0f)
+				{
+					player->m_vel.y = m_playerToTarget.y / kMoveFrame;
+				}
 			}
 		}
 		else	// ターゲットがいなかったら
