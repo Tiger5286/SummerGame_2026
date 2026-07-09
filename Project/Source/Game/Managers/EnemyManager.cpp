@@ -47,6 +47,15 @@ void EnemyManager::Update()
 			m_deadEnemyList.push_back(enemy);
 		}
 	}
+
+#ifdef _DEBUG
+	// デバッグ機能：敵を全員殺す
+	if (CheckHitKey(KEY_INPUT_4))
+	{
+		m_deadEnemyList = m_enemyList;
+	}
+#endif
+
 	// 死んでいる敵をリストから削除する
 	for (auto& enemy : m_deadEnemyList)
 	{
