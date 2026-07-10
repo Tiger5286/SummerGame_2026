@@ -11,7 +11,6 @@
 
 #include "../../UI/PlayerHPUI.h"
 #include "../../UI/PlayerSpecialUI.h"
-#include "../../UI/PlayerSkillUI.h"
 #include "../../UI/ControlUI.h"
 
 #include "PlayerStateIdle.h"
@@ -79,10 +78,6 @@ void Player::Init()
 	m_pSpecialUI = std::make_shared<PlayerSpecialUI>();
 	m_pSpecialUI->SetInfo(player);
 	UIManager::GetInstance().AddUI(m_pSpecialUI);
-
-	m_pSkillUI = std::make_shared<PlayerSkillUI>();
-	m_pSkillUI->SetInfo(player);
-	UIManager::GetInstance().AddUI(m_pSkillUI);
 
 	m_pControlUI = std::make_shared<ControlUI>();
 	m_pControlUI->SetInfo(player);
