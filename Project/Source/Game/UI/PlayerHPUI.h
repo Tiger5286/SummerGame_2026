@@ -1,5 +1,7 @@
-#pragma once
+﻿#pragma once
 #include "PlayerUIBase.h"
+#include <vector>
+
 class PlayerHPUI :
     public PlayerUIBase
 {
@@ -12,6 +14,6 @@ public:
     void Draw() override;
 
 private:
-
+    std::vector<int> m_handles;
 };
 
