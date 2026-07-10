@@ -20,9 +20,6 @@ public:
 private:
     std::vector<int> m_handles;
     std::vector<float> m_scale;
-    int m_spinBlackHandle = -1;
-    int m_cooltimeHandle = -1;
-    int m_cooltimeBlackHandle = -1;
 
     std::weak_ptr<Player> m_pPlayer;
 };

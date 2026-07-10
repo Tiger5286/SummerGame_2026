@@ -9,6 +9,12 @@
 #include "../Collider/CapsuleCollider.h"
 #include "Game.h"
 
+namespace
+{
+	constexpr const wchar_t* kArrowGraphPath = L"data/Graphs/Game/EnemyArrow.png";
+	constexpr const wchar_t* kTargetGraphPath = L"data/Graphs/Game/target.png";
+}
+
 TargetUI::TargetUI() :
 	UIBase(1)
 {
@@ -23,9 +29,9 @@ TargetUI::~TargetUI()
 
 void TargetUI::Init()
 {
-	m_arrowHandle = LoadGraph(L"data/Graphs/EnemyArrow.png");
+	m_arrowHandle = LoadGraph(kArrowGraphPath);
 	assert(m_arrowHandle != -1);
-	m_targetHandle = LoadGraph(L"data/Graphs/target.png");
+	m_targetHandle = LoadGraph(kTargetGraphPath);
 	assert(m_targetHandle != -1);
 }
 

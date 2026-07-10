@@ -10,12 +10,12 @@
 namespace
 {
 	const std::array<std::wstring,6> kFileNames = {
-		L"data/Graphs/skybox_front.png",
-		L"data/Graphs/skybox_back.png",
-		L"data/Graphs/skybox_left.png",
-		L"data/Graphs/skybox_right.png",
-		L"data/Graphs/skybox_up.png",
-		L"data/Graphs/skybox_down.png",
+		L"data/Graphs/Skybox/skybox_front.png",
+		L"data/Graphs/Skybox/skybox_back.png",
+		L"data/Graphs/Skybox/skybox_left.png",
+		L"data/Graphs/Skybox/skybox_right.png",
+		L"data/Graphs/Skybox/skybox_up.png",
+		L"data/Graphs/Skybox/skybox_down.png",
 	};
 }
 

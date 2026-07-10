@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "Singleton/Input.h"
 #include "../Character/Player/Player.h"
+//#include <cassert>
 
 namespace
 {
@@ -12,15 +13,21 @@ namespace
 		Jump,
 		Spin,
 		Shift,
+		SpinBlack,
+		Cooltime,
+		CooltimeBlack,
 
 		Num
 	};
 
 	const std::vector<std::wstring> kFilePath = {
-		L"data/Graphs/AttackIcon.png",
-		L"data/Graphs/JumpIcon.png",
-		L"data/Graphs/SpinIcon.png",
-		L"data/Graphs/ShiftIcon.png"
+		L"data/Graphs/Game/AttackIcon.png",
+		L"data/Graphs/Game/JumpIcon.png",
+		L"data/Graphs/Game/SpinIcon.png",
+		L"data/Graphs/Game/ShiftIcon.png",
+		L"data/Graphs/Game/SpinIcon_black.png",
+		L"data/Graphs/Game/Cooltime.png",
+		L"data/Graphs/Game/Cooltime_black.png"
 	};
 
 	constexpr int kButton[4] = { XINPUT_BUTTON_X,XINPUT_BUTTON_A,XINPUT_BUTTON_Y,XINPUT_BUTTON_B };
@@ -38,9 +45,6 @@ ControlUI::~ControlUI()
 	{
 		DeleteGraph(handle);
 	}
-	DeleteGraph(m_spinBlackHandle);
-	DeleteGraph(m_cooltimeHandle);
-	DeleteGraph(m_cooltimeBlackHandle);
 }
 
 void ControlUI::Init()
@@ -48,11 +52,9 @@ void ControlUI::Init()
 	for (auto& path : kFilePath)
 	{
 		m_handles.push_back(LoadGraph(path.c_str()));
+		assert(m_handles.back() != -1);
 		m_scale.push_back(1.0f);
 	}
-	m_spinBlackHandle = LoadGraph(L"data/Graphs/SpinIcon_black.png");
-	m_cooltimeHandle = LoadGraph(L"data/Graphs/Cooltime.png");
-	m_cooltimeBlackHandle = LoadGraph(L"data/Graphs/Cooltime_black.png");
 }
 
 void ControlUI::Update()
@@ -96,10 +98,10 @@ void ControlUI::Draw()
 			float rate = static_cast<float>(player->GetSkillCooltime()) / static_cast<float>(player->kSkillCooltime);
 			if (rate < 1.0f)
 			{
-				DrawRotaGraph(x[i], y[i], scale * 1.2f, 0.0, m_cooltimeBlackHandle, true);
-				DrawCircleGauge(x[i], y[i], rate * 100.0f, m_cooltimeHandle, 0.0, scale * 1.2f);
+				DrawRotaGraph(x[i], y[i], scale * 1.2f, 0.0, m_handles[static_cast<int>(Graph::CooltimeBlack)], true);
+				DrawCircleGauge(x[i], y[i], rate * 100.0f, m_handles[static_cast<int>(Graph::Cooltime)], 0.0, scale * 1.2f);
 
-				auto a = DrawRotaGraph(x[i], y[i], scale, 0.0, m_spinBlackHandle, true);
+				auto a = DrawRotaGraph(x[i], y[i], scale, 0.0, m_handles[static_cast<int>(Graph::SpinBlack)], true);
 			}
 		}
 	}

@@ -12,9 +12,9 @@
 namespace
 {
 	const std::vector<std::wstring> kGraphFileNames = {
-		L"data/Graphs/title.png",
+		L"data/Graphs/Title/title.png",
 		L"data/Graphs/StoneBrick.png",
-		L"data/Graphs/TitleSelectUI.png"
+		L"data/Graphs/Title/TitleSelectUI.png"
 	};
 
 	enum class Graph
