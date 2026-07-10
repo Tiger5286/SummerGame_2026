@@ -8,5 +8,5 @@ namespace Game
 	constexpr int kScreenHeight = 720;
 	constexpr int kColorBitNum = 32;
 
-	constexpr const wchar_t* kMainFont = L"なのゴシックText W3";
+	constexpr const wchar_t* kMainFontName = L"HGP明朝B";
 }

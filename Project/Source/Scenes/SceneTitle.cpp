@@ -63,7 +63,7 @@ void SceneTitle::Init()
 	SetCameraPositionAndTarget_UpVecY(Vector3(0, 50, -500), Vector3(0, 50, 0));
 	Effekseer_Sync3DSetting();
 	// フォントを生成
-	m_fontHandle = CreateFontToHandle(L"HGP明朝B", kFontSize, -1, DX_FONTTYPE_ANTIALIASING);
+	m_fontHandle = CreateFontToHandle(Game::kMainFontName, kFontSize, -1, DX_FONTTYPE_ANTIALIASING);
 	assert(m_fontHandle != -1);
 }
 

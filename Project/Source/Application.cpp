@@ -57,7 +57,7 @@ bool Application::Init()
 	Effekseer_InitDistortion();
 
 	// フォントを読み込む
-	AddFontResourceExA("data/Fonts/NanoGothicText-W3.otf", FR_PRIVATE, NULL);
+	//AddFontResourceExA("data/Fonts/NanoGothicText-W3.otf", FR_PRIVATE, NULL);
 
 	return true;
 }
@@ -120,7 +120,7 @@ void Application::Run()
 	sceneManager.End();
 
 	// フォントを削除
-	RemoveFontResourceExA("", FR_PRIVATE, NULL);
+	//RemoveFontResourceExA("", FR_PRIVATE, NULL);
 }
 
 void Application::Terminate()
