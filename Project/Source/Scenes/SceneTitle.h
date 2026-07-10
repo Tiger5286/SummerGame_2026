@@ -41,6 +41,7 @@ private:
     std::vector<int> m_handles;
     int m_effHandle = -1;
     int m_fontHandle = -1;
+    float m_selectAlpha = 0.0f;
 
     int m_selectIndex = 0;
     std::array<MenuItem, static_cast<int>(Menu::Num)> m_menuActions;

@@ -26,8 +26,8 @@ namespace
 		Num
 	};
 
-	constexpr int kFontSize = 20;
-	constexpr int kMenuMargin = 30;
+	constexpr int kFontSize = 30;
+	constexpr int kMenuMargin = 20;
 }
 
 SceneTitle::SceneTitle(SceneManager& sceneManager) :
@@ -63,7 +63,7 @@ void SceneTitle::Init()
 	SetCameraPositionAndTarget_UpVecY(Vector3(0, 50, -500), Vector3(0, 50, 0));
 	Effekseer_Sync3DSetting();
 	// フォントを生成
-	m_fontHandle = CreateFontToHandle(L"HGP明朝B", 20, -1, DX_FONTTYPE_ANTIALIASING);
+	m_fontHandle = CreateFontToHandle(L"HGP明朝B", kFontSize, -1, DX_FONTTYPE_ANTIALIASING);
 	assert(m_fontHandle != -1);
 }
 
@@ -88,6 +88,7 @@ void SceneTitle::Update()
 	if (input.IsTriggerd(XINPUT_BUTTON_DPAD_DOWN))
 	{
 		m_selectIndex++;
+		m_selectAlpha = 0.0f;
 		if (m_selectIndex >= static_cast<int>(Menu::Num))
 		{
 			m_selectIndex = 0;
@@ -96,6 +97,7 @@ void SceneTitle::Update()
 	if (input.IsTriggerd(XINPUT_BUTTON_DPAD_UP))
 	{
 		m_selectIndex--;
+		m_selectAlpha = 0.0f;
 		if (m_selectIndex < 0)
 		{
 			m_selectIndex = static_cast<int>(Menu::Num) - 1;
@@ -120,14 +122,17 @@ void SceneTitle::Draw()
 	DrawRotaGraph(Game::kScreenWidth / 2, Game::kScreenHeight / 2 - 50, 0.8, 0.0, m_handles[static_cast<int>(Graph::Title)], true);
 
 	int x = Game::kScreenWidth / 2;
-	int y = Game::kScreenHeight / 2 + 200;
+	int y = Game::kScreenHeight / 2 + 180;
+	m_selectAlpha = std::lerp(m_selectAlpha, 1.0f, 0.2f);
 	for (int i = 0; i < static_cast<int>(Menu::Num); i++)
 	{
 		if (i == m_selectIndex)
 		{
 			int w, h;
 			GetGraphSize(m_handles[static_cast<int>(Graph::Select)], &w, &h);
-			DrawRotaGraph(x, y + i * kFontSize + kMenuMargin - h / 2 + kFontSize, 1.0, 0.0, m_handles[static_cast<int>(Graph::Select)], true);
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_selectAlpha * 255);
+			DrawRotaGraph(x, y + i * (kFontSize + kMenuMargin) - h / 2 + kFontSize, 1.0, 0.0, m_handles[static_cast<int>(Graph::Select)], true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
 	}
 	for (int i = 0; i < static_cast<int>(Menu::Num); i++)
@@ -135,7 +140,7 @@ void SceneTitle::Draw()
 		unsigned int color = 0x888888;
 		if (i == m_selectIndex) color = 0xffffff;
 		int strWidth = GetDrawStringWidthToHandle(m_menuActions[i].name.c_str(), m_menuActions[i].name.size(), m_fontHandle);
-		DrawStringToHandle(x - strWidth / 2, y + i * kFontSize + kMenuMargin, m_menuActions[i].name.c_str(), color, m_fontHandle);
+		DrawStringToHandle(x - strWidth / 2, y + i * (kFontSize + kMenuMargin), m_menuActions[i].name.c_str(), color, m_fontHandle);
 	}
 
 #ifdef _DEBUG
