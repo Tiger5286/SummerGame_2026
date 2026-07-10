@@ -4,12 +4,25 @@
 
 namespace
 {
-	constexpr int kWidth = 200;
-	constexpr int kHeight = 20;
+	constexpr float kGraphScale = 0.5f;
 
-	constexpr int kThickness = 2;
+	constexpr int kGraphMinX = 60;
+	constexpr int kGraphMaxX = 739;
 
-	constexpr int kMaxSpecial = 1000;
+	enum class Graph
+	{
+		Frame,
+		Main,
+
+		Num
+	};
+
+	constexpr const wchar_t* kFileNames[] = {
+		L"data/Graphs/Game/SpecialGauge_Frame.png",
+		L"data/Graphs/Game/SpecialGauge.png"
+	};
+
+	static_assert(static_cast<int>(Graph::Num) == sizeof(kFileNames) / sizeof(wchar_t*));
 }
 
 PlayerSpecialUI::PlayerSpecialUI()
@@ -18,11 +31,19 @@ PlayerSpecialUI::PlayerSpecialUI()
 
 PlayerSpecialUI::~PlayerSpecialUI()
 {
+	for (auto handle : m_handles)
+	{
+		DeleteGraph(handle);
+	}
 }
 
 void PlayerSpecialUI::Init()
 {
-	m_RTHandle = MakeScreen(kWidth, kHeight);
+	for (int i = 0; i < static_cast<int>(Graph::Num); i++)
+	{
+		m_handles.push_back(LoadGraph(kFileNames[i]));
+		assert(m_handles.back() != -1);
+	}
 }
 
 void PlayerSpecialUI::Update()
@@ -31,26 +52,23 @@ void PlayerSpecialUI::Update()
 
 void PlayerSpecialUI::Draw()
 {
-	SetDrawScreen(m_RTHandle);
-	// 背景
-	DrawBox(0, 0, kWidth, kHeight, 0x333333, true);
+	int w, h;
+	GetGraphSize(m_handles[static_cast<int>(Graph::Frame)], &w, &h);
+	// 枠を描画
+	int x = 30 + w / 2 * kGraphScale;
+	int y = 80 + h / 2 * kGraphScale;
+	DrawRotaGraph(x, y, kGraphScale, 0.0, m_handles[static_cast<int>(Graph::Frame)], true);
+	// 本体を描画
+	// ゲージの中身の長さを計算
+	int gaugeLen = w - ((w - kGraphMaxX) + kGraphMinX);
+	// プレイヤーのHPの割合を計算
+	auto player = m_pPlayer.lock();
+	float rate = static_cast<float>(player->GetSpecialCharge()) / static_cast<float>(player->kMaxSpecialCharge);
+	// 現在のHPバーの長さを計算
+	int width = rate * gaugeLen;
+	int handle = m_handles[static_cast<int>(Graph::Main)];
+	// HPバーを描画
+	DrawRectRotaGraph(x - (gaugeLen - width) * kGraphScale * 0.5f, y, kGraphMinX, 0, width, h, kGraphScale, 0.0, handle, true);
+	
 
-	// HPバー本体
-	int special = m_pPlayer.lock()->GetSpecialCharge();
-	float rate = static_cast<float>(special) / static_cast<float>(kMaxSpecial);
-	int x1, y1, x2, y2;
-	x1 = kThickness / 2;
-	y1 = kThickness / 2;
-	x2 = kWidth * rate - kThickness / 2;
-	y2 = kHeight - kThickness / 2;
-	DrawBox(x1, y1, x2, y2, 0xffff00, true);
-
-	// 枠
-	DrawBox(0, 0, kWidth, kHeight, 0x000000, false, kThickness);
-
-	SetDrawScreen(DX_SCREEN_BACK);
-
-	CameraSetter::GetInstance().SetCameraSetting();
-
-	DrawGraph(30, 70, m_RTHandle, false);
 }
