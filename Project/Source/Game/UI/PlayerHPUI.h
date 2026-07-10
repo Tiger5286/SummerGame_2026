@@ -15,5 +15,6 @@ public:
 
 private:
     std::vector<int> m_handles;
+    int m_fontHandle = -1;
 };
 
