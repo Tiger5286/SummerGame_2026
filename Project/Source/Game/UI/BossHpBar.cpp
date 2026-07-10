@@ -5,13 +5,28 @@
 
 namespace
 {
-	constexpr int kWidth = 600;
-	constexpr int kHeight = 40;
+	constexpr float kGraphScale = 0.8f;
+	constexpr int kOffsetX = -30;
+	constexpr int kOffsetY = 40;
 
-	constexpr int kThickness = 5;
+	constexpr int kGraphMinX = 21;
+	constexpr int kGraphMaxX = 780;
 
-	constexpr int kOffsetX = 30;
-	constexpr int kOffsetY = 30;
+	enum class Graph
+	{
+		Frame,
+		Main,
+
+		Num
+	};
+
+	constexpr const wchar_t* kFileNames[] = {
+		L"data/Graphs/Game/BossHPBar_Frame.png",
+		L"data/Graphs/Game/BossHPBar.png"
+	};
+
+	// 画像の種類とファイルパスの数が一致していないとエラー
+	static_assert(static_cast<int>(Graph::Num) == sizeof(kFileNames) / sizeof(wchar_t*));
 }
 
 BossHpBar::BossHpBar() :
@@ -21,11 +36,19 @@ BossHpBar::BossHpBar() :
 
 BossHpBar::~BossHpBar()
 {
+	for (auto handle : m_handles)
+	{
+		DeleteGraph(handle);
+	}
 }
 
 void BossHpBar::Init()
 {
-	m_RTHandle = MakeScreen(kWidth, kHeight);
+	for (int i = 0; i < static_cast<int>(Graph::Num); i++)
+	{
+		m_handles.push_back(LoadGraph(kFileNames[i]));
+		assert(m_handles.back() != -1);
+	}
 }
 
 void BossHpBar::Update()
@@ -39,27 +62,21 @@ void BossHpBar::Update()
 
 void BossHpBar::Draw()
 {
-	SetDrawScreen(m_RTHandle);
-	// 背景
-	DrawBox(0, 0, kWidth, kHeight, 0x333333, true);
-
-	// HPバー本体
-	int hp = m_pOwner.lock()->GetHP();
-	int maxHp = m_pOwner.lock()->GetMaxHP();
-	float rate = static_cast<float>(hp) / static_cast<float>(maxHp);
-	int x1, y1, x2, y2;
-	x1 = kThickness / 2;
-	y1 = kThickness / 2;
-	x2 = (kWidth - kThickness / 2) * rate;
-	y2 = kHeight - kThickness / 2;
-	DrawBox(x1, y1, x2, y2, 0xff0000, true, kThickness);
-
-	// 枠
-	DrawBox(0, 0, kWidth, kHeight, 0x000000, false, kThickness);
-
-	SetDrawScreen(DX_SCREEN_BACK);
-
-	CameraSetter::GetInstance().SetCameraSetting();
-
-	DrawGraph(Game::kScreenWidth - kWidth - kOffsetX, kOffsetY, m_RTHandle, false);
+	int w, h;
+	GetGraphSize(m_handles[static_cast<int>(Graph::Frame)], &w, &h);
+	// 枠を描画
+	int x = Game::kScreenWidth + kOffsetX - w / 2 * kGraphScale;
+	int y = kOffsetY + h / 2 * kGraphScale;
+	DrawRotaGraph(x, y, kGraphScale, 0.0, m_handles[static_cast<int>(Graph::Frame)], true);
+	// 本体を描画
+	// ゲージの中身の長さを計算
+	int gaugeLen = w - ((w - kGraphMaxX) + kGraphMinX);
+	// 必殺技チャージの割合を計算
+	auto boss = m_pOwner.lock();
+	float rate = static_cast<float>(boss->GetHP()) / static_cast<float>(boss->GetMaxHP());
+	// 現在のゲージの長さを計算
+	int width = rate * gaugeLen;
+	int handle = m_handles[static_cast<int>(Graph::Main)];
+	// ゲージを描画
+	DrawRectRotaGraph(x - (gaugeLen - width) * kGraphScale * 0.5f, y, kGraphMinX, 0, width, h, kGraphScale, 0.0, handle, true);
 }

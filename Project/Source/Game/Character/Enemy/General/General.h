@@ -27,7 +27,7 @@ public:
 
     void OnHitAttack(const MyLib::AttackData& atkData) override;
 
-    const int kMaxHp = 5000;
+    const int kMaxHp = 3000;
     int GetMaxHP() const override { return kMaxHp; }
 
 private:

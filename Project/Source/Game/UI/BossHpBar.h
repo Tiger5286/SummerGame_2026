@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "UIBase.h"
+#include <vector>
 
 class EnemyBase;
 
@@ -19,5 +20,6 @@ public:
 
 private:
     std::weak_ptr<EnemyBase> m_pOwner;
+    std::vector<int> m_handles;
 };
 

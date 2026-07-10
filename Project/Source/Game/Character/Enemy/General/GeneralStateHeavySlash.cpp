@@ -19,7 +19,7 @@ namespace
 	const Vector3 kAttackOffset = Vector3(0, 150, -150);
 	const MyLib::AttackData kAttackData = {
 		.colliderRadius		= 150.0f,
-		.damage				= 20,
+		.damage				= 50,
 		.hitCharacterType	= MyLib::CharacterType::Player,
 		.isKnockDown		= false,
 		.isIgnoreInvincible	= true

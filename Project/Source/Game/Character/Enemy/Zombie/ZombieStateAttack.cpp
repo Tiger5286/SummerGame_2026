@@ -16,7 +16,7 @@ namespace
 	const Vector3 kColliderOffset = Vector3(0, 100, -60);
 	const MyLib::AttackData kAttackData = {
 		60.0f,
-		20,
+		40,
 		MyLib::CharacterType::Player
 	};
 }

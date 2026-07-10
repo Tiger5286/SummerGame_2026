@@ -24,7 +24,7 @@ namespace
 	// 攻撃の情報
 	const MyLib::AttackData kAttackData = {
 		.colliderRadius = 80.0f,
-		.damage = 20,
+		.damage = 40,
 		.hitCharacterType = MyLib::CharacterType::Player,
 		.isKnockDown = false
 	};
