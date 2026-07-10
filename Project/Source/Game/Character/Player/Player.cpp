@@ -170,7 +170,7 @@ void Player::Draw()
 	DrawLine3D(m_pos.ToDxLib(), layEnd.ToDxLib(), 0xffff00);
 
 	// デバッグ表示
-	DrawFormatString(0, 48, 0xffffff, L"m_angle:%.2f", m_angle);
+	//DrawFormatString(0, 48, 0xffffff, L"m_angle:%.2f", m_angle);
 #endif
 }
 
