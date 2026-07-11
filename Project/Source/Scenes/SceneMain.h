@@ -35,6 +35,7 @@ private:
 	bool m_isEndScene = false;
 
 	int m_onSpawnBossHandle = -1;
+	// ボス出現演出中かどうかのフラグ
 	bool m_isDirectionSpawnBoss = false;
 	int m_directionBossFrameCount = 0;
 

@@ -261,6 +261,12 @@ void SceneMain::Draw()
 	lightVec = m_pPlayer->GetPos() - m_pCamera->GetPos();
 	lightVec.Normalize();
 	SetLightDirection(lightVec.ToDxLib());
+	// ボス戦演出中ならライトの向きを固定する
+	if (m_isDirectionSpawnBoss)
+	{
+		lightVec = Vector3(0, 0, -1);
+		SetLightDirection(lightVec);
+	}
 	// 各クラスの描画
 	m_pPlayer->Draw();
 
@@ -301,7 +307,7 @@ void SceneMain::SpawnBossUpdate()
 		m_pCamera->ChangeState(std::make_shared<CameraStateAppearBoss>());
 		m_pCamera->SetBossBattle(true);
 	}
-	if (m_directionBossFrameCount > 270)
+	if (m_directionBossFrameCount > 330)
 	{
 		m_isDirectionSpawnBoss = false;
 		m_pPlayer->SetCanControl(true);
