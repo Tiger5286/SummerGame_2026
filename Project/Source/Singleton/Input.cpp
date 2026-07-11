@@ -26,6 +26,12 @@ void Input::Update()
 	{
 		m_nowPadInput = {};
 	}
+
+	// 左スティック入力を十字キー入力に変換する
+	if (GetStickInput(MyLib::LR::Left).y > 0.5f) m_nowPadInput.Buttons[XINPUT_BUTTON_DPAD_UP] = true;
+	if (GetStickInput(MyLib::LR::Left).y < -0.5f) m_nowPadInput.Buttons[XINPUT_BUTTON_DPAD_DOWN] = true;
+	if (GetStickInput(MyLib::LR::Left).x > 0.5f) m_nowPadInput.Buttons[XINPUT_BUTTON_DPAD_RIGHT] = true;
+	if (GetStickInput(MyLib::LR::Left).x < -0.5f) m_nowPadInput.Buttons[XINPUT_BUTTON_DPAD_LEFT] = true;
 }
 
 bool Input::IsPressed(int button)
