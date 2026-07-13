@@ -18,6 +18,7 @@
 #include "PlayerStateHit.h"
 #include "PlayerStateBurning.h"
 #include "PlayerStateDeath.h"
+#include "PlayerStateSpin.h"
 
 namespace
 {
@@ -223,6 +224,14 @@ void Player::OnHitAttack(const MyLib::AttackData& atkData)
 		m_pState->ChangeState(std::make_shared<PlayerStateDeath>());
 		return;
 	}
+
+	// スピンの時はダメージは食らうがひるまない
+	state = std::dynamic_pointer_cast<PlayerStateSpin>(m_pState);
+	if (state != nullptr)
+	{
+		return;
+	}
+	state = nullptr;
 
 	// 死ななかったら被弾
 	m_pState->ChangeState(std::make_shared<PlayerStateHit>());
