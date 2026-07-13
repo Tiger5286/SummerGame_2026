@@ -50,7 +50,7 @@ void SceneOption::Update()
 	auto& input = Input::GetInstance();
 
 	// 上下キーでメニューの選択を変更する
-	if (input.IsTriggerd(XINPUT_BUTTON_DPAD_DOWN))
+	if (input.IsTriggerd(XINPUT_BUTTON_DPAD_DOWN, true))
 	{
 		m_selectIndex++;
 		if (m_selectIndex >= static_cast<int>(Menu::Num))
@@ -58,7 +58,7 @@ void SceneOption::Update()
 			m_selectIndex = 0;
 		}
 	}
-	if (input.IsTriggerd(XINPUT_BUTTON_DPAD_UP))
+	if (input.IsTriggerd(XINPUT_BUTTON_DPAD_UP, true))
 	{
 		m_selectIndex--;
 		if (m_selectIndex < 0)
