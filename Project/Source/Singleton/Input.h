@@ -29,7 +29,7 @@ public:
 	/// </summary>
 	/// <param name="button">取得したいボタン</param>
 	/// <returns>押されたかどうか</returns>
-	bool IsTriggerd(int button);
+	bool IsTriggerd(int button,bool isMargeStickAndDPad = false);
 
 	/// <summary>
 	/// スティック入力を取得する
