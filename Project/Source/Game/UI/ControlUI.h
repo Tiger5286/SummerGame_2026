@@ -20,6 +20,7 @@ public:
 private:
     std::vector<int> m_handles;
     std::vector<float> m_scale;
+    int m_fontHandle = -1;
 
     std::weak_ptr<Player> m_pPlayer;
 };
