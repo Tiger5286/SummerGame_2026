@@ -81,6 +81,15 @@ namespace
 			.scale = 50.0f
 		}
 	};
+
+	constexpr float kStageLightY = -0.5f;
+	const Vector3 kBossDirectionLight = Vector3(0, 0, -1);
+	constexpr int kBossDirectionWaitFrame = 60;
+	constexpr int kBossDirectionEndFrame = 330;
+
+#ifdef _DEBUG
+	const Vector3 kBossRoomPos = Vector3(3100, -130, -4700);
+#endif
 }
 
 SceneMain::SceneMain(SceneManager& sceneManager) :
@@ -232,7 +241,7 @@ void SceneMain::Update()
 	// 1キーでボス部屋にテレポート
 	if (key[KEY_INPUT_1])
 	{
-		m_pPlayer->SetPos(Vector3(3100, -150, -4700));
+		m_pPlayer->SetPos(kBossRoomPos);
 	}
 #endif
 }
@@ -245,7 +254,7 @@ void SceneMain::Draw()
 	// ステージ用のライトの向きを設定する
 	Vector3 lightVec = m_pPlayer->GetPos() - m_pCamera->GetPos();
 	lightVec.Normalize();
-	lightVec.y = -0.5f;
+	lightVec.y = kStageLightY;
 	SetLightDirection(lightVec.ToDxLib());
 	// ステージの描画
 	auto& modelManager = ModelManager::GetInstance();
@@ -264,7 +273,7 @@ void SceneMain::Draw()
 	// ボス戦演出中ならライトの向きを固定する
 	if (m_isDirectionSpawnBoss)
 	{
-		lightVec = Vector3(0, 0, -1);
+		lightVec = kBossDirectionLight;
 		SetLightDirection(lightVec);
 	}
 	// 各クラスの描画
@@ -301,13 +310,13 @@ void SceneMain::SpawnBossUpdate()
 {
 	m_directionBossFrameCount++;
 	auto& fadeManager = FadeManager::GetInstance();
-	if (m_directionBossFrameCount == 60)
+	if (m_directionBossFrameCount == kBossDirectionWaitFrame)
 	{
 		fadeManager.StartFadeIn();
 		m_pCamera->ChangeState(std::make_shared<CameraStateAppearBoss>());
 		m_pCamera->SetBossBattle(true);
 	}
-	if (m_directionBossFrameCount > 330)
+	if (m_directionBossFrameCount > kBossDirectionEndFrame)
 	{
 		m_isDirectionSpawnBoss = false;
 		m_pPlayer->SetCanControl(true);
