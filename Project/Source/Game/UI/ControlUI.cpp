@@ -4,6 +4,8 @@
 #include "Singleton/Input.h"
 #include "../Character/Player/Player.h"
 #include <string_view>
+#include "ControlUILeft.h"
+#include "Singleton/UIManager.h"
 
 namespace
 {
@@ -31,7 +33,7 @@ namespace
 		Num
 	};
 
-	const std::vector<std::wstring> kFilePath = {
+	constexpr std::wstring_view kFilePath[] = {
 		L"data/Graphs/Game/AttackIcon.png",
 		L"data/Graphs/Game/JumpIcon.png",
 		L"data/Graphs/Game/SpinIcon.png",
@@ -40,6 +42,8 @@ namespace
 		L"data/Graphs/Game/Cooltime.png",
 		L"data/Graphs/Game/Cooltime_black.png"
 	};
+
+	static_assert(static_cast<int>(Graph::Num) == std::size(kFilePath));
 
 	constexpr int kButton[kActionNum] = { XINPUT_BUTTON_X,XINPUT_BUTTON_A,XINPUT_BUTTON_Y,XINPUT_BUTTON_B };
 	constexpr float kMaxScale = 1.2f;
@@ -76,11 +80,15 @@ void ControlUI::Init()
 {
 	for (auto& path : kFilePath)
 	{
-		m_handles.push_back(LoadGraph(path.c_str()));
+		m_handles.push_back(LoadGraph(path.data()));
 		assert(m_handles.back() != -1);
 		m_scale.push_back(1.0f);
 	}
 	m_fontHandle = CreateFontToHandle(Game::kMainFontName, kFontSize, -1);
+
+	m_pUILeft = std::make_shared<ControlUILeft>();
+	m_pUILeft->SetInfo(m_fontHandle);
+	UIManager::GetInstance().AddUI(m_pUILeft);
 }
 
 void ControlUI::Update()

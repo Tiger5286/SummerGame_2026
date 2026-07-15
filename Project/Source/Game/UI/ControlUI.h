@@ -3,6 +3,7 @@
 #include <vector>
 
 class Player;
+class ControlUILeft;
 
 class ControlUI :
     public UIBase
@@ -23,5 +24,6 @@ private:
     int m_fontHandle = -1;
 
     std::weak_ptr<Player> m_pPlayer;
+    std::shared_ptr<ControlUILeft> m_pUILeft = nullptr;
 };
 
