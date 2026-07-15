@@ -33,6 +33,7 @@ namespace
 	// ロードするモデルのファイル名と登録名
 	const std::vector<std::pair<std::wstring, std::wstring>> kModelFileNames = {
 		{ L"Collision", L"data/models/Stage/NewMapCollision.mv1" },
+		{ L"Stage",L"data/models/Stage/Stage.mv1" },
 		{ L"Player", L"data/models/Player/Player.mv1" },
 		{ L"Wing" , L"data/models/Player/Wing.mv1" },
 		{ L"Zombie", L"data/models/Enemy/Zombie.mv1" },
@@ -125,6 +126,8 @@ void SceneMain::Init()
 
 	// ステージの初期化
 	auto stage = modelManager.GetModelHandle(L"Collision");
+	MV1SetMatrix(stage, Matrix4x4::GetRotY(DX_PI_F).ToDxLib());
+	stage = modelManager.GetModelHandle(L"Stage");
 	MV1SetMatrix(stage, Matrix4x4::GetRotY(DX_PI_F).ToDxLib());
 
 	// プレイヤーの生成
@@ -258,8 +261,10 @@ void SceneMain::Draw()
 	SetLightDirection(lightVec.ToDxLib());
 	// ステージの描画
 	auto& modelManager = ModelManager::GetInstance();
-	//MV1DrawModel(modelManager.GetModelHandle(L"Stage"));
+	MV1DrawModel(modelManager.GetModelHandle(L"Stage"));
+#ifdef _DEBUG
 	MV1DrawModel(modelManager.GetModelHandle(L"Collision"));
+#endif
 
 #ifdef _DEBUG
 	// グリッドの描画
