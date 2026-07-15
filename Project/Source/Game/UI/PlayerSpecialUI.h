@@ -13,5 +13,6 @@ public:
     void Draw() override;
 
 private:
+    int m_frame = 0;
     std::vector<int> m_handles;
 };

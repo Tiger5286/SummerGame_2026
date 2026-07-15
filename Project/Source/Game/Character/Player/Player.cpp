@@ -148,6 +148,10 @@ void Player::Update()
 	{
 		m_hp = 1;
 	}
+	if (CheckHitKey(KEY_INPUT_5))
+	{
+		m_specialCharge = kMaxSpecialCharge;
+	}
 #endif
 }
 

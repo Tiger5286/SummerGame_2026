@@ -12,17 +12,23 @@ namespace
 	constexpr int kOffsetX = 30;
 	constexpr int kOffsetY = 80;
 
+	constexpr int kBrinkFrame = 20;
+
 	enum class Graph
 	{
 		Frame,
 		Main,
+		LB,
+		LBOutline,
 
 		Num
 	};
 
 	constexpr const wchar_t* kFileNames[] = {
 		L"data/Graphs/Game/SpecialGauge_Frame.png",
-		L"data/Graphs/Game/SpecialGauge.png"
+		L"data/Graphs/Game/SpecialGauge.png",
+		L"data/Graphs/Buttons/LB.png",
+		L"data/Graphs/Buttons/LB_outline.png"
 	};
 
 	static_assert(static_cast<int>(Graph::Num) == sizeof(kFileNames) / sizeof(wchar_t*));
@@ -42,6 +48,7 @@ PlayerSpecialUI::~PlayerSpecialUI()
 
 void PlayerSpecialUI::Init()
 {
+	m_handles.reserve(static_cast<int>(Graph::Num));
 	for (int i = 0; i < static_cast<int>(Graph::Num); i++)
 	{
 		m_handles.push_back(LoadGraph(kFileNames[i]));
@@ -51,6 +58,7 @@ void PlayerSpecialUI::Init()
 
 void PlayerSpecialUI::Update()
 {
+	m_frame++;
 }
 
 void PlayerSpecialUI::Draw()
@@ -71,5 +79,21 @@ void PlayerSpecialUI::Draw()
 	int width = rate * gaugeLen;
 	int handle = m_handles[static_cast<int>(Graph::Main)];
 	// ゲージを描画
-	DrawRectRotaGraph(x - (gaugeLen - width) * kGraphScale * 0.5f, y, kGraphMinX, 0, width, h, kGraphScale, 0.0, handle, true);
+	DrawRectRotaGraph(x - (gaugeLen - width) * kGraphScale / 2, y, kGraphMinX, 0, width, h, kGraphScale, 0.0, handle, true);
+
+	// ボタンの描画
+	// 最大までたまってるときのみ描画
+	if (rate >= 1.0f)
+	{
+		x = kOffsetX + w * kGraphScale;
+		y = kOffsetY + h * kGraphScale;
+		// ちかちかさせる
+		int handle = m_handles[static_cast<int>(Graph::LB)];
+		if (m_frame % kBrinkFrame * 2 > kBrinkFrame)
+		{
+			handle = m_handles[static_cast<int>(Graph::LBOutline)];
+		}
+
+		DrawRotaGraph(x, y, kGraphScale, 0.0, handle, true);
+	}
 }
