@@ -7,6 +7,17 @@
 
 namespace
 {
+	constexpr int kLayer = 2;
+	constexpr int kActionNum = 4;
+	constexpr float kLerpT = 0.5f;
+
+	constexpr int kDrawPosBaseX = Game::kScreenWidth - 250;
+	constexpr int kDrawPosBaseY = Game::kScreenHeight - 120;
+	constexpr int kDrawDist = 60;
+	constexpr int kDrawRadius = 30;
+
+	constexpr int kTextOffset = 10;
+
 	enum class Graph
 	{
 		Attack,
@@ -30,20 +41,26 @@ namespace
 		L"data/Graphs/Game/Cooltime_black.png"
 	};
 
-	constexpr int kButton[4] = { XINPUT_BUTTON_X,XINPUT_BUTTON_A,XINPUT_BUTTON_Y,XINPUT_BUTTON_B };
+	constexpr int kButton[kActionNum] = { XINPUT_BUTTON_X,XINPUT_BUTTON_A,XINPUT_BUTTON_Y,XINPUT_BUTTON_B };
 	constexpr float kMaxScale = 1.2f;
 
 	constexpr int kFontSize = 20;
-	constexpr std::wstring_view kActionNames[4] = {
+	constexpr std::wstring_view kActionNames[kActionNum] = {
 		L"こうげき",
 		L"ジャンプ",
 		L"ウィングスピン",
 		L"フレイムシフト"
 	};
+
+	enum class Buttons
+	{
+		X,A,Y,B,
+		Num
+	};
 }
 
 ControlUI::ControlUI() :
-	UIBase(2)
+	UIBase(kLayer)
 {
 }
 
@@ -70,15 +87,15 @@ void ControlUI::Update()
 {
 	auto& input = Input::GetInstance();
 	// ボタンを押したとき拡縮する
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < kActionNum; i++)
 	{
 		if (input.IsPressed(kButton[i]))
 		{
-			m_scale[i] = std::lerp(m_scale[i], kMaxScale, 0.5f);
+			m_scale[i] = std::lerp(m_scale[i], kMaxScale, kLerpT);
 		}
 		else
 		{
-			m_scale[i] = std::lerp(m_scale[i], 1.0f, 0.5f);
+			m_scale[i] = std::lerp(m_scale[i], 1.0f, kLerpT);
 		}
 	}
 }
@@ -86,16 +103,16 @@ void ControlUI::Update()
 void ControlUI::Draw()
 {
 	// UIの中心位置
-	int baseX = Game::kScreenWidth - 250;
-	int baseY = Game::kScreenHeight - 120;
+	const int baseX = kDrawPosBaseX;
+	const int baseY = kDrawPosBaseY;
 	// UI同士の距離
-	int dist = 60;
+	const int dist = kDrawDist;
 	// UIの半径
-	int r = 30;
+	const int r = kDrawRadius;
 
 	// それぞれのUIの位置を設定
-	int x[4] = { baseX - dist, baseX,        baseX,        baseX + dist };
-	int y[4] = { baseY,        baseY + dist, baseY - dist, baseY };
+	int x[kActionNum] = { baseX - dist, baseX,        baseX,        baseX + dist };
+	int y[kActionNum] = { baseY,        baseY + dist, baseY - dist, baseY };
 
 	// 画像のサイズを取得
 	int w, h;
@@ -118,22 +135,22 @@ void ControlUI::Draw()
 			// クールタイム中ならゲージ等を描画
 			if (rate < 1.0f)
 			{
-				DrawRotaGraph(x[i], y[i], scale * 1.2f, 0.0, m_handles[static_cast<int>(Graph::CooltimeBlack)], true);	// クールタイムゲージの背景
-				DrawCircleGauge(x[i], y[i], rate * 100.0f, m_handles[static_cast<int>(Graph::Cooltime)], 0.0, scale * 1.2f);	// クールタイムゲージ本体
+				DrawRotaGraph(x[i], y[i], scale * kMaxScale, 0.0, m_handles[static_cast<int>(Graph::CooltimeBlack)], true);	// クールタイムゲージの背景
+				DrawCircleGauge(x[i], y[i], rate * 100.0f, m_handles[static_cast<int>(Graph::Cooltime)], 0.0, scale * kMaxScale);	// クールタイムゲージ本体
 
 				DrawRotaGraph(x[i], y[i], scale, 0.0, m_handles[static_cast<int>(Graph::SpinBlack)], true);	// アイコンを暗くする
 			}
 		}
 
 		// テキストを描画
-		if (i == 0 || i == 1)	// X,A
+		if (i == static_cast<int>(Buttons::X) || i == static_cast<int>(Buttons::A))	// X,A
 		{
 			int width = GetDrawStringWidthToHandle(kActionNames[i].data(), kActionNames[i].size(), m_fontHandle);
-			DrawStringToHandle(x[i] - (r + 10) - width, y[i] - kFontSize / 2, kActionNames[i].data(), 0xffffff, m_fontHandle);
+			DrawStringToHandle(x[i] - (r + kTextOffset) - width, y[i] - kFontSize / 2, kActionNames[i].data(), 0xffffff, m_fontHandle);
 		}
-		else if (i == 2 || i == 3)	// Y,B
+		else if (i == static_cast<int>(Buttons::Y) || i == static_cast<int>(Buttons::B))	// Y,B
 		{
-			DrawStringToHandle(x[i] + (r + 10), y[i] - kFontSize / 2, kActionNames[i].data(), 0xffffff, m_fontHandle);
+			DrawStringToHandle(x[i] + (r + kTextOffset), y[i] - kFontSize / 2, kActionNames[i].data(), 0xffffff, m_fontHandle);
 		}
 	}
 }
