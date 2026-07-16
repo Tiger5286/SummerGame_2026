@@ -6,6 +6,24 @@ EventManager& EventManager::GetInstance()
 	return instance;
 }
 
+void EventManager::Update()
+{
+	// イベント関数の持ち主が生きているかどうかチェックし、死んでいたら登録解除
+	std::list<EventData> deleteDatas;
+	for (auto& data : m_eventDatas)
+	{
+		std::shared_ptr<void> shared = data.owner.lock();
+		if (shared == nullptr)
+		{
+			deleteDatas.push_back(data);
+		}
+	}
+	for (auto& data : deleteDatas)
+	{
+		UnRegister(data.handle);
+	}
+}
+
 void EventManager::CallEvent(const std::string& eventName)
 {
 	// 対応した名前の関数を呼ぶ
@@ -18,7 +36,7 @@ void EventManager::CallEvent(const std::string& eventName)
 	}
 }
 
-int EventManager::Register(const std::string& eventName, std::function<void()> func)
+int EventManager::Register(const std::string& eventName, std::function<void()> func, std::weak_ptr<void> owner)
 {
 	// 管理番号を更新
 	m_newHandle++;
@@ -26,7 +44,8 @@ int EventManager::Register(const std::string& eventName, std::function<void()> f
 	EventData newData = {
 		.handle = m_newHandle,
 		.eventName = eventName,
-		.func = func
+		.func = func,
+		.owner = owner
 	};
 	// 登録
 	m_eventDatas.push_back(newData);

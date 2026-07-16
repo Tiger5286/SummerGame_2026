@@ -1,8 +1,9 @@
-#pragma once
+﻿#pragma once
+#include <memory>
 
 class SceneManager;
 
-class SceneBase
+class SceneBase : public std::enable_shared_from_this<SceneBase>
 {
 public:
 	SceneBase(SceneManager& sceneManager);

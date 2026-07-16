@@ -2,6 +2,7 @@
 #include <string>
 #include <functional>
 #include <list>
+#include <memory>
 
 class EventManager
 {
@@ -19,6 +20,7 @@ private:
 		int handle = -1;
 		std::string eventName;
 		std::function<void()> func;
+		std::weak_ptr<void> owner;
 
 		bool operator==(const EventData& data) const
 		{
@@ -26,6 +28,8 @@ private:
 		}
 	};
 public:
+
+	void Update();
 
 	/// <summary>
 	/// 登録したイベントを発火させる。
@@ -39,7 +43,7 @@ public:
 	/// <param name="eventName">イベント名</param>
 	/// <param name="func">発火時に呼ばれる関数</param>
 	/// <returns>管理番号</returns>
-	int Register(const std::string& eventName, std::function<void()> func);
+	int Register(const std::string& eventName, std::function<void()> func, std::weak_ptr<void> owner);
 
 	/// <summary>
 	/// 登録した関数を登録解除する。

@@ -101,7 +101,7 @@ SceneMain::SceneMain(SceneManager& sceneManager) :
 SceneMain::~SceneMain()
 {
 	// イベントマネージャーに登録した関数を削除
-	EventManager::GetInstance().UnRegister(m_onSpawnBossHandle);
+	//EventManager::GetInstance().UnRegister(m_onSpawnBossHandle);
 }
 
 void SceneMain::Init()
@@ -119,7 +119,8 @@ void SceneMain::Init()
 		effManager.LoadEffect(effData.path, effData.name, effData.scale);
 	}
 
-	m_onSpawnBossHandle = EventManager::GetInstance().Register("SpawnBoss", [this]() {OnSpawnBoss(); });
+	// 関数をイベントマネージャーに登録
+	m_onSpawnBossHandle = EventManager::GetInstance().Register("SpawnBoss", [this]() {OnSpawnBoss(); }, shared_from_this());
 
 	// UIの初期化
 	UIManager::GetInstance().Init();
