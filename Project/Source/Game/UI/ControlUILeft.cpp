@@ -12,6 +12,7 @@ namespace
 		LStick,
 		RStick,
 		RB,
+		RStickPush,
 
 		Num
 	};
@@ -19,16 +20,18 @@ namespace
 	constexpr std::wstring_view kFileNames[] = {
 		L"data/Graphs/Buttons/LStick.png",
 		L"data/Graphs/Buttons/RStick.png",
-		L"data/Graphs/Buttons/RB.png"
+		L"data/Graphs/Buttons/RB.png",
+		L"data/Graphs/Buttons/RStickPush.png"
 	};
 
 	constexpr std::wstring_view kTexts[] = {
 		L"移動",
 		L"カメラ操作",
-		L"回避"
+		L"回避",
+		L"ロックオン"
 	};
 
-	constexpr int kUINum = 3;
+	constexpr int kUINum = 4;
 
 	static_assert(static_cast<int>(Graph::Num) == std::size(kFileNames));
 

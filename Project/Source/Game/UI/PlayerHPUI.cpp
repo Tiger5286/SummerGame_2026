@@ -23,6 +23,7 @@ namespace
 		Green,
 		Yellow,
 		Red,
+		TextBack,
 
 		Num
 	};
@@ -32,12 +33,14 @@ namespace
 		L"data/Graphs/Game/HPBar_Green.png",
 		L"data/Graphs/Game/HPBar_Yellow.png",
 		L"data/Graphs/Game/HPBar_Red.png",
+		L"data/Graphs/Game/hpBack.png"
 	};
 
 	// 画像の種類とファイルパスの数が一致していないとエラー
 	static_assert(static_cast<int>(Graph::Num) == sizeof(kFileNames) / sizeof(wchar_t*));
 
 	constexpr int kFontSize = 20;
+	constexpr int kTextOffsetY = -5;
 }
 
 PlayerHPUI::~PlayerHPUI()
@@ -98,7 +101,8 @@ void PlayerHPUI::Draw()
 
 	// HPテキストを描画
 	x = kOffsetX + kHPGraphMinX * kGraphScale;
-	y = kOffsetY - kFontSize + kHPGraphMinY * kGraphScale;
+	y = kOffsetY - kFontSize + kHPGraphMinY * kGraphScale + kTextOffsetY;
 
+	DrawGraph(x - 17, y-2, m_handles[static_cast<int>(Graph::TextBack)], true);
 	DrawFormatStringToHandle(x, y, 0xffffff, m_fontHandle, L"HP : %4d / %4d", player->GetHP(), player->kMaxHp);
 }
