@@ -44,7 +44,7 @@ namespace
 void Player::Init()
 {
 	// 位置の初期化
-	m_pos = Vector3(0.0f, 0.0f, 0.0f);
+	m_pos = Vector3::Zero();
 	// 向きの初期化(出現時に背中を向けてほしいため180度回転)
 	m_angle = DX_PI_F;
 	m_drawAngle = DX_PI_F;
@@ -70,19 +70,20 @@ void Player::Init()
 	m_type = MyLib::CharacterType::Player;
 
 	// UIの生成と初期化
+	auto& uiManager = UIManager::GetInstance();
 	auto player = std::dynamic_pointer_cast<Player>(shared_from_this());
 
 	m_pHPUI = std::make_shared<PlayerHPUI>();
 	m_pHPUI->SetInfo(player);
-	UIManager::GetInstance().AddUI(m_pHPUI);
+	uiManager.AddUI(m_pHPUI);
 
 	m_pSpecialUI = std::make_shared<PlayerSpecialUI>();
 	m_pSpecialUI->SetInfo(player);
-	UIManager::GetInstance().AddUI(m_pSpecialUI);
+	uiManager.AddUI(m_pSpecialUI);
 
 	m_pControlUI = std::make_shared<ControlUI>();
 	m_pControlUI->SetInfo(player);
-	UIManager::GetInstance().AddUI(m_pControlUI);
+	uiManager.AddUI(m_pControlUI);
 }
 
 void Player::End()
@@ -186,39 +187,19 @@ Vector3 Player::GetDir() const
 
 void Player::OnHitAttack(const MyLib::AttackData& atkData)
 {
-	// 回避ステートのときは攻撃を食らわない
-	std::shared_ptr<PlayerStateBase> state = nullptr;
-	state = std::dynamic_pointer_cast<PlayerStateDodge>(m_pState);
-	if (state != nullptr)
+	// 被弾属性を取得
+	auto state = std::dynamic_pointer_cast<PlayerStateBase>(m_pState);
+	PlayerStateBase::HitAttribute hitAttribute = state->GetHitAttribute();
+	// 完全無敵なら食らわない
+	if (hitAttribute == PlayerStateBase::HitAttribute::PerfectInvincible)
 	{
 		return;
 	}
-	state = nullptr;
-	// 被弾ステートの時は攻撃を食らわない
-	state = std::dynamic_pointer_cast<PlayerStateHit>(m_pState);
-	if (state != nullptr)
-	{
-		// 攻撃が無敵を無効する攻撃なら食らう
-		if (!atkData.isIgnoreInvincible)
-		{
-			return;
-		}
-	}
-	state = nullptr;
-	// バーニングの時は攻撃を食らわない
-	state = std::dynamic_pointer_cast<PlayerStateBurning>(m_pState);
-	if (state != nullptr)
+	// 無敵かつ攻撃が無敵貫通しないなら食らわない
+	if (hitAttribute == PlayerStateBase::HitAttribute::Invincible && !atkData.isIgnoreInvincible)
 	{
 		return;
 	}
-	state = nullptr;
-	// 死亡しているときは攻撃を食らわない
-	state = std::dynamic_pointer_cast<PlayerStateDeath>(m_pState);
-	if (state != nullptr)
-	{
-		return;
-	}
-	state = nullptr;
 
 	// ダメージを食らう
 	m_hp -= atkData.damage;
@@ -229,17 +210,14 @@ void Player::OnHitAttack(const MyLib::AttackData& atkData)
 		return;
 	}
 
-	// スピンの時はダメージは食らうがひるまない
-	state = std::dynamic_pointer_cast<PlayerStateSpin>(m_pState);
-	if (state != nullptr)
+	// ひるまない状態ならひるまない
+	if (hitAttribute == PlayerStateBase::HitAttribute::IgnoreFalter)
 	{
 		return;
 	}
-	state = nullptr;
 
 	// 死ななかったら被弾
 	m_pState->ChangeState(std::make_shared<PlayerStateHit>());
-	//printfDx(L"プレイヤーが攻撃を食らった！DAMAGE:%d,HP:%d\n",atkData.damage,m_hp);
 }
 
 void Player::Move()

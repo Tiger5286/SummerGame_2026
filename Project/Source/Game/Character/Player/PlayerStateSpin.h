@@ -15,6 +15,8 @@ public:
     void Update() override;
     void Exit() override;
     void Draw() override;
+
+    HitAttribute GetHitAttribute() override { return HitAttribute::IgnoreFalter; }
 private:
     int m_frame = 0;
     int m_effHandle = -1;

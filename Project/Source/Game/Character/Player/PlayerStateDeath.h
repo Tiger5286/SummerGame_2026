@@ -11,6 +11,7 @@ public:
     void Update() override;
     void Exit() override;
 
+    HitAttribute GetHitAttribute() override { return HitAttribute::PerfectInvincible; }
 private:
 
 };

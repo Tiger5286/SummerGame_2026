@@ -17,6 +17,21 @@ public:
 
 	void AddSpecialCharge(int value);
 
+	// 被弾属性(このステートの時どのように被弾するか)
+	enum class HitAttribute
+	{
+		Normal,		// 普通に被弾する
+		Invincible,	// 無敵(無敵貫通可)
+		PerfectInvincible,	// 完全無敵(無敵貫通不可)
+		IgnoreFalter	// 被弾するがひるまない
+	};
+
+	/// <summary>
+	/// 被弾属性を返す関数
+	/// </summary>
+	/// <returns>ステートの被弾属性</returns>
+	virtual HitAttribute GetHitAttribute() { return HitAttribute::Normal; }
+
 protected:
 	std::weak_ptr<Player> m_pPlayer;
 	std::shared_ptr<PlayerStateBase> m_pNextStatePlayer = nullptr;
