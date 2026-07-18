@@ -53,6 +53,9 @@ void PlayerStateSpin::Update()
 	// 翼の更新
 	m_pWing->SetPos(player->m_pos + kWingOffset);
 	m_pWing->Update();
+	// プレイヤーのy速度を0にする(落下しないようにする)
+	player->m_vel.y = 0.0f;
+
 	// 攻撃の生成	// 指定のフレームになったら攻撃を生成する
 	if (m_frame == kAttackFrame[0] || m_frame == kAttackFrame[1] || m_frame == kAttackFrame[2])
 	{

@@ -7,6 +7,7 @@
 #include "PlayerStateDodge.h"
 #include "PlayerStateAttack.h"
 #include "PlayerStateShift.h"
+#include "PlayerStateSpin.h"
 
 namespace
 {
@@ -47,6 +48,13 @@ void PlayerStateFall::Update()
 		ChangeState(std::make_shared<PlayerStateShift>());
 		return;
 	}
+	// スピンを入力していたらスピン
+	if (input.IsTriggerd(player->kSpin) && player->m_skillCooltime >= player->kSkillCooltime)
+	{
+		ChangeState(std::make_shared<PlayerStateSpin>());
+		return;
+	}
+
 	// 接地していたら
 	if (player->m_isGround)
 	{
