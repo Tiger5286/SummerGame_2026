@@ -34,13 +34,13 @@ void PlayerStateIdle::Update()
 	if (player->m_isCanControl)
 	{
 		// バーニングを入力していたらバーニング
-		if (input.IsTriggerd(player->kBurning) && player->GetSpecialCharge() >= 1000)
+		if (input.IsTriggerd(player->kBurning) && player->GetSpecialCharge() >= player->kMaxSpecialCharge)
 		{
 			ChangeState(std::make_shared<PlayerStateBurning>());
 			return;
 		}
 		// スピンを入力したいたらスピン
-		if (input.IsTriggerd(player->kSpin) && player->m_skillCooltime >= 10 * 60)
+		if (input.IsTriggerd(player->kSpin) && player->m_skillCooltime >= player->kSkillCooltime)
 		{
 			ChangeState(std::make_shared<PlayerStateSpin>());
 			return;
