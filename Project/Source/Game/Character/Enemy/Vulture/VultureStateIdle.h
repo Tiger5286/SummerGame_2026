@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "VultureStateBase.h"
 class VultureStateIdle :
     public VultureStateBase
@@ -7,7 +7,7 @@ public:
     VultureStateIdle() = default;
     ~VultureStateIdle() = default;
 
-    void Enter(std::weak_ptr<Character> pOwner) override;
+    void OnEnter() override;
     void Update() override;
     void Exit() override;
 private:

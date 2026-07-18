@@ -17,9 +17,9 @@ namespace
 	const std::wstring kRunAnimName = L"Player|Run";
 }
 
-void PlayerStateMove::Enter(std::weak_ptr<Character> pOwner)
+void PlayerStateMove::OnEnter()
 {
-	m_pPlayer = std::dynamic_pointer_cast<Player>(pOwner.lock());
+	m_pPlayer = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	m_pPlayer.lock()->m_anim.ChangeAnim(kRunAnimName);
 }
 

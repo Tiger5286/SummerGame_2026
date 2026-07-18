@@ -5,6 +5,9 @@
 #include <cmath>
 #include <cassert>
 #include <string>
+#include <memory>
+
+class Character;
 
 namespace MyLib
 {
@@ -44,6 +47,7 @@ namespace MyLib
 		bool isKnockDown = false;
 		bool isIgnoreInvincible = false;
 		int specialCharge = 0;
+		std::weak_ptr<Character> attacker;
 	};
 
 	const Vector3 kDefaultDir = Vector3(0, 0, -1);

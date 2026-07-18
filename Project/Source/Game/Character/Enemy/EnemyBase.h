@@ -14,7 +14,7 @@ public:
 
 	virtual void Init() override = 0;
 	virtual void End() override = 0;
-	virtual void Update() override = 0;
+	virtual void OnUpdate() override = 0;
 	virtual void Draw() override = 0;
 
 	void BaseInit(int maxHp);

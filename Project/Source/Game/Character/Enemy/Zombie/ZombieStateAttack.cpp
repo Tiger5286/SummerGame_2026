@@ -21,9 +21,9 @@ namespace
 	};
 }
 
-void ZombieStateAttack::Enter(std::weak_ptr<Character> pOwner)
+void ZombieStateAttack::OnEnter()
 {
-	m_pZombie = std::dynamic_pointer_cast<Zombie>(pOwner.lock());
+	m_pZombie = std::dynamic_pointer_cast<Zombie>(m_pOwner.lock());
 	auto zombie = m_pZombie.lock();
 	zombie->m_anim.ChangeAnim(kAttackAnimName,0.5f,false);
 	// プレイヤーの方を向く

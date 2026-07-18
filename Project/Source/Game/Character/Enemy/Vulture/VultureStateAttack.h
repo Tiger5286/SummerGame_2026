@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "VultureStateBase.h"
 #include "Utility/Vector3.h"
 
@@ -11,7 +11,7 @@ public:
     VultureStateAttack() = default;
     ~VultureStateAttack() = default;
 
-    void Enter(std::weak_ptr<Character> pOwner) override;
+    void OnEnter() override;
     void Update() override;
     void Exit() override;
     void Draw() override;

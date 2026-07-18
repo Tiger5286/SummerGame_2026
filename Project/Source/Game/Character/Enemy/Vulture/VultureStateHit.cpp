@@ -1,4 +1,4 @@
-#include "VultureStateHit.h"
+﻿#include "VultureStateHit.h"
 #include "Vulture.h"
 
 #include "VultureStateIdle.h"
@@ -8,9 +8,9 @@ namespace
 	const std::wstring kAnimName = L"VultureCinereous_Skelmesh|VultureCinereous_TakeOff";
 }
 
-void VultureStateHit::Enter(std::weak_ptr<Character> pOwner)
+void VultureStateHit::OnEnter()
 {
-	m_pVulture = std::dynamic_pointer_cast<Vulture>(pOwner.lock());
+	m_pVulture = std::dynamic_pointer_cast<Vulture>(m_pOwner.lock());
 	auto vulture = m_pVulture.lock();
 	vulture->m_anim.ChangeAnim(kAnimName, 1.0f, false);
 }

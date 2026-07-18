@@ -15,8 +15,12 @@ public:
 
 	virtual void Init() abstract;
 	virtual void End() abstract;
-	virtual void Update() abstract;
+	void Update();
 	virtual void Draw() abstract;
+
+protected:
+	virtual void OnUpdate() abstract;
+public:
 
 	/// <summary>
 	/// モデルのハンドルを設定する。Initの前に実行すること
@@ -72,6 +76,11 @@ public:
 	// ステートの切り替え処理
 	void CheckChangeState();
 
+	// ヒットストップのフレーム数を設定する
+	void SetHitStop(int frame) { m_hitStopFrame = frame; }
+
+	bool IsCanHitAttack() const { return m_isCanHitAttack; }
+
 protected:
 	// モデルのハンドル
 	int m_modelHandle = -1;
@@ -95,5 +104,9 @@ protected:
 	bool m_isGround = false;	// 接地しているかどうか
 
 	const int m_id;	// ID
+
+	int m_hitStopFrame = 0;	// ヒットストップのフレーム数 (0以上ならヒットストップ中)
+
+	bool m_isCanHitAttack = true;	// 攻撃を喰らえるかどうか
 };
 

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "../../CharacterStateBase.h"
 #include <memory>
 
@@ -10,7 +10,7 @@ public:
 	GeneralStateBase() = default;
 	virtual ~GeneralStateBase() = default;
 
-	virtual void Enter(std::weak_ptr<Character> pOwner) = 0;
+	virtual void OnEnter() = 0;
 	virtual void Update() = 0;
 	virtual void Exit() = 0;
 	virtual void Draw() {}

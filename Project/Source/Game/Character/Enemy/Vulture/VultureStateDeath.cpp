@@ -1,4 +1,4 @@
-#include "VultureStateDeath.h"
+﻿#include "VultureStateDeath.h"
 #include "Vulture.h"
 
 namespace
@@ -6,13 +6,14 @@ namespace
 	const std::wstring kAnimName = L"VultureCinereous_Skelmesh|VultureCinereous_Land";
 }
 
-void VultureStateDeath::Enter(std::weak_ptr<Character> pOwner)
+void VultureStateDeath::OnEnter()
 {
-	m_pVulture = std::dynamic_pointer_cast<Vulture>(pOwner.lock());
+	m_pVulture = std::dynamic_pointer_cast<Vulture>(m_pOwner.lock());
 	auto vulture = m_pVulture.lock();
 	vulture->m_anim.ChangeAnim(kAnimName, 0.5f, false);
 	vulture->m_isDying = true;
 	vulture->m_isFlying = false;
+	vulture->m_isCanHitAttack = false;
 }
 
 void VultureStateDeath::Update()

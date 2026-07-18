@@ -97,9 +97,9 @@ namespace
 	};
 }
 
-void PlayerStateAttack::Enter(std::weak_ptr<Character> pOwner)
+void PlayerStateAttack::OnEnter()
 {
-	m_pPlayer = std::dynamic_pointer_cast<Player>(pOwner.lock());
+	m_pPlayer = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	m_pPlayer.lock()->m_anim.ChangeAnim(kComboDatas[0].animName, MyLib::kDefaultAnimSpeed, false);
 	m_pPlayer.lock()->RotateToTarget(kTrackingAttackDist);
 	m_comboIndex = 0;

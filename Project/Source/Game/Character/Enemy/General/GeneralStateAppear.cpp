@@ -4,9 +4,9 @@
 
 #include "GeneralStateWalk.h"
 
-void GeneralStateAppear::Enter(std::weak_ptr<Character> pOwner)
+void GeneralStateAppear::OnEnter()
 {
-	m_pGeneral = std::dynamic_pointer_cast<General>(pOwner.lock());
+	m_pGeneral = std::dynamic_pointer_cast<General>(m_pOwner.lock());
 	auto general = m_pGeneral.lock();
 	general->m_anim.ChangeAnim(L"General|Idle");
 }

@@ -31,9 +31,9 @@ namespace
 	const Vector3 kWingOffset = Vector3(0, 100, 0);
 }
 
-void PlayerStateSpin::Enter(std::weak_ptr<Character> pOwner)
+void PlayerStateSpin::OnEnter()
 {
-	m_pPlayer = std::dynamic_pointer_cast<Player>(pOwner.lock());
+	m_pPlayer = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	auto player = m_pPlayer.lock();
 	player->m_anim.ChangeAnim(kAnimName, 0.5f, false);
 

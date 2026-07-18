@@ -10,7 +10,7 @@ public:
     PlayerStateAttack() = default;
     ~PlayerStateAttack() = default;
 
-    void Enter(std::weak_ptr<Character> pOwner) override;
+    void OnEnter() override;
     void Update() override;
     void Exit() override;
     void Draw() override;

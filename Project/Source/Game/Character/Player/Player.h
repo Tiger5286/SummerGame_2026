@@ -30,7 +30,7 @@ public:
 
     void Init() override;
     void End() override;
-    void Update() override;
+    void OnUpdate() override;
     void Draw() override;
     
 

@@ -30,9 +30,9 @@ namespace
 	};
 }
 
-void VultureStateAttack::Enter(std::weak_ptr<Character> pOwner)
+void VultureStateAttack::OnEnter()
 {
-	m_pVulture = std::dynamic_pointer_cast<Vulture>(pOwner.lock());
+	m_pVulture = std::dynamic_pointer_cast<Vulture>(m_pOwner.lock());
 	auto vulture = m_pVulture.lock();
 	// プレイヤーとの高さの差を記録
 	m_toPlayerHeightDif = vulture->m_pos.y - (vulture->m_pPlayer->GetPos().y + 50.0f);

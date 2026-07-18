@@ -90,14 +90,8 @@ void Player::End()
 {
 }
 
-void Player::Update()
+void Player::OnUpdate()
 {
-	// 次のステートがあったらステートを変更する
-	CheckChangeState();
-
-	// ステートの更新
-	m_pState->Update();
-
 	//位置に速度を足す
 	m_pos += m_vel;
 

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "GeneralStateBase.h"
 
 class Attack;
@@ -10,7 +10,7 @@ public:
     GeneralStateProjectile() = default;
     ~GeneralStateProjectile() = default;
 
-    void Enter(std::weak_ptr<Character> pOwner) override;
+    void OnEnter() override;
     void Update() override;
     void Exit() override;
     void Draw() override;

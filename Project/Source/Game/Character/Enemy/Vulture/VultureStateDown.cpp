@@ -10,9 +10,9 @@ namespace
 	constexpr int kReturnFrame = 120;
 }
 
-void VultureStateDown::Enter(std::weak_ptr<Character> pOwner)
+void VultureStateDown::OnEnter()
 {
-	m_pVulture = std::dynamic_pointer_cast<Vulture>(pOwner.lock());
+	m_pVulture = std::dynamic_pointer_cast<Vulture>(m_pOwner.lock());
 	auto vulture = m_pVulture.lock();
 
 	vulture->m_anim.ChangeAnim(kAnimName);

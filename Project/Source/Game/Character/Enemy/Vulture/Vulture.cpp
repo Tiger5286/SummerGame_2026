@@ -63,12 +63,8 @@ void Vulture::End()
 {
 }
 
-void Vulture::Update()
+void Vulture::OnUpdate()
 {
-	CheckChangeState();
-
-	m_pState->Update();
-
 	// 飛んでいなかったら落下する
 	if (!m_isFlying)
 	{

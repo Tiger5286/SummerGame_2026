@@ -10,7 +10,7 @@ public:
 	ZombieStateBase() = default;
 	virtual ~ZombieStateBase() = default;
 
-	virtual void Enter(std::weak_ptr<Character> pOwner) override = 0;
+	virtual void OnEnter() override = 0;
 	virtual void Update() override = 0;
 	virtual void Exit() override = 0;
 	virtual void Draw() override {}

@@ -18,6 +18,25 @@ Character::~Character()
 {
 }
 
+void Character::Update()
+{
+		// ヒットストップ中は更新しない
+	if (m_hitStopFrame > 0)
+	{
+		m_hitStopFrame--;
+		return;
+	}
+	// ステートの切り替え
+	CheckChangeState();
+	// ステートの更新
+	if (m_pState != nullptr)
+	{
+		m_pState->Update();
+	}
+	// 各クラスの更新処理
+	OnUpdate();
+}
+
 void Character::Resistance()
 {
 	// 速度と逆向きのベクトルを生成
@@ -109,6 +128,7 @@ void Character::CheckHitMapSphere(MV1_COLL_RESULT_POLY_DIM coll)
 
 void Character::CheckChangeState()
 {
+	if (m_pState == nullptr) return;
 	auto nextState = m_pState->GetNextState();
 	// 次のステートがある場合は切り替え
 	if (m_pState != nextState)

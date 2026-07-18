@@ -66,11 +66,8 @@ void General::End()
 
 }
 
-void General::Update()
+void General::OnUpdate()
 {
-	CheckChangeState();
-	m_pState->Update();
-
 	m_pos += m_vel;
 
 	Gravity();

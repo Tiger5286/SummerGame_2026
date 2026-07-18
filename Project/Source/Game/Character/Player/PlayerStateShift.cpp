@@ -26,9 +26,9 @@ namespace
 	constexpr float kStopTrackingDist = 120.0f;
 }
 
-void PlayerStateShift::Enter(std::weak_ptr<Character> pOwner)
+void PlayerStateShift::OnEnter()
 {
-	m_pPlayer = std::dynamic_pointer_cast<Player>(pOwner.lock());
+	m_pPlayer = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	auto player = m_pPlayer.lock();
 	player->m_anim.ChangeAnim(kShiftAnimName, 0.5f, false);
 	player->RotateToTarget(1500.0f);

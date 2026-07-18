@@ -9,9 +9,9 @@ namespace
 	const std::wstring kHitAnimName = L"Zombie|Hit";
 }
 
-void ZombieStateHit::Enter(std::weak_ptr<Character> pOwner)
+void ZombieStateHit::OnEnter()
 {
-	m_pZombie = std::dynamic_pointer_cast<Zombie>(pOwner.lock());
+	m_pZombie = std::dynamic_pointer_cast<Zombie>(m_pOwner.lock());
 	m_pZombie.lock()->m_anim.ChangeAnim(kHitAnimName, 0.5f, false);
 }
 

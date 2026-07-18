@@ -26,9 +26,9 @@ namespace
 	};
 }
 
-void PlayerStateBurning::Enter(std::weak_ptr<Character> pOwner)
+void PlayerStateBurning::OnEnter()
 {
-	m_pPlayer = std::dynamic_pointer_cast<Player>(pOwner.lock());
+	m_pPlayer = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	auto player = m_pPlayer.lock();
 	// アニメーションを切り替える
 	player->m_anim.ChangeAnim(kBurningAnimName, 0.5f, false);
@@ -44,6 +44,8 @@ void PlayerStateBurning::Enter(std::weak_ptr<Character> pOwner)
 	m_pWing->Init(player->m_pos + Vector3(0, 100, 0), player->m_angle);
 
 	player->m_specialCharge = 0;
+
+	player->m_isCanHitAttack = false;
 }
 
 void PlayerStateBurning::Update()
@@ -85,6 +87,8 @@ void PlayerStateBurning::Update()
 void PlayerStateBurning::Exit()
 {	// このステートが終わる時にカメラを元に戻す
 	m_pPlayer.lock()->m_pCamera.lock()->ChangeState(std::make_shared<CameraStateFree>());
+	
+	m_pPlayer.lock()->m_isCanHitAttack = true;
 }
 
 void PlayerStateBurning::Draw()

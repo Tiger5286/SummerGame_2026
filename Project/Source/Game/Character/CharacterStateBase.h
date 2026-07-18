@@ -9,7 +9,12 @@ public:
 	CharacterStateBase() = default;
 	virtual ~CharacterStateBase() = default;
 
-	virtual void Enter(std::weak_ptr<Character> pOwner) = 0;
+	void Enter(std::weak_ptr<Character> pOwner)
+	{
+		m_pOwner = pOwner;
+		OnEnter();
+	}
+	virtual void OnEnter() = 0;
 	virtual void Update() = 0;
 	virtual void Exit() = 0;
 	virtual void Draw() {}
@@ -23,6 +28,8 @@ public:
 	{
 		m_pNextState = pNextState;
 	}
+
+	std::weak_ptr<Character> GetOwner() const { return m_pOwner; }
 
 protected:
 	std::weak_ptr<Character> m_pOwner;
