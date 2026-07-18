@@ -22,6 +22,7 @@ private:
     bool m_isOffCollider = false;
 
     bool m_isActiveSpin = false;
+    bool m_isActiveShift = false;
 
     std::shared_ptr<Attack> m_pAtk = nullptr;
 };

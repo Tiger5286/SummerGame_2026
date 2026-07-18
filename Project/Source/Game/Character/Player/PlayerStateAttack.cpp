@@ -10,6 +10,7 @@
 #include "PlayerStateIdle.h"
 #include "PlayerStateDodge.h"
 #include "PlayerStateSpin.h"
+#include "PlayerStateShift.h"
 
 namespace
 {
@@ -121,6 +122,11 @@ void PlayerStateAttack::Update()
 	{
 		m_isActiveSpin = true;
 	}
+	// シフトを入力したらシフトに移行フラグを立てる
+	if (input.IsTriggerd(player->kShift))
+	{
+		m_isActiveShift = true;
+	}
 
 	// アニメーションが終わったらIdleに移行
 	if (m_pPlayer.lock()->m_anim.IsEnd())
@@ -191,6 +197,12 @@ void PlayerStateAttack::Update()
 	if (m_isActiveSpin && animRate > kComboDatas[m_comboIndex].minTimeRate)
 	{
 		ChangeState(std::make_shared<PlayerStateSpin>());
+		return;
+	}
+	// シフトが入力されていた、かつ次の攻撃までの最低時間を越していたらシフトへ
+	if (m_isActiveShift && animRate > kComboDatas[m_comboIndex].minTimeRate)
+	{
+		ChangeState(std::make_shared<PlayerStateShift>());
 		return;
 	}
 
