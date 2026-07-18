@@ -8,6 +8,8 @@
 
 namespace MyLib
 {
+	constexpr float kDefaultAnimSpeed = 0.5f;	// デフォルトのアニメーション再生速度
+
 	enum class LR
 	{
 		Left,

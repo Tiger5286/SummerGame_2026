@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "PlayerStateBase.h"
 
 class Attack;
@@ -20,6 +20,8 @@ private:
     bool m_isCanTransNextCombo = false;
     bool m_isOnCollider = false;
     bool m_isOffCollider = false;
+
+    bool m_isActiveSpin = false;
 
     std::shared_ptr<Attack> m_pAtk = nullptr;
 };

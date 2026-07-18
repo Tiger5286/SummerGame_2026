@@ -9,6 +9,7 @@
 
 #include "PlayerStateIdle.h"
 #include "PlayerStateDodge.h"
+#include "PlayerStateSpin.h"
 
 namespace
 {
@@ -16,46 +17,46 @@ namespace
 	struct ComboData
 	{
 		std::wstring animName;	// アニメーション名
-		float minTimeRate = -1;		// 次のコンボに行くまでの最低時間
-		float minInputTimeRate = -1;	// 次のコンボに行く入力の最低受付時間
-		float maxInputTimeRate = -1;	// 次のコンボに行く入力の最大受付時間
-		float moveTimeRate = -1;		// 移動する時間
-		float moveSpeed = -1;		// 移動する速度
-		float startColTimeRate = -1;	// 当たり判定を開始する時間
-		float endColTimeRate = -1;	// 当たり判定を終了する時間
+		float minTimeRate		= -1;		// 次のコンボに行くまでの最低時間(攻撃をキャンセルできるようになる時間)	// TimeRateは0.0がアニメーション開始、1.0がアニメーション終了とした割合で表す
+		float minInputTimeRate	= -1;	// 次のコンボに行く入力の最低受付時間
+		float maxInputTimeRate	= -1;	// 次のコンボに行く入力の最大受付時間
+		float moveTimeRate		= -1;		// 移動する時間
+		float moveSpeed			= -1;		// 移動する速度
+		float startColTimeRate	= -1;	// 当たり判定を開始する時間
+		float endColTimeRate	= -1;	// 当たり判定を終了する時間
 	};
 	// コンボ一つ一つの情報
 	const std::vector<ComboData> kComboDatas =
 	{
 		{
-			L"Player|Combo1",
-			0.28f,
-			0.1f,
-			0.9f,
-			0.1f,
-			10.0f,
-			0.1f,
-			0.28f
+			.animName			= L"Player|Combo1",
+			.minTimeRate		= 0.28f,
+			.minInputTimeRate	= 0.1f,
+			.maxInputTimeRate	= 0.9f,
+			.moveTimeRate		= 0.1f,
+			.moveSpeed			= 10.0f,
+			.startColTimeRate	= 0.1f,
+			.endColTimeRate		= 0.28f
 		},
 		{
-			L"Player|Combo2",
-			0.3f,
-			0.1f,
-			0.9f,
-			0.1f,
-			10.0f,
-			0.16f,
-			0.3f
+			.animName			= L"Player|Combo2",
+			.minTimeRate		= 0.3f,
+			.minInputTimeRate	= 0.1f,
+			.maxInputTimeRate	= 0.9f,
+			.moveTimeRate		= 0.1f,
+			.moveSpeed			= 10.0f,
+			.startColTimeRate	= 0.16f,
+			.endColTimeRate		= 0.3f
 		},
 		{
-			L"Player|Combo3",
-			0.0f,
-			0.0f,
-			0.0f,
-			0.15f,
-			10.0f,
-			0.25f,
-			0.44f
+			.animName			= L"Player|Combo3",
+			.minTimeRate		= 0.44f,
+			.minInputTimeRate	= 0.0f,
+			.maxInputTimeRate	= 0.0f,
+			.moveTimeRate		= 0.15f,
+			.moveSpeed			= 10.0f,
+			.startColTimeRate	= 0.25f,
+			.endColTimeRate		= 0.44f
 		}
 	};
 
@@ -98,7 +99,7 @@ namespace
 void PlayerStateAttack::Enter(std::weak_ptr<Character> pOwner)
 {
 	m_pPlayer = std::dynamic_pointer_cast<Player>(pOwner.lock());
-	m_pPlayer.lock()->m_anim.ChangeAnim(kComboDatas[0].animName, 0.5f, false);
+	m_pPlayer.lock()->m_anim.ChangeAnim(kComboDatas[0].animName, MyLib::kDefaultAnimSpeed, false);
 	m_pPlayer.lock()->RotateToTarget(kTrackingAttackDist);
 	m_comboIndex = 0;
 }
@@ -115,6 +116,12 @@ void PlayerStateAttack::Update()
 		ChangeState(std::make_shared<PlayerStateDodge>());
 		return;
 	}
+	// スピンを入力したらスピンに移行フラグを立てる
+	if (input.IsTriggerd(player->kSpin) && player->GetSkillCooltime() >= player->kSkillCooltime)
+	{
+		m_isActiveSpin = true;
+	}
+
 	// アニメーションが終わったらIdleに移行
 	if (m_pPlayer.lock()->m_anim.IsEnd())
 	{
@@ -152,11 +159,7 @@ void PlayerStateAttack::Update()
 		// 速度に適用
 		m_pPlayer.lock()->m_vel = moveVec;
 	}
-	// 攻撃中は落下速度を低減
-	//if (player->m_vel.y < -2.0f)
-	//{
-	//	player->m_vel.y = -2.0f;
-	//}
+	// 落下しないようにする
 	player->m_vel.y = 0.0f;
 
 	// 当たり判定処理
@@ -184,21 +187,23 @@ void PlayerStateAttack::Update()
 		m_pAtk->Update();
 	}
 
+	// スピンが入力されていた、かつ次の攻撃までの最低時間を越していたらスピンへ
+	if (m_isActiveSpin && animRate > kComboDatas[m_comboIndex].minTimeRate)
+	{
+		ChangeState(std::make_shared<PlayerStateSpin>());
+		return;
+	}
+
 	// 移行フラグが立っている、かつ次の攻撃までの最低時間を越していたら次の攻撃へ
 	if (m_isCanTransNextCombo && animRate > kComboDatas[m_comboIndex].minTimeRate)
 	{
 		m_pPlayer.lock()->RotateInputDir();
 		m_pPlayer.lock()->RotateToTarget(kTrackingAttackDist);
-		m_pPlayer.lock()->m_anim.ChangeAnim(kComboDatas[m_comboIndex + 1].animName, 0.5f, false);
+		m_pPlayer.lock()->m_anim.ChangeAnim(kComboDatas[m_comboIndex + 1].animName, MyLib::kDefaultAnimSpeed, false);
 		m_comboIndex++;
 		m_isCanTransNextCombo = false;
 		m_isOnCollider = false;
 		m_isOffCollider = false;
-		// コンボ時接地していなかったらちょっと上昇する
-		/*if (!player->m_isGround)
-		{
-			player->m_vel.y = 5.0f;
-		}*/
 	}
 }
 
