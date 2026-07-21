@@ -9,19 +9,6 @@ class PlayerSpecialUI;
 class PlayerSkillUI;
 class ControlUI;
 
-// プレイヤーのステートクラスをプロトタイプ宣言しておく
-class PlayerStateBase;
-class PlayerStateIdle;
-class PlayerStateMove;
-class PlayerStateFall;
-class PlayerStateDodge;
-class PlayerStateAttack;
-class PlayerStateHit;
-class PlayerStateShift;
-class PlayerStateBurning;
-class PlayerStateSpin;
-class PlayerStateDeath;
-
 class Player : public Character
 {
 public:
@@ -113,15 +100,16 @@ private:
     const int kSpin = XINPUT_BUTTON_Y;
 
     // プレイヤーのステートクラスがプレイヤーにアクセスできるようにする
-    friend PlayerStateBase;
-    friend PlayerStateIdle;
-    friend PlayerStateMove;
-    friend PlayerStateFall;
-    friend PlayerStateDodge;
-    friend PlayerStateAttack;
-    friend PlayerStateHit;
-    friend PlayerStateShift;
-    friend PlayerStateBurning;
-    friend PlayerStateSpin;
-    friend PlayerStateDeath;
+    friend class PlayerStateBase;
+    friend class PlayerStateIdle;
+    friend class PlayerStateMove;
+    friend class PlayerStateFall;
+    friend class PlayerStateDodge;
+    friend class PlayerStateAttack;
+    friend class PlayerStateHit;
+    friend class PlayerStateShift;
+    friend class PlayerStateShiftAttack;
+    friend class PlayerStateBurning;
+    friend class PlayerStateSpin;
+    friend class PlayerStateDeath;
 };

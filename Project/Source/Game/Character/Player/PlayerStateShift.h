@@ -5,6 +5,9 @@
 class PlayerStateShift :
     public PlayerStateBase
 {
+private:
+    const float kMoveDist = 1000.0f;
+
 public:
     PlayerStateShift() = default;
     ~PlayerStateShift() = default;
@@ -16,6 +19,7 @@ private:
     bool m_isPlayedShiftEffect = false;
     bool m_isPlayedShiftEndEffect = false;
     Vector3 m_playerToTarget;
-    float m_moveDist = 1000.0f;
+    float m_moveDist = kMoveDist;
+    bool m_isTransShiftAttack = false;
 };
 

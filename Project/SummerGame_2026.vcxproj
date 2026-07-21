@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\Character\Player\PlayerStateShiftAttack.cpp" />
     <ClCompile Include="Source\Game\UI\ControlUILeft.cpp" />
     <ClCompile Include="Source\Scenes\SceneOption.cpp" />
     <ClCompile Include="Source\Game\Character\Enemy\General\GeneralStateAppear.cpp" />
@@ -108,6 +109,7 @@
     <ClCompile Include="Source\Game\UI\TargetUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\Character\Player\PlayerStateShiftAttack.h" />
     <ClInclude Include="Source\Game\UI\ControlUILeft.h" />
     <ClInclude Include="Source\Scenes\SceneOption.h" />
     <ClInclude Include="Source\Game\Character\Enemy\General\GeneralStateAppear.h" />

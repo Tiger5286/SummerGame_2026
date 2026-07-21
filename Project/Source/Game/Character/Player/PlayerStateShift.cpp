@@ -7,6 +7,7 @@
 
 #include "PlayerStateIdle.h"
 #include "PlayerStateMove.h"
+#include "PlayerStateShiftAttack.h"
 
 namespace
 {
@@ -24,18 +25,22 @@ namespace
 
 	// 敵との距離がこれになったら止まる
 	constexpr float kStopTrackingDist = 120.0f;
+
+	constexpr float kRotateToTargetDist = 1500.0f;
+
+	constexpr float kTargetVelocityScale = 10.0f;
 }
 
 void PlayerStateShift::OnEnter()
 {
 	m_pPlayer = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	auto player = m_pPlayer.lock();
-	player->m_anim.ChangeAnim(kShiftAnimName, 0.5f, false);
-	player->RotateToTarget(1500.0f);
+	player->m_anim.ChangeAnim(kShiftAnimName, MyLib::kDefaultAnimSpeed, false);
+	player->RotateToTarget(kRotateToTargetDist);
 	// プレイヤーからターゲットへのベクトルを計算しておく
 	if (player->m_target != nullptr)
 	{
-		Vector3 target = player->m_target->GetPos() + player->m_target->GetVel() * 10;
+		Vector3 target = player->m_target->GetPos() + player->m_target->GetVel() * kTargetVelocityScale;
 		m_playerToTarget = target - player->m_pos;
 		if (m_playerToTarget.SquaredLength() > kTrackingDist * kTrackingDist)
 		{
@@ -63,7 +68,7 @@ void PlayerStateShift::Update()
 		// プレイヤーからターゲットへのベクトルを計算しておく
 		if (player->m_target != nullptr)
 		{
-			Vector3 target = player->m_target->GetPos() + player->m_target->GetVel() * 10;
+			Vector3 target = player->m_target->GetPos() + player->m_target->GetVel() * kTargetVelocityScale;
 			m_playerToTarget = target - player->m_pos;
 			if (m_playerToTarget.SquaredLength() > kTrackingDist * kTrackingDist)
 			{
@@ -116,6 +121,12 @@ void PlayerStateShift::Update()
 
 			m_isPlayedShiftEffect = true;
 		}
+
+		// 攻撃を入力したらシフト攻撃に移行するフラグを立てる
+		if (input.IsTriggerd(player->kAttack))
+		{
+			m_isTransShiftAttack = true;
+		}
 	}
 	else
 	{
@@ -123,13 +134,21 @@ void PlayerStateShift::Update()
 	}
 
 	if (player->m_anim.GetAnimRate() > kInvisibleEndTimeRate)
-	{	// シフト終了のエフェクトを一回だけ再生
+	{	
+		// シフト終了のエフェクトを一回だけ再生
 		if (!m_isPlayedShiftEndEffect)
 		{
 			auto effHandle = EffectManager::GetInstance().PlayEffect(L"ShiftEnd", player->m_pos);
 			SetRotationPlayingEffekseer3DEffect(effHandle, 0.0f, player->m_angle, 0.0f);
 
 			m_isPlayedShiftEndEffect = true;
+
+			// 攻撃を入力していたらシフト攻撃アニメーションをする
+			if (m_isTransShiftAttack)
+			{
+				ChangeState(std::make_shared<PlayerStateShiftAttack>());
+				return;
+			}
 		}
 	}
 

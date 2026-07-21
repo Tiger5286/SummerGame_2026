@@ -18,7 +18,7 @@ void SceneManager::ChangeScene(std::shared_ptr<SceneBase> pNewScene, bool isCall
 	}
 
 	// ロードシーンを使用するなら非同期読み込みを有効にする
-	if (isCallLoadScene) SetUseASyncLoadFlag(true);
+	if (isCallLoadScene) //SetUseASyncLoadFlag(true);
 
 	// 新しいシーンの初期化
 	pNewScene->Init();
