@@ -10,6 +10,8 @@ namespace
 	constexpr float kResistancePower = 1.0f;
 
 	constexpr float kHitEffectOffsetY = 100.0f;
+
+	constexpr float kHitVibrationDist = 2.5f;
 }
 
 Character::Character() :
@@ -23,11 +25,28 @@ Character::~Character()
 
 void Character::Update()
 {
-	// ヒットストップ中は更新しない
+	// ヒットストップ中は通常の更新処理をスルー
 	if (m_hitStopFrame > 0)
 	{
+		// ダメージを受けた側のヒットストップなら微振動する
+		if (m_isOnDamageHitStop)
+		{
+			Vector3 vibrationVec = Vector3::GetRandVec() * kHitVibrationDist;
+			Vector3 vibrationPos = m_pos + vibrationVec;
+			Matrix4x4 scaleMtx = Matrix4x4::GetScale(m_scale);
+			Matrix4x4 rotMtx = Matrix4x4::GetRotY(m_drawAngle);
+			Matrix4x4 vibrationTransMat = Matrix4x4::GetTranslate(vibrationPos);
+			Matrix4x4 multMat = scaleMtx * rotMtx * vibrationTransMat;
+
+			MV1SetMatrix(m_modelHandle, multMat.ToDxLib());
+		}
+
 		m_hitStopFrame--;
 		return;
+	}
+	else	// ヒットストップしていないならフラグを切る
+	{
+		m_isOnDamageHitStop = false;
 	}
 	// ステートの切り替え
 	CheckChangeState();
@@ -152,4 +171,10 @@ void Character::CheckChangeState()
 		m_pState->Enter(shared_from_this());
 		m_pState->ChangeState(m_pState);
 	}
+}
+
+void Character::SetHitStop(int frame, bool isOnDamage)
+{
+	m_hitStopFrame = frame;
+	m_isOnDamageHitStop = isOnDamage;
 }

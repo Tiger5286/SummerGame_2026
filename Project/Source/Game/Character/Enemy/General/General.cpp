@@ -59,6 +59,8 @@ void General::Init()
 	UIManager::GetInstance().AddUI(m_pBossBar);
 
 	m_targetUIOffset = Vector3(0, 280, 0);
+
+	m_scale = Vector3(kGeneralScale, kGeneralScale, kGeneralScale);
 }
 
 void General::End()
@@ -85,6 +87,21 @@ void General::OnUpdate()
 
 	m_anim.Update();
 
+	// 敵本体の行列を設定
+	auto scale = MGetScale(m_scale);
+	auto rot = MGetRotY(m_drawAngle);
+	auto trans = MGetTranslate(m_pos.ToDxLib());
+	auto resultMat = MMult(MMult(scale, rot), trans);
+	MV1SetMatrix(m_modelHandle, resultMat);
+	// 剣の行列を設定
+	scale = MGetScale(VGet(kSwordScale, kSwordScale, kSwordScale));
+	rot = MGetRotZ(kSwordRotZ);
+	trans = MGetTranslate(kSwordOffset.ToDxLib());
+	auto frameIndex = MV1SearchFrame(m_modelHandle, L"mixamorig:RightHand");
+	auto m = MV1GetFrameLocalWorldMatrix(m_modelHandle, frameIndex);
+	resultMat = MMult(MMult(MMult(scale, rot), trans), m);
+	MV1SetMatrix(m_swordModelHandle, resultMat);
+
 #ifdef _DEBUG
 	if (CheckHitKey(KEY_INPUT_3))
 	{
@@ -100,21 +117,9 @@ void General::Draw()
 	m_drawAngle += diff * 0.1f;
 
 	// 敵本体の描画
-	auto scale = MGetScale(VGet(kGeneralScale, kGeneralScale, kGeneralScale));
-	auto rot = MGetRotY(m_drawAngle);
-	auto trans = MGetTranslate(m_pos.ToDxLib());
-	auto resultMat = MMult(MMult(scale, rot), trans);
-	MV1SetMatrix(m_modelHandle, resultMat);
 	MV1DrawModel(m_modelHandle);
 
 	// 剣の描画
-	scale = MGetScale(VGet(kSwordScale, kSwordScale, kSwordScale));
-	rot = MGetRotZ(kSwordRotZ);
-	trans = MGetTranslate(kSwordOffset.ToDxLib());
-	auto frameIndex = MV1SearchFrame(m_modelHandle, L"mixamorig:RightHand");
-	auto m = MV1GetFrameLocalWorldMatrix(m_modelHandle, frameIndex);
-	resultMat = MMult(MMult(MMult(scale, rot), trans), m);
-	MV1SetMatrix(m_swordModelHandle, resultMat);
 	MV1DrawModel(m_swordModelHandle);
 
 	// ステートに描画したいものがあったら描画

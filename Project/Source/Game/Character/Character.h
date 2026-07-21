@@ -77,7 +77,7 @@ public:
 	void CheckChangeState();
 
 	// ヒットストップのフレーム数を設定する
-	void SetHitStop(int frame) { m_hitStopFrame = frame; }
+	void SetHitStop(int frame, bool isOnDamage);
 
 	bool IsCanHitAttack() const { return m_isCanHitAttack; }
 
@@ -97,6 +97,7 @@ protected:
 	Vector3 m_vel;	// 速度
 	float m_angle = 0.0f;	// 向き
 	float m_drawAngle = 0.0f;	// 描画時の向き
+	Vector3 m_scale = Vector3(1.0f, 1.0f, 1.0f);	// スケール
 
 	// キャラクターのタイプ(タグ)
 	MyLib::CharacterType m_type = MyLib::CharacterType::None;
@@ -106,6 +107,7 @@ protected:
 	const int m_id;	// ID
 
 	int m_hitStopFrame = 0;	// ヒットストップのフレーム数 (0以上ならヒットストップ中)
+	bool m_isOnDamageHitStop = false;	// true : ダメージを受けたヒットストップ / false : ダメージを受けていない(攻撃側の)ヒットストップ
 
 	bool m_isCanHitAttack = true;	// 攻撃を喰らえるかどうか
 };

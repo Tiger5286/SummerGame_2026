@@ -34,6 +34,22 @@ float Vector3::Angle() const
 	return atan2(z, -x) + DX_PI_F / 2;;
 }
 
+Vector3 Vector3::GetRandVec()
+{
+	// -1.0f ~ 1.0f のスカラー値を3つ生成
+	float rand[3] = { 0.0f };
+	for (auto& value : rand)
+	{
+		// 0~200 - 100 -> -100~100 / 100 -> -1 ~ 1
+		value = GetRand(200);
+		value -= 100.0f;
+		value /= 100.0f;
+	}
+	Vector3 vec = Vector3(rand[0], rand[1], rand[2]);
+	vec.Normalize();
+	return vec;
+}
+
 VECTOR Vector3::ToDxLib() const
 {
 	return { x,y,z };

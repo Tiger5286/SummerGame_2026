@@ -31,6 +31,12 @@ public:
 	/// <returns>角度(ラジアン)</returns>
 	float Angle() const;
 
+	/// <summary>
+	/// ランダムな方向の単位ベクトルを返す
+	/// </summary>
+	/// <returns>ランダムな方向の単位ベクトル</returns>
+	static Vector3 GetRandVec();
+
 // ----- 変換関数 -----
 	// DxLib用のベクトルに変換して返す
 	VECTOR ToDxLib() const;

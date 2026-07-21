@@ -15,7 +15,6 @@
 namespace
 {
 	constexpr float kScale = 0.5f;
-	const Matrix4x4 kScaleMatrix = Matrix4x4::GetScale(Vector3(kScale, kScale, kScale));
 
 	constexpr float kColliderRadius = 50.0f;
 
@@ -57,6 +56,8 @@ void Vulture::Init()
 	BaseInit(kMaxHp);
 
 	m_targetUIOffset = Vector3(0, 30, 0);
+
+	m_scale = Vector3(kScale, kScale, kScale);
 }
 
 void Vulture::End()
@@ -92,9 +93,10 @@ void Vulture::OnUpdate()
 	m_drawAngle += diff * 0.1f;
 
 	// 行列を生成してモデルに適用
+	auto scaleMtx = Matrix4x4::GetScale(m_scale);
 	auto rotMtx = Matrix4x4::GetRotY(m_drawAngle);
 	auto transMtx = Matrix4x4::GetTranslate(m_pos);
-	auto mtx = kScaleMatrix * rotMtx * transMtx;
+	Matrix4x4 mtx = scaleMtx * rotMtx * transMtx;
 	MV1SetMatrix(m_modelHandle, mtx.ToDxLib());
 
 	// アニメーションの更新

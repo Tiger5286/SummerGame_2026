@@ -53,9 +53,9 @@ void Attack::OnCollision(Character& other)
 			// 攻撃を当てた相手のOnHitAttack関数を呼ぶ
 			other.OnHitAttack(m_data);
 			// 攻撃の持ち主と当たった相手にヒットストップをかける
-			auto attacker = m_data.attacker.lock();
-			attacker->SetHitStop(kHitStopFrame);
-			other.SetHitStop(kHitStopFrame);
+			std::shared_ptr<Character> attacker = m_data.attacker.lock();
+			attacker->SetHitStop(kHitStopFrame, false);
+			other.SetHitStop(kHitStopFrame, true);
 
 			// 攻撃を当てた時必殺技ゲージを貯める
 			auto playerState = std::dynamic_pointer_cast<PlayerStateBase>(m_pOwner.lock());
