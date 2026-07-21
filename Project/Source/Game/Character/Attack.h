@@ -34,5 +34,6 @@ private:
     std::list<int> m_hitIds;
     MyLib::AttackData m_data;
     std::weak_ptr<CharacterStateBase> m_pOwner;
+    bool m_isHit = false;
 };
 
