@@ -169,6 +169,8 @@ void SceneMain::Init()
 	// スカイボックスの生成
 	m_pSkyBox = std::make_shared<SkyBox>();
 	m_pSkyBox->Init();
+
+	m_shadowMapHandle = MakeShadowMap(8192, 8192);
 }
 
 void SceneMain::End()
@@ -187,6 +189,8 @@ void SceneMain::End()
 	}
 
 	EffectManager::GetInstance().StopEffectAll();
+
+	DeleteShadowMap(m_shadowMapHandle);
 }
 
 void SceneMain::Update()
@@ -267,7 +271,9 @@ void SceneMain::Draw()
 	SetLightDirection(lightVec.ToDxLib());
 	// ステージの描画
 	auto& modelManager = ModelManager::GetInstance();
+	SetUseShadowMap(0, m_shadowMapHandle);
 	MV1DrawModel(modelManager.GetModelHandle(L"Stage"));
+	SetUseShadowMap(0, -1);
 #ifdef _DEBUG
 	// MV1DrawModel(modelManager.GetModelHandle(L"Collision"));
 #endif
@@ -287,9 +293,17 @@ void SceneMain::Draw()
 		lightVec = kBossDirectionLight;
 		SetLightDirection(lightVec);
 	}
-	// 各クラスの描画
-	m_pPlayer->Draw();
 
+	// シャドウマップへ描画
+	Vector3 smMinPos = m_pPlayer->GetPos() + Vector3(-3000, -1000, -3000);
+	Vector3 smMaxPos = m_pPlayer->GetPos() + Vector3(3000, 1000, 3000);
+	SetShadowMapDrawArea(m_shadowMapHandle, smMinPos, smMaxPos);
+	ShadowMap_DrawSetup(m_shadowMapHandle);
+	m_pPlayer->Draw();
+	m_pEnemyManager->Draw();
+	ShadowMap_DrawEnd();
+	// 通常の描画
+	m_pPlayer->Draw();
 	m_pEnemyManager->Draw();
 
 	m_pSpawnerManager->Draw();

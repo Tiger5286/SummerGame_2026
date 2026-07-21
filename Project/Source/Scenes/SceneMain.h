@@ -31,6 +31,8 @@ private:
 private:
 	int m_frameCount = 0;
 
+	int m_shadowMapHandle = -1;
+
 	bool m_isBossBattle = false;
 	bool m_isEndScene = false;
 
