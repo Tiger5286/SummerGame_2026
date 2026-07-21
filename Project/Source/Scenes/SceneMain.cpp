@@ -93,6 +93,10 @@ namespace
 	constexpr int kBossDirectionWaitFrame = 60;
 	constexpr int kBossDirectionEndFrame = 330;
 
+	constexpr int kShadowMapSize = 8192;
+	const Vector3 kShadowMapMinPos = Vector3(-3000, -1000, -3000);
+	const Vector3 kShadowMapMaxPos = Vector3(3000, 1000, 3000);
+
 #ifdef _DEBUG
 	const Vector3 kBossRoomPos = Vector3(3100, -130, -4700);
 #endif
@@ -111,6 +115,8 @@ SceneMain::~SceneMain()
 
 void SceneMain::Init()
 {
+	m_shadowMapHandle = MakeShadowMap(kShadowMapSize, kShadowMapSize);
+
 	// モデルのロードと登録
 	auto& modelManager = ModelManager::GetInstance();
 	for (const auto& modelFileName : kModelFileNames)
@@ -169,8 +175,6 @@ void SceneMain::Init()
 	// スカイボックスの生成
 	m_pSkyBox = std::make_shared<SkyBox>();
 	m_pSkyBox->Init();
-
-	m_shadowMapHandle = MakeShadowMap(8192, 8192);
 }
 
 void SceneMain::End()
@@ -295,8 +299,8 @@ void SceneMain::Draw()
 	}
 
 	// シャドウマップへ描画
-	Vector3 smMinPos = m_pPlayer->GetPos() + Vector3(-3000, -1000, -3000);
-	Vector3 smMaxPos = m_pPlayer->GetPos() + Vector3(3000, 1000, 3000);
+	Vector3 smMinPos = m_pPlayer->GetPos() + kShadowMapMinPos;
+	Vector3 smMaxPos = m_pPlayer->GetPos() + kShadowMapMaxPos;
 	SetShadowMapDrawArea(m_shadowMapHandle, smMinPos, smMaxPos);
 	ShadowMap_DrawSetup(m_shadowMapHandle);
 	m_pPlayer->Draw();
