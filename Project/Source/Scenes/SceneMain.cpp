@@ -38,8 +38,8 @@ namespace
 		{ L"Wing" , L"data/models/Player/Wing.mv1" },
 		{ L"Zombie", L"data/models/Enemy/Zombie.mv1" },
 		{ L"Vulture", L"data/models/Enemy/Vulture.mv1" },
-		{L"General",L"data/models/Enemy/General.mv1"},
-		{L"GeneralSword",L"data/models/Enemy/sword.mv1"}
+		{ L"General",L"data/models/Enemy/General.mv1"},
+		{ L"GeneralSword",L"data/models/Enemy/sword.mv1"}
 	};
 	// ロードするエフェクトのファイル名と登録名
 	struct EffectData
@@ -80,6 +80,11 @@ namespace
 			.path = L"data/effects/SwordRush.efkefc",
 			.name = L"SwordRush",
 			.scale = 50.0f
+		},
+		{
+			.path = L"data/effects/Hit.efkproj",
+			.name = L"Hit",
+			.scale = 30.0f
 		}
 	};
 
@@ -264,7 +269,7 @@ void SceneMain::Draw()
 	auto& modelManager = ModelManager::GetInstance();
 	MV1DrawModel(modelManager.GetModelHandle(L"Stage"));
 #ifdef _DEBUG
-	MV1DrawModel(modelManager.GetModelHandle(L"Collision"));
+	// MV1DrawModel(modelManager.GetModelHandle(L"Collision"));
 #endif
 
 #ifdef _DEBUG

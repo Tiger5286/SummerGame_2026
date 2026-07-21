@@ -181,6 +181,8 @@ Vector3 Player::GetDir() const
 
 void Player::OnHitAttack(const MyLib::AttackData& atkData)
 {
+	Character::OnHitAttack(atkData);
+
 	// 被弾属性を取得
 	auto state = std::dynamic_pointer_cast<PlayerStateBase>(m_pState);
 	PlayerStateBase::HitAttribute hitAttribute = state->GetHitAttribute();

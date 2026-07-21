@@ -3,10 +3,13 @@
 #include "../Collider/SphereCollider.h"
 #include "Singleton/IDManager.h"
 #include "CharacterStateBase.h"
+#include "Singleton/EffectManager.h"
 
 namespace
 {
 	constexpr float kResistancePower = 1.0f;
+
+	constexpr float kHitEffectOffsetY = 100.0f;
 }
 
 Character::Character() :
@@ -20,7 +23,7 @@ Character::~Character()
 
 void Character::Update()
 {
-		// ヒットストップ中は更新しない
+	// ヒットストップ中は更新しない
 	if (m_hitStopFrame > 0)
 	{
 		m_hitStopFrame--;
@@ -63,6 +66,17 @@ void Character::Gravity(float power)
 
 void Character::OnCollision(Character& other)
 {}
+
+void Character::OnHitAttack(const MyLib::AttackData& atkData)
+{
+	// 攻撃した奴と当たった奴の中点をもとめる
+	Vector3 effectPos = atkData.attacker.lock()->GetPos() + m_pos;
+	effectPos /= 2;
+	// そのままだと地面の位置になるのでY位置を補正する
+	effectPos.y += kHitEffectOffsetY;
+	// エフェクトを再生
+	EffectManager::GetInstance().PlayEffect(L"Hit", effectPos);
+}
 
 void Character::CheckHitMapCapsule(MV1_COLL_RESULT_POLY_DIM coll)
 {

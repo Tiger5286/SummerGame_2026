@@ -143,6 +143,9 @@ void Zombie::OnCollision(Character& other)
 
 void Zombie::OnHitAttack(const MyLib::AttackData& atkData)
 {
+	// 基底クラスの関数を呼ぶ
+	Character::OnHitAttack(atkData);
+
 	// 死亡ステートなら被弾しない
 	std::shared_ptr<ZombieStateBase> state = nullptr;
 	state = std::dynamic_pointer_cast<ZombieStateDeath>(m_pState);

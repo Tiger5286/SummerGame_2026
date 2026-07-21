@@ -48,6 +48,7 @@ namespace MyLib
 		bool isIgnoreInvincible = false;
 		int specialCharge = 0;
 		std::weak_ptr<Character> attacker;
+		Vector3 pos;
 	};
 
 	const Vector3 kDefaultDir = Vector3(0, 0, -1);

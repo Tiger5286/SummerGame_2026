@@ -117,6 +117,8 @@ void Vulture::Draw()
 
 void Vulture::OnHitAttack(const MyLib::AttackData& atkData)
 {
+	Character::OnHitAttack(atkData);
+
 	// 死亡ステートなら被弾しない
 	std::shared_ptr<VultureStateBase> state = nullptr;
 	state = std::dynamic_pointer_cast<VultureStateDeath>(m_pState);

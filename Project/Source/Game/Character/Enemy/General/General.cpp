@@ -127,6 +127,8 @@ void General::Draw()
 
 void General::OnHitAttack(const MyLib::AttackData& atkData)
 {
+	Character::OnHitAttack(atkData);
+
 	std::shared_ptr<GeneralStateDeath> state = nullptr;
 	state = std::dynamic_pointer_cast<GeneralStateDeath>(m_pState);
 	if (state != nullptr) return;	// 現在のステートがDeathならreturn

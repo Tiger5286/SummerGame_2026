@@ -24,6 +24,8 @@ void Attack::OnUpdate()
 	m_pos += m_vel;
 
 	m_pCollider->SetPos(m_pos);
+
+	m_data.pos = m_pos;
 }
 
 void Attack::Draw()
