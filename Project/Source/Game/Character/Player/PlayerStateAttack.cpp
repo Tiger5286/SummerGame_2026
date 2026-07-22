@@ -8,6 +8,7 @@
 #include "Utility/MyLib.h"
 
 #include "PlayerStateIdle.h"
+#include "PlayerStateMove.h"
 #include "PlayerStateDodge.h"
 #include "PlayerStateSpin.h"
 #include "PlayerStateShift.h"
@@ -15,6 +16,11 @@
 
 namespace
 {
+	// コンボ最終段のインデックス
+	constexpr int kLastComboIndex = 2;
+	// コンボの最終段をキャンセルできる時間
+	constexpr float kCanComboEndAnimRate = 0.6f;
+
 	// コンボ一つ一つの情報
 	struct ComboData
 	{
@@ -228,6 +234,23 @@ void PlayerStateAttack::Update()
 		m_isCanTransNextCombo = false;
 		m_isOnCollider = false;
 		m_isOffCollider = false;
+	}
+
+	// コンボ三段目が終わりかけの時
+	if (m_comboIndex == kLastComboIndex && animRate > kCanComboEndAnimRate)
+	{
+		// 攻撃を入力していたらコンボを最初から
+		if (input.IsPressed(player->kAttack))
+		{
+			ChangeState(std::make_shared<PlayerStateAttack>());
+			return;
+		}
+		// 移動を入力していたら移動ステートへ
+		if (input.GetStickInput(MyLib::LR::Left).SquaredLength() > 0.0f)
+		{
+			ChangeState(std::make_shared<PlayerStateMove>());
+			return;
+		}
 	}
 }
 
