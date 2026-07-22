@@ -11,7 +11,7 @@ namespace
 
 	constexpr float kHitEffectOffsetY = 100.0f;
 
-	constexpr float kHitVibrationDist = 2.5f;
+	constexpr float kHitVibrationDist = 3.0f;
 }
 
 Character::Character() :

@@ -6,7 +6,7 @@
 namespace
 {
 	// ヒットストップのフレーム数
-	constexpr int kHitStopFrame = 3;
+	constexpr int kHitStopFrame = 4;
 }
 
 void Attack::Init()
