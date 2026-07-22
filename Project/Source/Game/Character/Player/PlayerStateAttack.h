@@ -23,6 +23,7 @@ private:
 
     bool m_isActiveSpin = false;
     bool m_isActiveShift = false;
+    bool m_isActiveBurning = false;
 
     std::shared_ptr<Attack> m_pAtk = nullptr;
 };

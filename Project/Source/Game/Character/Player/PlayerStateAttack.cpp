@@ -11,6 +11,7 @@
 #include "PlayerStateDodge.h"
 #include "PlayerStateSpin.h"
 #include "PlayerStateShift.h"
+#include "PlayerStateBurning.h"
 
 namespace
 {
@@ -127,6 +128,11 @@ void PlayerStateAttack::Update()
 	{
 		m_isActiveShift = true;
 	}
+	// 必殺技を入力したら必殺技に移行フラグを立てる
+	if (input.IsTriggerd(player->kBurning) && player->GetSpecialCharge() >= player->kMaxSpecialCharge)
+	{
+		m_isActiveBurning = true;
+	}
 
 	// アニメーションが終わったらIdleに移行
 	if (m_pPlayer.lock()->m_anim.IsEnd())
@@ -203,6 +209,12 @@ void PlayerStateAttack::Update()
 	if (m_isActiveShift && animRate > kComboDatas[m_comboIndex].minTimeRate)
 	{
 		ChangeState(std::make_shared<PlayerStateShift>());
+		return;
+	}
+	// 必殺技が入力されていた、かつ次の攻撃までの最低時間を越していたら必殺技へ
+	if (m_isActiveBurning && animRate > kComboDatas[m_comboIndex].minTimeRate)
+	{
+		ChangeState(std::make_shared<PlayerStateBurning>());
 		return;
 	}
 
