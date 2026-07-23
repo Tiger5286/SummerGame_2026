@@ -39,7 +39,7 @@ private:
 	/// </summary>
 	/// <param name="enemies">絞りたい敵のリスト</param>
 	/// <returns>ターゲットできる範囲内の敵のみが入ったリスト</returns>
-	std::list<std::shared_ptr<EnemyBase>> GetInSearchAreaEnemies(std::list<std::shared_ptr<EnemyBase>> enemies);
+	std::list<std::shared_ptr<EnemyBase>> GetInSearchAreaEnemies(std::list<std::shared_ptr<EnemyBase>> enemies,float dist);
 
 	/// <summary>
 	/// 画面内の敵リストを取得する

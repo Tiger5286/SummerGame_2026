@@ -18,6 +18,8 @@
 namespace
 {
 	constexpr float kNoTargetDist = 1500.0f;
+
+	constexpr float kAttackTargetDist = 250.0f;
 }
 
 TargetManager::~TargetManager()
@@ -47,7 +49,7 @@ void TargetManager::Update()
 		{
 			auto enemies = m_pEnemyManager->GetEnemies();
 			enemies = GetAliveEnemies(enemies);			// 生きている敵
-			enemies = GetInSearchAreaEnemies(enemies);	// ターゲット範囲内の敵
+			enemies = GetInSearchAreaEnemies(enemies, kNoTargetDist);	// ターゲット範囲内の敵
 			enemies = GetInScreenEnemies(enemies);		// 画面内の敵
 			m_pTarget = GetNearestEnemy(enemies);		// 最も近い敵
 			if (m_pTarget != nullptr)	// ターゲットできたらisTargetをtrue、できなかったらfalse
@@ -65,6 +67,24 @@ void TargetManager::Update()
 			m_pTarget = nullptr;
 			m_isTarget = false;
 		}
+	}
+
+	// ターゲットしていない、かつ攻撃が入力されたとき、近い敵をロックオン
+	if (m_pTarget == nullptr && input.IsTriggerd(XINPUT_BUTTON_X))
+	{
+		auto enemies = m_pEnemyManager->GetEnemies();
+		enemies = GetAliveEnemies(enemies);
+		enemies = GetInSearchAreaEnemies(enemies,kAttackTargetDist);
+		m_pTarget = GetNearestEnemy(enemies);
+		if (m_pTarget != nullptr)	// ターゲットできたらisTargetをtrue、できなかったらfalse
+		{
+			m_isTarget = true;
+		}
+		else
+		{
+			m_isTarget = false;
+		}
+		m_pTargetUI->SetTargetFrame(0);
 	}
 
 	// 十字キー左右でターゲット切り替え
@@ -97,7 +117,7 @@ void TargetManager::CheckTarget()
 	// ターゲットすべき敵がいなくなったらターゲットを解除
 	auto enemies = m_pEnemyManager->GetEnemies();
 	enemies = GetAliveEnemies(enemies);
-	enemies = GetInSearchAreaEnemies(enemies);
+	enemies = GetInSearchAreaEnemies(enemies, kNoTargetDist);
 	if (enemies.empty())
 	{
 		m_pTarget = nullptr;
@@ -118,7 +138,7 @@ void TargetManager::CheckTarget()
 		// 近い敵にターゲットする
 		enemies = m_pEnemyManager->GetEnemies();
 		enemies = GetAliveEnemies(enemies);			// 生きている敵
-		enemies = GetInSearchAreaEnemies(enemies);	// ターゲット範囲内の敵
+		enemies = GetInSearchAreaEnemies(enemies, kNoTargetDist);	// ターゲット範囲内の敵
 		m_pTarget = GetNearestEnemy(enemies);		// 最も近い敵
 		m_pTargetUI->SetTargetFrame(0);
 	}
@@ -132,7 +152,7 @@ void TargetManager::SelectTarget(MyLib::LR lr)
 	// 選択するターゲットを絞る
 	auto enemies = m_pEnemyManager->GetEnemies();
 	enemies = GetAliveEnemies(enemies);
-	enemies = GetInSearchAreaEnemies(enemies);
+	enemies = GetInSearchAreaEnemies(enemies,kNoTargetDist);
 	enemies = GetInScreenEnemies(enemies);
 
 	// ターゲットのスクリーン位置
@@ -199,14 +219,14 @@ std::list<std::shared_ptr<EnemyBase>> TargetManager::GetAliveEnemies(std::list<s
 }
 
 
-std::list<std::shared_ptr<EnemyBase>> TargetManager::GetInSearchAreaEnemies(std::list<std::shared_ptr<EnemyBase>> enemies)
+std::list<std::shared_ptr<EnemyBase>> TargetManager::GetInSearchAreaEnemies(std::list<std::shared_ptr<EnemyBase>> enemies, float dist)
 {
 	// ターゲットする範囲外の敵を除外
 	std::list<std::shared_ptr<EnemyBase>> noTargetEnemies;
 	for (auto& enemy : enemies)
 	{
 		auto squaredDist = (enemy->GetPos() - m_pPlayer->GetPos()).SquaredLength();
-		if (squaredDist > kNoTargetDist * kNoTargetDist)
+		if (squaredDist > dist * dist)
 		{
 			noTargetEnemies.push_back(enemy);
 		}

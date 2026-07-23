@@ -13,6 +13,8 @@ namespace
 {
 	constexpr const wchar_t* kArrowGraphPath = L"data/Graphs/Game/EnemyArrow.png";
 	constexpr const wchar_t* kTargetGraphPath = L"data/Graphs/Game/target.png";
+
+	constexpr float kNoTargetDist = 1500.0f;
 }
 
 TargetUI::TargetUI() :
@@ -58,7 +60,7 @@ void TargetUI::Draw()
 	auto inScreenEnemies = pTM->GetInScreenEnemies(enemies);
 	auto outScreenEnemies = enemies;
 	outScreenEnemies = pTM->GetAliveEnemies(outScreenEnemies);
-	outScreenEnemies = pTM->GetInSearchAreaEnemies(outScreenEnemies);
+	outScreenEnemies = pTM->GetInSearchAreaEnemies(outScreenEnemies, kNoTargetDist);
 	for (auto& enemy : inScreenEnemies)
 	{
 		outScreenEnemies.remove(enemy);
