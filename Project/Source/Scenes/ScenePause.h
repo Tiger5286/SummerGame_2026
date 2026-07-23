@@ -49,6 +49,7 @@ private:
 	// メニューのアクション(関数)を格納する配列
 	std::array<MenuItem, static_cast<int>(Menu::Num)> m_menuActions;
 	float m_menuScales[static_cast<int>(Menu::Num)] = {};
+	float m_menuColorRate[static_cast<int>(Menu::Num)] = {};
 
 };
 

@@ -20,6 +20,8 @@ namespace
 	constexpr int kMenuMargin = 50;
 	constexpr unsigned int kMenuTextColor = 0xffffff;
 
+	constexpr float kMaxMenuScale = 1.1f;
+	constexpr float kLerpT = 0.2f;
 }
 
 ScenePause::ScenePause(SceneManager& sceneManager) :
@@ -99,11 +101,20 @@ void ScenePause::Update()
 	{
 		if (m_selectIndex == i)
 		{
-			m_menuScales[i] = std::lerp(m_menuScales[i], 1.1f, 0.2f);
+			m_menuScales[i] = std::lerp(m_menuScales[i], kMaxMenuScale, kLerpT);
 		}
 		else
 		{
-			m_menuScales[i] = std::lerp(m_menuScales[i], 1.0f, 0.2f);
+			m_menuScales[i] = std::lerp(m_menuScales[i], 1.0f, kLerpT);
+		}
+
+		if (m_selectIndex == i)
+		{
+			m_menuColorRate[i] = std::lerp(m_menuColorRate[i], 1.0f, kLerpT);
+		}
+		else
+		{
+			m_menuColorRate[i] = std::lerp(m_menuColorRate[i], 0.0f, kLerpT);
 		}
 	}
 }
@@ -122,11 +133,21 @@ void ScenePause::Draw()
 	{
 		int handle = m_menuUIHandle;
 		if (i == m_selectIndex) handle = m_selectMenuUIHandle;
-
 		auto actionName = m_menuActions[i].name;
 
+		int origBlendMode, origBlendParam;
+		GetDrawBlendMode(&origBlendMode, &origBlendParam);
+
+		int black = (1.0f - m_menuColorRate[i]) * 255;
+		int red = m_menuColorRate[i] * 255;
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, black);
+		DrawRotaGraph(Game::kScreenWidth / 2, kMenuStartY + kMenuFontSize / 2 + (kMenuFontSize + kMenuMargin) * i, m_menuScales[i], 0.0, m_menuUIHandle, true);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, red);
+		DrawRotaGraph(Game::kScreenWidth / 2, kMenuStartY + kMenuFontSize / 2 + (kMenuFontSize + kMenuMargin) * i, m_menuScales[i], 0.0, m_selectMenuUIHandle, true);
+		SetDrawBlendMode(origBlendMode, origBlendParam);
+
 		// 文字の背景の描画
-		DrawRotaGraph(Game::kScreenWidth / 2, kMenuStartY + kMenuFontSize / 2 + (kMenuFontSize + kMenuMargin) * i, m_menuScales[i], 0.0, handle, true);
+		//DrawRotaGraph(Game::kScreenWidth / 2, kMenuStartY + kMenuFontSize / 2 + (kMenuFontSize + kMenuMargin) * i, m_menuScales[i], 0.0, handle, true);
 		// 文字の描画
 		int width = GetDrawExtendStringWidthToHandle(m_menuScales[i], actionName.c_str(), actionName.size(), m_menuFontHandle);
 		DrawExtendStringToHandle(Game::kScreenWidth / 2 - width / 2,
