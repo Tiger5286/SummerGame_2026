@@ -145,7 +145,7 @@ void SceneTitle::Draw()
 
 #ifdef _DEBUG
 	DrawString(0, 0, L"SceneTitle", 0xffffff);
-	DrawStringToHandle(0, 16, L"フォントテストtest試験", 0xffffff, m_fontHandle);
+	//DrawStringToHandle(0, 16, L"フォントテストtest試験", 0xffffff, m_fontHandle);
 	//DrawGrid();
 #endif
 }

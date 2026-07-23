@@ -4,36 +4,60 @@
 #include "Singleton/Input.h"
 #include "SceneManager.h"
 #include <map>
+#include <string_view>
 
 #include "SceneTitle.h"
 #include "SceneOption.h"
+
+namespace
+{
+	constexpr std::wstring_view kTitleString = L"ポーズ";
+
+	constexpr int kTitleFontSize = 70;
+
+	constexpr int kMenuStartY = 450;
+	constexpr int kMenuFontSize = 30;
+	constexpr int kMenuMargin = 50;
+	constexpr unsigned int kMenuTextColor = 0xffffff;
+
+}
 
 ScenePause::ScenePause(SceneManager& sceneManager) :
 	SceneBase(sceneManager)
 {
 	// メニューのアクションを設定する
 	m_menuActions[static_cast<int>(Menu::Resume)] = {
-		.name = L"Resume",
+		.name = L"再開",
 		.action = [this]() { Resume(); }
 	};
 	m_menuActions[static_cast<int>(Menu::Option)] = {
-		.name = L"Option",
+		.name = L"オプション",
 		.action = [this]() { Option(); }
 	};
 	m_menuActions[static_cast<int>(Menu::BackToTitle)] = {
-		.name = L"Back to Title",
+		.name = L"タイトルに戻る",
 		.action = [this]() { BackToTitle(); }
 	};
 }
 
 void ScenePause::Init()
 {
+	m_menuUIHandle = LoadGraph(L"data/Graphs/Game/MenuUI.png");
+	m_selectMenuUIHandle = LoadGraph(L"data/Graphs/Game/MenuUI_Select.png");
 
+	m_titleFontHandle = CreateFontToHandle(Game::kMainFontName, kTitleFontSize, 0);
+	m_titleStringWidth = GetDrawStringWidthToHandle(kTitleString.data(), kTitleString.size(), m_titleFontHandle);
+
+	m_menuFontHandle = CreateFontToHandle(Game::kMainFontName, kMenuFontSize, 0);
 }
 
 void ScenePause::End()
 {
+	DeleteGraph(m_menuUIHandle);
+	DeleteGraph(m_selectMenuUIHandle);
 
+	DeleteFontToHandle(m_titleFontHandle);
+	DeleteFontToHandle(m_menuFontHandle);
 }
 
 void ScenePause::Update()
@@ -63,11 +87,24 @@ void ScenePause::Update()
 		m_menuActions[m_selectIndex].action();
 		return;
 	}
-	// スタートボタンでポーズを解除する
-	if (input.IsTriggerd(XINPUT_BUTTON_START))
+	// スタートボタン、Bボタンでポーズを解除する
+	if (input.IsTriggerd(XINPUT_BUTTON_START) || input.IsTriggerd(XINPUT_BUTTON_B))
 	{
 		Resume();
 		return;
+	}
+
+	// 選択中のUIの大きさをlerpで動かす
+	for (int i = 0; i < static_cast<int>(Menu::Num); i++)
+	{
+		if (m_selectIndex == i)
+		{
+			m_menuScales[i] = std::lerp(m_menuScales[i], 1.1f, 0.2f);
+		}
+		else
+		{
+			m_menuScales[i] = std::lerp(m_menuScales[i], 1.0f, 0.2f);
+		}
 	}
 }
 
@@ -77,11 +114,24 @@ void ScenePause::Draw()
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
+	DrawStringToHandle(Game::kScreenWidth / 2 - m_titleStringWidth / 2,
+					   Game::kScreenHeight / 2 - kTitleFontSize / 2 - 100,
+					   kTitleString.data(), 0xffffff, m_titleFontHandle);
+
 	for (int i = 0; i < static_cast<int>(Menu::Num); i++)
 	{
-		unsigned int color = 0xffffff;
-		if (i == m_selectIndex) color = 0xff0000;
-		DrawString(100, 100 + i * 20, m_menuActions[i].name.c_str(), color);
+		int handle = m_menuUIHandle;
+		if (i == m_selectIndex) handle = m_selectMenuUIHandle;
+
+		auto actionName = m_menuActions[i].name;
+
+		// 文字の背景の描画
+		DrawRotaGraph(Game::kScreenWidth / 2, kMenuStartY + kMenuFontSize / 2 + (kMenuFontSize + kMenuMargin) * i, m_menuScales[i], 0.0, handle, true);
+		// 文字の描画
+		int width = GetDrawExtendStringWidthToHandle(m_menuScales[i], actionName.c_str(), actionName.size(), m_menuFontHandle);
+		DrawExtendStringToHandle(Game::kScreenWidth / 2 - width / 2,
+						   kMenuStartY + (kMenuFontSize + kMenuMargin) * i,
+						   m_menuScales[i], m_menuScales[i], actionName.c_str(), kMenuTextColor, m_menuFontHandle);
 	}
 
 #ifdef _DEBUG
