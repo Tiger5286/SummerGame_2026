@@ -24,6 +24,9 @@ namespace
 		60,
 		MyLib::CharacterType::Enemy
 	};
+
+	const Vector3 kEffectOffset = Vector3(0, 100, 0);
+	const Vector3 kWingOffset = Vector3(0, 120, 20);
 }
 
 void PlayerStateBurning::OnEnter()
@@ -31,17 +34,18 @@ void PlayerStateBurning::OnEnter()
 	m_pPlayer = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	auto player = m_pPlayer.lock();
 	// アニメーションを切り替える
-	player->m_anim.ChangeAnim(kBurningAnimName, 0.5f, false);
+	player->m_anim.ChangeAnim(kBurningAnimName, MyLib::kDefaultAnimSpeed, false);
 	// カメラを切り替える
 	player->m_pCamera.lock()->ChangeState(std::make_shared<CameraStateBurning>());
 	// ターゲットの方向を向く
 	player->RotateToTarget(FLT_MAX);
 	// エフェクトを再生する
-	EffectManager::GetInstance().PlayEffect(L"Burning", player->m_pos + Vector3(0, 100, 0));
+	EffectManager::GetInstance().PlayEffect(L"Burning", player->m_pos + kEffectOffset);
 
 	// 翼を生成する
 	m_pWing = std::make_shared<BurningWing>();
-	m_pWing->Init(player->m_pos + Vector3(0, 100, 0), player->m_angle);
+	Vector3 offset = kWingOffset * Matrix4x4::GetRotY(player->m_angle);
+	m_pWing->Init(player->m_pos + offset, player->m_angle);
 
 	player->m_specialCharge = 0;
 
