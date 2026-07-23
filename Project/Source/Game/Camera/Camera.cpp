@@ -47,6 +47,8 @@ void Camera::Init()
 	m_pState->ChangeState(m_pState);
 	m_pState->Enter(weak_from_this());
 	CheckChangeState();
+
+	//SetShake(99999, 10.0f);
 }
 
 void Camera::Update()
@@ -69,8 +71,20 @@ void Camera::Update()
 	// カメラの位置を滑らかに移動させる
 	m_pos.Lerp(m_calcPos, kLerpT);
 
+	// カメラの揺れ後の位置を計算
+	Vector3 afterShakePos = m_pos;
+	Vector3 afterShakeTargetPos = m_targetPos;
+	if (m_shakeFrame > 0)
+	{
+		Vector3 randVec = Vector3::GetRandVec();
+		afterShakePos += randVec * m_shakePower;
+		afterShakeTargetPos += randVec * m_shakePower;
+
+		m_shakeFrame--;
+	}
+
 	// 位置と注視点を反映
-	SetCameraPositionAndTarget_UpVecY(m_pos.ToDxLib(), m_targetPos.ToDxLib());
+	SetCameraPositionAndTarget_UpVecY(afterShakePos.ToDxLib(), afterShakeTargetPos.ToDxLib());
 	// DXライブラリのカメラとEffekseerのカメラを同期する。
 	Effekseer_Sync3DSetting();
 }
@@ -78,6 +92,12 @@ void Camera::Update()
 void Camera::ChangeState(std::shared_ptr<CameraStateBase> pNextState)
 {
 	m_pState->ChangeState(pNextState);
+}
+
+void Camera::SetShake(int shakeFrame, float shakePower)
+{
+	m_shakeFrame = shakeFrame;
+	m_shakePower = shakePower;
 }
 
 void Camera::CheckChangeState()

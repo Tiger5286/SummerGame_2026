@@ -38,6 +38,13 @@ public:
 
 	void ChangeState(std::shared_ptr<CameraStateBase> pNextState);
 
+	/// <summary>
+	/// カメラの揺れを設定する
+	/// </summary>
+	/// <param name="shakeFrame">揺れるフレーム数</param>
+	/// <param name="shakePower">揺れる力(振れ幅)</param>
+	void SetShake(int shakeFrame, float shakePower);
+
 private:
 	/// <summary>
 	/// ステートの切り替え処理
@@ -60,6 +67,9 @@ private:
 	float m_angleX = 0.0f;
 
 	std::shared_ptr<Character> m_pTarget = nullptr;
+
+	int m_shakeFrame = 0;
+	float m_shakePower = 0.0f;
 
 	friend CameraStateFree;
 	friend CameraStateBurning;
