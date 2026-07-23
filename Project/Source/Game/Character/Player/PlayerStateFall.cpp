@@ -36,8 +36,8 @@ void PlayerStateFall::Update()
 		ChangeState(std::make_shared<PlayerStateDodge>());
 		return;
 	}
-	// 攻撃を入力していたら攻撃
-	if (input.IsTriggerd(player->kAttack))
+	// 攻撃を入力していたら、かつ空中で攻撃が発動可能なら攻撃
+	if (input.IsTriggerd(player->kAttack) && player->m_isCanAirAttack)
 	{
 		ChangeState(std::make_shared<PlayerStateAttack>());
 		return;

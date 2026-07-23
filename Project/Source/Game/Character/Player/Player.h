@@ -83,6 +83,8 @@ private:
 
     // 空中でテレポートが発動可能かどうか
     bool m_isCanAirShift = true;
+    // 空中で通常攻撃が発動可能か
+    bool m_isCanAirAttack = true;
     // 操作可能かどうか
     bool m_isCanControl = true;
 

@@ -107,8 +107,14 @@ namespace
 void PlayerStateAttack::OnEnter()
 {
 	m_pPlayer = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
-	m_pPlayer.lock()->m_anim.ChangeAnim(kComboDatas[0].animName, MyLib::kDefaultAnimSpeed, false);
-	m_pPlayer.lock()->RotateToTarget(kTrackingAttackDist);
+	auto player = m_pPlayer.lock();
+	player->m_anim.ChangeAnim(kComboDatas[0].animName, MyLib::kDefaultAnimSpeed, false);
+	player->RotateToTarget(kTrackingAttackDist);
+	// 空中で発動したなら、空中で発動可能フラグを切る
+	if (!player->m_isGround)
+	{
+		player->m_isCanAirAttack = false;
+	}
 	m_comboIndex = 0;
 }
 
@@ -242,8 +248,18 @@ void PlayerStateAttack::Update()
 		// 攻撃を入力していたらコンボを最初から
 		if (input.IsPressed(player->kAttack))
 		{
-			ChangeState(std::make_shared<PlayerStateAttack>());
-			return;
+			// 地上にいるなら普通に遷移
+			if (player->m_isGround)
+			{
+				ChangeState(std::make_shared<PlayerStateAttack>());
+				return;
+			}
+			else if (player->m_isCanAirAttack)	// 空中にいる、かつ空中で攻撃が発動可能なら遷移
+			{
+				ChangeState(std::make_shared<PlayerStateAttack>());
+				return;
+			}
+			// どちらの条件も満たさないなら攻撃に移らない
 		}
 		// 移動を入力していたら移動ステートへ
 		if (input.GetStickInput(MyLib::LR::Left).SquaredLength() > 0.0f)

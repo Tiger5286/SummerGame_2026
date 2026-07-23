@@ -306,9 +306,11 @@ void Player::CheckGround()
 
 		if (isFloor)
 		{
+			// 着地したときの処理
 			m_pos.y = result.HitPosition.y;
 			m_isGround = true;
 			m_isCanAirShift = true;
+			m_isCanAirAttack = true;
 		}
 	}
 	else
