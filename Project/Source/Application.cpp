@@ -110,6 +110,13 @@ void Application::Run()
 		sceneManager.Draw();
 		fadeManager.Draw();
 
+		//float fps = GetFPS();
+		//DrawFormatString(0, 100, 0xffffff, L"fps:%.2f", fps);
+		//if (fps < 45)
+		//{
+		//	printfDx(L"fps < 45\n");
+		//}
+
 		// escキーで終了
 		if (CheckHitKey(KEY_INPUT_ESCAPE))
 		{
