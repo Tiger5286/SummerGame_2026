@@ -199,6 +199,11 @@ void Player::OnHitAttack(const MyLib::AttackData& atkData)
 
 	// ダメージを食らう
 	m_hp -= atkData.damage;
+	// 0以下にならない
+	if (m_hp < 0)
+	{
+		m_hp = 0;
+	}
 	// 死ぬダメージを食らったら死ぬ
 	if (m_hp <= 0)
 	{
