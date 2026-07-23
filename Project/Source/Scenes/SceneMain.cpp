@@ -85,6 +85,11 @@ namespace
 			.path = L"data/effects/Hit.efkproj",
 			.name = L"Hit",
 			.scale = 30.0f
+		},
+		{
+			.path = L"data/effects/BossRoar.efkproj",
+			.name = L"BossRoar",
+			.scale = 50.0f
 		}
 	};
 
