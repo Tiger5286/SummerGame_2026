@@ -7,11 +7,18 @@
 
 namespace
 {
+	// アニメーション名
 	constexpr const wchar_t* kIdleAnimName = L"General|Idle";
 	constexpr const wchar_t* kRoarAnimName = L"General|Power";
 
+	// 叫びアニメーションを開始するフレーム数
 	constexpr int kStartAnimFrame = 120;
+	// 叫びアニメーションを始めてから実際に叫んでる部分までのフレーム数
 	constexpr int kStartRoarFrame = kStartAnimFrame + 18 * 2;
+
+	const Vector3 kEffectOffset = Vector3(0, 250, 0);
+
+	constexpr float kAngleOffset = DX_PI_F / 5;
 }
 
 void GeneralStateAppear::OnEnter()
@@ -33,13 +40,20 @@ void GeneralStateAppear::Update()
 	}
 	if (m_frame == kStartRoarFrame)
 	{
-		EffectManager::GetInstance().PlayEffect(L"BossRoar", general->m_pos + Vector3(0, 250, 0));
+		EffectManager::GetInstance().PlayEffect(L"BossRoar", general->m_pos + kEffectOffset);
 	}
 
-	if (general->m_anim == kRoarAnimName && general->m_anim.IsEnd())
+	if (general->m_anim == kRoarAnimName)
 	{
-		ChangeState(std::make_shared<GeneralStateWalk>());
-		return;
+		// 叫びアニメーションで横を向いてしまうため無理やり補正
+		general->m_drawAngle = general->m_angle - kAngleOffset;
+
+		// アニメーションが終わったらボス戦の行動に移行
+		if (general->m_anim.IsEnd())
+		{
+			ChangeState(std::make_shared<GeneralStateWalk>());
+			return;
+		}
 	}
 }
 
