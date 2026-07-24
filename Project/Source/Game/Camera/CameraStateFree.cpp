@@ -28,7 +28,10 @@ namespace
 	// ターゲットにどれだけ近かったら注視方向の制限をしないか
 	constexpr float kNotLockonDist = 200.0f;
 	// ロックオンの最大補正速度
-	constexpr float kMaxLockonSpeed = 0.3f;
+	constexpr float kMaxLockonSpeed = 0.1f;
+
+	// ボス戦時のカメラの位置Yオフセット
+	constexpr float kBossFightCameraOffsetY = 100.0f;
 }
 
 void CameraStateFree::Enter(std::weak_ptr<Camera> pCamera)
@@ -52,10 +55,11 @@ void CameraStateFree::Update()
 	// プレイヤーの位置をもとにカメラの位置と注視点を設定
 	auto player = camera->m_pPlayer.lock();
 	// 位置を設定
-	// 適当なベクトルを生成
-	Vector3 pos = { 0,0,-1 };
+	// デフォルトの向きのベクトルを生成
+	Vector3 pos = MyLib::kDefaultDir;
 	pos.Normalize();
 	// ベクトルの長さを注視点との距離にする
+	// ボス戦時はそれ専用の距離になる
 	if (camera->m_isBossBattle)
 	{
 		pos *= kTargetDistBoss;
@@ -75,7 +79,7 @@ void CameraStateFree::Update()
 
 	// 注視点を設定
 	Vector3 target = player->GetPos() + kTargetOffset;
-	// ロックオンターゲット
+	// ロックオンの処理
 	if (camera->m_pTarget != nullptr)
 	{
 		// カメラのY軸の向きの補正
@@ -112,6 +116,8 @@ void CameraStateFree::Update()
 				camera->m_angleY -= fixValue;
 			}
 		}
+		// カメラのX軸の向きの補正
+		cameraDir = (camera->m_targetPos - camera->m_pos);
 	}
 
 	// 注視点とカメラの位置を右にずらす
@@ -121,8 +127,8 @@ void CameraStateFree::Update()
 	target += right * kOffsetX;
 	if (camera->m_isBossBattle)
 	{
-		pos.y += 100.0f;
-		target.y += 100.0f;
+		pos.y += kBossFightCameraOffsetY;
+		target.y += kBossFightCameraOffsetY;
 	}
 
 	camera->m_calcPos = pos;
