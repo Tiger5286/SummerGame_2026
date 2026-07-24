@@ -10,5 +10,7 @@ public:
     void OnEnter() override;
     void Update() override;
     void Exit() override;
+private:
+    bool m_isEnterJump = false;
 };
 

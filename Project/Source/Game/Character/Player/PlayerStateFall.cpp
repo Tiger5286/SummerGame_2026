@@ -13,17 +13,33 @@ namespace
 {
 	// アニメーション名
 	const std::wstring kFallAnimName = L"Player|Fall";
+	const std::wstring kJumpAnimName = L"Player|Jump";
 }
 
 void PlayerStateFall::OnEnter()
 {
 	m_pPlayer = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
-	m_pPlayer.lock()->m_anim.ChangeAnim(kFallAnimName);
+	auto player = m_pPlayer.lock();
+	if (player->m_vel.y > 0.0f)
+	{
+		player->m_anim.ChangeAnim(kJumpAnimName, MyLib::kDefaultAnimSpeed, false);
+		m_isEnterJump = true;
+	}
+	else
+	{
+		player->m_anim.ChangeAnim(kFallAnimName, MyLib::kDefaultAnimSpeed, false);
+	}
 }
 
 void PlayerStateFall::Update()
 {
 	auto player = m_pPlayer.lock();
+
+	if (player->m_vel.y < 0.0f && m_isEnterJump)
+	{
+		player->m_anim.ChangeAnim(kFallAnimName, MyLib::kDefaultAnimSpeed,false);
+		m_isEnterJump = false;
+	}
 
 	// 移動処理
 	player->Move();
