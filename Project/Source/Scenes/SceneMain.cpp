@@ -90,6 +90,16 @@ namespace
 			.path = L"data/effects/BossRoar.efkproj",
 			.name = L"BossRoar",
 			.scale = 50.0f
+		},
+		{
+			.path = L"data/effects/BossAttackProjectileSlash.efkproj",
+			.name = L"BossProjectileSlash",
+			.scale = 100.0f
+		},
+		{
+			.path = L"data/effects/BossAttackProjectile.efkproj",
+			.name = L"BossProjectile",
+			.scale = 100.0f
 		}
 	};
 

@@ -17,5 +17,6 @@ public:
 private:
     int m_frame = 0;
     std::shared_ptr<Attack> m_pAtk = nullptr;
+    int m_projectileEffectHandle = -1;
 };
 
