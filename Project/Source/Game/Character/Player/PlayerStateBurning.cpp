@@ -6,6 +6,7 @@
 #include "../Attack.h"
 #include "Singleton/EffectManager.h"
 #include "Wing/BurningWing.h"
+#include "Game.h"
 
 #include "PlayerStateIdle.h"
 
@@ -27,6 +28,10 @@ namespace
 
 	const Vector3 kEffectOffset = Vector3(0, 100, 0);
 	const Vector3 kWingOffset = Vector3(0, 120, 20);
+
+	constexpr int kAngleCorrectStartFrame = 60;
+	constexpr int kAngleCorrectEndFrame = 120;
+	constexpr float kAngleOffsetAddValue = 0.015f;
 }
 
 void PlayerStateBurning::OnEnter()
@@ -59,10 +64,17 @@ void PlayerStateBurning::Update()
 	// 翼を更新する
 	m_pWing->Update();
 
+	// 向きをいい感じに補正する
+	if (m_frame > kAngleCorrectStartFrame && m_frame < kAngleCorrectEndFrame)
+	{
+		m_angleOffset -= kAngleOffsetAddValue;
+	}
+	player->m_drawAngle = player->m_angle + m_angleOffset;
+
 	// 攻撃のフレームの間、一定のフレームごとに攻撃を生成する
 	if (m_frame > kStartAttackFrame && m_frame < kEndAttackFrame)
 	{	// 一定のフレームごとに攻撃を生成する
-		if (m_frame % static_cast<int>(60 * kAttackPerSecond) == 0)
+		if (m_frame % static_cast<int>(Game::kFPS * kAttackPerSecond) == 0)
 		{
 			// 攻撃を生成する
 			m_pAtk = std::make_shared<Attack>();

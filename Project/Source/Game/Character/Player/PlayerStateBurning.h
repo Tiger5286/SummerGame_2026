@@ -19,6 +19,7 @@ public:
     HitAttribute GetHitAttribute() override { return HitAttribute::PerfectInvincible; }
 private:
     int m_frame = 0;
+    float m_angleOffset = 0.0f;
     std::shared_ptr<Attack> m_pAtk = nullptr;
     std::shared_ptr<BurningWing> m_pWing = nullptr;
 };

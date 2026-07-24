@@ -9,4 +9,6 @@ namespace Game
 	constexpr int kColorBitNum = 32;
 
 	constexpr const wchar_t* kMainFontName = L"HGP明朝B";
+
+	constexpr int kFPS = 60;
 }
