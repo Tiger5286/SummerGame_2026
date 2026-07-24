@@ -10,20 +10,30 @@
 
 namespace
 {
+	// アニメーション名
 	const std::wstring kAnimName = L"General|HeavySlash";
 
+	// 初撃のフレーム数
 	constexpr int kAttackFrame = 33 * 2;
+	// 連続斬撃のフレーム
 	constexpr int kStartSlashFrame = 54 * 2;
 	constexpr int kEndSlashFrame = 85 * 2;
+	// 連続斬撃の間隔
+	constexpr int kAttackInterval = 10;
 
+	// 攻撃の位置オフセット
 	const Vector3 kAttackOffset = Vector3(0, 150, -150);
+	// 攻撃の情報
 	const MyLib::AttackData kAttackData = {
 		.colliderRadius		= 150.0f,
-		.damage				= 50,
+		.damage				= 30,
 		.hitCharacterType	= MyLib::CharacterType::Player,
 		.isKnockDown		= false,
 		.isIgnoreInvincible	= true
 	};
+
+	// エフェクトの位置オフセット
+	const Vector3 kEffectOffset = Vector3(0, 150, 0);
 }
 
 void GeneralStateHeavySlash::OnEnter()
@@ -46,20 +56,20 @@ void GeneralStateHeavySlash::Update()
 	// 初撃
 	if (m_frame == kAttackFrame)
 	{
-		//Vector3 colPos = general->m_pos + kAttackOffset * Matrix4x4::GetRotY(general->m_angle);
 		m_pAttack = std::make_shared<Attack>();
-		m_pAttack->SetData(kAttackData,shared_from_this());
+		m_pAttack->SetData(kAttackData, shared_from_this());
 		m_pAttack->Init();
 		m_pAttack->SetPos(colPos);
-		EffectManager::GetInstance().PlayEffect(L"SwordRush", colPos);
+
+		EffectManager::GetInstance().PlayEffect(L"SwordRush", colPos + Vector3(0, 150, 0));
 	}
 
 	// 連続斬撃
 	if (m_frame > kStartSlashFrame && m_frame < kEndSlashFrame)
 	{
-		if (m_frame % 10 == 0)
+		// 一定フレームごとに攻撃を生成
+		if (m_frame % kAttackInterval == 0)
 		{
-			//Vector3 colPos = general->m_pos + kAttackOffset * Matrix4x4::GetRotY(general->m_angle);
 			m_pAttack = std::make_shared<Attack>();
 			m_pAttack->SetData(kAttackData,shared_from_this());
 			m_pAttack->Init();
