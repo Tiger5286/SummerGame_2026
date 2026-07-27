@@ -33,16 +33,27 @@ void Animator::Init(int modelHandle, std::wstring animName)
 	m_lastAnimTime = 0.0f;
 
 	m_animChangeFrame = 0;
+
+	// 落下アニメーションを持っておく(プレイヤー限定)
+	m_floatAnimIndex = MV1GetAnimIndex(m_modelHandle, L"Player|Fall");
 }
 
 void Animator::Update()
 {
+	// 下半身のリグを取得
+	int leftLeg = MV1SearchFrame(m_modelHandle, L"mixamorig:LeftUpLeg");
+	int rightLeg = MV1SearchFrame(m_modelHandle, L"mixamorig:RightUpLeg");
 	// アニメーションのブレンドで滑らかに切り替える
 	m_animChangeFrame++;
 	if (m_lastAnimHandle == -1)
 	{
 		// アニメーションが一つしか設定されていない場合
 		MV1SetAttachAnimBlendRate(m_modelHandle, m_currentAnimHandle, 1.0f);
+		if (m_isFloat)
+		{
+			MV1SetAttachAnimBlendRateToFrame(m_modelHandle, m_currentAnimHandle, leftLeg, 0.0f);
+			MV1SetAttachAnimBlendRateToFrame(m_modelHandle, m_currentAnimHandle, rightLeg, 0.0f);
+		}
 	}
 	else
 	{
@@ -52,6 +63,13 @@ void Animator::Update()
 
 		MV1SetAttachAnimBlendRate(m_modelHandle, m_currentAnimHandle, rate);
 		MV1SetAttachAnimBlendRate(m_modelHandle, m_lastAnimHandle, 1.0f - rate);
+		if (m_isFloat)
+		{
+			MV1SetAttachAnimBlendRateToFrame(m_modelHandle, m_currentAnimHandle, leftLeg, 0.0f);
+			MV1SetAttachAnimBlendRateToFrame(m_modelHandle, m_currentAnimHandle, rightLeg, 0.0f);
+			MV1SetAttachAnimBlendRateToFrame(m_modelHandle, m_lastAnimHandle, leftLeg, 0.0f);
+			MV1SetAttachAnimBlendRateToFrame(m_modelHandle, m_lastAnimHandle, rightLeg, 0.0f);
+		}
 	}
 
 	// アニメーションの進行
@@ -87,7 +105,7 @@ void Animator::Update()
 	}
 }
 
-void Animator::ChangeAnim(std::wstring animName, float animSpeed,bool isLoop)
+void Animator::ChangeAnim(std::wstring animName, float animSpeed, bool isLoop)
 {
 	// 新しくアニメーションを設定しようとしたとき
 	// 古いアニメーションが残っている場合、それをデタッチ
@@ -114,6 +132,21 @@ void Animator::ChangeAnim(std::wstring animName, float animSpeed,bool isLoop)
 	m_isCurrentAnimLoop = isLoop;
 	// アニメーション名を設定
 	m_currentAnimName = animName;
+
+	// 落下アニメーションを下半身に適用している場合
+	if (m_isFloat)
+	{
+		// 下半身のリグを取得
+		int leftLeg = MV1SearchFrame(m_modelHandle, L"mixamorig:LeftUpLeg");
+		int rightLeg = MV1SearchFrame(m_modelHandle, L"mixamorig:RightUpLeg");
+
+		// 現在の下半身のアニメーションをなしにする
+		MV1SetAttachAnimBlendRateToFrame(m_modelHandle, m_currentAnimHandle, leftLeg, 0.0f);
+		MV1SetAttachAnimBlendRateToFrame(m_modelHandle, m_currentAnimHandle, rightLeg, 0.0f);
+		// ひとつ前の下半身のアニメーションをなしにする
+		MV1SetAttachAnimBlendRateToFrame(m_modelHandle, m_lastAnimHandle, leftLeg, 0.0f);
+		MV1SetAttachAnimBlendRateToFrame(m_modelHandle, m_lastAnimHandle, rightLeg, 0.0f);
+	}
 }
 
 bool Animator::IsEnd()
@@ -154,6 +187,43 @@ float Animator::GetAnimRate()
 	// 現在のアニメーションの再生時間を総再生時間で割って割合を計算
 	float rate = m_currentAnimTime / totalTime;
 	return rate;
+}
+
+void Animator::SetFloatAnimLowerBody(bool isApply)
+{
+	m_isFloat = isApply;
+
+	// 下半身のリグを取得
+	int leftLeg = MV1SearchFrame(m_modelHandle, L"mixamorig:LeftUpLeg");
+	int rightLeg = MV1SearchFrame(m_modelHandle, L"mixamorig:RightUpLeg");
+
+	if (isApply)
+	{
+		// 現在の下半身のアニメーションをなしにする
+		MV1SetAttachAnimBlendRateToFrame(m_modelHandle, m_currentAnimHandle, leftLeg, 0.0f);
+		MV1SetAttachAnimBlendRateToFrame(m_modelHandle, m_currentAnimHandle, rightLeg, 0.0f);
+
+		// 落下のアニメーションを下半身に設定する
+		m_floatAttachIndex = MV1AttachAnim(m_modelHandle, m_floatAnimIndex);
+		// 一旦落下のアニメーションを全部ブレンド0にする
+		MV1SetAttachAnimBlendRate(m_modelHandle, m_floatAttachIndex, 0.0f);
+		// 下半身だけ1にする
+		MV1SetAttachAnimBlendRateToFrame(m_modelHandle, m_floatAnimIndex, leftLeg, 1.0f);
+		MV1SetAttachAnimBlendRateToFrame(m_modelHandle, m_floatAnimIndex, rightLeg, 1.0f);
+		// 再生時間を最後にする
+		float totalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_floatAttachIndex);
+		MV1SetAttachAnimTime(m_modelHandle, m_floatAttachIndex, totalTime);
+	}
+	else
+	{
+		// 現在の下半身のアニメーションを復活させる
+		MV1SetAttachAnimBlendRateToFrame(m_modelHandle, m_currentAnimHandle, leftLeg, 1.0f);
+		MV1SetAttachAnimBlendRateToFrame(m_modelHandle, m_currentAnimHandle, rightLeg, 1.0f);
+
+		// 落下のアニメーションをデタッチする
+		MV1DetachAnim(m_modelHandle, m_floatAttachIndex);
+		m_floatAnimIndex = -1;
+	}
 }
 
 bool Animator::operator==(const std::wstring& animName)

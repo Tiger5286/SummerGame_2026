@@ -35,6 +35,12 @@ public:
 	/// <returns>再生時間の割合</returns>
 	float GetAnimRate();
 
+	/// <summary>
+	/// 【プレイヤー限定】下半身に浮いてる感じのアニメーションを設定する
+	/// </summary>
+	/// <param name="isApply">true:適用する / false:適用しない</param>
+	void SetFloatAnimLowerBody(bool isApply);
+
 	bool operator==(const std::wstring& animName);
 	bool operator!=(const std::wstring& animName);
 
@@ -58,5 +64,10 @@ private:
 
 	// アニメーションの切り替えフレーム数
 	int m_animChangeFrame = 0;
+
+	// 下半身用
+	bool m_isFloat = false;
+	int m_floatAttachIndex = -1;
+	int m_floatAnimIndex = -1;
 };
 
