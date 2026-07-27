@@ -95,8 +95,14 @@ void CameraStateFree::Update()
 	// 注視点とカメラの位置を右にずらす
 	auto forwardVec = target - pos;
 	auto right = forwardVec.Cross(Vector3::Up()).Normalized();
-	pos += right * kOffsetX;
-	target += right * kOffsetX;
+	// 注視点までの距離でどれくらい右にずらすか計算する
+	float toTargetDist = (camera->m_targetPos - camera->m_pos).Length();
+	toTargetDist /= kTargetDist;
+
+	pos += right * kOffsetX * toTargetDist;
+	target += right * kOffsetX * toTargetDist;
+
+	// ボス戦中なら位置を高くする
 	if (camera->m_isBossBattle)
 	{
 		pos.y += kBossFightCameraOffsetY;
