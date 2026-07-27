@@ -194,6 +194,18 @@ namespace MyLib
 		return ret;
 	}
 
+	/// <summary>
+	/// 角度を-π~+πに補正する
+	/// </summary>
+	/// <param name="angle">角度(ラジアン)</param>
+	/// <returns>補正後の角度(ラジアン)</returns>
+	inline float WrapAngle(float angle)
+	{
+		while (angle > DX_PI_F)  angle -= DX_TWO_PI_F;
+		while (angle < -DX_PI_F) angle += DX_TWO_PI_F;
+		return angle;
+	}
+
 	inline void ReadVector3(Vector3& vec, int fileHandle)
 	{
 		FileRead_read(&vec.x, sizeof(float), fileHandle);

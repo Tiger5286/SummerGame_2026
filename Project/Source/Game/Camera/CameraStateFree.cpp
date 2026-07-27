@@ -24,11 +24,12 @@ namespace
 	const Vector3 kPosOffset = { 0.0f,200.0f,0.0f };
 
 	// ターゲットがどれくらい注視方向からずれたら戻すかの角度
-	constexpr float kLockonFixAngle = DX_PI_F / 6.0f;
+	constexpr float kLockonFixAngleY = DX_PI_F / 4.0f;
+	constexpr float kLockonFixAngleX = DX_PI_F / 9.0f;
 	// ターゲットにどれだけ近かったら注視方向の制限をしないか
 	constexpr float kNotLockonDist = 200.0f;
 	// ロックオンの最大補正速度
-	constexpr float kMaxLockonSpeed = 0.1f;
+	constexpr float kMaxLockonSpeed = 0.05f;
 
 	// ボス戦時のカメラの位置Yオフセット
 	constexpr float kBossFightCameraOffsetY = 100.0f;
@@ -42,6 +43,7 @@ void CameraStateFree::Enter(std::weak_ptr<Camera> pCamera)
 void CameraStateFree::Update()
 {
 	auto camera = m_pCamera.lock();
+	auto player = camera->m_pPlayer.lock();
 
 	// スティック入力に応じて角度を更新
 	auto rightStick = Input::GetInstance().GetStickInput(MyLib::LR::Right);
@@ -52,8 +54,18 @@ void CameraStateFree::Update()
 	if (camera->m_angleX > kMaxAngleX) camera->m_angleX = kMaxAngleX;
 	if (camera->m_angleX < kMinAngleX) camera->m_angleX = kMinAngleX;
 
+	// ロックオンの処理
+	if (camera->m_pTarget != nullptr)
+	{
+		// 距離が遠い場合のみロックオンする
+		float playerToTargetSquaredDist = (camera->m_pTarget->GetPos() - player->GetPos()).SquaredLength();
+		if (playerToTargetSquaredDist > kNotLockonDist * kNotLockonDist)
+		{
+			LockonUpdate();
+		}
+	}
+
 	// プレイヤーの位置をもとにカメラの位置と注視点を設定
-	auto player = camera->m_pPlayer.lock();
 	// 位置を設定
 	// デフォルトの向きのベクトルを生成
 	Vector3 pos = MyLib::kDefaultDir;
@@ -79,11 +91,6 @@ void CameraStateFree::Update()
 
 	// 注視点を設定
 	Vector3 target = player->GetPos() + kTargetOffset;
-	// ロックオンの処理
-	if (camera->m_pTarget != nullptr)
-	{
-		LockonUpdate();
-	}
 
 	// 注視点とカメラの位置を右にずらす
 	auto forwardVec = target - pos;
@@ -110,40 +117,54 @@ void CameraStateFree::LockonUpdate()
 	auto camera = m_pCamera.lock();
 	auto player = camera->m_pPlayer.lock();
 
-	// カメラのY軸の向きの補正
-	// カメラの向き、プレイヤー→ターゲットの二つのベクトルを生成
-	Vector3 cameraDir = (camera->m_targetPos - camera->m_pos);
-	cameraDir.y = 0.0f;		// カメラの水平方向のみを見る
-	cameraDir.Normalize();
-	Vector3 playerToTargetVec = camera->m_pTarget->GetPos() - player->GetPos();
-	float playerToTargetDist = playerToTargetVec.SquaredLength();
-	playerToTargetVec.y = 0.0f;	// 水平方向のみを見る
-	// 二つのベクトルの角度の差を求める			// cameraDirは正規化されているので1.0
-	float dif = cameraDir.Dot(playerToTargetVec) / (1.0f * playerToTargetVec.Length());
-	// ターゲットが視界から外れようとしたら、かつ一定の距離が開いていたら
-	if (dif < cosf(kLockonFixAngle) && playerToTargetDist > kNotLockonDist * kNotLockonDist)
+	// プレイヤーから敵までのベクトル
+	Vector3 toTarget = camera->m_pTarget->GetPos() - player->GetPos();
+
+	// Y軸回転の補正
 	{
-		// 外積でどっちに向きを修正すべきか判定
-		auto cross = cameraDir.Cross(playerToTargetVec);
-		if (cross.y > 0)
+		float targetAngleY = atan2f(toTarget.x, toTarget.z);	// ターゲットへの方向
+		// 現在のカメラの角度からターゲットへの角度の差を計算
+		float diffY = targetAngleY - camera->m_angleY;
+		diffY = MyLib::WrapAngle(diffY);	// -π~+πの範囲に丸める
+
+		if (abs(diffY) > kLockonFixAngleY)
 		{
-			float fixValue = cosf(kLockonFixAngle) - dif;
-			if (fixValue > kMaxLockonSpeed)
-			{
-				fixValue = kMaxLockonSpeed;
-			}
-			camera->m_angleY += fixValue;
-		}
-		else
-		{
-			float fixValue = cosf(kLockonFixAngle) - dif;
-			if (fixValue > kMaxLockonSpeed)
-			{
-				fixValue = kMaxLockonSpeed;
-			}
-			camera->m_angleY -= fixValue;
+			// 角度の正負で1.0か-1.0の数値を生成
+			float sign = 1.0f;
+			if (diffY < 0.0f) sign = -1.0f;
+
+			// 修正したい角度の量
+			float fixAngle = abs(diffY) - kLockonFixAngleY;
+			// 角度が大きすぎたら補正
+			if (fixAngle > kMaxLockonSpeed) fixAngle = kMaxLockonSpeed;
+			// 角度を修正
+			camera->m_angleY += fixAngle * sign;
 		}
 	}
-	// カメラのX軸の向きの補正
-	cameraDir = (camera->m_targetPos - camera->m_pos);
+	// X軸回転の補正
+	{
+		Vector3 toTargetXZ = toTarget;
+		toTargetXZ.y = 0.0f;
+		// 水平距離
+		float distXZ = toTargetXZ.Length();
+		// 水平距離と高低差から理想のX軸角度を計算
+		float targetAngleX = atan2f(-toTarget.y, distXZ);
+
+		// 現在のX軸角度と理想のX軸角度の差
+		float diffX = targetAngleX - camera->m_angleX;
+
+		if (abs(diffX) > kLockonFixAngleX)
+		{
+			// 角度の正負で1.0か-1.0の数値を生成
+			float sign = 1.0f;
+			if (diffX < 0.0f) sign = -1.0f;
+
+			// 修正したい角度の量
+			float fixAngle = abs(diffX) - kLockonFixAngleX;
+			// 角度が大きすぎたら補正
+			if (fixAngle > kMaxLockonSpeed) fixAngle = kMaxLockonSpeed;
+			// 角度を修正
+			camera->m_angleX += fixAngle * sign;
+		}
+	}
 }
