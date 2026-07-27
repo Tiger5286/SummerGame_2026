@@ -32,7 +32,7 @@ namespace
 {
 	// ロードするモデルのファイル名と登録名
 	const std::vector<std::pair<std::wstring, std::wstring>> kModelFileNames = {
-		{ L"Collision", L"data/models/Stage/NewMapCollision.mv1" },
+		{ L"Collision", L"data/models/Stage/Collision.mv1" },
 		{ L"Stage",L"data/models/Stage/Stage.mv1" },
 		{ L"Player", L"data/models/Player/Player.mv1" },
 		{ L"Wing" , L"data/models/Player/Wing.mv1" },
