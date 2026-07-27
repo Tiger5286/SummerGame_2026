@@ -31,6 +31,10 @@ void PlayerStateShiftAttack::OnEnter()
 	m_pPlayer = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	auto player = m_pPlayer.lock();
 	player->m_anim.ChangeAnim(L"Player|ShiftAttack", MyLib::kDefaultAnimSpeed, false);
+	if (!player->m_isGround)
+	{
+		player->m_anim.SetFloatAnimLowerBody(true);
+	}
 }
 
 void PlayerStateShiftAttack::Update()
@@ -90,6 +94,8 @@ void PlayerStateShiftAttack::Update()
 
 void PlayerStateShiftAttack::Exit()
 {
+	auto player = m_pPlayer.lock();
+	player->m_anim.SetFloatAnimLowerBody(false);
 }
 
 void PlayerStateShiftAttack::Draw()

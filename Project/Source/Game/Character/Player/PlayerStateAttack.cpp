@@ -114,6 +114,7 @@ void PlayerStateAttack::OnEnter()
 	if (!player->m_isGround)
 	{
 		player->m_isCanAirAttack = false;
+		player->m_anim.SetFloatAnimLowerBody(true);
 	}
 	m_comboIndex = 0;
 }
@@ -271,7 +272,10 @@ void PlayerStateAttack::Update()
 }
 
 void PlayerStateAttack::Exit()
-{}
+{
+	auto player = m_pPlayer.lock();
+	player->m_anim.SetFloatAnimLowerBody(false);
+}
 
 void PlayerStateAttack::Draw()
 {

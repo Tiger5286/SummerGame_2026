@@ -43,6 +43,11 @@ void PlayerStateSpin::OnEnter()
 	m_effHandle = EffectManager::GetInstance().PlayEffect(L"Spin", player->m_pos + kWingOffset);
 
 	player->m_skillCooltime = 0;
+
+	if (!player->m_isGround)
+	{
+		player->m_anim.SetFloatAnimLowerBody(true);
+	}
 }
 
 void PlayerStateSpin::Update()
@@ -97,6 +102,8 @@ void PlayerStateSpin::Update()
 void PlayerStateSpin::Exit()
 {
 	EffectManager::GetInstance().StopEffect(m_effHandle);
+	auto player = m_pPlayer.lock();
+	player->m_anim.SetFloatAnimLowerBody(false);
 }
 
 void PlayerStateSpin::Draw()
