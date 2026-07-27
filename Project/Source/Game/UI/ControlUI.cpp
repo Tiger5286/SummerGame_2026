@@ -50,7 +50,7 @@ namespace
 
 	constexpr int kFontSize = 20;
 	constexpr std::wstring_view kActionNames[kActionNum] = {
-		L"こうげき",
+		L"スラッシュ",
 		L"ジャンプ",
 		L"ウィングスピン",
 		L"フレイムシフト"
