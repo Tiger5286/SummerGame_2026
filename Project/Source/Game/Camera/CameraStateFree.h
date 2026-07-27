@@ -11,5 +11,8 @@ public:
     void Update() override;
     void Exit() override;
 private:
+    void LockonUpdate();
+
+private:
 };
 
