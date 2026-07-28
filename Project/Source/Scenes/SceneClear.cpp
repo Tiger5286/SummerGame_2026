@@ -8,7 +8,7 @@
 namespace
 {
 	constexpr float kBackGraphScale = 1.3f;
-	constexpr int kButtonGraphOffset = 40;
+	constexpr int kButtonGraphOffset = 20;
 }
 
 SceneClear::SceneClear(SceneManager& sceneManager) :
@@ -49,11 +49,13 @@ void SceneClear::Draw()
 	int w, h;
 	GetGraphSize(m_buttonHandle, &w, &h);
 	int x = Game::kScreenWidth - w / 2 - kButtonGraphOffset;
-	int y = Game::kScreenWidth - h / 2 - kButtonGraphOffset;
+	int y = Game::kScreenHeight - h / 2 - kButtonGraphOffset;
 
-	//float sin = sinf(m_frame) * 0.1f;
-	DrawRotaGraph(x, y, 1.0, 0.0, m_buttonHandle, true);
+	float sin = sinf(m_frame / 10.0f) * 0.1f;
+	DrawRotaGraph(x, y, 1.0 + sin, 0.0, m_buttonHandle, true);
 
+#ifdef _DEBUG
 	DrawString(0, 0, L"SceneClear\n", 0xffffff);
 	DrawString(0, 16, L"Aボタンでタイトルに戻る\n", 0xffffff);
+#endif
 }
