@@ -14,6 +14,7 @@
 #include "Singleton/FadeManager.h"
 #include "Singleton/EventManager.h"
 
+#include "Scenes/SceneDebug.h"
 #include "Scenes/SceneTitle.h"
 #include "Scenes/SceneManager.h"
 
@@ -86,7 +87,11 @@ void Application::Run()
 
 	// シーンの生成、初期化
 	SceneManager sceneManager;
+#ifdef _DEBUG
+	sceneManager.ResetScene(std::make_shared<SceneDebug>(sceneManager));
+#else
 	sceneManager.ResetScene(std::make_shared<SceneTitle>(sceneManager));
+#endif
 
 	// フェード
 	fadeManager.StartFadeIn();
@@ -96,6 +101,13 @@ void Application::Run()
 		auto start = GetNowHiPerformanceCount(); // フレーム開始時間を取得
 		ClearDrawScreen(); // 画面をクリア
 
+#ifdef _DEBUG
+		// もしZが入力されたらデバッグシーンにする
+		if (CheckHitKey(KEY_INPUT_Z))
+		{
+			sceneManager.ResetScene(std::make_shared<SceneDebug>(sceneManager));
+		}
+#endif
 		// 入力の更新
 		input.Update();
 		// 当たり判定の更新
