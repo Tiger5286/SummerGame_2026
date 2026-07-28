@@ -41,15 +41,8 @@ namespace
 		{ L"General",L"data/models/Enemy/General.mv1"},
 		{ L"GeneralSword",L"data/models/Enemy/sword.mv1"}
 	};
-	// ロードするエフェクトのファイル名と登録名
-	struct EffectData
-	{
-		std::wstring path;
-		std::wstring name;
-		float scale;
-	};
 
-	const std::vector<EffectData> kEffectFileDatas =
+	const std::vector<SceneMain::EffectData> kEffectFileDatas =
 	{
 		{
 			.path = L"data/effects/ShiftEffect.efkefc",
@@ -341,6 +334,11 @@ void SceneMain::Draw()
 	DrawString(0,0,L"SceneMain",0xffffff);
 	DrawFormatString(0, 16, 0xffffff, L"FRAME:%d", m_frameCount);
 #endif
+}
+
+void SceneMain::LoadData(std::vector<std::wstring> modelFiles, std::vector<EffectData> effectDatas, BossDirectionData bossDirectionData)
+{
+
 }
 
 void SceneMain::OnSpawnBoss()

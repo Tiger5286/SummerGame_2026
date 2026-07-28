@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include <memory>
+#include <vector>
+#include <string>
 #include "SceneBase.h"
+#include "Utility/Vector3.h"
 
 class Player;
 class Camera;
@@ -15,6 +18,24 @@ class SpawnerManager;
 class SceneMain : public SceneBase
 {
 public:
+	// ロードするエフェクトのファイル名と登録名
+	struct EffectData
+	{
+		std::wstring path;
+		std::wstring name;
+		float scale;
+	};
+	// ボス演出用のデータ
+	struct BossDirectionData
+	{
+		Vector3 lightDir;
+		int frame;
+		Vector3 cameraPos;
+		Vector3 cameraDir;
+		std::wstring bossAppearAnimName;
+	};
+
+public:
 	SceneMain(SceneManager& sceneManager);
 	~SceneMain();
 
@@ -22,6 +43,14 @@ public:
 	void End() override;
 	void Update() override;
 	void Draw() override;
+
+	/// <summary>
+	/// 必要なデータをロードする
+	/// </summary>
+	/// <param name="modelFiles">ロードするモデルのファイルパスの配列</param>
+	/// <param name="effectDatas">ロードするエフェクトの情報の配列</param>
+	/// <param name="bossDirectionData">ボス演出用データ</param>
+	void LoadData(std::vector<std::wstring> modelFiles, std::vector<EffectData> effectDatas, BossDirectionData bossDirectionData);
 
 private:
 	void OnSpawnBoss();
