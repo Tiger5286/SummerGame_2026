@@ -5,7 +5,7 @@
 #include "Game.h"
 #include "Singleton/EffectManager.h"
 
-#include "SceneMain.h"
+#include "SceneStageSelect.h"
 #include "SceneOption.h"
 #include "Application.h"
 
@@ -152,7 +152,7 @@ void SceneTitle::Draw()
 
 void SceneTitle::Start()
 {
-	m_sceneManager.ChangeSceneWithFade(std::make_shared<SceneMain>(m_sceneManager), true);
+	m_sceneManager.ChangeSceneWithFade(std::make_shared<SceneStageSelect>(m_sceneManager),false);
 }
 
 void SceneTitle::Option()
