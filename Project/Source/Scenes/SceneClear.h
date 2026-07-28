@@ -13,6 +13,10 @@ public:
     void Draw() override;
 
 private:
+    int m_frame = 0;
 
+    int m_backHandle = -1;
+    int m_clearLogoHandle = -1;
+    int m_buttonHandle = -1;
 };
 
