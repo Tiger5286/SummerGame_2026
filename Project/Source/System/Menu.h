@@ -5,6 +5,21 @@
 
 class Menu
 {
+public:
+	enum class Type
+	{
+		Normal,
+		Bar,
+	};
+
+	struct Funcs
+	{
+		std::wstring name;
+		std::function<void()> action;
+		Type type = Type::Normal;
+		float* pBarRate = nullptr;
+	};
+
 private:
 	struct Item
 	{
@@ -12,14 +27,11 @@ private:
 		std::function<void()> action;
 		float scale = 0.0f;
 		float colorRate = 0.0f;
+		Type type = Type::Normal;
+		float* pBarRate = nullptr;
 	};
 
 public:
-	struct Funcs
-	{
-		std::wstring name;
-		std::function<void()> action;
-	};
 
 	Menu() = default;
 	~Menu();

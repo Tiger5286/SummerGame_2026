@@ -30,6 +30,8 @@ void Menu::Init(std::vector<Funcs> actions, int x, int y,float scale)
 		m_items[i].name = actions[i].name;
 		m_items[i].action = actions[i].action;
 		// scaleとcolorRateは0.0で初期化
+		m_items[i].type = actions[i].type;
+		m_items[i].pBarRate = actions[i].pBarRate;
 	}
 	// 位置を初期化
 	m_x = x;
@@ -116,9 +118,18 @@ void Menu::Draw()
 		SetDrawBlendMode(origBlendMode, origBlendParam);
 
 		// 文字の描画
-		int width = GetDrawExtendStringWidthToHandle(m_items[i].scale * m_scale, actionName.c_str(), actionName.size(), m_fontHandle);
-		DrawExtendStringToHandle(m_x - width / 2,
+		int width = GetDrawExtendStringWidthToHandle(m_items[i].scale, actionName.c_str(), actionName.size(), m_fontHandle);
+		if (m_items[i].type == Type::Normal)
+		{
+			DrawExtendStringToHandle(m_x - (width / 2) * m_scale,
 						   m_y + ((kFontSize + kMargin) * i) * m_scale,
 						   m_items[i].scale * m_scale, m_items[i].scale * m_scale, actionName.c_str(), kTextColor, m_fontHandle);
+		}
+		else if (m_items[i].type == Type::Bar)
+		{
+			DrawExtendStringToHandle(m_x - (width / 2) * m_scale,
+						   m_y + ((kFontSize + kMargin) * i) * m_scale,
+						   m_items[i].scale * m_scale, m_items[i].scale * m_scale, L"バーの描画", kTextColor, m_fontHandle);
+		}
 	}
 }
