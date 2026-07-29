@@ -12,7 +12,8 @@ namespace
 	constexpr float kBackScale = 1.3f;
 	constexpr int kLogoOffsetY = -100;
 
-	constexpr int kMenuStartY = 550;
+	constexpr int kMenuStartY = 570;
+	constexpr float kMenuScale = 0.9f;
 
 	enum class MenuList
 	{
@@ -43,7 +44,7 @@ void SceneGameOver::Init()
 		.name = L"タイトルに戻る",
 		.action = [this]() {Title(); }
 	};
-	m_menu.Init(funcs, Game::kScreenWidth, kMenuStartY);
+	m_menu.Init(funcs, Game::kScreenWidth / 2, kMenuStartY, kMenuScale);
 }
 
 void SceneGameOver::End()

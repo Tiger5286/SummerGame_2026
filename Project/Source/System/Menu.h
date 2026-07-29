@@ -30,7 +30,7 @@ public:
 	/// <param name="actions">メニューのアクションの配列</param>
 	/// <param name="x">メニューの一番上の項目の真ん中座標X</param>
 	/// <param name="y">メニューの真ん中座標Y</param>
-	void Init(std::vector<Funcs> actions,int x,int y);
+	void Init(std::vector<Funcs> actions,int x,int y,float scale = 1.0f);
 	void Update();
 	void Draw();
 
@@ -45,4 +45,5 @@ private:
 
 	int m_x = 0;
 	int m_y = 0;
+	float m_scale = 1.0f;
 };

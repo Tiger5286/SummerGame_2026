@@ -21,7 +21,7 @@ Menu::~Menu()
 	DeleteFontToHandle(m_fontHandle);
 }
 
-void Menu::Init(std::vector<Funcs> actions, int x, int y)
+void Menu::Init(std::vector<Funcs> actions, int x, int y,float scale)
 {
 	// 関数とそのアクション名を初期化
 	m_items.resize(actions.size());
@@ -34,6 +34,8 @@ void Menu::Init(std::vector<Funcs> actions, int x, int y)
 	// 位置を初期化
 	m_x = x;
 	m_y = y;
+	// 大きさを初期化
+	m_scale = scale;
 
 	m_uiHandle = LoadGraph(L"data/Graphs/Game/MenuUI.png");
 	m_selectUIHandle = LoadGraph(L"data/Graphs/Game/MenuUI_Select.png");
@@ -108,15 +110,15 @@ void Menu::Draw()
 		int black = (1.0f - m_items[i].colorRate) * 255;
 		int red = m_items[i].colorRate * 255;
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, black);
-		DrawRotaGraph(Game::kScreenWidth / 2, m_y + kFontSize / 2 + (kFontSize + kMargin) * i, m_items[i].scale, 0.0, m_uiHandle, true);
+		DrawRotaGraph(m_x, m_y + (kFontSize / 2 + (kFontSize + kMargin) * i) * m_scale, m_items[i].scale * m_scale, 0.0, m_uiHandle, true);
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, red);
-		DrawRotaGraph(Game::kScreenWidth / 2, m_y + kFontSize / 2 + (kFontSize + kMargin) * i, m_items[i].scale, 0.0, m_selectUIHandle, true);
+		DrawRotaGraph(m_x, m_y + (kFontSize / 2 + (kFontSize + kMargin) * i) * m_scale, m_items[i].scale * m_scale, 0.0, m_selectUIHandle, true);
 		SetDrawBlendMode(origBlendMode, origBlendParam);
 
 		// 文字の描画
-		int width = GetDrawExtendStringWidthToHandle(m_items[i].scale, actionName.c_str(), actionName.size(), m_fontHandle);
-		DrawExtendStringToHandle(Game::kScreenWidth / 2 - width / 2,
-						   m_y + (kFontSize + kMargin) * i,
-						   m_items[i].scale, m_items[i].scale, actionName.c_str(), kTextColor, m_fontHandle);
+		int width = GetDrawExtendStringWidthToHandle(m_items[i].scale * m_scale, actionName.c_str(), actionName.size(), m_fontHandle);
+		DrawExtendStringToHandle(m_x - width / 2,
+						   m_y + ((kFontSize + kMargin) * i) * m_scale,
+						   m_items[i].scale * m_scale, m_items[i].scale * m_scale, actionName.c_str(), kTextColor, m_fontHandle);
 	}
 }
