@@ -9,6 +9,9 @@ namespace
 {
 	constexpr float kBackGraphScale = 1.3f;
 	constexpr int kButtonGraphOffset = 20;
+
+	constexpr float kSinScale = 0.1f;
+	constexpr float kSinRate = 0.1f;
 }
 
 SceneClear::SceneClear(SceneManager& sceneManager) :
@@ -51,7 +54,7 @@ void SceneClear::Draw()
 	int x = Game::kScreenWidth - w / 2 - kButtonGraphOffset;
 	int y = Game::kScreenHeight - h / 2 - kButtonGraphOffset;
 
-	float sin = sinf(m_frame / 10.0f) * 0.1f;
+	float sin = sinf(m_frame * kSinScale) * kSinRate;
 	DrawRotaGraph(x, y, 1.0 + sin, 0.0, m_buttonHandle, true);
 
 #ifdef _DEBUG

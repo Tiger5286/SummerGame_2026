@@ -36,5 +36,10 @@ private:
 private:
     int m_selectIndex = 0;
     std::array<MenuItem, static_cast<int>(Menu::Num)> m_menuActions;
+
+    int m_backHandle = -1;
+    int m_logoHandle = -1;
+
+    int m_fontHandle = -1;
 };
 
