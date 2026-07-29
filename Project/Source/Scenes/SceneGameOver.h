@@ -3,6 +3,7 @@
 #include <functional>
 #include <array>
 #include <string>
+#include "System/Menu.h"
 
 class SceneGameOver :
     public SceneBase
@@ -18,28 +19,9 @@ public:
 private:
     void Retry();
     void Title();
-
-    enum class Menu
-    {
-        Retry,
-        Title,
-
-        Num
-    };
-
-    struct MenuItem
-    {
-        std::wstring name;
-        std::function<void()> action;
-    };
-
 private:
-    int m_selectIndex = 0;
-    std::array<MenuItem, static_cast<int>(Menu::Num)> m_menuActions;
-
     int m_backHandle = -1;
     int m_logoHandle = -1;
-
-    int m_fontHandle = -1;
+    Menu m_menu;
 };
 

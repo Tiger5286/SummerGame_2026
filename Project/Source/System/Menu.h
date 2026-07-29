@@ -36,14 +36,13 @@ public:
 
 private:
 	std::vector<Item> m_items;	// メニューのアクション(関数)を格納する配列
-	int m_selectIndex = -1;			// 選択中のメニューの番号
+	int m_selectIndex = 0;			// 選択中のメニューの番号
 
 	int m_uiHandle = -1;
 	int m_selectUIHandle = -1;
 
 	int m_fontHandle = -1;
 
-	int m_x;
-	int m_y;
+	int m_x = 0;
+	int m_y = 0;
 };
-

@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="Source\System\Menu.cpp" />
     <ClCompile Include="Source\Scenes\SceneDebug.cpp" />
     <ClCompile Include="Source\Scenes\SceneStageSelect.cpp" />
     <ClCompile Include="Source\System\Animation.cpp" />
@@ -113,7 +113,7 @@
     <ClCompile Include="Source\Game\UI\TargetUI.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Menu.h" />
+    <ClInclude Include="Source\System\Menu.h" />
     <ClInclude Include="Source\Scenes\SceneDebug.h" />
     <ClInclude Include="Source\Scenes\SceneStageSelect.h" />
     <ClInclude Include="Source\System\Animation.h" />
