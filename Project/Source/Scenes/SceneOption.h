@@ -23,6 +23,7 @@ private:
     void WindowMode();
 
 private:
+    int m_fontHandle = -1;
     Menu m_menu;
 
     enum class Volumes

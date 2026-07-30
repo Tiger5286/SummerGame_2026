@@ -4,6 +4,7 @@
 #include "Singleton/Input.h"
 #include "SceneManager.h"
 #include "Singleton/SoundManager.h"
+#include <string_view>
 
 namespace
 {
@@ -22,7 +23,10 @@ namespace
 		Num
 	};
 
-	constexpr int kMenuStartY = 230;
+	constexpr int kMenuStartY = 270;
+
+	constexpr int kFontSize = 40;
+	constexpr std::wstring_view kTitle = L"オプション";
 }
 
 SceneOption::SceneOption(SceneManager& sceneManager) :
@@ -36,6 +40,8 @@ SceneOption::SceneOption(SceneManager& sceneManager) :
 
 void SceneOption::Init()
 {
+	m_fontHandle = CreateFontToHandle(Game::kMainFontName, kFontSize, -1);
+
 	m_isFullScreen = !GetWindowModeFlag();
 	auto& soundManager = SoundManager::GetInstance();
 	m_volume[static_cast<int>(Volumes::SE)] = soundManager.GetSEVolume() / 255.0f;
@@ -74,6 +80,7 @@ void SceneOption::Init()
 
 void SceneOption::End()
 {
+	DeleteFontToHandle(m_fontHandle);
 }
 
 void SceneOption::Update()
@@ -107,6 +114,10 @@ void SceneOption::Draw()
 	x2 = Game::kScreenWidth / 2 + kWindowWidth / 2;
 	y2 = Game::kScreenHeight / 2 + kWindowHeight / 2;
 	DrawBox(x1, y1, x2, y2, 0xffffff, false, 10);
+
+	// タイトルの描画
+	int width = GetDrawStringWidthToHandle(kTitle.data(), kTitle.size(), m_fontHandle);
+	DrawStringToHandle(Game::kScreenWidth / 2 - width / 2, 150, kTitle.data(), 0xffffff, m_fontHandle);
 
 	// メニューの描画
 	m_menu.Draw();
