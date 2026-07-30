@@ -10,22 +10,25 @@ namespace
 	constexpr int kWindowWidth = Game::kScreenWidth / 10 * 7;
 	constexpr int kWindowHeight = Game::kScreenHeight / 10 * 7;
 
-	constexpr float kVolumeControlSpeed = 0.005f;
+	constexpr float kVolumeControlSpeed = 0.01f;
 
 	enum class MenuList
 	{
 		SeVolume,
 		BgmVolume,
 		WindowMode,
+		Back,
 
 		Num
 	};
+
+	constexpr int kMenuStartY = 230;
 }
 
 SceneOption::SceneOption(SceneManager& sceneManager) :
 	SceneBase(sceneManager)
 {
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < static_cast<int>(Volumes::Num); i++)
 	{
 		m_volume[i] = 0.0f;
 	}
@@ -35,8 +38,8 @@ void SceneOption::Init()
 {
 	m_isFullScreen = !GetWindowModeFlag();
 	auto& soundManager = SoundManager::GetInstance();
-	m_volume[0] = soundManager.GetSEVolume() / 255.0f;
-	m_volume[1] = soundManager.GetBGMVolume() / 255.0f;
+	m_volume[static_cast<int>(Volumes::SE)] = soundManager.GetSEVolume() / 255.0f;
+	m_volume[static_cast<int>(Volumes::BGM)] = soundManager.GetBGMVolume() / 255.0f;
 
 	std::vector<Menu::Funcs> menuActions;
 	menuActions.resize(static_cast<int>(MenuList::Num));
@@ -44,13 +47,13 @@ void SceneOption::Init()
 		.name = L"効果音音量",
 		.action = [this]() {SeVolume(); },
 		.type = Menu::Type::Bar,
-		.pBarRate = &m_volume[0]
+		.pBarRate = &m_volume[static_cast<int>(Volumes::SE)]
 	};
 	menuActions[static_cast<int>(MenuList::BgmVolume)] = {
 		.name = L"BGM音量",
 		.action = [this]() {BgmVolume(); },
 		.type = Menu::Type::Bar,
-		.pBarRate = &m_volume[1]
+		.pBarRate = &m_volume[static_cast<int>(Volumes::BGM)]
 	};
 	menuActions[static_cast<int>(MenuList::WindowMode)] = {
 		.name = L"フルスクリーン",
@@ -59,7 +62,14 @@ void SceneOption::Init()
 		.pBarRate = nullptr,
 		.pSwitch = &m_isFullScreen
 	};
-	m_menu.Init(menuActions, 1280 / 2, 720 / 2, 1.0f);
+	menuActions[static_cast<int>(MenuList::Back)] = {
+		.name = L"戻る",
+		.action = [this]() { m_sceneManager.PopScene(); },
+		.type = Menu::Type::Normal,
+		.pBarRate = nullptr,
+		.pSwitch = nullptr
+	};
+	m_menu.Init(menuActions, Game::kScreenWidth / 2, kMenuStartY);
 }
 
 void SceneOption::End()
@@ -70,14 +80,15 @@ void SceneOption::Update()
 {
 	auto& input = Input::GetInstance();
 
-	m_menu.Update();
-
 	// Bボタンでオプションを閉じる
 	if (input.IsTriggerd(XINPUT_BUTTON_B))
 	{
 		m_sceneManager.PopScene();
 		return;
 	}
+
+	// メニューの更新
+	m_menu.Update();
 }
 
 void SceneOption::Draw()
@@ -90,33 +101,6 @@ void SceneOption::Draw()
 	y2 = Game::kScreenHeight / 2 + kWindowHeight / 2;
 	DrawBox(x1, y1, x2, y2, 0x000000, true);
 
-	//for (int i = 0; i < static_cast<int>(Menu::Num); i++)
-	//{
-	//	unsigned int color = 0xffffff;
-	//	if (i == m_selectIndex) color = 0xff0000;
-	//	DrawString(x1 + 50, y1 + 50 + i * 20, m_menuActions[i].name.c_str(), color);
-	//	
-	//	if (i == static_cast<int>(Menu::SeVolume) || i == static_cast<int>(Menu::BgmVolume))
-	//	{
-	//		int stringWidth = GetDrawStringWidth(m_menuActions[i].name.c_str(), m_menuActions[i].name.size());
-	//		int x = x1 + 50 + stringWidth + 15;
-	//		int y = y1 + 50 + i * 20 + 8;
-	//		int barLen = 100;
-	//		DrawLine(x, y, x + barLen, y, 0xffffff, 2);
-	//		float rate = m_volume[i] / 255.0f;
-	//		DrawCircle(x + rate * barLen, y, 8, 0xff0000, true);
-	//	}
-	//	else if (i == static_cast<int>(Menu::WindowMode))
-	//	{
-	//		int stringWidth = GetDrawStringWidth(m_menuActions[i].name.c_str(), m_menuActions[i].name.size());
-	//		int x = x1 + 50 + stringWidth + 15;
-	//		int y = y1 + 50 + i * 20 + 8;
-	//		unsigned int color = 0xffffff;
-	//		if (m_windowMode) color = 0xff0000;
-	//		DrawCircle(x, y, 8, color, true);
-	//	}
-	//}
-
 	// 枠の描画
 	x1 = Game::kScreenWidth / 2 - kWindowWidth / 2;
 	y1 = Game::kScreenHeight / 2 - kWindowHeight / 2;
@@ -124,6 +108,7 @@ void SceneOption::Draw()
 	y2 = Game::kScreenHeight / 2 + kWindowHeight / 2;
 	DrawBox(x1, y1, x2, y2, 0xffffff, false, 10);
 
+	// メニューの描画
 	m_menu.Draw();
 
 #ifdef _DEBUG
@@ -136,23 +121,23 @@ void SceneOption::SeVolume()
 	auto& input = Input::GetInstance();
 	if (input.IsPressed(XINPUT_BUTTON_DPAD_RIGHT))
 	{
-		m_volume[0]+= kVolumeControlSpeed;
+		m_volume[static_cast<int>(Volumes::SE)] += kVolumeControlSpeed;
 	}
 	if (input.IsPressed(XINPUT_BUTTON_DPAD_LEFT))
 	{
-		m_volume[0]-= kVolumeControlSpeed;
+		m_volume[static_cast<int>(Volumes::SE)]-= kVolumeControlSpeed;
 	}
 
-	if (m_volume[0] > 1.0f)
+	if (m_volume[static_cast<int>(Volumes::SE)] > 1.0f)
 	{
-		m_volume[0] = 1.0f;
+		m_volume[static_cast<int>(Volumes::SE)] = 1.0f;
 	}
-	if (m_volume[0] < 0)
+	if (m_volume[static_cast<int>(Volumes::SE)] < 0)
 	{
-		m_volume[0] = 0;
+		m_volume[static_cast<int>(Volumes::SE)] = 0;
 	}
 
-	SoundManager::GetInstance().ChangeVolume(SoundType::SE, m_volume[0] * 255);
+	SoundManager::GetInstance().ChangeVolume(SoundType::SE, m_volume[static_cast<int>(Volumes::SE)] * 255);
 }
 
 void SceneOption::BgmVolume()
@@ -160,23 +145,23 @@ void SceneOption::BgmVolume()
 	auto& input = Input::GetInstance();
 	if (input.IsPressed(XINPUT_BUTTON_DPAD_RIGHT))
 	{
-		m_volume[1]+= kVolumeControlSpeed;
+		m_volume[static_cast<int>(Volumes::BGM)]+= kVolumeControlSpeed;
 	}
 	if (input.IsPressed(XINPUT_BUTTON_DPAD_LEFT))
 	{
-		m_volume[1]-= kVolumeControlSpeed;
+		m_volume[static_cast<int>(Volumes::BGM)]-= kVolumeControlSpeed;
 	}
 
-	if (m_volume[1] > 1.0f)
+	if (m_volume[static_cast<int>(Volumes::BGM)] > 1.0f)
 	{
-		m_volume[1] = 1.0f;
+		m_volume[static_cast<int>(Volumes::BGM)] = 1.0f;
 	}
-	if (m_volume[1] < 0)
+	if (m_volume[static_cast<int>(Volumes::BGM)] < 0)
 	{
-		m_volume[1] = 0;
+		m_volume[static_cast<int>(Volumes::BGM)] = 0;
 	}
 
-	SoundManager::GetInstance().ChangeVolume(SoundType::BGM, m_volume[1] * 255);
+	SoundManager::GetInstance().ChangeVolume(SoundType::BGM, m_volume[static_cast<int>(Volumes::BGM)] * 255);
 }
 
 void SceneOption::WindowMode()

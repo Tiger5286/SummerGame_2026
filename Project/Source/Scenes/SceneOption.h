@@ -25,7 +25,15 @@ private:
 private:
     Menu m_menu;
 
-    float m_volume[2];
+    enum class Volumes
+    {
+        SE,
+        BGM,
+
+        Num
+    };
+    float m_volume[static_cast<int>(Volumes::Num)];
+
     bool m_isFullScreen = true;
 };
 

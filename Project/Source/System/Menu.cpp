@@ -72,28 +72,22 @@ void Menu::Update()
 			m_selectIndex = m_items.size() - 1;
 		}
 	}
-	// 項目の種類によって異なるアクションを実行する
-	for (const auto& item : m_items)
+
+	// 選択中の項目によって異なるアクションを実行する
+	const auto& currentItem = m_items[m_selectIndex];
+	switch (currentItem.type)
 	{
-		switch (item.type)
+	case Type::Normal:
+		// 決定ボタンで選択中のメニューのアクションを実行する
+		if (input.IsTriggerd(XINPUT_BUTTON_A))
 		{
-		case Type::Normal:
-			// 決定ボタンで選択中のメニューのアクションを実行する
-			if (input.IsTriggerd(XINPUT_BUTTON_A))
-			{
-				m_items[m_selectIndex].action();
-				return;
-			}
-			break;
-		case Type::Bar:
-			// 常にアクションを実行する
-			m_items[m_selectIndex].action();
-			break;
-		case Type::Switch:
-			// 常にアクションを実行する
-			m_items[m_selectIndex].action();
-			break;
+			currentItem.action();
 		}
+		break;
+	case Type::Bar:
+	case Type::Switch:
+		currentItem.action();
+		break;
 	}
 
 	// UIの大きさをLerpで動かす
