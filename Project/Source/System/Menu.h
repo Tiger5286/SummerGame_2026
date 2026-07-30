@@ -10,6 +10,7 @@ public:
 	{
 		Normal,
 		Bar,
+		Switch
 	};
 
 	struct Funcs
@@ -18,6 +19,7 @@ public:
 		std::function<void()> action;
 		Type type = Type::Normal;
 		float* pBarRate = nullptr;
+		bool* pSwitch = nullptr;
 	};
 
 private:
@@ -29,6 +31,7 @@ private:
 		float colorRate = 0.0f;
 		Type type = Type::Normal;
 		float* pBarRate = nullptr;
+		bool* pSwitch = nullptr;
 	};
 
 public:

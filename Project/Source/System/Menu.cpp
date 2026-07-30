@@ -1,6 +1,7 @@
 ﻿#include "Menu.h"
 #include "Singleton/Input.h"
 #include "Game.h"
+#include "DxLib.h"
 
 namespace
 {
@@ -11,6 +12,10 @@ namespace
 	constexpr float kLerpT = 0.2f;
 
 	constexpr unsigned int kTextColor = 0xffffff;
+
+	constexpr int kStringOffset = 15;
+	constexpr int kBarOffset = 20;
+	constexpr int kBarHeight = 8;
 }
 
 Menu::~Menu()
@@ -32,6 +37,7 @@ void Menu::Init(std::vector<Funcs> actions, int x, int y,float scale)
 		// scaleとcolorRateは0.0で初期化
 		m_items[i].type = actions[i].type;
 		m_items[i].pBarRate = actions[i].pBarRate;
+		m_items[i].pSwitch = actions[i].pSwitch;
 	}
 	// 位置を初期化
 	m_x = x;
@@ -66,11 +72,28 @@ void Menu::Update()
 			m_selectIndex = m_items.size() - 1;
 		}
 	}
-	// 決定ボタンで選択中のメニューのアクションを実行する
-	if (input.IsTriggerd(XINPUT_BUTTON_A))
+	// 項目の種類によって異なるアクションを実行する
+	for (const auto& item : m_items)
 	{
-		m_items[m_selectIndex].action();
-		return;
+		switch (item.type)
+		{
+		case Type::Normal:
+			// 決定ボタンで選択中のメニューのアクションを実行する
+			if (input.IsTriggerd(XINPUT_BUTTON_A))
+			{
+				m_items[m_selectIndex].action();
+				return;
+			}
+			break;
+		case Type::Bar:
+			// 常にアクションを実行する
+			m_items[m_selectIndex].action();
+			break;
+		case Type::Switch:
+			// 常にアクションを実行する
+			m_items[m_selectIndex].action();
+			break;
+		}
 	}
 
 	// UIの大きさをLerpで動かす
@@ -117,19 +140,59 @@ void Menu::Draw()
 		DrawRotaGraph(m_x, m_y + (kFontSize / 2 + (kFontSize + kMargin) * i) * m_scale, m_items[i].scale * m_scale, 0.0, m_selectUIHandle, true);
 		SetDrawBlendMode(origBlendMode, origBlendParam);
 
+		int graphW, graphH;
+		GetGraphSize(m_uiHandle, &graphW, &graphH);
 		// 文字の描画
-		int width = GetDrawExtendStringWidthToHandle(m_items[i].scale, actionName.c_str(), actionName.size(), m_fontHandle);
+		int strW = GetDrawExtendStringWidthToHandle(m_items[i].scale, actionName.c_str(), actionName.size(), m_fontHandle);
 		if (m_items[i].type == Type::Normal)
 		{
-			DrawExtendStringToHandle(m_x - (width / 2) * m_scale,
+			// 文字の描画(中央揃え)
+			DrawExtendStringToHandle(m_x - (strW / 2) * m_scale,
 						   m_y + ((kFontSize + kMargin) * i) * m_scale,
 						   m_items[i].scale * m_scale, m_items[i].scale * m_scale, actionName.c_str(), kTextColor, m_fontHandle);
 		}
 		else if (m_items[i].type == Type::Bar)
 		{
-			DrawExtendStringToHandle(m_x - (width / 2) * m_scale,
+			// 文字の描画(左揃え)
+			DrawExtendStringToHandle(m_x - (graphW / 2 - kStringOffset) * m_items[i].scale * m_scale,
 						   m_y + ((kFontSize + kMargin) * i) * m_scale,
-						   m_items[i].scale * m_scale, m_items[i].scale * m_scale, L"バーの描画", kTextColor, m_fontHandle);
+						   m_items[i].scale * m_scale, m_items[i].scale * m_scale, actionName.c_str(), kTextColor, m_fontHandle);
+			// バーの描画
+			int x1, y1, x2, y2;
+			x1 = m_x + kBarOffset * m_scale;
+			y1 = m_y + (kFontSize / 2 + (kFontSize + kMargin) * i - kBarHeight / 2) * m_scale;
+			x2 = m_x + (graphW / 2 - kBarOffset) * m_scale;
+			y2 = m_y + (kFontSize / 2 + (kFontSize + kMargin) * i + kBarHeight / 2) * m_scale;
+			DrawBox(x1, y1, x2, y2, 0x888888, true);	// バーの背景
+			int barLength = abs(x2 - x1);
+			x2 = x1 + barLength * *m_items[i].pBarRate;
+			DrawBox(x1, y1, x2, y2, 0xff0000, true);	// バーの本体
+			y1 = m_y + (kFontSize / 2 + (kFontSize + kMargin) * i) * m_scale;
+			DrawCircle(x2, y1, kBarHeight, 0xffffff);
+		}
+		else if (m_items[i].type == Type::Switch)
+		{
+			// 文字の描画(左揃え)
+			DrawExtendStringToHandle(m_x - (graphW / 2 - kStringOffset) * m_items[i].scale * m_scale,
+						   m_y + ((kFontSize + kMargin) * i) * m_scale,
+						   m_items[i].scale * m_scale, m_items[i].scale * m_scale, actionName.c_str(), kTextColor, m_fontHandle);
+			// スイッチの描画
+			unsigned int color = 0x888888;
+			if (*m_items[i].pSwitch) color = 0xff0000;
+			int x, y;
+			x = m_x + (graphW / 2 - 30) * m_scale;
+			y = m_y + (kFontSize / 2 + (kFontSize + kMargin) * i) * m_scale;
+			DrawCircle(x, y, 10, color);
+			x = x - 30;
+			DrawCircle(x, y, 10, color);
+			int x1, y1, x2, y2;
+			x1 = x;
+			y1 = y - 10;
+			x2 = x + 30;
+			y2 = y + 10 + 1;
+			DrawBox(x1, y1, x2, y2, color, true);
+			if (*m_items[i].pSwitch) x += 30;
+			DrawCircle(x, y, 13, 0xffffff);
 		}
 	}
 }

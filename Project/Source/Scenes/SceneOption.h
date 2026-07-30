@@ -3,6 +3,7 @@
 #include <functional>
 #include <string>
 #include <array>
+#include "System/Menu.h"
 
 class SceneOption :
     public SceneBase
@@ -21,27 +22,10 @@ private:
     void BgmVolume();
     void WindowMode();
 
-    enum class Menu
-    {
-        SeVolume,
-        BgmVolume,
-        WindowMode,
-
-        Num
-    };
-
-    struct MenuItem
-    {
-        std::wstring name;
-        std::function<void()> action;
-    };
-
 private:
-    int m_selectIndex = 0;	// 選択中のメニューのインデックス
-    // メニューのアクション(関数)を格納する配列
-    std::array<MenuItem, static_cast<int>(Menu::Num)> m_menuActions;
+    Menu m_menu;
 
-    int m_volume[2];
-    bool m_windowMode = true;   // true:ウィンドウ / false:フルスクリーン
+    float m_volume[2];
+    bool m_isFullScreen = true;
 };
 
