@@ -112,6 +112,8 @@
     <ClCompile Include="Source\Singleton\UIManager.cpp" />
     <ClCompile Include="Source\Game\UI\TargetUI.cpp" />
     <ClCompile Include="Source\Game\Character\Enemy\ZombieBoss\ZombieBoss.cpp" />
+    <ClCompile Include="Source\Game\Character\Enemy\ZombieBoss\ZombieBossStateBase.cpp" />
+    <ClCompile Include="Source\Game\Character\Enemy\ZombieBoss\ZombieBossStateWalk.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\System\Menu.h" />
@@ -208,6 +210,8 @@
     <ClInclude Include="Source\Singleton\UIManager.h" />
     <ClInclude Include="Source\Game\UI\TargetUI.h" />
     <ClInclude Include="Source\Game\Character\Enemy\ZombieBoss\ZombieBoss.h" />
+    <ClInclude Include="Source\Game\Character\Enemy\ZombieBoss\ZombieBossStateBase.h" />
+    <ClInclude Include="Source\Game\Character\Enemy\ZombieBoss\ZombieBossStateWalk.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

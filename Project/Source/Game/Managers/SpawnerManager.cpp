@@ -15,7 +15,7 @@ namespace
 		{ "Zombie",  MyLib::EnemyType::Zombie},
 		{ "Vulture", MyLib::EnemyType::Vulture },
 		{ "General", MyLib::EnemyType::General },
-		{"ZombieBoss",MyLib::EnemyType::ZombieBoss}
+		{ "ZombieBoss",MyLib::EnemyType::ZombieBoss }
 	};
 }
 

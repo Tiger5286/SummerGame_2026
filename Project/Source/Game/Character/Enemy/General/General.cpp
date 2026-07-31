@@ -21,6 +21,11 @@ namespace
 	constexpr float kSwordScale = 2.5f;
 	constexpr float kSwordRotZ = -DX_PI_F / 2;
 	const Vector3 kSwordOffset = Vector3(0, 10, 0);
+
+	constexpr float kColliderRadius = 70;
+	constexpr float kColliderHeight = 250;
+
+	const Vector3 kTargetUIOffset = Vector3(0, 280, 0);
 }
 
 General::~General()
@@ -37,7 +42,7 @@ void General::Init()
 	m_anim.Init(m_modelHandle, L"General|Idle");
 
 	// 当たり判定の初期化
-	m_pCollider = std::make_shared<CapsuleCollider>(70, 250);
+	m_pCollider = std::make_shared<CapsuleCollider>(kColliderRadius, kColliderHeight);
 	// 当たり判定の登録
 	CollisionManager::GetInstance().Register(shared_from_this());
 
@@ -58,7 +63,7 @@ void General::Init()
 	m_pBossBar->SetInfo(general);
 	UIManager::GetInstance().AddUI(m_pBossBar);
 
-	m_targetUIOffset = Vector3(0, 280, 0);
+	m_targetUIOffset = kTargetUIOffset;
 
 	m_scale = Vector3(kGeneralScale, kGeneralScale, kGeneralScale);
 }
