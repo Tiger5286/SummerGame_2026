@@ -32,8 +32,8 @@ namespace
 {
 	// ロードするモデルのファイル名と登録名
 	const std::vector<std::pair<std::wstring, std::wstring>> kModelFileNames = {
-		{ L"Collision", L"data/models/Stage/Collision.mv1" },
-		{ L"Stage",L"data/models/Stage/Stage.mv1" },
+		//{ L"Collision", L"data/models/Stage/Collision.mv1" },
+		//{ L"Stage",L"data/models/Stage/Stage.mv1" },
 		{ L"Player", L"data/models/Player/Player.mv1" },
 		{ L"Wing" , L"data/models/Player/Wing.mv1" },
 		{ L"Zombie", L"data/models/Enemy/Zombie.mv1" },
@@ -131,6 +131,8 @@ void SceneMain::Init()
 	{
 		modelManager.LoadModel(modelFileName.second, modelFileName.first);
 	}
+	modelManager.LoadModel(m_filePaths.collisionFilePath, L"Collision");
+	modelManager.LoadModel(m_filePaths.stageFilePath, L"Stage");
 	// エフェクトのロードと登録
 	auto& effManager = EffectManager::GetInstance();
 	for (const auto& effData : kEffectFileDatas)
@@ -174,7 +176,7 @@ void SceneMain::Init()
 	m_pSpawnerManager = std::make_shared<SpawnerManager>();
 	m_pSpawnerManager->Init(m_pEnemyManager, m_pPlayer);
 	//m_pSpawnerManager->Loadcsv();
-	m_pSpawnerManager->LoadBinaly();
+	m_pSpawnerManager->LoadBinaly(m_filePaths.spawnerDataFilePath);
 
 	// ターゲットマネージャーの生成
 	m_pTargetManager = std::make_shared<TargetManager>();
@@ -193,12 +195,9 @@ void SceneMain::End()
 
 	m_pEnemyManager->End();
 
-	// モデルの削除		// ほんとは使わなくなるやつだけ削除すべきだけど、バグ防止のためにとりあえず全部消してる　あとで直したい
+	// モデルの削除
 	auto& modelManager = ModelManager::GetInstance();
-	for (auto& model : kModelFileNames)
-	{
-		modelManager.DeleteModel(model.first);
-	}
+	modelManager.DeleteAllModel();
 
 	EffectManager::GetInstance().StopEffectAll();
 
@@ -287,7 +286,7 @@ void SceneMain::Draw()
 	MV1DrawModel(modelManager.GetModelHandle(L"Stage"));
 	SetUseShadowMap(0, -1);
 #ifdef _DEBUG
-	// MV1DrawModel(modelManager.GetModelHandle(L"Collision"));
+	 MV1DrawModel(modelManager.GetModelHandle(L"Collision"));
 #endif
 
 #ifdef _DEBUG
@@ -336,9 +335,9 @@ void SceneMain::Draw()
 #endif
 }
 
-void SceneMain::LoadData(std::vector<std::wstring> modelFiles, std::vector<EffectData> effectDatas, BossDirectionData bossDirectionData)
+void SceneMain::SetData(UniqueFiles filePaths)
 {
-
+	m_filePaths = filePaths;
 }
 
 void SceneMain::OnSpawnBoss()

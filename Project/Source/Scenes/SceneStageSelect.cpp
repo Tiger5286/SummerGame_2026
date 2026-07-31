@@ -16,6 +16,24 @@ namespace
 		L"Stage 2",
 		L"Stage 3"
 	};
+	// ステージごとの固有のデータ
+	const SceneMain::UniqueFiles kUniqueFiles[static_cast<int>(SceneStageSelect::Stage::Num)] = {
+		{
+			.collisionFilePath = L"data/Stages/First/Collision.mv1",
+			.stageFilePath = L"data/Stages/First/Stage.mv1",
+			.spawnerDataFilePath = L"data/Stages/First/SpawnerData.dat"
+		},
+		{
+			.collisionFilePath = L"data/Stages/Second/Collision.mv1",
+			.stageFilePath = L"data/Stages/Second/Stage.mv1",
+			.spawnerDataFilePath = L"data/Stages/Second/SpawnerData.dat"
+		},
+		{
+			.collisionFilePath = L"data/Stages/First/Collision.mv1",
+			.stageFilePath = L"data/Stages/First/Stage.mv1",
+			.spawnerDataFilePath = L"data/Stages/First/SpawnerData.dat"
+		}
+	};
 }
 
 SceneStageSelect::SceneStageSelect(SceneManager& sceneManager):
@@ -69,7 +87,9 @@ void SceneStageSelect::Update()
 	// 決定入力でステージ開始(今は仮で全部同じステージを開始するようになっている)
 	if (input.IsTriggerd(XINPUT_BUTTON_A))
 	{
-		m_sceneManager.ChangeSceneWithFade(std::make_shared<SceneMain>(m_sceneManager), true);
+		auto sceneMain = std::make_shared<SceneMain>(m_sceneManager);
+		sceneMain->SetData(kUniqueFiles[static_cast<int>(m_selectStage)]);
+		m_sceneManager.ChangeSceneWithFade(sceneMain, true);
 		return;
 	}
 	

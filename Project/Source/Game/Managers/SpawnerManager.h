@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <memory>
 #include <vector>
+#include <string>
 
 class EnemySpawner;
 class EnemyManager;
@@ -13,7 +14,7 @@ public:
 	~SpawnerManager() = default;
 
 	//void Loadcsv();
-	void LoadBinaly();
+	void LoadBinaly(std::wstring filePath);
 
 	void Init(std::shared_ptr<EnemyManager> pEnemyManager, std::shared_ptr<Player> pPlayer);
 	void Update();

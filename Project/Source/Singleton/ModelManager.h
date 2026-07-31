@@ -38,6 +38,11 @@ public:
 	void DeleteModel(std::wstring key);
 
 	/// <summary>
+	/// すべての登録されたモデルを削除し登録解除する
+	/// </summary>
+	void DeleteAllModel();
+
+	/// <summary>
 	/// 登録されたモデルを複製しそのハンドルを返す
 	/// ※このクラスは複製されたモデルのハンドルを管理しないのでそれぞれで管理すること
 	/// </summary>

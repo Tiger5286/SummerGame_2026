@@ -102,13 +102,13 @@ namespace
 //	}
 //}
 
-void SpawnerManager::LoadBinaly()
+void SpawnerManager::LoadBinaly(std::wstring filePath)
 {
 	bool asyncLoadFlag = GetUseASyncLoadFlag();
 	SetUseASyncLoadFlag(false);
 
 	// バイナリを開く
-	auto handle = FileRead_open(L"data/SpawnerData.dat");
+	auto handle = FileRead_open(filePath.c_str());
 	assert(handle != -1);
 
 	// スポナーの数を読み込む

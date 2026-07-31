@@ -34,6 +34,13 @@ public:
 		Vector3 cameraDir;
 		std::wstring bossAppearAnimName;
 	};
+	// ステージごとの異なるデータ
+	struct UniqueFiles
+	{
+		std::wstring collisionFilePath;		// ステージの当たり判定モデルのファイルパス
+		std::wstring stageFilePath;			// ステージの見た目モデルのファイルパス
+		std::wstring spawnerDataFilePath;	// スポナーデータのファイルパス
+	};
 
 public:
 	SceneMain(SceneManager& sceneManager);
@@ -45,12 +52,10 @@ public:
 	void Draw() override;
 
 	/// <summary>
-	/// 必要なデータをロードする
+	/// ステージごとの固有のデータをセットする(Initの前に実行する)
 	/// </summary>
-	/// <param name="modelFiles">ロードするモデルのファイルパスの配列</param>
-	/// <param name="effectDatas">ロードするエフェクトの情報の配列</param>
-	/// <param name="bossDirectionData">ボス演出用データ</param>
-	void LoadData(std::vector<std::wstring> modelFiles, std::vector<EffectData> effectDatas, BossDirectionData bossDirectionData);
+	/// <param name="filePaths">ステージごとの固有データのファイルパス</param>
+	void SetData(UniqueFiles filePaths);
 
 private:
 	void OnSpawnBoss();
@@ -79,4 +84,6 @@ private:
 	std::shared_ptr<SkyBox> m_pSkyBox = nullptr;
 
 	std::shared_ptr<SpawnerManager> m_pSpawnerManager = nullptr;
+
+	UniqueFiles m_filePaths;
 };

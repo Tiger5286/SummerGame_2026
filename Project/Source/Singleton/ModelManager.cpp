@@ -46,6 +46,15 @@ void ModelManager::DeleteModel(std::wstring key)
 	m_modelHandles.erase(key);
 }
 
+void ModelManager::DeleteAllModel()
+{
+	for (auto handle : m_modelHandles)
+	{
+		MV1DeleteModel(handle.second);
+	}
+	m_modelHandles.clear();
+}
+
 int ModelManager::DuplicateModel(std::wstring key) const
 {
 	// 存在しないキーをチェック
