@@ -27,6 +27,8 @@ namespace
 
 	constexpr int kFontSize = 40;
 	constexpr std::wstring_view kTitle = L"オプション";
+
+	constexpr int kBackAlpha = 200;
 }
 
 SceneOption::SceneOption(SceneManager& sceneManager) :
@@ -106,7 +108,9 @@ void SceneOption::Draw()
 	y1 = Game::kScreenHeight / 2 - kWindowHeight / 2;
 	x2 = Game::kScreenWidth / 2 + kWindowWidth / 2;
 	y2 = Game::kScreenHeight / 2 + kWindowHeight / 2;
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kBackAlpha);
 	DrawBox(x1, y1, x2, y2, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	// 枠の描画
 	x1 = Game::kScreenWidth / 2 - kWindowWidth / 2;
