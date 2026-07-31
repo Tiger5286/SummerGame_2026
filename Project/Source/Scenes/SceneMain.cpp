@@ -39,7 +39,8 @@ namespace
 		{ L"Zombie", L"data/models/Enemy/Zombie.mv1" },
 		{ L"Vulture", L"data/models/Enemy/Vulture.mv1" },
 		{ L"General",L"data/models/Enemy/General.mv1"},
-		{ L"GeneralSword",L"data/models/Enemy/sword.mv1"}
+		{ L"GeneralSword",L"data/models/Enemy/sword.mv1"},
+		{ L"ZombieBoss",L"data/models/Enemy/ZombieBoss.mv1"}
 	};
 
 	const std::vector<SceneMain::EffectData> kEffectFileDatas =

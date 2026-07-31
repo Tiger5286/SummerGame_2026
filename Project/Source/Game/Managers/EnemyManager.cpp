@@ -6,6 +6,7 @@
 #include "../Character/Enemy/Zombie/Zombie.h"
 #include "../Character/Enemy/Vulture/Vulture.h"
 #include "../Character/Enemy/General/General.h"
+#include "../Character/Enemy/ZombieBoss/ZombieBoss.h"
 
 EnemyManager::EnemyManager()
 {}
@@ -98,6 +99,15 @@ void EnemyManager::AddEnemy(MyLib::EnemyType type, const Vector3& pos)
 	case MyLib::EnemyType::General:
 		pEnemy = std::make_shared<General>();
 		pEnemy->SetHandle(ModelManager::GetInstance().DuplicateModel(L"General"));
+		pEnemy->SetPlayer(m_pPlayer);
+		pEnemy->SetMapHandle(ModelManager::GetInstance().GetModelHandle(L"Collision"));
+		pEnemy->SetPos(pos);
+		pEnemy->Init();
+		m_enemyList.push_back(pEnemy);
+		break;
+	case MyLib::EnemyType::ZombieBoss:
+		pEnemy = std::make_shared<ZombieBoss>();
+		pEnemy->SetHandle(ModelManager::GetInstance().DuplicateModel(L"ZombieBoss"));
 		pEnemy->SetPlayer(m_pPlayer);
 		pEnemy->SetMapHandle(ModelManager::GetInstance().GetModelHandle(L"Collision"));
 		pEnemy->SetPos(pos);

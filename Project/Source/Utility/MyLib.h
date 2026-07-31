@@ -35,6 +35,7 @@ namespace MyLib
 		Zombie,
 		Vulture,
 		General,
+		ZombieBoss,
 
 		Num
 	};

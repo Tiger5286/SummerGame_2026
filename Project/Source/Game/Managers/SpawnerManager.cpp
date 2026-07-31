@@ -14,7 +14,8 @@ namespace
 	const std::unordered_map<std::string, MyLib::EnemyType> kEnemyTypeTable = {
 		{ "Zombie",  MyLib::EnemyType::Zombie},
 		{ "Vulture", MyLib::EnemyType::Vulture },
-		{ "General", MyLib::EnemyType::General }
+		{ "General", MyLib::EnemyType::General },
+		{"ZombieBoss",MyLib::EnemyType::ZombieBoss}
 	};
 }
 
