@@ -1,16 +1,14 @@
 ﻿#pragma once
 #include "ZombieBossStateBase.h"
-class ZombieBossStateWalk :
+class ZombieBossStateIdle :
     public ZombieBossStateBase
 {
-    public:
-    ZombieBossStateWalk() = default;
-    ~ZombieBossStateWalk() = default;
+public:
+    ZombieBossStateIdle() = default;
+    ~ZombieBossStateIdle() = default;
 
     void OnEnter() override;
     void Update() override;
 	void Exit() override;
-private:
-
 };
 

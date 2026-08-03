@@ -13,7 +13,7 @@ class GeneralStateProjectile;
 class GeneralStateDeath;
 class GeneralStateAppear;
 
-class General :
+class General : // このGeneralは将軍という意味のGeneral
     public EnemyBase
 {
 public:

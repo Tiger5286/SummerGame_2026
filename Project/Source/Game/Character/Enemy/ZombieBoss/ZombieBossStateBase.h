@@ -2,7 +2,7 @@
 #include "../../CharacterStateBase.h"
 #include <memory>
 
-#include "ZombieBossStateBase.h"
+#include "ZombieBoss.h"
 
 class ZombieBossStateBase :
     public CharacterStateBase
@@ -17,6 +17,6 @@ public:
     virtual void Draw(){}
 
 protected:
-    std::weak_ptr<ZombieBossStateBase> m_pZombieBoss;
+    std::weak_ptr<ZombieBoss> m_pZombieBoss;
 };
 

@@ -2,6 +2,10 @@
 #include "Utility/Matrix4x4.h"
 #include "Game/Collider/CapsuleCollider.h"
 #include "Singleton/CollisionManager.h"
+#include "Game/UI/BossHpBar.h"
+#include "Singleton/UIManager.h"
+
+#include "ZombieBossStateWalk.h"
 
 namespace
 {
@@ -19,15 +23,36 @@ namespace
 
 void ZombieBoss::Init()
 {
+	m_scale = Vector3(kScale, kScale, kScale);
+
+	// アニメーションの初期化
 	m_anim.Init(m_modelHandle, kInitAnimName);
 
+	// 当たり判定の初期化、登録
 	m_pCollider = std::make_shared<CapsuleCollider>(kColliderRadius, kColliderHeight);
 	CollisionManager::GetInstance().Register(shared_from_this());
 
+	// ステートの初期化
+	m_pState = std::make_shared<ZombieBossStateWalk>();
+	m_pState->ChangeState(m_pState);
+	auto zombieBoss = std::dynamic_pointer_cast<ZombieBoss>(shared_from_this());
+	m_pState->Enter(zombieBoss);
+	CheckChangeState();
+
+	// プレイヤーの方を向く
 	RotateToPlayer();
 
+	// 体力の初期化
 	m_hp = kMaxHP;
 
+	// HPバーの初期化
+	m_pBossBar = std::make_shared<BossHpBar>();
+	m_pBossBar->SetInfo(zombieBoss);
+	UIManager::GetInstance().AddUI(m_pBossBar);
+
+	m_type = MyLib::CharacterType::Enemy;
+
+	// ターゲットUIの位置オフセットを設定
 	m_targetUIOffset = kTargetUIOffset;
 }
 
@@ -58,7 +83,7 @@ void ZombieBoss::OnUpdate()
 	float diff = MyLib::GetAngleDif(m_angle, m_drawAngle);
 	m_drawAngle += diff * 0.1f;
 
-	auto scale = Matrix4x4::GetScale(Vector3(kScale, kScale, kScale));
+	auto scale = Matrix4x4::GetScale(m_scale);
 	auto rot = Matrix4x4::GetRotY(m_drawAngle);
 	auto trans = Matrix4x4::GetTranslate(m_pos);
 	auto mat = scale * rot * trans;
@@ -73,6 +98,13 @@ void ZombieBoss::Draw()
 #ifdef _DEBUG
 	m_pCollider->Draw();
 #endif
+}
+
+void ZombieBoss::OnHitAttack(const MyLib::AttackData& atkData)
+{
+	Character::OnHitAttack(atkData);
+
+	m_hp -= atkData.damage;
 }
 
 int ZombieBoss::GetMaxHP() const
