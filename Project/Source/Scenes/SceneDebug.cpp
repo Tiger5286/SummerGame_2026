@@ -27,6 +27,13 @@ namespace
 
 	constexpr int kDefaultFontSize = 16;
 	constexpr int kStringMargin = 8;
+
+	SceneMain::UniqueFiles kUniqueFiles =
+	{
+		.collisionFilePath = L"data/Stages/First/Collision.mv1",
+		.stageFilePath = L"data/Stages/First/Stage.mv1",
+		.spawnerDataFilePath = L"data/Stages/First/SpawnerData.dat"
+	};
 }
 
 SceneDebug::SceneDebug(SceneManager& sceneManager) :
@@ -34,7 +41,7 @@ SceneDebug::SceneDebug(SceneManager& sceneManager) :
 {
 	m_sceneChangeFuncs[static_cast<int>(Scene::Title)]		 = [this]() { m_sceneManager.ChangeScene(std::make_shared<SceneTitle>	   (m_sceneManager), false); };
 	m_sceneChangeFuncs[static_cast<int>(Scene::StageSelect)] = [this]() { m_sceneManager.ChangeScene(std::make_shared<SceneStageSelect>(m_sceneManager), false); };
-	m_sceneChangeFuncs[static_cast<int>(Scene::Main)]		 = [this]() { m_sceneManager.ChangeScene(std::make_shared<SceneMain>       (m_sceneManager), true ); };
+	m_sceneChangeFuncs[static_cast<int>(Scene::Main)]		 = [this]() { ChangeSceneSceneMain(); };
 	m_sceneChangeFuncs[static_cast<int>(Scene::Pause)]		 = [this]() { m_sceneManager.PushScene(  std::make_shared<ScenePause>      (m_sceneManager)		  ); };
 	m_sceneChangeFuncs[static_cast<int>(Scene::Option)]		 = [this]() { m_sceneManager.PushScene(  std::make_shared<SceneOption>     (m_sceneManager)		  ); };
 	m_sceneChangeFuncs[static_cast<int>(Scene::Clear)]		 = [this]() { m_sceneManager.ChangeScene(std::make_shared<SceneClear>      (m_sceneManager), false); };
@@ -97,4 +104,11 @@ void SceneDebug::Draw()
 		DrawString(50, 50 + (kDefaultFontSize + kStringMargin) * i, kSceneNames[i].data(), color);
 		color = 0xffffff;
 	}
+}
+
+void SceneDebug::ChangeSceneSceneMain()
+{
+	auto sceneMain = std::make_shared<SceneMain>(m_sceneManager);
+	sceneMain->SetData(kUniqueFiles);
+	m_sceneManager.ChangeScene(sceneMain, true);
 }

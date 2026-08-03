@@ -29,6 +29,9 @@ public:
     };
 
 private:
+    void ChangeSceneSceneMain();
+
+private:
     std::array<std::function<void()>, static_cast<int>(Scene::Num)> m_sceneChangeFuncs;
     Scene m_selectScene = Scene::Title;
 };

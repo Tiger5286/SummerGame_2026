@@ -84,7 +84,7 @@ void SceneStageSelect::Update()
 		m_selectStage = static_cast<Stage>(nextSelect);
 	}
 
-	// 決定入力でステージ開始(今は仮で全部同じステージを開始するようになっている)
+	// 決定入力でステージ開始
 	if (input.IsTriggerd(XINPUT_BUTTON_A))
 	{
 		auto sceneMain = std::make_shared<SceneMain>(m_sceneManager);
