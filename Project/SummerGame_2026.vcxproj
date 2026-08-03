@@ -116,6 +116,7 @@
     <ClCompile Include="Source\Game\Character\Enemy\ZombieBoss\ZombieBossStateWalk.cpp" />
     <ClCompile Include="Source\Game\Character\Enemy\ZombieBoss\ZombieBossStateIdle.cpp" />
     <ClCompile Include="Source\Game\Character\Enemy\ZombieBoss\ZombieBossStateDeath.cpp" />
+    <ClCompile Include="Source\Game\Character\Enemy\ZombieBoss\ZombieBossStateAppear.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\System\Menu.h" />
@@ -216,6 +217,7 @@
     <ClInclude Include="Source\Game\Character\Enemy\ZombieBoss\ZombieBossStateWalk.h" />
     <ClInclude Include="Source\Game\Character\Enemy\ZombieBoss\ZombieBossStateIdle.h" />
     <ClInclude Include="Source\Game\Character\Enemy\ZombieBoss\ZombieBossStateDeath.h" />
+    <ClInclude Include="Source\Game\Character\Enemy\ZombieBoss\ZombieBossStateAppear.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

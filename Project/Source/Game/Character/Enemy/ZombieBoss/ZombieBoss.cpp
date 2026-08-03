@@ -5,7 +5,7 @@
 #include "Game/UI/BossHpBar.h"
 #include "Singleton/UIManager.h"
 
-#include "ZombieBossStateWalk.h"
+#include "ZombieBossStateAppear.h"
 #include "ZombieBossStateDeath.h"
 
 namespace
@@ -34,7 +34,7 @@ void ZombieBoss::Init()
 	CollisionManager::GetInstance().Register(shared_from_this());
 
 	// ステートの初期化
-	m_pState = std::make_shared<ZombieBossStateWalk>();
+	m_pState = std::make_shared<ZombieBossStateAppear>();
 	m_pState->ChangeState(m_pState);
 	auto zombieBoss = std::dynamic_pointer_cast<ZombieBoss>(shared_from_this());
 	m_pState->Enter(zombieBoss);

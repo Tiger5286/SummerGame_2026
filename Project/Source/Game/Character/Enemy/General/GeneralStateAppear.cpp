@@ -19,6 +19,8 @@ namespace
 	const Vector3 kEffectOffset = Vector3(0, 250, 0);
 
 	constexpr float kAngleOffset = DX_PI_F / 5;
+
+	constexpr float kAnimSpeed = 0.3f;
 }
 
 void GeneralStateAppear::OnEnter()
@@ -36,7 +38,7 @@ void GeneralStateAppear::Update()
 
 	if (m_frame == kStartAnimFrame)
 	{
-		general->m_anim.ChangeAnim(kRoarAnimName, 0.3f, false);
+		general->m_anim.ChangeAnim(kRoarAnimName, kAnimSpeed, false);
 	}
 	if (m_frame == kStartRoarFrame)
 	{
