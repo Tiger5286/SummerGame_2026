@@ -25,7 +25,7 @@ void ZombieStateAttack::OnEnter()
 {
 	m_pZombie = std::dynamic_pointer_cast<Zombie>(m_pOwner.lock());
 	auto zombie = m_pZombie.lock();
-	zombie->m_anim.ChangeAnim(kAttackAnimName,0.5f,false);
+	zombie->m_anim.ChangeAnim(kAttackAnimName, MyLib::kDefaultAnimSpeed,false);
 	// プレイヤーの方を向く
 	Vector3 toPlayerVec = m_pZombie.lock()->m_pPlayer->GetPos() - m_pZombie.lock()->m_pos;
 	float toPlayerAngle = toPlayerVec.Angle();

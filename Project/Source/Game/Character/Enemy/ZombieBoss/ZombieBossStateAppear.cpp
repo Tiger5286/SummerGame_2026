@@ -46,4 +46,6 @@ void ZombieBossStateAppear::Update()
 
 void ZombieBossStateAppear::Exit()
 {
+	auto zombieBoss = m_pZombieBoss.lock();
+	zombieBoss->m_attackCooltime = ZombieBoss::kAttackCooltime;
 }

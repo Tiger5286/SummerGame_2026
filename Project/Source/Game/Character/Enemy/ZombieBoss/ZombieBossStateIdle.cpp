@@ -2,6 +2,7 @@
 #include "Game/Character/Player/Player.h"
 
 #include "ZombieBossStateWalk.h"
+#include "ZombieBossStateAttack.h"
 
 namespace
 {
@@ -26,6 +27,14 @@ void ZombieBossStateIdle::Update()
 	// プレイヤーの方を向く
 	float angle = MyLib::GetAngleVec(toPlayer.z, toPlayer.x);
 	zombieBoss->m_angle = angle;
+	// 条件を満たしたら攻撃ステートに遷移する
+	bool isEndCooltime = zombieBoss->m_attackCooltime <= 0;	// 攻撃クールタイムが終わっているかどうか
+	bool isNearPlayer = toPlayer.SquaredLength() <= kIdleDist * kIdleDist;	// プレイヤーが一定距離以内にいるかどうか
+	if (isEndCooltime && isNearPlayer)
+	{
+		zombieBoss->RandomAttack();
+		return;
+	}
 	// 一定距離以上離れていたら歩きステートに遷移する
 	if (toPlayer.SquaredLength() > kIdleDist * kIdleDist)
 	{

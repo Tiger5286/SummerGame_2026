@@ -7,6 +7,8 @@
 
 #include "ZombieBossStateAppear.h"
 #include "ZombieBossStateDeath.h"
+#include "ZombieBossStateAttack.h"
+#include "ZombieBossStateGroundAttack.h"
 
 namespace
 {
@@ -78,6 +80,9 @@ void ZombieBoss::OnUpdate()
 	// 当たり判定に使用したメモリを解放
 	MV1CollResultPolyDimTerminate(collResult);
 
+	if (m_attackCooltime > 0) m_attackCooltime--;
+
+	// アニメーションの更新
 	m_anim.Update();
 
 	// モデルの回転角度を更新
@@ -95,7 +100,7 @@ void ZombieBoss::Draw()
 {
 	MV1DrawModel(m_modelHandle);
 
-	//m_pState->Draw();
+	m_pState->Draw();
 #ifdef _DEBUG
 	m_pCollider->Draw();
 #endif
@@ -121,4 +126,18 @@ void ZombieBoss::OnHitAttack(const MyLib::AttackData& atkData)
 int ZombieBoss::GetMaxHP() const
 {
 	return kMaxHP;
+}
+
+void ZombieBoss::RandomAttack()
+{
+	int rand = GetRand(1);
+
+	if (rand == 0)
+	{
+		m_pState->ChangeState(std::make_shared<ZombieBossStateGroundAttack>());
+	}
+	else
+	{
+		m_pState->ChangeState(std::make_shared<ZombieBossStateAttack>());
+	}
 }

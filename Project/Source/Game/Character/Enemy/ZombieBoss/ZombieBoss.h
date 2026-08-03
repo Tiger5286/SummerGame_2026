@@ -20,8 +20,15 @@ public:
 
     int GetMaxHP() const;
 
+    static constexpr int kAttackCooltime = 120;
+
+private:
+    void RandomAttack();
+
 private:
     Animator m_anim;
+
+    int m_attackCooltime = kAttackCooltime;
 
 	std::shared_ptr<BossHpBar> m_pBossBar = nullptr;
 
