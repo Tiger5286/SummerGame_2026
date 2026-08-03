@@ -6,6 +6,7 @@
 #include "Singleton/UIManager.h"
 
 #include "ZombieBossStateWalk.h"
+#include "ZombieBossStateDeath.h"
 
 namespace
 {
@@ -13,7 +14,7 @@ namespace
 
 	constexpr float kScale = 2.0f;
 
-	constexpr int kMaxHP = 2000;
+	constexpr int kMaxHP = 1500;
 
 	constexpr float kColliderRadius = 70;
 	constexpr float kColliderHeight = 250;
@@ -104,7 +105,17 @@ void ZombieBoss::OnHitAttack(const MyLib::AttackData& atkData)
 {
 	Character::OnHitAttack(atkData);
 
+	std::shared_ptr<ZombieBossStateDeath> state = nullptr;
+	state = std::dynamic_pointer_cast<ZombieBossStateDeath>(m_pState);
+	if (state != nullptr) return;	// 現在のステートがDeathならreturn
+	state = nullptr;
+
 	m_hp -= atkData.damage;
+
+	if (m_hp <= 0)
+	{
+		m_pState->ChangeState(std::make_shared<ZombieBossStateDeath>());
+	}
 }
 
 int ZombieBoss::GetMaxHP() const
