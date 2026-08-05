@@ -4,6 +4,7 @@
 #include <array>
 #include <string>
 #include "System/Menu.h"
+#include "SceneMain.h"
 
 class SceneGameOver :
     public SceneBase
@@ -16,6 +17,9 @@ public:
     void End() override;
     void Update() override;
     void Draw() override;
+
+	void SetData(SceneMain::UniqueDatas uniqueDatas) { m_uniqueDatas = uniqueDatas; }
+
 private:
     void Retry();
     void Title();
@@ -23,5 +27,6 @@ private:
     int m_backHandle = -1;
     int m_logoHandle = -1;
     Menu m_menu;
+	SceneMain::UniqueDatas m_uniqueDatas;
 };
 

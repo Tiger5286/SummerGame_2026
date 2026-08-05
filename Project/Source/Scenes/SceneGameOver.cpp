@@ -85,7 +85,9 @@ void SceneGameOver::Draw()
 
 void SceneGameOver::Retry()
 {
-	m_sceneManager.ChangeSceneWithFade(std::make_shared<SceneMain>(m_sceneManager), true);
+	auto sceneMain = std::make_shared<SceneMain>(m_sceneManager);
+	sceneMain->SetData(m_uniqueDatas);
+	m_sceneManager.ChangeSceneWithFade(sceneMain, true);
 }
 
 void SceneGameOver::Title()

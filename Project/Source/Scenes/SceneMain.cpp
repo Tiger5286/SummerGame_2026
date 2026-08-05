@@ -199,8 +199,6 @@ void SceneMain::Init()
 	soundManager.LoadSound(L"BossBGM", kBossBGMFilePath, SoundManager::SoundType::BGM);
 	soundManager.LoadSound(L"StageBGM", kBGMFilePaths[static_cast<int>(m_uniqueDatas.stage)], SoundManager::SoundType::BGM);
 	soundManager.PlaySoundGame(L"StageBGM", true, true);
-
-
 }
 
 void SceneMain::End()
@@ -276,7 +274,9 @@ void SceneMain::Update()
 	// プレイヤーが死んだらゲームオーバー
 	if (m_pPlayer->IsDead() && !m_isEndScene)
 	{
-		m_sceneManager.ChangeSceneWithFade(std::make_shared<SceneGameOver>(m_sceneManager),false);
+		auto sceneGameOver = std::make_shared<SceneGameOver>(m_sceneManager);
+		sceneGameOver->SetData(m_uniqueDatas);
+		m_sceneManager.ChangeSceneWithFade(sceneGameOver,false);
 		m_isEndScene = true;
 		return;
 	}
