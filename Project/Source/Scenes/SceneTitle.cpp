@@ -4,6 +4,7 @@
 #include "SceneManager.h"
 #include "Game.h"
 #include "Singleton/EffectManager.h"
+#include "Singleton/SoundManager.h"
 
 #include "SceneStageSelect.h"
 #include "SceneOption.h"
@@ -28,6 +29,8 @@ namespace
 
 	constexpr int kFontSize = 30;
 	constexpr int kMenuMargin = 20;
+
+	constexpr const wchar_t* kBGMFilePath = L"data/Sounds/BGM/Title.ogg";
 }
 
 SceneTitle::SceneTitle(SceneManager& sceneManager) :
@@ -65,6 +68,11 @@ void SceneTitle::Init()
 	// フォントを生成
 	m_fontHandle = CreateFontToHandle(Game::kMainFontName, kFontSize, -1, DX_FONTTYPE_ANTIALIASING);
 	assert(m_fontHandle != -1);
+
+	// BGMを再生
+	auto& soundManager = SoundManager::GetInstance();
+	soundManager.LoadSound(L"TitleBGM", kBGMFilePath, SoundManager::SoundType::BGM);
+	soundManager.PlaySoundGame(L"TitleBGM", true, true);
 }
 
 void SceneTitle::End()
@@ -78,6 +86,11 @@ void SceneTitle::End()
 	EffectManager::GetInstance().StopEffect(m_effHandle);
 	// フォントを削除
 	DeleteFontToHandle(m_fontHandle);
+
+	// BGMを停止
+	auto& soundManager = SoundManager::GetInstance();
+	soundManager.StopSound(L"TitleBGM", true);
+	soundManager.DeleteSound(L"TitleBGM");
 }
 
 void SceneTitle::Update()

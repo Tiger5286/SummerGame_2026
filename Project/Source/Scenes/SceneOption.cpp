@@ -152,7 +152,7 @@ void SceneOption::SeVolume()
 		m_volume[static_cast<int>(Volumes::SE)] = 0;
 	}
 
-	SoundManager::GetInstance().ChangeVolume(SoundType::SE, m_volume[static_cast<int>(Volumes::SE)] * 255);
+	SoundManager::GetInstance().ChangeVolume(SoundManager::SoundType::SE, m_volume[static_cast<int>(Volumes::SE)] * 255);
 }
 
 void SceneOption::BgmVolume()
@@ -176,7 +176,7 @@ void SceneOption::BgmVolume()
 		m_volume[static_cast<int>(Volumes::BGM)] = 0;
 	}
 
-	SoundManager::GetInstance().ChangeVolume(SoundType::BGM, m_volume[static_cast<int>(Volumes::BGM)] * 255);
+	SoundManager::GetInstance().ChangeVolume(SoundManager::SoundType::BGM, m_volume[static_cast<int>(Volumes::BGM)] * 255);
 }
 
 void SceneOption::WindowMode()

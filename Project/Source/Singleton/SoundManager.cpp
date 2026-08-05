@@ -1,11 +1,12 @@
 ﻿#include "SoundManager.h"
 #include "Dxlib.h"
 #include <cassert>
+#include <vector>
 
 namespace
 {
 	// 音がフェードする時間(フレーム)
-	constexpr int kFadeFrame = 60;
+	constexpr int kFadeFrame = 40;
 }
 
 SoundManager::SoundManager()
@@ -23,6 +24,7 @@ void SoundManager::Init()
 
 void SoundManager::Update()
 {
+	std::map<std::wstring, SoundInfo> deleteList;
 	// 音のフェードイン、アウト処理
 	for (auto& pair : m_soundMap)
 	{
@@ -53,6 +55,11 @@ void SoundManager::Update()
 				{	// フェードアウト完了
 					pair.second.fadeState = SoundFadeState::None;
 					StopSoundMem(pair.second.handle);	// 音を停止
+					if (pair.second.m_isRequestDelete)
+					{	// 削除リクエストがあったら削除する
+						DeleteSoundMem(pair.second.handle);
+						deleteList[pair.first] = pair.second;
+					}
 				}
 			}
 			// フレームカウントに応じて音量を調整
@@ -61,6 +68,11 @@ void SoundManager::Update()
 			if (pair.second.fadeState == SoundFadeState::None) newVolume = targetVolume;
 			ChangeVolumeSoundMem(newVolume, pair.second.handle);
 		}
+	}
+	// 削除リクエストがあった音を削除
+	for(auto& pair : deleteList)
+	{
+		m_soundMap.erase(pair.first);
 	}
 }
 
@@ -141,15 +153,16 @@ void SoundManager::DeleteSound(const std::wstring& soundName)
 {
 	// 未登録の名前を渡すとエラー
 	assert(m_soundMap.find(soundName) != m_soundMap.end() && "未登録の音です");
-	// 再生中なら止める
-	if (CheckSoundMem(m_soundMap[soundName].handle))
-	{
-		StopSoundMem(m_soundMap[soundName].handle);
-	}
-	// 音をメモリから解放
-	DeleteSoundMem(m_soundMap[soundName].handle);
-	// 登録されている名前を除外
-	m_soundMap.erase(soundName);
+	m_soundMap[soundName].m_isRequestDelete = true;
+	//// 再生中なら止める
+	//if (CheckSoundMem(m_soundMap[soundName].handle))
+	//{
+	//	StopSoundMem(m_soundMap[soundName].handle);
+	//}
+	//// 音をメモリから解放
+	//DeleteSoundMem(m_soundMap[soundName].handle);
+	//// 登録されている名前を除外
+	//m_soundMap.erase(soundName);
 }
 
 void SoundManager::ChangeVolume(SoundType type, int volume)

@@ -25,6 +25,7 @@ public:
 		SoundType type = SoundType::SE;
 		SoundFadeState fadeState = SoundFadeState::None;
 		int fadeFrame = 0;
+		bool m_isRequestDelete = false;
 	};
 
 public:

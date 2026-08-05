@@ -13,6 +13,7 @@
 #include "Singleton/EffectManager.h"
 #include "Singleton/FadeManager.h"
 #include "Singleton/EventManager.h"
+#include "Singleton/SoundManager.h"
 
 #include "Scenes/SceneDebug.h"
 #include "Scenes/SceneTitle.h"
@@ -84,6 +85,7 @@ void Application::Run()
 	auto& colManager = CollisionManager::GetInstance();
 	auto& fadeManager = FadeManager::GetInstance();
 	auto& eventManager = EventManager::GetInstance();
+	auto& soundManager = SoundManager::GetInstance();
 
 	// シーンの生成、初期化
 	SceneManager sceneManager;
@@ -117,6 +119,7 @@ void Application::Run()
 		fadeManager.Update();
 
 		eventManager.Update();
+		soundManager.Update();
 
 		// シーンの描画
 		sceneManager.Draw();
