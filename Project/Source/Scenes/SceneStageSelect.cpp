@@ -17,21 +17,45 @@ namespace
 		L"Stage 3"
 	};
 	// ステージごとの固有のデータ
-	const SceneMain::UniqueFiles kUniqueFiles[static_cast<int>(SceneStageSelect::Stage::Num)] = {
+	const SceneMain::UniqueDatas kUniqueFiles[static_cast<int>(SceneStageSelect::Stage::Num)] = {
 		{
 			.collisionFilePath = L"data/Stages/First/Collision.mv1",
 			.stageFilePath = L"data/Stages/First/Stage.mv1",
-			.spawnerDataFilePath = L"data/Stages/First/SpawnerData.dat"
+			.spawnerDataFilePath = L"data/Stages/First/SpawnerData.dat",
+			.bossDirectionData = {
+				.lightDir = Vector3(0, 0, 1),
+				.cameraPos = Vector3(-5800, 400, 13300),
+				.cameraTargetPos = Vector3(-5800, 400, 13500)
+			}
+#ifdef _DEBUG
+		,.bossRoomEntrancePos = Vector3(-5800, 200, 11500)
+#endif
 		},
 		{
 			.collisionFilePath = L"data/Stages/Second/Collision.mv1",
 			.stageFilePath = L"data/Stages/Second/Stage.mv1",
-			.spawnerDataFilePath = L"data/Stages/Second/SpawnerData.dat"
+			.spawnerDataFilePath = L"data/Stages/Second/SpawnerData.dat",
+			.bossDirectionData = {
+				.lightDir = Vector3(0, 0, -1),
+				.cameraPos = Vector3(3100, 130, -6300),
+				.cameraTargetPos = Vector3(3100, 0, -6800)
+			}
+#ifdef _DEBUG
+		,.bossRoomEntrancePos = Vector3(3100, -130, -4700)
+#endif
 		},
 		{
 			.collisionFilePath = L"data/Stages/First/Collision.mv1",
 			.stageFilePath = L"data/Stages/First/Stage.mv1",
-			.spawnerDataFilePath = L"data/Stages/First/SpawnerData.dat"
+			.spawnerDataFilePath = L"data/Stages/First/SpawnerData.dat",
+			.bossDirectionData = {
+				.lightDir = Vector3(0, 0, -1),
+				.cameraPos = Vector3(0, 100, -300),
+				.cameraTargetPos = Vector3(0, 0, 0)
+			}
+#ifdef _DEBUG
+		,.bossRoomEntrancePos = Vector3(0, 500, 0)
+#endif
 		}
 	};
 }

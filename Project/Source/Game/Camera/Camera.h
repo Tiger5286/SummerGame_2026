@@ -45,6 +45,13 @@ public:
 	/// <param name="shakePower">揺れる力(振れ幅)</param>
 	void SetShake(int shakeFrame, float shakePower);
 
+	/// <summary>
+	/// ボス演出用のカメラの設定をする
+	/// </summary>
+	/// <param name="pos">ボス演出時のカメラの位置</param>
+	/// <param name="targetPos">ボス演出時のカメラの注視点の位置</param>
+	void SetBossDirectionData(const Vector3& pos, const Vector3& targetPos);
+
 private:
 	/// <summary>
 	/// ステートの切り替え処理
@@ -70,6 +77,9 @@ private:
 
 	int m_shakeFrame = 0;
 	float m_shakePower = 0.0f;
+
+	Vector3 m_bossDirectionPos;
+	Vector3 m_bossDirectionTargetPos;
 
 	friend CameraStateFree;
 	friend CameraStateBurning;

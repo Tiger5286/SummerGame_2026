@@ -5,9 +5,6 @@
 
 namespace
 {
-	const Vector3 kPos = Vector3(3100, 130, -6300);
-	const Vector3 kTargetPos = Vector3(3100, 0, -6800);
-
 	constexpr int kStartShakeFrame = 100;
 	constexpr int kShakeFrame = 120;
 	constexpr float kShakePower = 5.0f;
@@ -19,10 +16,10 @@ void CameraStateAppearBoss::Enter(std::weak_ptr<Camera> pCamera)
 {
 	m_pCamera = pCamera;
 	auto camera = m_pCamera.lock();
-	camera->m_pos = kPos;
-	camera->m_targetPos = kTargetPos;
-	camera->m_calcPos = kPos;
-	camera->m_calcTargetPos = kTargetPos;
+	camera->m_pos = camera->m_bossDirectionPos;
+	camera->m_targetPos = camera->m_bossDirectionTargetPos;
+	camera->m_calcPos = camera->m_bossDirectionPos;
+	camera->m_calcTargetPos = camera->m_bossDirectionTargetPos;
 }
 
 void CameraStateAppearBoss::Update()

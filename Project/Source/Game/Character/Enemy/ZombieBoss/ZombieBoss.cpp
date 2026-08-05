@@ -57,6 +57,8 @@ void ZombieBoss::Init()
 
 	// ターゲットUIの位置オフセットを設定
 	m_targetUIOffset = kTargetUIOffset;
+
+	m_isBoss = true;
 }
 
 void ZombieBoss::End()

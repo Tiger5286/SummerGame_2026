@@ -29,17 +29,19 @@ public:
 	struct BossDirectionData
 	{
 		Vector3 lightDir;
-		int frame;
 		Vector3 cameraPos;
-		Vector3 cameraDir;
-		std::wstring bossAppearAnimName;
+		Vector3 cameraTargetPos;
 	};
 	// ステージごとの異なるデータ
-	struct UniqueFiles
+	struct UniqueDatas
 	{
 		std::wstring collisionFilePath;		// ステージの当たり判定モデルのファイルパス
 		std::wstring stageFilePath;			// ステージの見た目モデルのファイルパス
 		std::wstring spawnerDataFilePath;	// スポナーデータのファイルパス
+		BossDirectionData bossDirectionData;// ボス演出用のデータ
+#ifdef _DEBUG
+		Vector3 bossRoomEntrancePos;		// デバッグ用:ボス部屋の入り口の座標
+#endif
 	};
 
 public:
@@ -55,7 +57,7 @@ public:
 	/// ステージごとの固有のデータをセットする(Initの前に実行する)
 	/// </summary>
 	/// <param name="filePaths">ステージごとの固有データのファイルパス</param>
-	void SetData(UniqueFiles filePaths);
+	void SetData(UniqueDatas filePaths);
 
 private:
 	void OnSpawnBoss();
@@ -85,5 +87,5 @@ private:
 
 	std::shared_ptr<SpawnerManager> m_pSpawnerManager = nullptr;
 
-	UniqueFiles m_filePaths;
+	UniqueDatas m_uniqueDatas;
 };

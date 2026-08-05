@@ -100,6 +100,12 @@ void Camera::SetShake(int shakeFrame, float shakePower)
 	m_shakePower = shakePower;
 }
 
+void Camera::SetBossDirectionData(const Vector3& pos, const Vector3& targetPos)
+{
+	m_bossDirectionPos = pos;
+	m_bossDirectionTargetPos = targetPos;
+}
+
 void Camera::CheckChangeState()
 {
 	auto nextState = m_pState->GetNextState();

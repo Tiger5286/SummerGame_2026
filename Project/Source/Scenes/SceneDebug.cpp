@@ -28,11 +28,19 @@ namespace
 	constexpr int kDefaultFontSize = 16;
 	constexpr int kStringMargin = 8;
 
-	SceneMain::UniqueFiles kUniqueFiles =
+	SceneMain::UniqueDatas kUniqueFiles =
 	{
 		.collisionFilePath = L"data/Stages/First/Collision.mv1",
 		.stageFilePath = L"data/Stages/First/Stage.mv1",
-		.spawnerDataFilePath = L"data/Stages/First/SpawnerData.dat"
+		.spawnerDataFilePath = L"data/Stages/First/SpawnerData.dat",
+		.bossDirectionData = {
+			.lightDir = Vector3(0, 0, 1),
+			.cameraPos = Vector3(-5800, 400, 13300),
+			.cameraTargetPos = Vector3(-5800, 400, 13500)
+		}
+#ifdef _DEBUG
+		,.bossRoomEntrancePos = Vector3(-5800, 200, 11500)
+#endif
 	};
 }
 

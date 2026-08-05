@@ -107,7 +107,8 @@ namespace
 	const Vector3 kShadowMapMaxPos = Vector3(3000, 1000, 3000);
 
 #ifdef _DEBUG
-	const Vector3 kBossRoomPos = Vector3(3100, -130, -4700);
+	const Vector3 kBossRoomPosFirst = Vector3(-5800, 200, -11500);
+	const Vector3 kBossRoomPosSecond = Vector3(3100, -130, -4700);
 #endif
 }
 
@@ -132,8 +133,8 @@ void SceneMain::Init()
 	{
 		modelManager.LoadModel(modelFileName.second, modelFileName.first);
 	}
-	modelManager.LoadModel(m_filePaths.collisionFilePath, L"Collision");
-	modelManager.LoadModel(m_filePaths.stageFilePath, L"Stage");
+	modelManager.LoadModel(m_uniqueDatas.collisionFilePath, L"Collision");
+	modelManager.LoadModel(m_uniqueDatas.stageFilePath, L"Stage");
 	// エフェクトのロードと登録
 	auto& effManager = EffectManager::GetInstance();
 	for (const auto& effData : kEffectFileDatas)
@@ -161,6 +162,7 @@ void SceneMain::Init()
 	// カメラの生成
 	m_pCamera = std::make_shared<Camera>();
 	m_pCamera->SetMapHandle(modelManager.GetModelHandle(L"Collision"));
+	m_pCamera->SetBossDirectionData(m_uniqueDatas.bossDirectionData.cameraPos, m_uniqueDatas.bossDirectionData.cameraTargetPos);
 	m_pCamera->Init();
 
 	m_pCamera->SetPlayer(m_pPlayer);
@@ -177,7 +179,7 @@ void SceneMain::Init()
 	m_pSpawnerManager = std::make_shared<SpawnerManager>();
 	m_pSpawnerManager->Init(m_pEnemyManager, m_pPlayer);
 	//m_pSpawnerManager->Loadcsv();
-	m_pSpawnerManager->LoadBinaly(m_filePaths.spawnerDataFilePath);
+	m_pSpawnerManager->LoadBinaly(m_uniqueDatas.spawnerDataFilePath);
 
 	// ターゲットマネージャーの生成
 	m_pTargetManager = std::make_shared<TargetManager>();
@@ -266,7 +268,13 @@ void SceneMain::Update()
 	// 1キーでボス部屋にテレポート
 	if (key[KEY_INPUT_1])
 	{
-		m_pPlayer->SetPos(kBossRoomPos);
+		m_pPlayer->SetPos(m_uniqueDatas.bossRoomEntrancePos);
+	}
+	// enterで現在位置を出力
+	if (key[KEY_INPUT_RETURN])
+	{
+		Vector3 pos = m_pPlayer->GetPos();
+		printfDx(L"PlayerPos:%.2f,%.2f,%.2f\n", pos.x, pos.y, pos.z);
 	}
 #endif
 }
@@ -287,7 +295,7 @@ void SceneMain::Draw()
 	MV1DrawModel(modelManager.GetModelHandle(L"Stage"));
 	SetUseShadowMap(0, -1);
 #ifdef _DEBUG
-	 MV1DrawModel(modelManager.GetModelHandle(L"Collision"));
+	MV1DrawModel(modelManager.GetModelHandle(L"Collision"));
 #endif
 
 #ifdef _DEBUG
@@ -302,7 +310,7 @@ void SceneMain::Draw()
 	// ボス戦演出中ならライトの向きを固定する
 	if (m_isDirectionSpawnBoss)
 	{
-		lightVec = kBossDirectionLight;
+		lightVec = m_uniqueDatas.bossDirectionData.lightDir;
 		SetLightDirection(lightVec);
 	}
 
@@ -336,9 +344,9 @@ void SceneMain::Draw()
 #endif
 }
 
-void SceneMain::SetData(UniqueFiles filePaths)
+void SceneMain::SetData(UniqueDatas uniqueDatas)
 {
-	m_filePaths = filePaths;
+	m_uniqueDatas = uniqueDatas;
 }
 
 void SceneMain::OnSpawnBoss()
