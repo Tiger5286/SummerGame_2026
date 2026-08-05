@@ -3,6 +3,7 @@
 #include "Game.h"
 #include <string_view>
 #include <array>
+#include "Singleton/SoundManager.h"
 
 #include "SceneManager.h"
 #include "SceneMain.h"
@@ -58,6 +59,8 @@ namespace
 #endif
 		}
 	};
+
+	constexpr const wchar_t* kBGMFilePath = L"data/Sounds/BGM/StageSelect.ogg";
 }
 
 SceneStageSelect::SceneStageSelect(SceneManager& sceneManager):
@@ -71,10 +74,16 @@ SceneStageSelect::~SceneStageSelect()
 
 void SceneStageSelect::Init()
 {
+	auto& soundManager = SoundManager::GetInstance();
+	soundManager.LoadSound(L"StageSelectBGM", kBGMFilePath, SoundManager::SoundType::BGM);
+	soundManager.PlaySoundGame(L"StageSelectBGM", true, true);
 }
 
 void SceneStageSelect::End()
 {
+	auto& soundManager = SoundManager::GetInstance();
+	soundManager.StopSound(L"StageSelectBGM", true);
+	soundManager.DeleteSound(L"StageSelectBGM");
 }
 
 void SceneStageSelect::Update()
