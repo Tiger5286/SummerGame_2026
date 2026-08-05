@@ -4,6 +4,7 @@
 #include "SceneManager.h"
 #include "SceneTitle.h"
 #include "Game.h"
+#include "Singleton/SoundManager.h"
 
 namespace
 {
@@ -12,6 +13,8 @@ namespace
 
 	constexpr float kSinScale = 0.1f;
 	constexpr float kSinRate = 0.1f;
+
+	constexpr const wchar_t* kBGMFilePath = L"data/Sounds/BGM/Clear.ogg";
 }
 
 SceneClear::SceneClear(SceneManager& sceneManager) :
@@ -24,6 +27,10 @@ void SceneClear::Init()
 	m_backHandle = LoadGraph(L"data/Graphs/StoneBrick.png");
 	m_clearLogoHandle = LoadGraph(L"data/Graphs/ClearLogo.png");
 	m_buttonHandle = LoadGraph(L"data/Graphs/Buttons/A.png");
+
+	auto& soundManager = SoundManager::GetInstance();
+	soundManager.LoadSound(L"ClearBGM", kBGMFilePath, SoundManager::SoundType::BGM);
+	soundManager.PlaySoundGame(L"ClearBGM", true, true);
 }
 
 void SceneClear::End()
@@ -31,6 +38,10 @@ void SceneClear::End()
 	DeleteGraph(m_backHandle);
 	DeleteGraph(m_clearLogoHandle);
 	DeleteGraph(m_buttonHandle);
+
+	auto& soundManager = SoundManager::GetInstance();
+	soundManager.StopSound(L"ClearBGM", true);
+	soundManager.DeleteSound(L"ClearBGM");
 }
 
 void SceneClear::Update()

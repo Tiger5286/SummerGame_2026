@@ -3,6 +3,7 @@
 #include "Singleton/Input.h"
 #include "SceneManager.h"
 #include "Game.h"
+#include "Singleton/SoundManager.h"
 
 #include "SceneTitle.h"
 #include "SceneMain.h"
@@ -22,6 +23,8 @@ namespace
 
 		Num
 	};
+
+	constexpr const wchar_t* kBGMFilePath = L"data/Sounds/BGM/Gameover.ogg";
 }
 
 SceneGameOver::SceneGameOver(SceneManager& sceneManager) :
@@ -45,12 +48,20 @@ void SceneGameOver::Init()
 		.action = [this]() {Title(); }
 	};
 	m_menu.Init(funcs, Game::kScreenWidth / 2, kMenuStartY, kMenuScale);
+
+	auto& soundManager = SoundManager::GetInstance();
+	soundManager.LoadSound(L"GameOverBGM", kBGMFilePath, SoundManager::SoundType::BGM);
+	soundManager.PlaySoundGame(L"GameOverBGM", true, true);
 }
 
 void SceneGameOver::End()
 {
 	DeleteGraph(m_backHandle);
 	DeleteGraph(m_logoHandle);
+
+	auto& soundManager = SoundManager::GetInstance();
+	soundManager.StopSound(L"GameOverBGM", true);
+	soundManager.DeleteSound(L"GameOverBGM");
 }
 
 void SceneGameOver::Update()
