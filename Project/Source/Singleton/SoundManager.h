@@ -2,29 +2,31 @@
 #include <map>
 #include <string>
 
-enum class SoundType
-{
-	BGM,
-	SE
-};
-
-enum class SoundFadeState
-{
-	None,
-	FadeIn,
-	FadeOut
-};
-
-struct SoundInfo
-{
-	int handle = -1;
-	SoundType type = SoundType::SE;
-	SoundFadeState fadeState = SoundFadeState::None;
-	int fadeFrame = 0;
-};
-
 class SoundManager
 {
+private:
+	enum class SoundFadeState
+	{
+		None,
+		FadeIn,
+		FadeOut
+	};
+
+public:
+	enum class SoundType
+	{
+		BGM,
+		SE
+	};
+
+	struct SoundInfo
+	{
+		int handle = -1;
+		SoundType type = SoundType::SE;
+		SoundFadeState fadeState = SoundFadeState::None;
+		int fadeFrame = 0;
+	};
+
 public:
 	static SoundManager& GetInstance();
 	~SoundManager();
@@ -60,13 +62,8 @@ public:
 	void ChangeVolume(SoundType type, int volume);
 
 	// 音量取得関数
-	int GetBGMVolume() const { return _bgmVolume; }
-	int GetSEVolume() const { return _seVolume; }
-
-private:
-	SoundManager();
-	SoundManager(const SoundManager& sm) = delete;
-	void operator=(const SoundManager& sm) = delete;
+	int GetBGMVolume() const { return m_bgmVolume; }
+	int GetSEVolume() const { return m_seVolume; }
 
 	/// <summary>
 	/// 音声ファイルを読み込み、登録する
@@ -87,11 +84,15 @@ private:
 	/// <param name="soundName">解放する音の登録名</param>
 	void DeleteSound(const std::wstring& soundName);
 
+private:
+	SoundManager();
+	SoundManager(const SoundManager& sm) = delete;
+	void operator=(const SoundManager& sm) = delete;
+
 	// 音声ファイルマップ
-	std::map<std::wstring, SoundInfo> _soundMap;
+	std::map<std::wstring, SoundInfo> m_soundMap;
 
 	// 音量(0~255)
-	int _bgmVolume = 255 / 10 * 7;
-	int _seVolume = 255 / 10 * 7;
+	int m_bgmVolume = 255 / 10 * 7;
+	int m_seVolume = 255 / 10 * 7;
 };
-

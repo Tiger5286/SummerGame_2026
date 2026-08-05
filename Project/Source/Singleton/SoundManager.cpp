@@ -24,7 +24,7 @@ void SoundManager::Init()
 void SoundManager::Update()
 {
 	// 音のフェードイン、アウト処理
-	for (auto& pair : _soundMap)
+	for (auto& pair : m_soundMap)
 	{
 		// 再生中の音がフェードイン・フェードアウト中かどうかを確認
 		if (CheckSoundMem(pair.second.handle))
@@ -56,7 +56,7 @@ void SoundManager::Update()
 				}
 			}
 			// フレームカウントに応じて音量を調整
-			int targetVolume = pair.second.type == SoundType::BGM ? _bgmVolume : _seVolume;
+			int targetVolume = pair.second.type == SoundType::BGM ? m_bgmVolume : m_seVolume;
 			int newVolume = static_cast<int>(pair.second.fadeFrame / static_cast<float>(kFadeFrame) * targetVolume);
 			if (pair.second.fadeState == SoundFadeState::None) newVolume = targetVolume;
 			ChangeVolumeSoundMem(newVolume, pair.second.handle);
@@ -67,55 +67,55 @@ void SoundManager::Update()
 void SoundManager::LoadSound(const std::wstring& soundName, const std::wstring& filePath, SoundType type)
 {
 	// 同じ名前で登録しようとしたらエラー
-	assert(_soundMap.find(soundName) == _soundMap.end() && "すでに登録されている音です");
+	assert(m_soundMap.find(soundName) == m_soundMap.end() && "すでに登録されている音です");
 	// 音を読み込み
 	int soundHandle = LoadSoundMem(filePath.c_str());
 	assert(soundHandle != -1 && "サウンドを正しくロードできませんでした。");
 	// mapにハンドルと音の種類を登録
-	_soundMap[soundName].handle = soundHandle;
-	_soundMap[soundName].type = type;
+	m_soundMap[soundName].handle = soundHandle;
+	m_soundMap[soundName].type = type;
 	// 音の種類に応じて音量を調節
-	ChangeVolumeSoundMem(type == SoundType::BGM ? _bgmVolume : _seVolume, soundHandle);
+	ChangeVolumeSoundMem(type == SoundType::BGM ? m_bgmVolume : m_seVolume, soundHandle);
 }
 
 void SoundManager::PlaySoundGame(const std::wstring& soundName, bool isLoop, bool isFade)
 {
 	// 未登録の名前を渡すとエラー
-	assert(_soundMap.find(soundName) != _soundMap.end() && "未登録の音です");
+	assert(m_soundMap.find(soundName) != m_soundMap.end() && "未登録の音です");
 	// 登録された名前のハンドルの音を再生
-	int handle = _soundMap[soundName].handle;
+	int handle = m_soundMap[soundName].handle;
 	PlaySoundMem(handle, isLoop ? DX_PLAYTYPE_LOOP : DX_PLAYTYPE_BACK);	// ループするかどうかを決める
 	// フェードして再生するならフェード状態をフェードインにする
 	if (isFade)
 	{
-		_soundMap[soundName].fadeState = SoundFadeState::FadeIn;
-		_soundMap[soundName].fadeFrame = 0;
+		m_soundMap[soundName].fadeState = SoundFadeState::FadeIn;
+		m_soundMap[soundName].fadeFrame = 0;
 	}
 	else	// フェードしないなら即再生
 	{
-		_soundMap[soundName].fadeState = SoundFadeState::None;
-		_soundMap[soundName].fadeFrame = kFadeFrame;
+		m_soundMap[soundName].fadeState = SoundFadeState::None;
+		m_soundMap[soundName].fadeFrame = kFadeFrame;
 	}
 }
 
 void SoundManager::StopSound(const std::wstring& soundName, bool isFade)
 {
 	// 未登録の名前を渡すとエラー
-	assert(_soundMap.find(soundName) != _soundMap.end() && "未登録の音です");
+	assert(m_soundMap.find(soundName) != m_soundMap.end() && "未登録の音です");
 	// フェードアウト状態にする
-	_soundMap[soundName].fadeState = SoundFadeState::FadeOut;
+	m_soundMap[soundName].fadeState = SoundFadeState::FadeOut;
 	if (!isFade)
 	{	// フェードしないならフェードアウトを即時終わらせる
-		_soundMap[soundName].fadeState = SoundFadeState::None;
-		_soundMap[soundName].fadeFrame = 0;
-		StopSoundMem(_soundMap[soundName].handle);
+		m_soundMap[soundName].fadeState = SoundFadeState::None;
+		m_soundMap[soundName].fadeFrame = 0;
+		StopSoundMem(m_soundMap[soundName].handle);
 	}
 }
 
 void SoundManager::StopSoundAll(bool isFade)
 {
 	// 全ての登録されている音でStopSoundを実行
-	for (auto& pair : _soundMap)
+	for (auto& pair : m_soundMap)
 	{
 		StopSound(pair.first, isFade);
 	}
@@ -124,7 +124,7 @@ void SoundManager::StopSoundAll(bool isFade)
 void SoundManager::DeleteSoundAll()
 {
 	// 全ての音をメモリから解放
-	for (const auto& pair : _soundMap)
+	for (const auto& pair : m_soundMap)
 	{
 		// 再生中なら止める
 		if (CheckSoundMem(pair.second.handle))
@@ -134,22 +134,22 @@ void SoundManager::DeleteSoundAll()
 		DeleteSoundMem(pair.second.handle);
 	}
 	// mapをクリア
-	_soundMap.clear();
+	m_soundMap.clear();
 }
 
 void SoundManager::DeleteSound(const std::wstring& soundName)
 {
 	// 未登録の名前を渡すとエラー
-	assert(_soundMap.find(soundName) != _soundMap.end() && "未登録の音です");
+	assert(m_soundMap.find(soundName) != m_soundMap.end() && "未登録の音です");
 	// 再生中なら止める
-	if (CheckSoundMem(_soundMap[soundName].handle))
+	if (CheckSoundMem(m_soundMap[soundName].handle))
 	{
-		StopSoundMem(_soundMap[soundName].handle);
+		StopSoundMem(m_soundMap[soundName].handle);
 	}
 	// 音をメモリから解放
-	DeleteSoundMem(_soundMap[soundName].handle);
+	DeleteSoundMem(m_soundMap[soundName].handle);
 	// 登録されている名前を除外
-	_soundMap.erase(soundName);
+	m_soundMap.erase(soundName);
 }
 
 void SoundManager::ChangeVolume(SoundType type, int volume)
@@ -162,14 +162,14 @@ void SoundManager::ChangeVolume(SoundType type, int volume)
 	switch (type)
 	{
 	case SoundType::BGM:
-		_bgmVolume = volume;
+		m_bgmVolume = volume;
 		break;
 	case SoundType::SE:
-		_seVolume = volume;
+		m_seVolume = volume;
 		break;
 	}
 	// 音の種類ごとに音量を調節
-	for (const auto& pair : _soundMap)
+	for (const auto& pair : m_soundMap)
 	{
 		if (pair.second.type == type)
 		{
