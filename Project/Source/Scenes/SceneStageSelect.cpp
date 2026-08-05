@@ -24,11 +24,11 @@ namespace
 			.spawnerDataFilePath = L"data/Stages/First/SpawnerData.dat",
 			.bossDirectionData = {
 				.lightDir = Vector3(0, 0, 1),
-				.cameraPos = Vector3(-5800, 400, 13300),
-				.cameraTargetPos = Vector3(-5800, 400, 13500)
+				.cameraPos = Vector3(-5800, 400, 14800),
+				.cameraTargetPos = Vector3(-5800, 400, 14800) + Vector3::Front()
 			}
 #ifdef _DEBUG
-		,.bossRoomEntrancePos = Vector3(-5800, 200, 11500)
+		,.bossRoomEntrancePos = Vector3(-5800, 200, 13000)
 #endif
 		},
 		{

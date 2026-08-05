@@ -295,10 +295,8 @@ void SceneMain::Draw()
 	MV1DrawModel(modelManager.GetModelHandle(L"Stage"));
 	SetUseShadowMap(0, -1);
 #ifdef _DEBUG
+	// ステージの当たり判定モデルの描画
 	MV1DrawModel(modelManager.GetModelHandle(L"Collision"));
-#endif
-
-#ifdef _DEBUG
 	// グリッドの描画
 	DrawGrid();
 #endif
