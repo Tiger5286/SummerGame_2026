@@ -8,7 +8,6 @@ public:
     {
         First,
         Second,
-        Third,
 
         Num
     };

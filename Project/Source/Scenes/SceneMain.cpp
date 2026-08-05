@@ -10,6 +10,7 @@
 #include "Singleton/UIManager.h"
 #include "Singleton/EventManager.h"
 #include "Singleton/FadeManager.h"
+#include "Singleton/SoundManager.h"
 
 #include "SceneManager.h"
 #include "ScenePause.h"
@@ -106,6 +107,12 @@ namespace
 	const Vector3 kShadowMapMinPos = Vector3(-3000, -1000, -3000);
 	const Vector3 kShadowMapMaxPos = Vector3(3000, 1000, 3000);
 
+	constexpr const wchar_t* kBGMFilePaths[static_cast<int>(SceneMain::Stage::Num)] = {
+		L"data/Sounds/BGM/FirstStage.ogg",
+		L"data/Sounds/BGM/SecondStage.ogg"
+	};
+	constexpr const wchar_t* kBossBGMFilePath = L"data/Sounds/BGM/BossFight.ogg";
+
 #ifdef _DEBUG
 	const Vector3 kBossRoomPosFirst = Vector3(-5800, 200, -11500);
 	const Vector3 kBossRoomPosSecond = Vector3(3100, -130, -4700);
@@ -119,8 +126,6 @@ SceneMain::SceneMain(SceneManager& sceneManager) :
 
 SceneMain::~SceneMain()
 {
-	// イベントマネージャーに登録した関数を削除
-	//EventManager::GetInstance().UnRegister(m_onSpawnBossHandle);
 }
 
 void SceneMain::Init()
@@ -188,6 +193,14 @@ void SceneMain::Init()
 	// スカイボックスの生成
 	m_pSkyBox = std::make_shared<SkyBox>();
 	m_pSkyBox->Init();
+
+	// BGMのロードと再生
+	auto& soundManager = SoundManager::GetInstance();
+	soundManager.LoadSound(L"BossBGM", kBossBGMFilePath, SoundManager::SoundType::BGM);
+	soundManager.LoadSound(L"StageBGM", kBGMFilePaths[static_cast<int>(m_uniqueDatas.stage)], SoundManager::SoundType::BGM);
+	soundManager.PlaySoundGame(L"StageBGM", true, true);
+
+
 }
 
 void SceneMain::End()
@@ -205,6 +218,13 @@ void SceneMain::End()
 	EffectManager::GetInstance().StopEffectAll();
 
 	DeleteShadowMap(m_shadowMapHandle);
+
+	// サウンドの停止と削除
+	auto& soundManager = SoundManager::GetInstance();
+	soundManager.StopSound(L"StageBGM", true);
+	soundManager.StopSound(L"BossBGM", true);
+	soundManager.DeleteSound(L"StageBGM");
+	soundManager.DeleteSound(L"BossBGM");
 }
 
 void SceneMain::Update()
@@ -352,6 +372,9 @@ void SceneMain::OnSpawnBoss()
 	m_isDirectionSpawnBoss = true;
 	FadeManager::GetInstance().StartFadeOut();
 	m_pPlayer->SetCanControl(false);
+	auto& soundManager = SoundManager::GetInstance();
+	soundManager.StopSound(L"StageBGM", true);
+	soundManager.PlaySoundGame(L"BossBGM", true, true);
 }
 
 void SceneMain::SpawnBossUpdate()

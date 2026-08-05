@@ -15,11 +15,11 @@ namespace
 	constexpr std::array<std::wstring_view, static_cast<int>(SceneStageSelect::Stage::Num)> kStageNames = {
 		L"Stage 1",
 		L"Stage 2",
-		L"Stage 3"
 	};
 	// ステージごとの固有のデータ
 	const SceneMain::UniqueDatas kUniqueFiles[static_cast<int>(SceneStageSelect::Stage::Num)] = {
 		{
+			.stage = SceneMain::Stage::First,
 			.collisionFilePath = L"data/Stages/First/Collision.mv1",
 			.stageFilePath = L"data/Stages/First/Stage.mv1",
 			.spawnerDataFilePath = L"data/Stages/First/SpawnerData.dat",
@@ -33,6 +33,7 @@ namespace
 #endif
 		},
 		{
+			.stage = SceneMain::Stage::Second,
 			.collisionFilePath = L"data/Stages/Second/Collision.mv1",
 			.stageFilePath = L"data/Stages/Second/Stage.mv1",
 			.spawnerDataFilePath = L"data/Stages/Second/SpawnerData.dat",
@@ -43,19 +44,6 @@ namespace
 			}
 #ifdef _DEBUG
 		,.bossRoomEntrancePos = Vector3(3100, -130, -4700)
-#endif
-		},
-		{
-			.collisionFilePath = L"data/Stages/First/Collision.mv1",
-			.stageFilePath = L"data/Stages/First/Stage.mv1",
-			.spawnerDataFilePath = L"data/Stages/First/SpawnerData.dat",
-			.bossDirectionData = {
-				.lightDir = Vector3(0, 0, -1),
-				.cameraPos = Vector3(0, 100, -300),
-				.cameraTargetPos = Vector3(0, 0, 0)
-			}
-#ifdef _DEBUG
-		,.bossRoomEntrancePos = Vector3(0, 500, 0)
 #endif
 		}
 	};
