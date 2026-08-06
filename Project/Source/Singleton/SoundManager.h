@@ -94,6 +94,6 @@ private:
 	std::map<std::wstring, SoundInfo> m_soundMap;
 
 	// 音量(0~255)
-	int m_bgmVolume = 255 / 10 * 7;
+	int m_bgmVolume = 255 / 10 * 5;
 	int m_seVolume = 255 / 10 * 7;
 };
