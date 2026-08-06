@@ -87,6 +87,11 @@ void Application::Run()
 	auto& eventManager = EventManager::GetInstance();
 	auto& soundManager = SoundManager::GetInstance();
 
+	// システム音をロード
+	soundManager.LoadSound(L"Decision", L"data/Sounds/SE/System/Decision.mp3", SoundManager::SoundType::SE);
+	soundManager.LoadSound(L"Cancel", L"data/Sounds/SE/System/Cancel.mp3", SoundManager::SoundType::SE);
+	soundManager.LoadSound(L"Select", L"data/Sounds/SE/System/Select.mp3", SoundManager::SoundType::SE);
+
 	// シーンの生成、初期化
 	SceneManager sceneManager;
 #ifdef _DEBUG
