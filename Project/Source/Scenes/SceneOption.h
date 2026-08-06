@@ -21,6 +21,7 @@ private:
     void SeVolume();
     void BgmVolume();
     void WindowMode();
+    void Back();
 
 private:
     int m_fontHandle = -1;

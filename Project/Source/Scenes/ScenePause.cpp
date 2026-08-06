@@ -5,6 +5,7 @@
 #include "SceneManager.h"
 #include <map>
 #include <string_view>
+#include "Singleton/SoundManager.h"
 
 #include "SceneTitle.h"
 #include "SceneOption.h"
@@ -51,6 +52,8 @@ void ScenePause::Init()
 		.action = [this]() {BackToTitle(); }
 	};
 	m_menu.Init(funcs, Game::kScreenWidth / 2, kMenuStartY);
+
+	SoundManager::GetInstance().PlaySoundGame(L"Decision");
 }
 
 void ScenePause::End()
@@ -92,6 +95,7 @@ void ScenePause::Draw()
 void ScenePause::Resume()
 {
 	m_sceneManager.PopScene();
+	SoundManager::GetInstance().PlaySoundGame(L"Cancel");
 }
 
 void ScenePause::Option()
@@ -102,4 +106,5 @@ void ScenePause::Option()
 void ScenePause::BackToTitle()
 {
 	m_sceneManager.ResetSceneWithFade(std::make_shared<SceneTitle>(m_sceneManager));
+	SoundManager::GetInstance().PlaySoundGame(L"Cancel");
 }

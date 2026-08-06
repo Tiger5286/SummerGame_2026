@@ -47,6 +47,11 @@ bool Input::IsTriggerd(int button, bool isMargeStickAndDPad)
 	return m_nowPadInput.Buttons[button] && !m_prevPadInput.Buttons[button];
 }
 
+bool Input::IsReleased(int button)
+{
+	return !m_nowPadInput.Buttons[button] && m_prevPadInput.Buttons[button];
+}
+
 Vector3 Input::GetStickInput(MyLib::LR lr)
 {
 	Vector3 stick;

@@ -32,6 +32,13 @@ public:
 	bool IsTriggerd(int button,bool isMargeStickAndDPad = false);
 
 	/// <summary>
+	/// ボタンが離された瞬間を取得する(引数にはXINPUT_BUTTON定義を使用する)
+	/// </summary>
+	/// <param name="button">取得したいボタン</param>
+	/// <returns>離されたかどうか</returns>
+	bool IsReleased(int button);
+
+	/// <summary>
 	/// スティック入力を取得する
 	/// </summary>
 	/// <param name="lr">左右どちらの入力を取得するか</param>

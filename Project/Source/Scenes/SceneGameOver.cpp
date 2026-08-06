@@ -25,6 +25,22 @@ namespace
 	};
 
 	constexpr const wchar_t* kBGMFilePath = L"data/Sounds/BGM/Gameover.ogg";
+
+	SceneMain::UniqueDatas kUniqueFiles =
+	{
+		.stage = SceneMain::Stage::First,
+		.collisionFilePath = L"data/Stages/First/Collision.mv1",
+		.stageFilePath = L"data/Stages/First/Stage.mv1",
+		.spawnerDataFilePath = L"data/Stages/First/SpawnerData.dat",
+		.bossDirectionData = {
+			.lightDir = Vector3(0, 0, 1),
+			.cameraPos = Vector3(-5800, 400, 14800),
+			.cameraTargetPos = Vector3(-5800, 400, 14800) + Vector3::Front()
+		}
+#ifdef _DEBUG
+		,.bossRoomEntrancePos = Vector3(-5800, 200, 13000)
+#endif
+	};
 }
 
 SceneGameOver::SceneGameOver(SceneManager& sceneManager) :
@@ -52,6 +68,12 @@ void SceneGameOver::Init()
 	auto& soundManager = SoundManager::GetInstance();
 	soundManager.LoadSound(L"GameOverBGM", kBGMFilePath, SoundManager::SoundType::BGM);
 	soundManager.PlaySoundGame(L"GameOverBGM", true, true);
+
+	// もしデータがセットされていなかったら1ステージのデータをセットする
+	if (!m_isSetData)
+	{
+		m_uniqueDatas = kUniqueFiles;
+	}
 }
 
 void SceneGameOver::End()

@@ -91,6 +91,7 @@ void Application::Run()
 	soundManager.LoadSound(L"Decision", L"data/Sounds/SE/System/Decision.mp3", SoundManager::SoundType::SE);
 	soundManager.LoadSound(L"Cancel", L"data/Sounds/SE/System/Cancel.mp3", SoundManager::SoundType::SE);
 	soundManager.LoadSound(L"Select", L"data/Sounds/SE/System/Select.mp3", SoundManager::SoundType::SE);
+	soundManager.LoadSound(L"HeavySlash", L"data/Sounds/SE/Player/Slash2.mp3", SoundManager::SoundType::SE);
 
 	// シーンの生成、初期化
 	SceneManager sceneManager;

@@ -2,6 +2,7 @@
 #include "Singleton/Input.h"
 #include "Game.h"
 #include "DxLib.h"
+#include "Singleton/SoundManager.h"
 
 namespace
 {
@@ -54,6 +55,7 @@ void Menu::Init(std::vector<Funcs> actions, int x, int y,float scale)
 void Menu::Update()
 {
 	auto& input = Input::GetInstance();
+	auto& soundManager = SoundManager::GetInstance();
 
 	// 上下キーでメニューの選択を変更する
 	if (input.IsTriggerd(XINPUT_BUTTON_DPAD_DOWN, true))
@@ -63,6 +65,7 @@ void Menu::Update()
 		{
 			m_selectIndex = 0;
 		}
+		soundManager.PlaySoundGame(L"Select");
 	}
 	if (input.IsTriggerd(XINPUT_BUTTON_DPAD_UP, true))
 	{
@@ -71,6 +74,7 @@ void Menu::Update()
 		{
 			m_selectIndex = m_items.size() - 1;
 		}
+		soundManager.PlaySoundGame(L"Select");
 	}
 
 	// 選択中の項目によって異なるアクションを実行する

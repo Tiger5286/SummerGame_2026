@@ -72,12 +72,14 @@ void SceneOption::Init()
 	};
 	menuActions[static_cast<int>(MenuList::Back)] = {
 		.name = L"戻る",
-		.action = [this]() { m_sceneManager.PopScene(); },
+		.action = [this]() { Back(); },
 		.type = Menu::Type::Normal,
 		.pBarRate = nullptr,
 		.pSwitch = nullptr
 	};
 	m_menu.Init(menuActions, Game::kScreenWidth / 2, kMenuStartY);
+
+	SoundManager::GetInstance().PlaySoundGame(L"Decision");
 }
 
 void SceneOption::End()
@@ -92,7 +94,7 @@ void SceneOption::Update()
 	// Bボタンでオプションを閉じる
 	if (input.IsTriggerd(XINPUT_BUTTON_B))
 	{
-		m_sceneManager.PopScene();
+		Back();
 		return;
 	}
 
@@ -142,6 +144,11 @@ void SceneOption::SeVolume()
 	{
 		m_volume[static_cast<int>(Volumes::SE)]-= kVolumeControlSpeed;
 	}
+	// 音量の増減が終わったら効果音を再生する
+	if (input.IsReleased(XINPUT_BUTTON_DPAD_LEFT) || input.IsReleased(XINPUT_BUTTON_DPAD_RIGHT))
+	{
+		SoundManager::GetInstance().PlaySoundGame(L"HeavySlash");
+	}
 
 	if (m_volume[static_cast<int>(Volumes::SE)] > 1.0f)
 	{
@@ -186,5 +193,13 @@ void SceneOption::WindowMode()
 	{
 		m_isFullScreen = !m_isFullScreen;
 		ChangeWindowMode(!m_isFullScreen);
+		SoundManager::GetInstance().PlaySoundGame(L"Decision");
 	}
+}
+
+
+void SceneOption::Back()
+{
+	m_sceneManager.PopScene();
+	SoundManager::GetInstance().PlaySoundGame(L"Cancel");
 }

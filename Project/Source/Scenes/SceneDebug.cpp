@@ -30,6 +30,7 @@ namespace
 
 	SceneMain::UniqueDatas kUniqueFiles =
 	{
+		.stage = SceneMain::Stage::First,
 		.collisionFilePath = L"data/Stages/First/Collision.mv1",
 		.stageFilePath = L"data/Stages/First/Stage.mv1",
 		.spawnerDataFilePath = L"data/Stages/First/SpawnerData.dat",

@@ -18,7 +18,7 @@ public:
     void Update() override;
     void Draw() override;
 
-	void SetData(SceneMain::UniqueDatas uniqueDatas) { m_uniqueDatas = uniqueDatas; }
+    void SetData(SceneMain::UniqueDatas uniqueDatas) { m_uniqueDatas = uniqueDatas; m_isSetData = true; }
 
 private:
     void Retry();
@@ -28,5 +28,6 @@ private:
     int m_logoHandle = -1;
     Menu m_menu;
 	SceneMain::UniqueDatas m_uniqueDatas;
+    bool m_isSetData = false;
 };
 
