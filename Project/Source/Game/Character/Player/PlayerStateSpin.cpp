@@ -4,6 +4,7 @@
 #include "Wing/SpinWing.h"
 #include "Utility/Matrix4x4.h"
 #include "Singleton/EffectManager.h"
+#include "Singleton/SoundManager.h"
 
 #include "PlayerStateIdle.h"
 
@@ -48,6 +49,8 @@ void PlayerStateSpin::OnEnter()
 	{
 		player->m_anim.SetFloatAnimLowerBody(true);
 	}
+
+	SoundManager::GetInstance().PlaySoundGame(L"Shift");
 }
 
 void PlayerStateSpin::Update()
@@ -70,6 +73,10 @@ void PlayerStateSpin::Update()
 		m_pAttackR = std::make_shared<Attack>();
 		m_pAttackR->SetData(kAttackData, shared_from_this());
 		m_pAttackR->Init();
+		if (m_frame == kAttackFrame[0])
+		{
+			SoundManager::GetInstance().PlaySoundGame(L"Spin");
+		}
 	}
 	// 攻撃の更新
 	if (m_pAttackL != nullptr)

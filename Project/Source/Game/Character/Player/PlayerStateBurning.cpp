@@ -5,6 +5,7 @@
 #include "../../Camera/CameraStateFree.h"
 #include "../Attack.h"
 #include "Singleton/EffectManager.h"
+#include "Singleton/SoundManager.h"
 #include "Wing/BurningWing.h"
 #include "Game.h"
 
@@ -55,6 +56,8 @@ void PlayerStateBurning::OnEnter()
 	player->m_specialCharge = 0;
 
 	player->m_isCanHitAttack = false;
+
+	SoundManager::GetInstance().PlaySoundGame(L"Spin");
 }
 
 void PlayerStateBurning::Update()
@@ -71,6 +74,11 @@ void PlayerStateBurning::Update()
 	}
 	player->m_drawAngle = player->m_angle + m_angleOffset;
 
+	auto& soundManager = SoundManager::GetInstance();
+	if (m_frame == kStartAttackFrame)
+	{
+		soundManager.PlaySoundGame(L"Burning");
+	}
 	// 攻撃のフレームの間、一定のフレームごとに攻撃を生成する
 	if (m_frame > kStartAttackFrame && m_frame < kEndAttackFrame)
 	{	// 一定のフレームごとに攻撃を生成する
@@ -81,6 +89,7 @@ void PlayerStateBurning::Update()
 			m_pAtk->SetData(kAttackData, shared_from_this());
 			m_pAtk->Init();
 			m_pAtk->SetPos(player->m_pos);
+			soundManager.PlaySoundGame(L"Shift");
 		}
 	}
 	else

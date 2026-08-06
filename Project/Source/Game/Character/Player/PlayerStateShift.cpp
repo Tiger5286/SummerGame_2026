@@ -4,6 +4,7 @@
 #include "Singleton/EffectManager.h"
 #include "Utility/Matrix4x4.h"
 #include <EffekseerForDXLib.h>
+#include "Singleton/SoundManager.h"
 
 #include "PlayerStateIdle.h"
 #include "PlayerStateMove.h"
@@ -55,6 +56,8 @@ void PlayerStateShift::OnEnter()
 	}
 	// 空中で発動可能フラグを消す
 	player->m_isCanAirShift = false;
+	// 効果音を鳴らす
+	SoundManager::GetInstance().PlaySoundGame(L"Shift");
 }
 
 void PlayerStateShift::Update()
