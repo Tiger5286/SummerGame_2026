@@ -183,7 +183,6 @@ void SceneMain::Init()
 	// スポナークラスの生成(スポナーのデータをロード)
 	m_pSpawnerManager = std::make_shared<SpawnerManager>();
 	m_pSpawnerManager->Init(m_pEnemyManager, m_pPlayer);
-	//m_pSpawnerManager->Loadcsv();
 	m_pSpawnerManager->LoadBinaly(m_uniqueDatas.spawnerDataFilePath);
 
 	// ターゲットマネージャーの生成
