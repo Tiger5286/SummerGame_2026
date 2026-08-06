@@ -3,6 +3,7 @@
 #include "Singleton/Input.h"
 #include "Utility/MyLib.h"
 #include "../Attack.h"
+#include "Singleton/SoundManager.h"
 
 #include "PlayerStateMove.h"
 #include "PlayerStateIdle.h"
@@ -52,6 +53,7 @@ void PlayerStateShiftAttack::Update()
 		m_pAtk = std::make_shared<Attack>();
 		m_pAtk->SetData(kAttackData, shared_from_this());
 		m_pAtk->Init();
+		SoundManager::GetInstance().PlaySoundGame(L"HeavySlash");
 	}
 	// 当たり判定終了
 	if (m_frame >= kEndColFrame)

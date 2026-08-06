@@ -50,7 +50,7 @@ namespace
 	constexpr SEData kSEDatas[] = {
 		{ L"data/Sounds/SE/Slash1.mp3", L"LightSlash" },
 		{ L"data/Sounds/SE/Slash2.mp3", L"HeavySlash" },
-		{ L"data/Sounds/SE/Slash_NoHit.mp3", L"SlashNoHit" },
+		{ L"data/Sounds/SE/Dodge.mp3", L"Dodge" },
 		{ L"data/Sounds/SE/Shift.mp3", L"Shift" },
 		{ L"data/Sounds/SE/Spin.mp3", L"Spin" },
 		{ L"data/Sounds/SE/Burning.mp3", L"Burning" },

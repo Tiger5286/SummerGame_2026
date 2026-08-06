@@ -1,6 +1,7 @@
 ﻿#include "PlayerStateDodge.h"
 #include "Player.h"
 #include "Utility/Matrix4x4.h"
+#include "Singleton/SoundManager.h"
 
 #include "PlayerStateMove.h"
 #include "PlayerStateFall.h"
@@ -21,6 +22,7 @@ void PlayerStateDodge::OnEnter()
 	m_pPlayer.lock()->m_anim.ChangeAnim(kRollingAnimName, 0.5f, false);
 	m_pPlayer.lock()->RotateInputDir();
 	m_pPlayer.lock()->m_isCanHitAttack = false;
+	SoundManager::GetInstance().PlaySoundGame(L"Dodge");
 }
 
 void PlayerStateDodge::Update()

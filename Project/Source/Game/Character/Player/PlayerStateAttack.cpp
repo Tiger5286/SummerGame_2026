@@ -5,6 +5,7 @@
 #include <vector>
 #include "Game/Character/Attack.h"
 #include "Singleton/CollisionManager.h"
+#include "Singleton/SoundManager.h"
 #include "Utility/MyLib.h"
 
 #include "PlayerStateIdle.h"
@@ -187,6 +188,7 @@ void PlayerStateAttack::Update()
 	// 落下しないようにする
 	player->m_vel.y = 0.0f;
 
+	auto& soundManager = SoundManager::GetInstance();
 	// 当たり判定処理
 	// 当たり判定開始	当たり判定開始の時間、かつまだ当たり判定をonにしていないなら
 	if (animRate > kComboDatas[m_comboIndex].startColTimeRate && !m_isOnCollider)
@@ -196,6 +198,14 @@ void PlayerStateAttack::Update()
 		m_pAtk->SetData(kAttackData[m_comboIndex], shared_from_this());
 		m_pAtk->Init();
 		m_isOnCollider = true;
+		if (m_comboIndex == kLastComboIndex)
+		{
+			soundManager.PlaySoundGame(L"HeavySlash");
+		}
+		else
+		{
+			soundManager.PlaySoundGame(L"LightSlash");
+		}
 	}
 	// 当たり判定終了	当たり判定終了の時間、かつまだ当たり判定をoffにしていないなら
 	if (animRate > kComboDatas[m_comboIndex].endColTimeRate && !m_isOffCollider)
