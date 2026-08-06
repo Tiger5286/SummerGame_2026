@@ -57,7 +57,6 @@ void SoundManager::Update()
 					StopSoundMem(pair.second.handle);	// 音を停止
 					if (pair.second.m_isRequestDelete)
 					{	// 削除リクエストがあったら削除する
-						DeleteSoundMem(pair.second.handle);
 						deleteList[pair.first] = pair.second;
 					}
 				}
@@ -68,10 +67,19 @@ void SoundManager::Update()
 			if (pair.second.fadeState == SoundFadeState::None) newVolume = targetVolume;
 			ChangeVolumeSoundMem(newVolume, pair.second.handle);
 		}
+		else
+		{
+			// 再生中でない音が削除リクエストがあったら削除する
+			if (pair.second.m_isRequestDelete)
+			{
+				deleteList[pair.first] = pair.second;
+			}
+		}
 	}
 	// 削除リクエストがあった音を削除
 	for(auto& pair : deleteList)
 	{
+		DeleteSoundMem(pair.second.handle);
 		m_soundMap.erase(pair.first);
 	}
 }
