@@ -90,6 +90,7 @@ void SceneStageSelect::Update()
 		}
 		// 実際の選択しているステージに適用
 		m_selectStage = static_cast<Stage>(nextSelect);
+		SoundManager::GetInstance().PlaySoundGame(L"Select");
 	}
 
 	if (input.IsTriggerd(XINPUT_BUTTON_DPAD_LEFT, true))
@@ -103,6 +104,7 @@ void SceneStageSelect::Update()
 		}
 		// 実際の選択しているステージに適用
 		m_selectStage = static_cast<Stage>(nextSelect);
+		SoundManager::GetInstance().PlaySoundGame(L"Select");
 	}
 
 	// 決定入力でステージ開始
@@ -111,6 +113,7 @@ void SceneStageSelect::Update()
 		auto sceneMain = std::make_shared<SceneMain>(m_sceneManager);
 		sceneMain->SetData(kUniqueFiles[static_cast<int>(m_selectStage)]);
 		m_sceneManager.ChangeSceneWithFade(sceneMain, true);
+		SoundManager::GetInstance().PlaySoundGame(L"Decision");
 		return;
 	}
 	
@@ -118,6 +121,7 @@ void SceneStageSelect::Update()
 	if (input.IsTriggerd(XINPUT_BUTTON_B))
 	{
 		m_sceneManager.ChangeSceneWithFade(std::make_shared<SceneTitle>(m_sceneManager), false);
+		SoundManager::GetInstance().PlaySoundGame(L"Cancel");
 		return;
 	}
 }

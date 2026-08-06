@@ -106,6 +106,7 @@ void SceneTitle::Update()
 		{
 			m_selectIndex = 0;
 		}
+		SoundManager::GetInstance().PlaySoundGame(L"Select");
 	}
 	if (input.IsTriggerd(XINPUT_BUTTON_DPAD_UP, true))
 	{
@@ -115,6 +116,7 @@ void SceneTitle::Update()
 		{
 			m_selectIndex = static_cast<int>(Menu::Num) - 1;
 		}
+		SoundManager::GetInstance().PlaySoundGame(L"Select");
 	}
 	// 決定ボタンで選択中のメニューのアクションを実行する
 	if (input.IsTriggerd(XINPUT_BUTTON_A))
@@ -166,6 +168,7 @@ void SceneTitle::Draw()
 void SceneTitle::Start()
 {
 	m_sceneManager.ChangeSceneWithFade(std::make_shared<SceneStageSelect>(m_sceneManager),false);
+	SoundManager::GetInstance().PlaySoundGame(L"Decision");
 }
 
 void SceneTitle::Option()
@@ -176,4 +179,5 @@ void SceneTitle::Option()
 void SceneTitle::Exit()
 {
 	Application::GetInstance().RequestExit();
+	SoundManager::GetInstance().PlaySoundGame(L"Cancel");
 }

@@ -51,6 +51,7 @@ void SceneClear::Update()
 	if (input.IsTriggerd(XINPUT_BUTTON_A))
 	{
 		m_sceneManager.ChangeSceneWithFade(std::make_shared<SceneTitle>(m_sceneManager), false);
+		SoundManager::GetInstance().PlaySoundGame(L"Decision");
 		return;
 	}
 }

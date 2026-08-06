@@ -110,9 +110,11 @@ void SceneGameOver::Retry()
 	auto sceneMain = std::make_shared<SceneMain>(m_sceneManager);
 	sceneMain->SetData(m_uniqueDatas);
 	m_sceneManager.ChangeSceneWithFade(sceneMain, true);
+	SoundManager::GetInstance().PlaySoundGame(L"Decision");
 }
 
 void SceneGameOver::Title()
 {
 	m_sceneManager.ChangeSceneWithFade(std::make_shared<SceneTitle>(m_sceneManager), false);
+	SoundManager::GetInstance().PlaySoundGame(L"Cancel");
 }
