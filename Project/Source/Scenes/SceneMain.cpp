@@ -33,8 +33,6 @@ namespace
 {
 	// ロードするモデルのファイル名と登録名
 	const std::vector<std::pair<std::wstring, std::wstring>> kModelFileNames = {
-		//{ L"Collision", L"data/models/Stage/Collision.mv1" },
-		//{ L"Stage",L"data/models/Stage/Stage.mv1" },
 		{ L"Player", L"data/models/Player/Player.mv1" },
 		{ L"Wing" , L"data/models/Player/Wing.mv1" },
 		{ L"Zombie", L"data/models/Enemy/Zombie.mv1" },
@@ -44,6 +42,22 @@ namespace
 		{ L"ZombieBoss",L"data/models/Enemy/ZombieBoss.mv1"}
 	};
 
+	struct SEData
+	{
+		const wchar_t* filePath;
+		const wchar_t* name;
+	};
+	constexpr SEData kSEDatas[] = {
+		{ L"data/Sounds/SE/Slash1.mp3", L"LightSlash" },
+		{ L"data/Sounds/SE/Slash2.mp3", L"HeavySlash" },
+		{ L"data/Sounds/SE/Slash_NoHit.mp3", L"SlashNoHit" },
+		{ L"data/Sounds/SE/Shift.mp3", L"Shift" },
+		{ L"data/Sounds/SE/Spin.mp3", L"Spin" },
+		{ L"data/Sounds/SE/Burning.mp3", L"Burning" },
+		{ L"data/Sounds/SE/Damage.mp3", L"Damage" }
+	};
+
+	// ロードするエフェクトのデータ
 	const std::vector<SceneMain::EffectData> kEffectFileDatas =
 	{
 		{
@@ -198,6 +212,11 @@ void SceneMain::Init()
 	soundManager.LoadSound(L"BossBGM", kBossBGMFilePath, SoundManager::SoundType::BGM);
 	soundManager.LoadSound(L"StageBGM", kBGMFilePaths[static_cast<int>(m_uniqueDatas.stage)], SoundManager::SoundType::BGM);
 	soundManager.PlaySoundGame(L"StageBGM", true, true);
+	// 効果音のロード
+	for (auto& se : kSEDatas)
+	{
+		soundManager.LoadSound(se.name, se.filePath, SoundManager::SoundType::SE);
+	}
 }
 
 void SceneMain::End()
@@ -222,6 +241,12 @@ void SceneMain::End()
 	soundManager.StopSound(L"BossBGM", true);
 	soundManager.DeleteSound(L"StageBGM");
 	soundManager.DeleteSound(L"BossBGM");
+	// 効果音の削除
+	for(auto& se : kSEDatas)
+	{
+		soundManager.StopSound(se.name, true);
+		soundManager.DeleteSound(se.name);
+	}
 }
 
 void SceneMain::Update()
