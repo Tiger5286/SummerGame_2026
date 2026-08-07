@@ -7,6 +7,7 @@
 #include "Game/Collider/CapsuleCollider.h"
 #include "Singleton/CollisionManager.h"
 #include "Singleton/UIManager.h"
+#include "Singleton/SoundManager.h"
 #include "../../Camera/Camera.h"
 
 #include "../../UI/PlayerHPUI.h"
@@ -196,6 +197,8 @@ void Player::OnHitAttack(const MyLib::AttackData& atkData)
 	{
 		return;
 	}
+
+	SoundManager::GetInstance().PlaySoundGame(L"Damage");
 
 	// ダメージを食らう
 	m_hp -= atkData.damage;
