@@ -8,7 +8,7 @@ namespace
 	constexpr const wchar_t* kAnimName = L"ZombieBoss|GroundAttack";
 
 	constexpr int kStartAttackFrame = 90 * 2;
-	constexpr int kEndAttackFrame = 120 * 2;
+	constexpr int kEndAttackFrame = 100 * 2;
 
 	MyLib::AttackData kAttackData = {
 		500.0f,
