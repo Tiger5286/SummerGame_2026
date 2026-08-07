@@ -13,9 +13,14 @@ namespace
 {
 	// ステージ名
 	constexpr std::array<std::wstring_view, static_cast<int>(SceneStageSelect::Stage::Num)> kStageNames = {
-		L"Stage 1",
-		L"Stage 2",
+		L"ステージ 1",
+		L"ステージ 2",
 	};
+	constexpr std::wstring_view kStartStageString = L"ステージ開始";
+	constexpr int kStartStageStringY = Game::kScreenHeight / 2 + 200;
+	constexpr float kStartStageStringSinScale = 20.0f;
+	constexpr float kStartStageStringScaleWidth = 0.1f;
+
 	// ステージごとの固有のデータ
 	const SceneMain::UniqueDatas kUniqueFiles[static_cast<int>(SceneStageSelect::Stage::Num)] = {
 		{
@@ -49,6 +54,21 @@ namespace
 	};
 
 	constexpr const wchar_t* kBGMFilePath = L"data/Sounds/BGM/StageSelect.ogg";
+
+	constexpr const wchar_t* kBackGraphs[static_cast<int>(SceneStageSelect::Stage::Num)] = {
+		L"data/Graphs/FirstStage.png",
+		L"data/Graphs/SecondStage.png"
+	};
+	constexpr float kBackAlphaLerpT = 0.2f;
+
+	constexpr int kFontSize = 50;
+
+	constexpr int kSideStringOffsetX = 100;
+
+	constexpr int kSelectArrowOffsetX = 430;
+	constexpr float kSelectArrowScale = 0.5f;
+	constexpr float kSelectArrowSinScale = 10.0f;
+	constexpr int kSelectArrowMoveWidth = 5;
 }
 
 SceneStageSelect::SceneStageSelect(SceneManager& sceneManager):
@@ -65,6 +85,16 @@ void SceneStageSelect::Init()
 	auto& soundManager = SoundManager::GetInstance();
 	soundManager.LoadSound(L"StageSelectBGM", kBGMFilePath, SoundManager::SoundType::BGM);
 	soundManager.PlaySoundGame(L"StageSelectBGM", true, true);
+
+	for (int i = 0; i < static_cast<int>(Stage::Num); i++)
+	{
+		m_backHandles[i] = LoadGraph(kBackGraphs[i]);
+	}
+	m_backAlpha[static_cast<int>(Stage::First)] = 1.0f;
+	m_buttonHandle = LoadGraph(L"data/Graphs/Buttons/A.png");
+	m_arrowHandle = LoadGraph(L"data/Graphs/SelectArrow.png");
+
+	m_fontHandle = CreateFontToHandle(Game::kMainFontName, kFontSize, -1);
 }
 
 void SceneStageSelect::End()
@@ -72,11 +102,21 @@ void SceneStageSelect::End()
 	auto& soundManager = SoundManager::GetInstance();
 	soundManager.StopSound(L"StageSelectBGM", true);
 	soundManager.DeleteSound(L"StageSelectBGM");
+
+	for (auto& handle : m_backHandles)
+	{
+		DeleteGraph(handle);
+	}
+	DeleteGraph(m_buttonHandle);
+	DeleteGraph(m_arrowHandle);
+
+	DeleteFontToHandle(m_fontHandle);
 }
 
 void SceneStageSelect::Update()
 {
 	auto& input = Input::GetInstance();
+	m_frame++;
 
 	// 左右入力で選択しているステージを切り替え
 	if (input.IsTriggerd(XINPUT_BUTTON_DPAD_RIGHT,true))
@@ -124,19 +164,43 @@ void SceneStageSelect::Update()
 		SoundManager::GetInstance().PlaySoundGame(L"Cancel");
 		return;
 	}
+
+	// 背景のアルファ値を選択中のステージに合わせて変化させる
+	for (int i = 0; i < static_cast<int>(Stage::Num); i++)
+	{
+		if (i == static_cast<int>(m_selectStage))
+		{
+			m_backAlpha[i] = std::lerp(m_backAlpha[i], 1.0f, kBackAlphaLerpT);
+		}
+		else
+		{
+			m_backAlpha[i] = std::lerp(m_backAlpha[i], 0.0f, kBackAlphaLerpT);
+		}
+	}
 }
 
 void SceneStageSelect::Draw()
 {
+	// 背景描画
+	for (int i = 0; i < static_cast<int>(Stage::Num); i++)
+	{
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(m_backAlpha[i] * 255));
+		DrawGraph(0, 0, m_backHandles[i], true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
+
 	// 選択中のステージ(真ん中)
-	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, kStageNames[static_cast<int>(m_selectStage)].data(), 0xffffff);
+	int strW = GetDrawStringWidthToHandle(kStageNames[static_cast<int>(m_selectStage)].data(), kStageNames[static_cast<int>(m_selectStage)].size(), m_fontHandle);
+	DrawStringToHandle(Game::kScreenWidth / 2 - strW / 2,Game::kScreenHeight / 2 - kFontSize / 2,kStageNames[static_cast<int>(m_selectStage)].data(), 0xffffff, m_fontHandle);
 
 	// 選択より一つ前のステージ(左)
 	int prevStage = static_cast<int>(m_selectStage) - 1;
 	// ひとつ前のステージが存在するステージの範囲内なら描画
+	float arrowOffsetX = sinf(m_frame / kSelectArrowSinScale) * kSelectArrowMoveWidth;
 	if (prevStage >= 0)
 	{
-		DrawString(Game::kScreenWidth / 4, Game::kScreenHeight / 2, kStageNames[prevStage].data(), 0x888888);
+		DrawStringToHandle(kSideStringOffsetX, Game::kScreenHeight / 2 - kFontSize / 2, kStageNames[prevStage].data(), 0x888888,m_fontHandle);
+		DrawRotaGraph(kSelectArrowOffsetX + arrowOffsetX, Game::kScreenHeight / 2, kSelectArrowScale, DX_PI_F, m_arrowHandle, true);
 	}
 
 	// 選択より一つ後のステージ(右)
@@ -144,8 +208,17 @@ void SceneStageSelect::Draw()
 	// ひとつ後のステージが存在するステージの範囲内なら描画
 	if (nextStage < static_cast<int>(Stage::Num))
 	{
-		DrawString(Game::kScreenWidth / 4 * 3, Game::kScreenHeight / 2, kStageNames[nextStage].data(), 0x888888);
+		strW = GetDrawStringWidthToHandle(kStageNames[nextStage].data(), kStageNames[nextStage].size(), m_fontHandle);
+		DrawStringToHandle(Game::kScreenWidth - kSideStringOffsetX - strW, Game::kScreenHeight / 2 - kFontSize / 2, kStageNames[nextStage].data(), 0x888888,m_fontHandle);
+		DrawRotaGraph(Game::kScreenWidth - kSelectArrowOffsetX + arrowOffsetX, Game::kScreenHeight / 2, kSelectArrowScale, 0.0f, m_arrowHandle, true);
 	}
+
+	strW = GetDrawStringWidthToHandle(kStartStageString.data(), kStartStageString.size(), m_fontHandle);
+	DrawStringToHandle(Game::kScreenWidth / 2 - strW / 2, kStartStageStringY - kFontSize / 2, kStartStageString.data(), 0xffffff, m_fontHandle);
+	int w, h;
+	GetGraphSize(m_buttonHandle, &w, &h);
+	float scale = sinf(m_frame / kStartStageStringSinScale) * kStartStageStringScaleWidth;
+	DrawRotaGraph(Game::kScreenWidth / 2 - strW / 2 - w / 2, kStartStageStringY, 1.0f + scale, 0.0, m_buttonHandle, true);
 
 #ifdef _DEBUG
 	DrawString(0, 0, L"SceneStageSelect", 0xffffff);
