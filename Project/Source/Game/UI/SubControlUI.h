@@ -2,12 +2,12 @@
 #include "UIBase.h"
 #include <vector>
 
-class ControlUILeft :
+class SubControlUI :
     public UIBase
 {
 public:
-    ControlUILeft();
-    ~ControlUILeft();
+    SubControlUI();
+    ~SubControlUI();
 
     void Init() override;
     void Update() override;

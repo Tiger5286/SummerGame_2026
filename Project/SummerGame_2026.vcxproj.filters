@@ -273,7 +273,7 @@
     <ClCompile Include="Source\Singleton\SoundManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\UI\ControlUILeft.cpp">
+    <ClCompile Include="Source\Game\UI\SubControlUI.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Character\Player\PlayerStateShiftAttack.cpp">
@@ -313,6 +313,9 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Character\Enemy\ZombieBoss\ZombieBossStateGroundAttack.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\TutorialManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -578,7 +581,7 @@
     <ClInclude Include="Source\Singleton\SoundManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\UI\ControlUILeft.h">
+    <ClInclude Include="Source\Game\UI\SubControlUI.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Character\Player\PlayerStateShiftAttack.h">
@@ -618,6 +621,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Character\Enemy\ZombieBoss\ZombieBossStateGroundAttack.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\TutorialManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

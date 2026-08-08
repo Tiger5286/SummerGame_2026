@@ -4,7 +4,7 @@
 #include "Singleton/Input.h"
 #include "../Character/Player/Player.h"
 #include <string_view>
-#include "ControlUILeft.h"
+#include "SubControlUI.h"
 #include "Singleton/UIManager.h"
 
 namespace
@@ -86,7 +86,7 @@ void ControlUI::Init()
 	}
 	m_fontHandle = CreateFontToHandle(Game::kMainFontName, kFontSize, -1);
 
-	m_pUILeft = std::make_shared<ControlUILeft>();
+	m_pUILeft = std::make_shared<SubControlUI>();
 	m_pUILeft->SetInfo(m_fontHandle);
 	UIManager::GetInstance().AddUI(m_pUILeft);
 }
