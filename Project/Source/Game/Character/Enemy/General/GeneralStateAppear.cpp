@@ -2,6 +2,7 @@
 #include "General.h"
 #include "Singleton/FadeManager.h"
 #include "Singleton/EffectManager.h"
+#include "Singleton/SoundManager.h"
 
 #include "GeneralStateWalk.h"
 
@@ -43,6 +44,7 @@ void GeneralStateAppear::Update()
 	if (m_frame == kStartRoarFrame)
 	{
 		EffectManager::GetInstance().PlayEffect(L"BossRoar", general->m_pos + kEffectOffset);
+		SoundManager::GetInstance().PlaySoundGame(L"GeneralAppear");
 	}
 
 	if (general->m_anim == kRoarAnimName)

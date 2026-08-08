@@ -1,5 +1,6 @@
 ﻿#include "ZombieBossStateAppear.h"
 #include "Singleton/EffectManager.h"
+#include "Singleton/SoundManager.h"
 
 #include "ZombieBossStateIdle.h"
 
@@ -33,6 +34,7 @@ void ZombieBossStateAppear::Update()
 	if (m_frame == kStartScreamFrame)
 	{
 		EffectManager::GetInstance().PlayEffect(L"BossRoar", zombieBoss->m_pos + kEffectOffset);
+		SoundManager::GetInstance().PlaySoundGame(L"ZombieBossAppear");
 	}
 	if (zombieBoss->m_anim == kScreamAnimName)
 	{

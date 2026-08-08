@@ -42,6 +42,7 @@ namespace
 		{ L"ZombieBoss",L"data/models/Enemy/ZombieBoss.mv1"}
 	};
 
+	// ロードするSEのデータ
 	struct SEData
 	{
 		const wchar_t* filePath;
@@ -53,7 +54,9 @@ namespace
 		{ L"data/Sounds/SE/Player/Shift.mp3", L"Shift" },
 		{ L"data/Sounds/SE/Player/Spin.mp3", L"Spin" },
 		{ L"data/Sounds/SE/Player/Burning.mp3", L"Burning" },
-		{ L"data/Sounds/SE/Damage.mp3", L"Damage" }
+		{ L"data/Sounds/SE/Damage.mp3", L"Damage" },
+		{L"data/Sounds/SE/Enemy/ZombieBossAppear.mp3", L"ZombieBossAppear"},
+		{L"data/Sounds/SE/Enemy/GeneralAppear.mp3", L"GeneralAppear"}
 	};
 
 	// ロードするエフェクトのデータ
