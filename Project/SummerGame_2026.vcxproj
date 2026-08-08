@@ -120,6 +120,7 @@
     <ClCompile Include="Source\Game\Character\Enemy\ZombieBoss\ZombieBossStateAttack.cpp" />
     <ClCompile Include="Source\Game\Character\Enemy\ZombieBoss\ZombieBossStateGroundAttack.cpp" />
     <ClCompile Include="Source\Game\TutorialManager.cpp" />
+    <ClCompile Include="Source\Game\UI\TutorialUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\System\Menu.h" />
@@ -224,6 +225,7 @@
     <ClInclude Include="Source\Game\Character\Enemy\ZombieBoss\ZombieBossStateAttack.h" />
     <ClInclude Include="Source\Game\Character\Enemy\ZombieBoss\ZombieBossStateGroundAttack.h" />
     <ClInclude Include="Source\Game\TutorialManager.h" />
+    <ClInclude Include="Source\Game\UI\TutorialUI.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

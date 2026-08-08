@@ -24,6 +24,7 @@
 
 #include "Game/Managers/EnemyManager.h"
 #include "Game/Managers/TargetManager.h"
+#include "Game/TutorialManager.h"
 
 #include "Game/SkyBox.h"
 
@@ -227,6 +228,12 @@ void SceneMain::Init()
 	for (auto& se : kSEDatas)
 	{
 		soundManager.LoadSound(se.name, se.filePath, SoundManager::SoundType::SE);
+	}
+
+	if (m_uniqueDatas.stage == Stage::First)
+	{
+		m_pTutorialManager = std::make_shared<TutorialManager>();
+		m_pTutorialManager->Init();
 	}
 }
 

@@ -10,10 +10,9 @@ class Camera;
 class SkyBox;
 
 class TargetManager;
-
 class EnemyManager;
-
 class SpawnerManager;
+class TutorialManager;
 
 class SceneMain : public SceneBase
 {
@@ -89,10 +88,10 @@ private:
 
 	std::shared_ptr<EnemyManager> m_pEnemyManager = nullptr;
 	std::shared_ptr<TargetManager> m_pTargetManager = nullptr;
+	std::shared_ptr<SpawnerManager> m_pSpawnerManager = nullptr;
+	std::shared_ptr<TutorialManager> m_pTutorialManager = nullptr;
 
 	std::shared_ptr<SkyBox> m_pSkyBox = nullptr;
-
-	std::shared_ptr<SpawnerManager> m_pSpawnerManager = nullptr;
 
 	UniqueDatas m_uniqueDatas;
 };
