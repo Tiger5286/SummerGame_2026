@@ -2,6 +2,7 @@
 #include "../Character/Enemy/EnemyBase.h"
 #include <cassert>
 #include "Singleton/ModelManager.h"
+#include "Singleton/EffectManager.h"
 
 #include "../Character/Enemy/Zombie/Zombie.h"
 #include "../Character/Enemy/Vulture/Vulture.h"
@@ -60,6 +61,7 @@ void EnemyManager::Update()
 	// 死んでいる敵をリストから削除する
 	for (auto& enemy : m_deadEnemyList)
 	{
+		EffectManager::GetInstance().PlayEffect(L"EnemyDeath", enemy->GetPos());
 		enemy->End();
 		m_enemyList.remove(enemy);
 	}
@@ -76,48 +78,37 @@ void EnemyManager::Draw()
 void EnemyManager::AddEnemy(MyLib::EnemyType type, const Vector3& pos)
 {
 	std::shared_ptr<EnemyBase> pEnemy = nullptr;
+	// 敵の種類によって生成するクラスを変える
 	switch (type)
 	{
 	case MyLib::EnemyType::Zombie:
 		pEnemy = std::make_shared<Zombie>();
 		pEnemy->SetHandle(ModelManager::GetInstance().DuplicateModel(L"Zombie"));
-		pEnemy->SetPlayer(m_pPlayer);
-		pEnemy->SetMapHandle(ModelManager::GetInstance().GetModelHandle(L"Collision"));
-		pEnemy->SetPos(pos);
-		pEnemy->Init();
-		m_enemyList.push_back(pEnemy);
 		break;
 	case MyLib::EnemyType::Vulture:
 		pEnemy = std::make_shared<Vulture>();
 		pEnemy->SetHandle(ModelManager::GetInstance().DuplicateModel(L"Vulture"));
-		pEnemy->SetPlayer(m_pPlayer);
-		pEnemy->SetMapHandle(ModelManager::GetInstance().GetModelHandle(L"Collision"));
-		pEnemy->SetPos(pos);
-		pEnemy->Init();
-		m_enemyList.push_back(pEnemy);
 		break;
 	case MyLib::EnemyType::General:
 		pEnemy = std::make_shared<General>();
 		pEnemy->SetHandle(ModelManager::GetInstance().DuplicateModel(L"General"));
-		pEnemy->SetPlayer(m_pPlayer);
-		pEnemy->SetMapHandle(ModelManager::GetInstance().GetModelHandle(L"Collision"));
-		pEnemy->SetPos(pos);
-		pEnemy->Init();
-		m_enemyList.push_back(pEnemy);
 		break;
 	case MyLib::EnemyType::ZombieBoss:
 		pEnemy = std::make_shared<ZombieBoss>();
 		pEnemy->SetHandle(ModelManager::GetInstance().DuplicateModel(L"ZombieBoss"));
-		pEnemy->SetPlayer(m_pPlayer);
-		pEnemy->SetMapHandle(ModelManager::GetInstance().GetModelHandle(L"Collision"));
-		pEnemy->SetPos(pos);
-		pEnemy->Init();
-		m_enemyList.push_back(pEnemy);
 		break;
 
 	default:
 		assert(false && "EnemyManager::AddEnemy() : 未知のEnemyTypeが渡されました");
 	}
+	// 共通の初期化処理
+	pEnemy->SetPlayer(m_pPlayer);
+	pEnemy->SetMapHandle(ModelManager::GetInstance().GetModelHandle(L"Collision"));
+	pEnemy->SetPos(pos);
+	pEnemy->Init();
+	m_enemyList.push_back(pEnemy);
+
+	EffectManager::GetInstance().PlayEffect(L"EnemyDeath", pos);
 }
 
 std::shared_ptr<EnemyBase> EnemyManager::GetLastEnemy()

@@ -115,6 +115,11 @@ namespace
 			.path = L"data/effects/BossAttackProjectile.efkproj",
 			.name = L"BossProjectile",
 			.scale = 100.0f
+		},
+		{
+			.path = L"data/effects/EnemyDeath.efkproj",
+			.name = L"EnemyDeath",
+			.scale = 50.0f
 		}
 	};
 
