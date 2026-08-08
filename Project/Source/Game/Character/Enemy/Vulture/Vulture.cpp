@@ -6,6 +6,7 @@
 #include "Utility/MyLib.h"
 #include "../../CharacterStateBase.h"
 #include "../../../UI/EnemyHpBar.h"
+#include "Singleton/SoundManager.h"
 
 #include "VultureStateIdle.h"
 #include "VultureStateHit.h"
@@ -58,6 +59,8 @@ void Vulture::Init()
 	m_targetUIOffset = Vector3(0, 30, 0);
 
 	m_scale = Vector3(kScale, kScale, kScale);
+
+	SoundManager::GetInstance().PlaySoundGame(L"VultureAppear");
 }
 
 void Vulture::End()

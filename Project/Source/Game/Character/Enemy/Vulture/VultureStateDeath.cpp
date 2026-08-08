@@ -1,5 +1,6 @@
 ﻿#include "VultureStateDeath.h"
 #include "Vulture.h"
+#include "Singleton/SoundManager.h"
 
 namespace
 {
@@ -14,6 +15,7 @@ void VultureStateDeath::OnEnter()
 	vulture->m_isDying = true;
 	vulture->m_isFlying = false;
 	vulture->m_isCanHitAttack = false;
+	SoundManager::GetInstance().PlaySoundGame(L"VultureDeath");
 }
 
 void VultureStateDeath::Update()

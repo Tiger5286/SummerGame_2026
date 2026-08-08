@@ -1,5 +1,6 @@
 ﻿#include "ZombieStateDeath.h"
 #include "Zombie.h"
+#include "Singleton/SoundManager.h"
 
 namespace
 {
@@ -12,6 +13,7 @@ void ZombieStateDeath::OnEnter()
 	m_pZombie.lock()->m_anim.ChangeAnim(kDeathAnimName, 0.5f, false);
 	m_pZombie.lock()->m_isDying = true;
 	m_pZombie.lock()->m_isCanHitAttack = false;
+	SoundManager::GetInstance().PlaySoundGame(L"ZombieDeath");
 }
 
 void ZombieStateDeath::Update()

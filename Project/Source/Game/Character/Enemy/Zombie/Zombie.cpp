@@ -6,6 +6,7 @@
 #include "Utility/MyLib.h"
 #include "Game/Collider/CapsuleCollider.h"
 #include "Singleton/CollisionManager.h"
+#include "Singleton/SoundManager.h"
 #include "../../../UI/EnemyHpBar.h"
 #include "../../CharacterStateBase.h"
 
@@ -75,6 +76,8 @@ void Zombie::Init()
 	BaseInit(kMaxHp);
 
 	m_targetUIOffset = Vector3(0, 120, 0);
+
+	SoundManager::GetInstance().PlaySoundGame(L"ZombieAppear");
 }
 
 void Zombie::End()

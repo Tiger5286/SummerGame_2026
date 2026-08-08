@@ -56,7 +56,11 @@ namespace
 		{ L"data/Sounds/SE/Player/Burning.mp3", L"Burning" },
 		{ L"data/Sounds/SE/Damage.mp3", L"Damage" },
 		{L"data/Sounds/SE/Enemy/ZombieBossAppear.mp3", L"ZombieBossAppear"},
-		{L"data/Sounds/SE/Enemy/GeneralAppear.mp3", L"GeneralAppear"}
+		{L"data/Sounds/SE/Enemy/GeneralAppear.mp3", L"GeneralAppear"},
+		{L"data/Sounds/SE/Enemy/ZombieAppear.mp3",L"ZombieAppear"},
+		{L"data/Sounds/SE/Enemy/ZombieDeath.mp3",L"ZombieDeath"},
+		{L"data/Sounds/SE/Enemy/VultureAppear.mp3",L"VultureAppear"},
+		{L"data/Sounds/SE/Enemy/VultureDeath.mp3",L"VultureDeath"},
 	};
 
 	// ロードするエフェクトのデータ
