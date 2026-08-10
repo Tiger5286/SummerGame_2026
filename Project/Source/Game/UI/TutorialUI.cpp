@@ -9,20 +9,57 @@ namespace
 	constexpr int kWindowMargin = 20;
 	constexpr int kWindowWidth = 500;
 	constexpr int kWindowHeight = 100;
-	constexpr int kPosX = Game::kScreenWidth - kWindowWidth / 2 - kWindowMargin;
-	constexpr int kPosY = kWindowHeight / 2 + kWindowMargin;
+	constexpr int kPosX = kWindowWidth / 2 + kWindowMargin;
+	constexpr int kPosY = Game::kScreenHeight - kWindowHeight / 2 - kWindowMargin;
 
 	constexpr int kTutorialStepNum = static_cast<int>(TutorialManager::TutorialStep::Num);
 	constexpr std::wstring_view kTutorialTexts[kTutorialStepNum] = {
-	L"Lスティックで移動",
-	L"Xボタンで攻撃",
-	L"Rスティック押し込みでロックオン　Bでフレイムシフト",
-	L"Aボタンでジャンプ",
-	L"Yボタンでウィングスピン",
-	L"RBボタンで回避",
-	L"溜まったらLBボタンで必殺技",
+	L"　　で移動",
+	L"　　で攻撃",
+	L"　　でロックオン　　　でフレイムシフト",
+	L"　　でジャンプ",
+	L"　　でウィングスピン",
+	L"　　で回避",
+	L"溜まったら　　　で必殺技",
 	L"チュートリアル終了"
 	};
+
+	constexpr int kFontSize = 30;
+
+	constexpr float kIconScaleSpeed = 0.1f;
+	constexpr float kMaxIconScaleAngle = DX_PI_F * 2 * 2;
+	constexpr float kIconScaleAmplitude = 0.5f;
+
+	enum class Buttons
+	{
+		LStick,
+		X,
+		RStickPush,
+		A,
+		Y,
+		RB,
+		LB,
+
+		Num
+	};
+
+	constexpr const wchar_t* kButtonFilePaths[static_cast<int>(Buttons::Num)] = {
+		L"data/Graphs/Buttons/LStick.png",
+		L"data/Graphs/Buttons/X.png",
+		L"data/Graphs/Buttons/RStickPush.png",
+		L"data/Graphs/Buttons/A.png",
+		L"data/Graphs/Buttons/Y.png",
+		L"data/Graphs/Buttons/RB.png",
+		L"data/Graphs/Buttons/LB.png"
+	};
+
+	static_assert(std::size(kButtonFilePaths) == static_cast<int>(Buttons::Num));
+
+	constexpr int kButtonPosOffsetX[static_cast<int>(Buttons::Num)] = {
+		-50,-50,-220,-70,-110,-50,+5,
+	};
+	constexpr int kBButtonPosOffsetX = 0;
+	constexpr float kButtonScale = 0.5f;
 }
 
 TutorialUI::TutorialUI():
@@ -32,18 +69,46 @@ TutorialUI::TutorialUI():
 
 TutorialUI::~TutorialUI()
 {
+	DeleteGraph(m_iconHandle);
+	DeleteFontToHandle(m_fontHandle);
+	for (auto& handle : m_buttonHandles)
+	{
+		DeleteGraph(handle);
+	}
+	DeleteGraph(m_bButtonHandle);
 }
 
 void TutorialUI::Init()
 {
+	m_iconHandle = LoadGraph(L"data/Graphs/TutorialIcon.png");
+	m_fontHandle = CreateFontToHandle(Game::kMainFontName, kFontSize, -1);
+	m_buttonHandles.resize(static_cast<int>(Buttons::Num));
+	for (int i = 0; i < static_cast<int>(Buttons::Num); i++)
+	{
+		m_buttonHandles[i] = LoadGraph(kButtonFilePaths[i]);
+	}
+	m_bButtonHandle = LoadGraph(L"data/Graphs/Buttons/B.png");
 }
 
 void TutorialUI::Update()
 {
+	// ボタンアイコンを拡縮させる
+	if (m_iconScaleAngle < kMaxIconScaleAngle)
+	{
+		m_iconScaleAngle += kIconScaleSpeed;
+	}
+	else
+	{
+		m_iconScaleAngle = kMaxIconScaleAngle;
+	}
 }
 
 void TutorialUI::Draw()
 {
+	// チュートリアルが終わっていたら描画しない
+	if (m_currentStep == TutorialManager::TutorialStep::End) return;
+
+	// 背景を描画
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
 	int x1, y1, x2, y2;
 	x1 = kPosX - kWindowWidth / 2;
@@ -52,8 +117,21 @@ void TutorialUI::Draw()
 	y2 = kPosY + kWindowHeight / 2;
 	DrawBox(x1, y1, x2, y2, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	// 枠を描画
+	DrawBox(x1, y1, x2, y2, 0xffffff, false, 3);
 
+	// アイコンを描画
+	DrawRotaGraph(x2, y1, 1.0 + abs(sinf(m_iconScaleAngle)) * kIconScaleAmplitude, 0.0, m_iconHandle, true);
+
+	// テキストを描画
 	auto text = kTutorialTexts[static_cast<int>(m_currentStep)];
-	int strW = GetDrawStringWidth(text.data(), text.size());
-	DrawString(kPosX - strW / 2, kPosY - 8, text.data(), 0xffffff);
+	int strW = GetDrawStringWidthToHandle(text.data(), text.size(),m_fontHandle);
+	DrawStringToHandle(kPosX - strW / 2, kPosY - kFontSize / 2, text.data(), 0xffffff, m_fontHandle);
+
+	// ボタンアイコンを描画
+	DrawRotaGraph(kPosX + kButtonPosOffsetX[static_cast<int>(m_currentStep)], kPosY, kButtonScale, 0.0, m_buttonHandles[static_cast<int>(m_currentStep)], true);
+	if (m_currentStep == TutorialManager::TutorialStep::LockOnAndShift)
+	{
+		DrawRotaGraph(kPosX + kBButtonPosOffsetX, kPosY, kButtonScale, 0.0, m_bButtonHandle, true);
+	}
 }
