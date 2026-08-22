@@ -27,6 +27,8 @@ private:
 
 	void SelectTarget(MyLib::LR lr);
 
+	void AutoTarget(float dist);
+
 	/// <summary>
 	/// 生きている敵のリストを取得する
 	/// </summary>

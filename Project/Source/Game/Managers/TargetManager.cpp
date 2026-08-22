@@ -17,8 +17,11 @@
 
 namespace
 {
+	// ロックオンが解除される距離
 	constexpr float kNoTargetDist = 1500.0f;
-
+	// スキル使用時にロックオンする距離
+	constexpr float kSkillTargetDist = 1000.0f;
+	// 通常攻撃時にロックオンする距離
 	constexpr float kAttackTargetDist = 250.0f;
 }
 
@@ -60,7 +63,7 @@ void TargetManager::Update()
 			{
 				m_isTarget = false;
 			}
-			m_pTargetUI->SetTargetFrame(0);
+			m_pTargetUI->ResetTargetFrame();
 		}
 		else	// ターゲットがいれば解除
 		{
@@ -69,34 +72,30 @@ void TargetManager::Update()
 		}
 	}
 
-	// ターゲットしていない、かつ攻撃が入力されたとき、近い敵をロックオン
-	if (m_pTarget == nullptr && input.IsTriggerd(XINPUT_BUTTON_X))
+	// もろもろの攻撃時の自動ターゲット処理
+	if (m_pTarget == nullptr)
 	{
-		auto enemies = m_pEnemyManager->GetEnemies();
-		enemies = GetAliveEnemies(enemies);
-		enemies = GetInSearchAreaEnemies(enemies,kAttackTargetDist);
-		m_pTarget = GetNearestEnemy(enemies);
-		if (m_pTarget != nullptr)	// ターゲットできたらisTargetをtrue、できなかったらfalse
+		// ターゲットする距離を攻撃によって変える
+		if (input.IsTriggerd(XINPUT_BUTTON_X))
 		{
-			m_isTarget = true;
+			AutoTarget(kAttackTargetDist);
 		}
-		else
+		if (input.IsTriggerd(XINPUT_BUTTON_B) || input.IsTriggerd(XINPUT_BUTTON_LEFT_SHOULDER))
 		{
-			m_isTarget = false;
+			AutoTarget(kSkillTargetDist);
 		}
-		m_pTargetUI->SetTargetFrame(0);
 	}
 
 	// 十字キー左右でターゲット切り替え
 	if (input.IsTriggerd(XINPUT_BUTTON_DPAD_LEFT))
 	{
 		SelectTarget(MyLib::LR::Left);
-		m_pTargetUI->SetTargetFrame(0);
+		m_pTargetUI->ResetTargetFrame();
 	}
 	if (input.IsTriggerd(XINPUT_BUTTON_DPAD_RIGHT))
 	{
 		SelectTarget(MyLib::LR::Right);
-		m_pTargetUI->SetTargetFrame(0);
+		m_pTargetUI->ResetTargetFrame();
 	}
 
 
@@ -140,7 +139,7 @@ void TargetManager::CheckTarget()
 		enemies = GetAliveEnemies(enemies);			// 生きている敵
 		enemies = GetInSearchAreaEnemies(enemies, kNoTargetDist);	// ターゲット範囲内の敵
 		m_pTarget = GetNearestEnemy(enemies);		// 最も近い敵
-		m_pTargetUI->SetTargetFrame(0);
+		m_pTargetUI->ResetTargetFrame();
 	}
 
 }
@@ -197,6 +196,23 @@ void TargetManager::SelectTarget(MyLib::LR lr)
 	{
 		m_pTarget = minDistEnemy;
 	}
+}
+
+void TargetManager::AutoTarget(float dist)
+{
+	auto enemies = m_pEnemyManager->GetEnemies();
+	enemies = GetAliveEnemies(enemies);
+	enemies = GetInSearchAreaEnemies(enemies, dist);
+	m_pTarget = GetNearestEnemy(enemies);
+	if (m_pTarget != nullptr)	// ターゲットできたらisTargetをtrue、できなかったらfalse
+	{
+		m_isTarget = true;
+	}
+	else
+	{
+		m_isTarget = false;
+	}
+	m_pTargetUI->ResetTargetFrame();
 }
 
 std::list<std::shared_ptr<EnemyBase>> TargetManager::GetAliveEnemies(std::list<std::shared_ptr<EnemyBase>> enemies)

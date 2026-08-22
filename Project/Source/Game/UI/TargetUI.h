@@ -17,7 +17,7 @@ public:
 	// 必要な情報を設定する
 	void SetInfo(std::shared_ptr<TargetManager> pTargetManager) { m_pTargetManager = pTargetManager; }
 
-	void SetTargetFrame(int frame) { m_targetFrame = frame; }
+	void ResetTargetFrame() { m_targetFrame = 0; }
 
 private:
 	std::weak_ptr<TargetManager> m_pTargetManager;
