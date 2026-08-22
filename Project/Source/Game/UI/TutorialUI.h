@@ -24,5 +24,4 @@ private:
 	float m_iconScaleAngle = 0.0f;
 
 	std::vector<int> m_buttonHandles;
-	int m_bButtonHandle = -1;
 };

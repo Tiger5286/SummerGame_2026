@@ -16,7 +16,7 @@ namespace
 	constexpr std::wstring_view kTutorialTexts[kTutorialStepNum] = {
 	L"　　で移動",
 	L"　　で攻撃",
-	L"　　でロックオン　　　でフレイムシフト",
+	L"　　でフレイムシフト　敵に接近できる",
 	L"　　でジャンプ",
 	L"　　でウィングスピン",
 	L"　　で回避",
@@ -34,7 +34,7 @@ namespace
 	{
 		LStick,
 		X,
-		RStickPush,
+		B,
 		A,
 		Y,
 		RB,
@@ -46,7 +46,7 @@ namespace
 	constexpr const wchar_t* kButtonFilePaths[static_cast<int>(Buttons::Num)] = {
 		L"data/Graphs/Buttons/LStick.png",
 		L"data/Graphs/Buttons/X.png",
-		L"data/Graphs/Buttons/RStickPush.png",
+		L"data/Graphs/Buttons/B.png",
 		L"data/Graphs/Buttons/A.png",
 		L"data/Graphs/Buttons/Y.png",
 		L"data/Graphs/Buttons/RB.png",
@@ -58,7 +58,6 @@ namespace
 	constexpr int kButtonPosOffsetX[static_cast<int>(Buttons::Num)] = {
 		-50,-50,-220,-70,-110,-50,+5,
 	};
-	constexpr int kBButtonPosOffsetX = 0;
 	constexpr float kButtonScale = 0.5f;
 }
 
@@ -75,7 +74,6 @@ TutorialUI::~TutorialUI()
 	{
 		DeleteGraph(handle);
 	}
-	DeleteGraph(m_bButtonHandle);
 }
 
 void TutorialUI::Init()
@@ -87,7 +85,6 @@ void TutorialUI::Init()
 	{
 		m_buttonHandles[i] = LoadGraph(kButtonFilePaths[i]);
 	}
-	m_bButtonHandle = LoadGraph(L"data/Graphs/Buttons/B.png");
 }
 
 void TutorialUI::Update()
@@ -130,8 +127,4 @@ void TutorialUI::Draw()
 
 	// ボタンアイコンを描画
 	DrawRotaGraph(kPosX + kButtonPosOffsetX[static_cast<int>(m_currentStep)], kPosY, kButtonScale, 0.0, m_buttonHandles[static_cast<int>(m_currentStep)], true);
-	if (m_currentStep == TutorialManager::TutorialStep::LockOnAndShift)
-	{
-		DrawRotaGraph(kPosX + kBButtonPosOffsetX, kPosY, kButtonScale, 0.0, m_bButtonHandle, true);
-	}
 }
