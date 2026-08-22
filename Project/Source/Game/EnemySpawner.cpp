@@ -13,6 +13,7 @@ void EnemySpawner::Init(std::shared_ptr<EnemyManager> pEnemyManager, std::shared
 	m_radius = spawnerData.radius;
 	m_enemyDatas = spawnerData.enemyDatas;
 	m_tag = spawnerData.tag;
+	m_pillarEffHandle = EffectManager::GetInstance().PlayEffect(L"LightPillar", m_pos);
 }
 
 void EnemySpawner::Update()
@@ -28,7 +29,7 @@ void EnemySpawner::Update()
 	if (isEnemiesEmpty && m_isSpawned)
 	{
 		m_isDefeatedEnemies = true;
-		EffectManager::GetInstance().StopEffect(m_effHandle);
+		EffectManager::GetInstance().StopEffect(m_areaEffHandle);
 		EventManager::GetInstance().CallEvent("OnEnemyDefeated");
 	}
 
@@ -65,13 +66,15 @@ void EnemySpawner::Draw()
 
 void EnemySpawner::Spawn()
 {
+	auto& effManager = EffectManager::GetInstance();
 	for (auto& data : m_enemyDatas)
 	{
 		m_pEnemyManager->AddEnemy(data.type, m_pos + data.localPos);
 	}
-	m_effHandle = EffectManager::GetInstance().PlayEffect(L"BattleArea", m_pos);
+	m_areaEffHandle = effManager.PlayEffect(L"BattleArea", m_pos);
 	float scale = m_radius / 1000 * 2;
-	SetScalePlayingEffekseer3DEffect(m_effHandle, scale, scale, scale);
+	SetScalePlayingEffekseer3DEffect(m_areaEffHandle, scale, scale, scale);
+	effManager.StopEffect(m_pillarEffHandle);
 }
 
 void EnemySpawner::KeepCharacterInArea()
