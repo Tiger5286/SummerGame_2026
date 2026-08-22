@@ -304,10 +304,13 @@ void SceneMain::Update()
 	{
 		m_isBossBattle = true;
 	}
-	else if (m_isBossBattle == true && !m_isEndScene)	// ボスがいない、かつボス戦中ならボスが死んだと判断し、クリアに遷移する
+	// ボスがいない、かつボス戦中ならボスが死んだと判断し、クリアに遷移する
+	else if (m_isBossBattle == true && !m_isEndScene)
 	{
 		m_isEndScene = true;
-		m_sceneManager.ChangeSceneWithFade(std::make_shared<SceneClear>(m_sceneManager), false);
+		auto sceneClear = std::make_shared<SceneClear>(m_sceneManager);
+		sceneClear->SetClearStage(m_uniqueDatas.stage);
+		m_sceneManager.ChangeSceneWithFade(sceneClear, false);
 		return;
 	}
 

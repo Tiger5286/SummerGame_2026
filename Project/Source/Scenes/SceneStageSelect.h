@@ -14,6 +14,12 @@ public:
     void Update() override;
     void Draw() override;
 
+    /// <summary>
+    /// 選択中のステージを設定する(クリアシーンが使う)
+    /// </summary>
+    /// <param name="stage">選択中のステージ</param>
+    void SetSelectStage(MyLib::Stage stage) { m_selectStage = stage; }
+
 private:
     int m_frame = 0;
     MyLib::Stage m_selectStage = MyLib::Stage::First;

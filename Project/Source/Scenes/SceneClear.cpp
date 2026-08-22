@@ -2,7 +2,7 @@
 #include "DxLib.h"
 #include "Singleton/Input.h"
 #include "SceneManager.h"
-#include "SceneTitle.h"
+#include "SceneStageSelect.h"
 #include "Game.h"
 #include "Singleton/SoundManager.h"
 
@@ -50,7 +50,13 @@ void SceneClear::Update()
 	auto& input = Input::GetInstance();
 	if (input.IsTriggerd(XINPUT_BUTTON_A))
 	{
-		m_sceneManager.ChangeSceneWithFade(std::make_shared<SceneTitle>(m_sceneManager), false);
+		auto selectScene = std::make_shared<SceneStageSelect>(m_sceneManager);
+		// 次のステージを選択中に設定する
+		MyLib::Stage nextStage = static_cast<MyLib::Stage>(static_cast<int>(m_clearStage) + 1);
+		if (nextStage == MyLib::Stage::Num) nextStage = static_cast<MyLib::Stage>(static_cast<int>(MyLib::Stage::Num) - 1);
+		selectScene->SetSelectStage(nextStage);
+
+		m_sceneManager.ChangeSceneWithFade(selectScene, false);
 		SoundManager::GetInstance().PlaySoundGame(L"Decision");
 		return;
 	}
