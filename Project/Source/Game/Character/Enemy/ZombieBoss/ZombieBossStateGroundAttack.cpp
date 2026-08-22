@@ -1,5 +1,6 @@
 ﻿#include "ZombieBossStateGroundAttack.h"
 #include "../../Attack.h"
+#include "Singleton/EffectManager.h"
 
 #include "ZombieBossStateIdle.h"
 
@@ -15,6 +16,8 @@ namespace
 		100,
 		MyLib::CharacterType::Player
 	};
+
+	const Vector3 kEffectOffset = Vector3::Up() * 10.0f;
 }
 
 void ZombieBossStateGroundAttack::OnEnter()
@@ -34,6 +37,7 @@ void ZombieBossStateGroundAttack::Update()
 		m_pAtk = std::make_shared<Attack>();
 		m_pAtk->SetData(kAttackData, shared_from_this());
 		m_pAtk->Init();
+		EffectManager::GetInstance().PlayEffect(L"ShockWave", zombieBoss->m_pos + kEffectOffset);
 	}
 	// 当たり判定終了
 	if (m_frame == kEndAttackFrame)

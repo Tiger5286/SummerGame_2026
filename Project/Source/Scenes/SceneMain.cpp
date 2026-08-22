@@ -126,6 +126,11 @@ namespace
 			.path = L"data/effects/LightPillar.efkproj",
 			.name = L"LightPillar",
 			.scale = 100.0f
+		},
+		{
+			.path = L"data/effects/ShockWave.efkproj",
+			.name = L"ShockWave",
+			.scale = 100.0f
 		}
 	};
 
