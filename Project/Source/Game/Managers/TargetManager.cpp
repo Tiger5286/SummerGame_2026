@@ -17,10 +17,8 @@
 
 namespace
 {
-	// ロックオンが解除される距離
+	// ロックオンが解除される距離(ロックオンできる最大距離)
 	constexpr float kNoTargetDist = 1500.0f;
-	// スキル使用時にロックオンする距離
-	constexpr float kSkillTargetDist = 1000.0f;
 	// 通常攻撃時にロックオンする距離
 	constexpr float kAttackTargetDist = 250.0f;
 }
@@ -82,7 +80,7 @@ void TargetManager::Update()
 		}
 		if (input.IsTriggerd(XINPUT_BUTTON_B) || input.IsTriggerd(XINPUT_BUTTON_LEFT_SHOULDER))
 		{
-			AutoTarget(kSkillTargetDist);
+			AutoTarget(kNoTargetDist);
 		}
 	}
 
