@@ -12,7 +12,7 @@
 namespace
 {
 	// ステージ名
-	constexpr std::array<std::wstring_view, static_cast<int>(SceneStageSelect::Stage::Num)> kStageNames = {
+	constexpr std::array<std::wstring_view, static_cast<int>(MyLib::Stage::Num)> kStageNames = {
 		L"ステージ 1",
 		L"ステージ 2",
 	};
@@ -22,9 +22,9 @@ namespace
 	constexpr float kStartStageStringScaleWidth = 0.1f;
 
 	// ステージごとの固有のデータ
-	const SceneMain::UniqueDatas kUniqueFiles[static_cast<int>(SceneStageSelect::Stage::Num)] = {
+	const SceneMain::UniqueDatas kUniqueFiles[static_cast<int>(MyLib::Stage::Num)] = {
 		{
-			.stage = SceneMain::Stage::First,
+			.stage = MyLib::Stage::First,
 			.collisionFilePath = L"data/Stages/First/Collision.mv1",
 			.stageFilePath = L"data/Stages/First/Stage.mv1",
 			.spawnerDataFilePath = L"data/Stages/First/SpawnerData.dat",
@@ -38,7 +38,7 @@ namespace
 #endif
 		},
 		{
-			.stage = SceneMain::Stage::Second,
+			.stage = MyLib::Stage::Second,
 			.collisionFilePath = L"data/Stages/Second/Collision.mv1",
 			.stageFilePath = L"data/Stages/Second/Stage.mv1",
 			.spawnerDataFilePath = L"data/Stages/Second/SpawnerData.dat",
@@ -55,7 +55,7 @@ namespace
 
 	constexpr const wchar_t* kBGMFilePath = L"data/Sounds/BGM/StageSelect.ogg";
 
-	constexpr const wchar_t* kBackGraphs[static_cast<int>(SceneStageSelect::Stage::Num)] = {
+	constexpr const wchar_t* kBackGraphs[static_cast<int>(MyLib::Stage::Num)] = {
 		L"data/Graphs/FirstStage.png",
 		L"data/Graphs/SecondStage.png"
 	};
@@ -86,11 +86,11 @@ void SceneStageSelect::Init()
 	soundManager.LoadSound(L"StageSelectBGM", kBGMFilePath, SoundManager::SoundType::BGM);
 	soundManager.PlaySoundGame(L"StageSelectBGM", true, true);
 
-	for (int i = 0; i < static_cast<int>(Stage::Num); i++)
+	for (int i = 0; i < static_cast<int>(MyLib::Stage::Num); i++)
 	{
 		m_backHandles[i] = LoadGraph(kBackGraphs[i]);
 	}
-	m_backAlpha[static_cast<int>(Stage::First)] = 1.0f;
+	m_backAlpha[static_cast<int>(MyLib::Stage::First)] = 1.0f;
 	m_buttonHandle = LoadGraph(L"data/Graphs/Buttons/A.png");
 	m_arrowHandle = LoadGraph(L"data/Graphs/SelectArrow.png");
 
@@ -124,12 +124,12 @@ void SceneStageSelect::Update()
 		// 次のステージの番号
 		int nextSelect = static_cast<int>(m_selectStage) + 1;
 		// 番号がステージの数を上回っていたら戻す
-		if (nextSelect >= static_cast<int>(Stage::Num))
+		if (nextSelect >= static_cast<int>(MyLib::Stage::Num))
 		{
-			nextSelect = static_cast<int>(Stage::Num) - 1;
+			nextSelect = static_cast<int>(MyLib::Stage::Num) - 1;
 		}
 		// 実際の選択しているステージに適用
-		m_selectStage = static_cast<Stage>(nextSelect);
+		m_selectStage = static_cast<MyLib::Stage>(nextSelect);
 		SoundManager::GetInstance().PlaySoundGame(L"Select");
 	}
 
@@ -143,7 +143,7 @@ void SceneStageSelect::Update()
 			nextSelect = 0;
 		}
 		// 実際の選択しているステージに適用
-		m_selectStage = static_cast<Stage>(nextSelect);
+		m_selectStage = static_cast<MyLib::Stage>(nextSelect);
 		SoundManager::GetInstance().PlaySoundGame(L"Select");
 	}
 
@@ -166,7 +166,7 @@ void SceneStageSelect::Update()
 	}
 
 	// 背景のアルファ値を選択中のステージに合わせて変化させる
-	for (int i = 0; i < static_cast<int>(Stage::Num); i++)
+	for (int i = 0; i < static_cast<int>(MyLib::Stage::Num); i++)
 	{
 		if (i == static_cast<int>(m_selectStage))
 		{
@@ -182,7 +182,7 @@ void SceneStageSelect::Update()
 void SceneStageSelect::Draw()
 {
 	// 背景描画
-	for (int i = 0; i < static_cast<int>(Stage::Num); i++)
+	for (int i = 0; i < static_cast<int>(MyLib::Stage::Num); i++)
 	{
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(m_backAlpha[i] * 255));
 		DrawGraph(0, 0, m_backHandles[i], true);
@@ -206,7 +206,7 @@ void SceneStageSelect::Draw()
 	// 選択より一つ後のステージ(右)
 	int nextStage = static_cast<int>(m_selectStage) + 1;
 	// ひとつ後のステージが存在するステージの範囲内なら描画
-	if (nextStage < static_cast<int>(Stage::Num))
+	if (nextStage < static_cast<int>(MyLib::Stage::Num))
 	{
 		strW = GetDrawStringWidthToHandle(kStageNames[nextStage].data(), kStageNames[nextStage].size(), m_fontHandle);
 		DrawStringToHandle(Game::kScreenWidth - kSideStringOffsetX - strW, Game::kScreenHeight / 2 - kFontSize / 2, kStageNames[nextStage].data(), 0x888888,m_fontHandle);

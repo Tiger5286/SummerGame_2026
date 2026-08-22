@@ -138,7 +138,7 @@ namespace
 	const Vector3 kShadowMapMinPos = Vector3(-3000, -1000, -3000);
 	const Vector3 kShadowMapMaxPos = Vector3(3000, 1000, 3000);
 
-	constexpr const wchar_t* kBGMFilePaths[static_cast<int>(SceneMain::Stage::Num)] = {
+	constexpr const wchar_t* kBGMFilePaths[static_cast<int>(MyLib::Stage::Num)] = {
 		L"data/Sounds/BGM/FirstStage.ogg",
 		L"data/Sounds/BGM/SecondStage.ogg"
 	};
@@ -235,7 +235,7 @@ void SceneMain::Init()
 		soundManager.LoadSound(se.name, se.filePath, SoundManager::SoundType::SE);
 	}
 
-	if (m_uniqueDatas.stage == Stage::First)
+	if (m_uniqueDatas.stage == MyLib::Stage::First)
 	{
 		m_pTutorialManager = std::make_shared<TutorialManager>();
 		m_pTutorialManager->Init();

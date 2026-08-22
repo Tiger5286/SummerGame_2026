@@ -4,6 +4,7 @@
 #include <string>
 #include "SceneBase.h"
 #include "Utility/Vector3.h"
+#include "Utility/MyLib.h"
 
 class Player;
 class Camera;
@@ -31,16 +32,10 @@ public:
 		Vector3 cameraPos;
 		Vector3 cameraTargetPos;
 	};
-	enum class Stage
-	{
-		First,
-		Second,
-		Num
-	};
 	// ステージごとの異なるデータ
 	struct UniqueDatas
 	{
-		Stage stage;						// ステージの種類
+		MyLib::Stage stage;						// ステージの種類
 		std::wstring collisionFilePath;		// ステージの当たり判定モデルのファイルパス
 		std::wstring stageFilePath;			// ステージの見た目モデルのファイルパス
 		std::wstring spawnerDataFilePath;	// スポナーデータのファイルパス

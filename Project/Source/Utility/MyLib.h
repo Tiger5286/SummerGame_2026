@@ -40,6 +40,14 @@ namespace MyLib
 		Num
 	};
 
+	enum class Stage
+	{
+		First,
+		Second,
+
+		Num
+	};
+
 	struct AttackData
 	{
 		float colliderRadius = 0.0f;
