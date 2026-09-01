@@ -16,7 +16,7 @@ namespace
 	constexpr float kFov = DX_PI_F / 3.0f;	// 60度
 	// NearFar
 	constexpr float kNear = 10.0f;
-	constexpr float kFar = 5000.0f;
+	constexpr float kFar = 10000.0f;
 
 	// オフセット
 	const Vector3 kPosOffset = { 0.0f,200.0f,0.0f };
