@@ -69,6 +69,8 @@ namespace
 	constexpr float kSelectArrowScale = 0.5f;
 	constexpr float kSelectArrowSinScale = 10.0f;
 	constexpr int kSelectArrowMoveWidth = 5;
+
+	constexpr int kTextBackMargin = 10;
 }
 
 SceneStageSelect::SceneStageSelect(SceneManager& sceneManager):
@@ -191,6 +193,11 @@ void SceneStageSelect::Draw()
 
 	// 選択中のステージ(真ん中)
 	int strW = GetDrawStringWidthToHandle(kStageNames[static_cast<int>(m_selectStage)].data(), kStageNames[static_cast<int>(m_selectStage)].size(), m_fontHandle);
+	// テキスト背景の描画
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
+	DrawBox(Game::kScreenWidth / 2 - strW / 2 - kTextBackMargin, Game::kScreenHeight / 2 - kFontSize / 2 - kTextBackMargin, Game::kScreenWidth / 2 + strW / 2 + kTextBackMargin, Game::kScreenHeight / 2 + kFontSize / 2 + kTextBackMargin, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	// テキストの描画
 	DrawStringToHandle(Game::kScreenWidth / 2 - strW / 2,Game::kScreenHeight / 2 - kFontSize / 2,kStageNames[static_cast<int>(m_selectStage)].data(), 0xffffff, m_fontHandle);
 
 	// 選択より一つ前のステージ(左)
@@ -199,7 +206,14 @@ void SceneStageSelect::Draw()
 	float arrowOffsetX = sinf(m_frame / kSelectArrowSinScale) * kSelectArrowMoveWidth;
 	if (prevStage >= 0)
 	{
+		strW = GetDrawStringWidthToHandle(kStageNames[prevStage].data(), kStageNames[prevStage].size(), m_fontHandle);
+		// テキスト背景の描画
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
+		DrawBox(kSideStringOffsetX - kTextBackMargin, Game::kScreenHeight / 2 - kFontSize / 2 - kTextBackMargin, kSideStringOffsetX + strW + kTextBackMargin, Game::kScreenHeight / 2 + kFontSize / 2 + kTextBackMargin, 0x000000, true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		// テキストの描画
 		DrawStringToHandle(kSideStringOffsetX, Game::kScreenHeight / 2 - kFontSize / 2, kStageNames[prevStage].data(), 0x888888,m_fontHandle);
+		// 矢印の描画
 		DrawRotaGraph(kSelectArrowOffsetX + arrowOffsetX, Game::kScreenHeight / 2, kSelectArrowScale, DX_PI_F, m_arrowHandle, true);
 	}
 
@@ -209,7 +223,13 @@ void SceneStageSelect::Draw()
 	if (nextStage < static_cast<int>(MyLib::Stage::Num))
 	{
 		strW = GetDrawStringWidthToHandle(kStageNames[nextStage].data(), kStageNames[nextStage].size(), m_fontHandle);
+		// テキスト背景の描画
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
+		DrawBox(Game::kScreenWidth - kSideStringOffsetX - strW - kTextBackMargin, Game::kScreenHeight / 2 - kFontSize / 2 - kTextBackMargin, Game::kScreenWidth - kSideStringOffsetX + kTextBackMargin, Game::kScreenHeight / 2 + kFontSize / 2 + kTextBackMargin, 0x000000, true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		// テキストの描画
 		DrawStringToHandle(Game::kScreenWidth - kSideStringOffsetX - strW, Game::kScreenHeight / 2 - kFontSize / 2, kStageNames[nextStage].data(), 0x888888,m_fontHandle);
+		// 矢印の描画
 		DrawRotaGraph(Game::kScreenWidth - kSelectArrowOffsetX + arrowOffsetX, Game::kScreenHeight / 2, kSelectArrowScale, 0.0f, m_arrowHandle, true);
 	}
 
