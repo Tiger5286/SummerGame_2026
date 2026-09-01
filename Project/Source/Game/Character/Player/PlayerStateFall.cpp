@@ -8,6 +8,7 @@
 #include "PlayerStateAttack.h"
 #include "PlayerStateShift.h"
 #include "PlayerStateSpin.h"
+#include "PlayerStateBurning.h"
 
 namespace
 {
@@ -46,6 +47,12 @@ void PlayerStateFall::Update()
 
 	// 入力を取得
 	auto& input = Input::GetInstance();
+	// バーニングを入力していたらバーニング
+	if (input.IsTriggerd(player->kBurning) && player->GetSpecialCharge() >= player->kMaxSpecialCharge)
+	{
+		ChangeState(std::make_shared<PlayerStateBurning>());
+		return;
+	}
 	// 回避ボタンを押したら回避
 	if (input.IsTriggerd(player->kDodge))
 	{

@@ -58,6 +58,12 @@ void PlayerStateBurning::OnEnter()
 	player->m_isCanHitAttack = false;
 
 	SoundManager::GetInstance().PlaySoundGame(L"Spin");
+
+	// 浮いてたら下半身を浮かせる
+	if (!player->m_isGround)
+	{
+		player->m_anim.SetFloatAnimLowerBody(true);
+	}
 }
 
 void PlayerStateBurning::Update()
@@ -66,6 +72,8 @@ void PlayerStateBurning::Update()
 	auto player = m_pPlayer.lock();
 	// 翼を更新する
 	m_pWing->Update();
+	// プレイヤーが移動しないようにする
+	player->m_vel = Vector3::Zero();
 
 	// 向きをいい感じに補正する
 	if (m_frame > kAngleCorrectStartFrame && m_frame < kAngleCorrectEndFrame)
@@ -111,9 +119,12 @@ void PlayerStateBurning::Update()
 
 void PlayerStateBurning::Exit()
 {	// このステートが終わる時にカメラを元に戻す
-	m_pPlayer.lock()->m_pCamera.lock()->ChangeState(std::make_shared<CameraStateFree>());
+	auto player = m_pPlayer.lock();
+	player->m_pCamera.lock()->ChangeState(std::make_shared<CameraStateFree>());
 	
-	m_pPlayer.lock()->m_isCanHitAttack = true;
+	player->m_isCanHitAttack = true;
+
+	player->m_anim.SetFloatAnimLowerBody(false);
 }
 
 void PlayerStateBurning::Draw()
